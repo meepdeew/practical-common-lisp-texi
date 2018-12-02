@@ -1,0 +1,2823 @@
+This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
+
+
+File: pcl.info,  Node: 10-2,  Next: 10-3,  Prev: 10-1,  Up: Chapter 10
+
+Numeric Literals
+================
+
+You can write numeric literals in a variety of ways; you saw a few
+examples in Chapter 4.  However, it's important to keep in mind the
+division of labor between the Lisp reader and the Lisp evaluator-the
+reader is responsible for translating text into Lisp objects, and the
+Lisp evaluator then deals only with those objects.  For a given number
+of a given type, there can be many different textual representations,
+all of which will be translated to the same object representation by the
+Lisp reader.  For instance, you can write the integer 10 as 10, 20/2,
+#xA, or any of a number of other ways, but the reader will translate all
+these to the same object.  When numbers are printed back out-say, at the
+REPL-they're printed in a canonical textual syntax that may be different
+from the syntax used to enter the number.  For example:
+
+   CL-USER> 10 10 CL-USER> 20/2 10 CL-USER> #xa 10 The syntax for
+integer values is an optional sign (+ or -) followed by one or more
+digits.  Ratios are written as an optional sign and a sequence of
+digits, representing the numerator, a slash (/), and another sequence of
+digits representing the denominator.  All rational numbers are
+"canonicalized" as they're read-that's why 10 and 20/2 are both read as
+the same number, as are 3/4 and 6/8.  Rationals are printed in "reduced"
+form-integer values are printed in integer syntax and ratios with the
+numerator and denominator reduced to lowest terms.
+
+   It's also possible to write rationals in bases other than 10.  If
+preceded by #B or #b, a rational literal is read as a binary number with
+0 and 1 as the only legal digits.  An #O or #o indicates an octal number
+(legal digits 0-7), and #X or #x indicates hexadecimal (legal digits 0-F
+or 0-f).  You can write rationals in other bases from 2 to 36 with #nR
+where n is the base (always written in decimal).  Additional "digits"
+beyond 9 are taken from the letters A-Z or a-z.  Note that these radix
+indicators apply to the whole rational-it's not possible to write a
+ratio with the numerator in one base and denominator in another.  Also,
+you can write integer values, but not ratios, as decimal digits
+terminated with a decimal point.6 Some examples of rationals, with their
+canonical, decimal representation are as follows:
+
+   123 ==> 123 +123 ==> 123 -123 ==> -123 123.  ==> 123 2/3 ==> 2/3 -2/3
+==> -2/3 4/6 ==> 2/3 6/3 ==> 2 #b10101 ==> 21 #b1010/1011 ==> 10/11
+#o777 ==> 511 #xDADA ==> 56026 #36rABCDEFGHIJKLMNOPQRSTUVWXYZ ==>
+8337503854730415241050377135811259267835 You can also write
+floating-point numbers in a variety of ways.  Unlike rational numbers,
+the syntax used to notate a floating-point number can affect the actual
+type of number read.  Common Lisp defines four subtypes of
+floating-point number: short, single, double, and long.  Each subtype
+can use a different number of bits in its representation, which means
+each subtype can represent values spanning a different range and with
+different precision.  More bits gives a wider range and more precision.7
+
+   The basic format for floating-point numbers is an optional sign
+followed by a nonempty sequence of decimal digits possibly with an
+embedded decimal point.  This sequence can be followed by an exponent
+marker for "computerized scientific notation."8 The exponent marker
+consists of a single letter followed by an optional sign and a sequence
+of digits, which are interpreted as the power of ten by which the number
+before the exponent marker should be multiplied.  The letter does double
+duty: it marks the beginning of the exponent and indicates what
+floating- point representation should be used for the number.  The
+exponent markers s, f, d, l (and their uppercase equivalents) indicate
+short, single, double, and long floats, respectively.  The letter e
+indicates that the default representation (initially single-float)
+should be used.
+
+   Numbers with no exponent marker are read in the default
+representation and must contain a decimal point followed by at least one
+digit to distinguish them from integers.  The digits in a floating-point
+number are always treated as base 10 digits-the #B, #X, #O, and #R
+syntaxes work only with rationals.  The following are some example
+floating-point numbers along with their canonical representation:
+
+   1.0 ==> 1.0 1e0 ==> 1.0 1d0 ==> 1.0d0 123.0 ==> 123.0 123e0 ==> 123.0
+0.123 ==> 0.123 .123 ==> 0.123 123e-3 ==> 0.123 123E-3 ==> 0.123
+0.123e20 ==> 1.23e+19 123d23 ==> 1.23d+25 Finally, complex numbers are
+written in their own syntax, namely, #C or #c followed by a list of two
+real numbers representing the real and imaginary part of the complex
+number.  There are actually five kinds of complex numbers because the
+real and imaginary parts must either both be rational or both be the
+same kind of floating-point number.
+
+   But you can write them however you want-if a complex is written with
+one rational and one floating-point part, the rational is converted to a
+float of the appropriate representation.  Similarly, if the real and
+imaginary parts are both floats of different representations, the one in
+the smaller representation will be upgraded.
+
+   However, no complex numbers have a rational real component and a zero
+imaginary part-since such values are, mathematically speaking, rational,
+they're represented by the appropriate rational value.  The same
+mathematical argument could be made for complex numbers with
+floating-point components, but for those complex types a number with a
+zero imaginary part is always a different object than the floating-point
+number representing the real component.  Here are some examples of
+numbers written the complex number syntax:
+
+   #c(2 1) ==> #c(2 1) #c(2/3 3/4) ==> #c(2/3 3/4) #c(2 1.0) ==> #c(2.0
+1.0) #c(2.0 1.0d0) ==> #c(2.0d0 1.0d0) #c(1/2 1.0) ==> #c(0.5 1.0) #c(3
+0) ==> 3 #c(3.0 0.0) ==> #c(3.0 0.0) #c(1/2 0) ==> 1/2 #c(-6/3 0) ==> -2
+
+
+File: pcl.info,  Node: 10-3,  Next: 10-4,  Prev: 10-2,  Up: Chapter 10
+
+Basic Math
+==========
+
+The basic arithmetic operations-addition, subtraction, multiplication,
+and division-are supported for all the different kinds of Lisp numbers
+with the functions +, -, *, and /.  Calling any of these functions with
+more than two arguments is equivalent to calling the same function on
+the first two arguments and then calling it again on the resulting value
+and the rest of the arguments.  For example, (+ 1 2 3) is equivalent to
+(+ (+ 1 2) 3).  With only one argument, + and * return the value; -
+returns its negation and / its reciprocal.9
+
+   (+ 1 2) ==> 3 (+ 1 2 3) ==> 6 (+ 10.0 3.0) ==> 13.0 (+ #c(1 2) #c(3
+4)) ==> #c(4 6) (- 5 4) ==> 1 (- 2) ==> -2 (- 10 3 5) ==> 2 (* 2 3) ==>
+6 (* 2 3 4) ==> 24 (/ 10 5) ==> 2 (/ 10 5 2) ==> 1 (/ 2 3) ==> 2/3 (/ 4)
+==> 1/4 If all the arguments are the same type of number (rational,
+floating point, or complex), the result will be the same type except in
+the case where the result of an operation on complex numbers with
+rational components yields a number with a zero imaginary part, in which
+case the result will be a rational.  However, floating-point and complex
+numbers are contagious-if all the arguments are reals but one or more
+are floating-point numbers, the other arguments are converted to the
+nearest floating-point value in a "largest" floating-point
+representation of the actual floating-point arguments.  Floating-point
+numbers in a "smaller" representation are also converted to the larger
+representation.  Similarly, if any of the arguments are complex, any
+real arguments are converted to the complex equivalents.
+
+   (+ 1 2.0) ==> 3.0 (/ 2 3.0) ==> 0.6666667 (+ #c(1 2) 3) ==> #c(4 2)
+(+ #c(1 2) 3/2) ==> #c(5/2 2) (+ #c(1 1) #c(2 -1)) ==> 3 Because /
+doesn't truncate, Common Lisp provides four flavors of truncating and
+rounding for converting a real number (rational or floating point) to an
+integer: FLOOR truncates toward negative infinity, returning the largest
+integer less than or equal to the argument.  CEILING truncates toward
+positive infinity, returning the smallest integer greater than or equal
+to the argument.  TRUNCATE truncates toward zero, making it equivalent
+to FLOOR for positive arguments and to CEILING for negative arguments.
+And ROUND rounds to the nearest integer.  If the argument is exactly
+halfway between two integers, it rounds to the nearest even integer.
+
+   Two related functions are MOD and REM, which return the modulus and
+remainder of a truncating division on real numbers.  These two functions
+are related to the FLOOR and TRUNCATE functions as follows:
+
+   (+ (* (floor (/ x y)) y) (mod x y)) === x (+ (* (truncate (/ x y)) y)
+(rem x y)) === x Thus, for positive quotients they're equivalent, but
+for negative quotients they produce different results.10
+
+   The functions 1+ and 1- provide a shorthand way to express adding and
+subtracting one from a number.  Note that these are different from the
+macros INCF and DECF. 1+ and 1- are just functions that return a new
+value, but INCF and DECF modify a place.  The following equivalences
+show the relation between INCF/DECF, 1+/1-, and +/-:
+
+   (incf x) === (setf x (1+ x)) === (setf x (+ x 1)) (decf x) === (setf
+x (1- x)) === (setf x (- x 1)) (incf x 10) === (setf x (+ x 10)) (decf x
+10) === (setf x (- x 10))
+
+
+File: pcl.info,  Node: 10-4,  Next: 10-5,  Prev: 10-3,  Up: Chapter 10
+
+Numeric Comparisons
+===================
+
+The function = is the numeric equality predicate.  It compares numbers
+by mathematical value, ignoring differences in type.  Thus, = will
+consider mathematically equivalent values of different types equivalent
+while the generic equality predicate EQL would consider them
+inequivalent because of the difference in type.  (The generic equality
+predicate EQUALP, however, uses = to compare numbers.)  If it's called
+with more than two arguments, it returns true only if they all have the
+same value.  Thus:
+
+   (= 1 1) ==> T (= 10 20/2) ==> T (= 1 1.0 #c(1.0 0.0) #c(1 0)) ==> T
+The /= function, conversely, returns true only if all its arguments are
+different values.
+
+   (/= 1 1) ==> NIL (/= 1 2) ==> T (/= 1 2 3) ==> T (/= 1 2 3 1) ==> NIL
+(/= 1 2 3 1.0) ==> NIL The functions <, >, <=, and >= order rationals
+and floating-point numbers (in other words, the real numbers.)  Like =
+and /=, these functions can be called with more than two arguments, in
+which case each argument is compared to the argument to its right.
+
+   (< 2 3) ==> T (> 2 3) ==> NIL (> 3 2) ==> T (< 2 3 4) ==> T (< 2 3 3)
+==> NIL (<= 2 3 3) ==> T (<= 2 3 3 4) ==> T (<= 2 3 4 3) ==> NIL To pick
+out the smallest or largest of several numbers, you can use the function
+MIN or MAX, which takes any number of real number arguments and returns
+the minimum or maximum value.
+
+   (max 10 11) ==> 11 (min -12 -10) ==> -12 (max -1 2 -3) ==> 2 Some
+other handy functions are ZEROP, MINUSP, and PLUSP, which test whether a
+single real number is equal to, less than, or greater than zero.  Two
+other predicates, EVENP and ODDP, test whether a single integer argument
+is even or odd.  The P suffix on the names of these functions is a
+standard naming convention for predicate functions, functions that test
+some condition and return a boolean.
+
+
+File: pcl.info,  Node: 10-5,  Next: 10-6,  Prev: 10-4,  Up: Chapter 10
+
+Higher Math
+===========
+
+The functions you've seen so far are the beginning of the built-in
+mathematical functions.  Lisp also supports logarithms: LOG;
+exponentiation: EXP and EXPT; the basic trigonometric functions: SIN,
+COS, and TAN; their inverses: ASIN, ACOS, and ATAN; hyperbolic
+functions: SINH, COSH, and TANH; and their inverses: ASINH, ACOSH, and
+ATANH. It also provides functions to get at the individual bits of an
+integer and to extract the parts of a ratio or a complex number.  For a
+complete list, see any Common Lisp reference.
+
+
+File: pcl.info,  Node: 10-6,  Next: 10-7,  Prev: 10-5,  Up: Chapter 10
+
+Characters
+==========
+
+Common Lisp characters are a distinct type of object from numbers.
+That's as it should be-characters are not numbers, and languages that
+treat them as if they are tend to run into problems when character
+encodings change, say, from 8-bit ASCII to 21-bit Unicode.11 Because the
+Common Lisp standard didn't mandate a particular representation for
+characters, today several Lisp implementations use Unicode as their
+"native" character encoding despite Unicode being only a gleam in a
+standards body's eye at the time Common Lisp's own standardization was
+being wrapped up.
+
+   The read syntax for characters objects is simple: #\ followed by the
+desired character.  Thus, #\x is the character x.  Any character can be
+used after the #\, including otherwise special characters such as ", (,
+and whitespace.  However, writing whitespace characters this way isn't
+very (human) readable; an alternative syntax for certain characters is
+#\ followed by the character's name.  Exactly what names are supported
+depends on the character set and on the Lisp implementation, but all
+implementations support the names Space and Newline.  Thus, you should
+write #\Space instead of #\ , though the latter is technically legal.
+Other semistandard names (that implementations must use if the character
+set has the appropriate characters) are Tab, Page, Rubout, Linefeed,
+Return, and Backspace.
+
+
+File: pcl.info,  Node: 10-7,  Next: 10-8,  Prev: 10-6,  Up: Chapter 10
+
+Character Comparisons
+=====================
+
+The main thing you can do with characters, other than putting them into
+strings (which I'll get to later in this chapter), is to compare them
+with other characters.  Since characters aren't numbers, you can't use
+the numeric comparison functions, such as < and >.  Instead, two sets of
+functions provide character-specific analogs to the numeric comparators;
+one set is case-sensitive and the other case-insensitive.
+
+   The case-sensitive analog to the numeric = is the function CHAR=.
+Like =, CHAR= can take any number of arguments and returns true only if
+they're all the same character.  The case- insensitive version is
+CHAR-EQUAL.
+
+   The rest of the character comparators follow this same naming scheme:
+the case-sensitive comparators are named by prepending the analogous
+numeric comparator with CHAR; the case-insensitive versions spell out
+the comparator name, separated from the CHAR with a hyphen.  Note,
+however, that <= and >= are "spelled out" with the logical equivalents
+NOT-GREATERP and NOT-LESSP rather than the more verbose LESSP-OR-EQUALP
+and GREATERP-OR-EQUALP. Like their numeric counterparts, all these
+functions can take one or more arguments.  Table 10-1 summarizes the
+relation between the numeric and character comparison functions.
+
+   Table 10-1.  Character Comparison Functions Numeric Analog
+Case-Sensitive	Case-Insensitive =	CHAR=	CHAR-EQUAL /=	CHAR/=
+CHAR-NOT-EQUAL <	CHAR<	CHAR-LESSP >	CHAR>	CHAR-GREATERP <=	CHAR<=
+CHAR-NOT-GREATERP >=	CHAR>=	CHAR-NOT-LESSP Other functions that deal
+with characters provide functions for, among other things, testing
+whether a given character is alphabetic or a digit character, testing
+the case of a character, obtaining a corresponding character in a
+different case, and translating between numeric values representing
+character codes and actual character objects.  Again, for complete
+details, see your favorite Common Lisp reference.
+
+
+File: pcl.info,  Node: 10-8,  Next: 10-9,  Prev: 10-7,  Up: Chapter 10
+
+Strings
+=======
+
+As mentioned earlier, strings in Common Lisp are really a composite data
+type, namely, a one-dimensional array of characters.  Consequently, I'll
+cover many of the things you can do with strings in the next chapter
+when I discuss the many functions for manipulating sequences, of which
+strings are just one type.  But strings also have their own literal
+syntax and a library of functions for performing string-specific
+operations.  I'll discuss these aspects of strings in this chapter and
+leave the others for Chapter 11.
+
+   As you've seen, literal strings are written enclosed in double
+quotes.  You can include any character supported by the character set in
+a literal string except double quote (") and backslash (\).  And you can
+include these two as well if you escape them with a backslash.  In fact,
+backslash always escapes the next character, whatever it is, though this
+isn't necessary for any character except for " and itself.  Table 10-2
+shows how various literal strings will be read by the Lisp reader.
+
+   Table 10-2.  Literal Strings Literal	Contents	Comment "foobar"	foobar
+Plain string.  "foo\"bar"	foo"bar	The backslash escapes quote.
+"foo\\bar"	foo\bar	The first backslash escapes second backslash.
+"\"foobar\""	"foobar"	The backslashes escape quotes.  "foo\bar"	foobar
+The backslash "escapes" b Note that the REPL will ordinarily print
+strings in readable form, adding the enclosing quotation marks and any
+necessary escaping backslashes, so if you want to see the actual
+contents of a string, you need to use function such as FORMAT designed
+to print human-readable output.  For example, here's what you see if you
+type a string containing an embedded quotation mark at the REPL:
+
+   CL-USER> "foo\"bar" "foo\"bar" FORMAT, on the other hand, will show
+you the actual string contents:12
+
+   CL-USER> (format t "foo\"bar") foo"bar NIL
+
+
+File: pcl.info,  Node: 10-9,  Next: Chapter 11,  Prev: 10-8,  Up: Chapter 10
+
+String Comparisons
+==================
+
+You can compare strings using a set of functions that follow the same
+naming convention as the character comparison functions except with
+STRING as the prefix rather than CHAR (see Table 10-3).
+
+   Table 10-3.  String Comparison Functions Numeric Analog
+Case-Sensitive	Case-Insensitive =	STRING=	STRING-EQUAL /=	STRING/=
+STRING-NOT-EQUAL <	STRING<	STRING-LESSP >	STRING>	STRING-GREATERP <=
+STRING<=	STRING-NOT-GREATERP >=	STRING>=	STRING-NOT-LESSP However,
+unlike the character and number comparators, the string comparators can
+compare only two strings.  That's because they also take keyword
+arguments that allow you to restrict the comparison to a substring of
+either or both strings.  The arguments-:start1, :end1, :start2, and
+:end2-specify the starting (inclusive) and ending (exclusive) indices of
+substrings in the first and second string arguments.  Thus, the
+following:
+
+   (string= "foobarbaz" "quuxbarfoo" :start1 3 :end1 6 :start2 4 :end2
+7) compares the substring "bar" in the two arguments and returns true.
+The :end1 and :end2 arguments can be NIL (or the keyword argument
+omitted altogether) to indicate that the corresponding substring extends
+to the end of the string.
+
+   The comparators that return true when their arguments differ-that is,
+all of them except STRING= and STRING-EQUAL-return the index in the
+first string where the mismatch was detected.
+
+   (string/= "lisp" "lissome") ==> 3 If the first string is a prefix of
+the second, the return value will be the length of the first string,
+that is, one greater than the largest valid index into the string.
+
+   (string< "lisp" "lisper") ==> 4 When comparing substrings, the
+resulting value is still an index into the string as a whole.  For
+instance, the following compares the substrings "bar" and "baz" but
+returns 5 because that's the index of the r in the first string:
+
+   (string< "foobar" "abaz" :start1 3 :start2 1) ==> 5 ; N.B. not 2
+Other string functions allow you to convert the case of strings and trim
+characters from one or both ends of a string.  And, as I mentioned
+previously, since strings are really a kind of sequence, all the
+sequence functions I'll discuss in the next chapter can be used with
+strings.  For instance, you can discover the length of a string with the
+LENGTH function and can get and set individual characters of a string
+with the generic sequence element accessor function, ELT, or the generic
+array element accessor function, AREF. Or you can use the
+string-specific accessor, CHAR. But those functions, and others, are the
+topic of the next chapter, so let's move on.
+
+
+File: pcl.info,  Node: Chapter 11,  Next: Chapter 12,  Prev: Chapter 10,  Up: Top
+
+11. Collections
+===============
+
+Like most programming languages, Common Lisp provides standard data
+types that collect multiple values into a single object.  Every language
+slices up the collection problem a little bit differently, but the basic
+collection types usually boil down to an integer-indexed array type and
+a table type that can be used to map more or less arbitrary keys to
+values.  The former are variously called arrays, lists, or tuples; the
+latter go by the names hash tables, associative arrays, maps, and
+dictionaries.
+
+   Lisp is, of course, famous for its list data structure, and most Lisp
+books, following the ontogeny-recapitulates-phylogeny principle of
+language instruction, start their discussion of Lisp's collections with
+lists.  However, that approach often leads readers to the mistaken
+conclusion that lists are Lisp's only collection type.  To make matters
+worse, because Lisp's lists are such a flexible data structure, it is
+possible to use them for many of the things arrays and hash tables are
+used for in other languages.  But it's a mistake to focus too much on
+lists; while they're a crucial data structure for representing Lisp code
+as Lisp data, in many situations other data structures are more
+appropriate.
+
+   To keep lists from stealing the show, in this chapter I'll focus on
+Common Lisp's other collection types: vectors and hash tables.1 However,
+vectors and lists share enough characteristics that Common Lisp treats
+them both as subtypes of a more general abstraction, the sequence.
+Thus, you can use many of the functions I'll discuss in this chapter
+with both vectors and lists.
+
+* Menu:
+
+* 11-1::                            Vectors
+* 11-2::                            Subtypes of Vector
+* 11-3::                            Vectors As Sequences
+* 11-4::                            Sequence Iterating Functions
+* 11-5::                            Higher-Order Function Variants
+* 11-6::                            Whole Sequence Manipulations
+* 11-7::                            Sorting and Merging
+* 11-8::                            Subsequence Manipulations
+* 11-9::                            Sequence Predicates
+* 11-10::                           Sequence Mapping Functions
+* 11-11::                           Hash Tables
+* 11-12::                           Hash Table Iteration
+
+
+File: pcl.info,  Node: 11-1,  Next: 11-2,  Prev: Chapter 11,  Up: Chapter 11
+
+Vectors
+=======
+
+Vectors are Common Lisp's basic integer-indexed collection, and they
+come in two flavors.  Fixed-size vectors are a lot like arrays in a
+language such as Java: a thin veneer over a chunk of contiguous memory
+that holds the vector's elements.2 Resizable vectors, on the other hand,
+are more like arrays in Perl or Ruby, lists in Python, or the ArrayList
+class in Java: they abstract the actual storage, allowing the vector to
+grow and shrink as elements are added and removed.
+
+   You can make fixed-size vectors containing specific values with the
+function VECTOR, which takes any number of arguments and returns a
+freshly allocated fixed-size vector containing those arguments.
+
+   (vector) ==> #() (vector 1) ==> #(1) (vector 1 2) ==> #(1 2) The
+#(...)  syntax is the literal notation for vectors used by the Lisp
+printer and reader.  This syntax allows you to save and restore vectors
+by PRINTing them out and READing them back in.  You can use the #(...)
+syntax to include literal vectors in your code, but as the effects of
+modifying literal objects aren't defined, you should always use VECTOR
+or the more general function MAKE-ARRAY to create vectors you plan to
+modify.
+
+   MAKE-ARRAY is more general than VECTOR since you can use it to create
+arrays of any dimensionality as well as both fixed-size and resizable
+vectors.  The one required argument to MAKE-ARRAY is a list containing
+the dimensions of the array.  Since a vector is a one-dimensional array,
+this list will contain one number, the size of the vector.  As a
+convenience, MAKE-ARRAY will also accept a plain number in the place of
+a one-item list.  With no other arguments, MAKE-ARRAY will create a
+vector with uninitialized elements that must be set before they can be
+accessed.3 To create a vector with the elements all set to a particular
+value, you can pass an :initial-element argument.  Thus, to make a
+five-element vector with its elements initialized to NIL, you can write
+the following:
+
+   (make-array 5 :initial-element nil) ==> #(NIL NIL NIL NIL NIL)
+MAKE-ARRAY is also the function to use to make a resizable vector.  A
+resizable vector is a slightly more complicated object than a fixed-size
+vector; in addition to keeping track of the memory used to hold the
+elements and the number of slots available, a resizable vector also
+keeps track of the number of elements actually stored in the vector.
+This number is stored in the vector's fill pointer, so called because
+it's the index of the next position to be filled when you add an element
+to the vector.
+
+   To make a vector with a fill pointer, you pass MAKE-ARRAY a
+:fill-pointer argument.  For instance, the following call to MAKE-ARRAY
+makes a vector with room for five elements; but it looks empty because
+the fill pointer is zero:
+
+   (make-array 5 :fill-pointer 0) ==> #() To add an element to the end
+of a resizable vector, you can use the function VECTOR-PUSH. It adds the
+element at the current value of the fill pointer and then increments the
+fill pointer by one, returning the index where the new element was
+added.  The function VECTOR-POP returns the most recently pushed item,
+decrementing the fill pointer in the process.
+
+   (defparameter *x* (make-array 5 :fill-pointer 0))
+
+   (vector-push 'a *x*) ==> 0 *x* ==> #(A) (vector-push 'b *x*) ==> 1
+*x* ==> #(A B) (vector-push 'c *x*) ==> 2 *x* ==> #(A B C) (vector-pop
+*x*) ==> C *x* ==> #(A B) (vector-pop *x*) ==> B *x* ==> #(A)
+(vector-pop *x*) ==> A *x* ==> #() However, even a vector with a fill
+pointer isn't completely resizable.  The vector *x* can hold at most
+five elements.  To make an arbitrarily resizable vector, you need to
+pass MAKE-ARRAY another keyword argument: :adjustable.
+
+   (make-array 5 :fill-pointer 0 :adjustable t) ==> #() This call makes
+an adjustable vector whose underlying memory can be resized as needed.
+To add elements to an adjustable vector, you use VECTOR-PUSH-EXTEND,
+which works just like VECTOR-PUSH except it will automatically expand
+the array if you try to push an element onto a full vector-one whose
+fill pointer is equal to the size of the underlying storage.4
+
+
+File: pcl.info,  Node: 11-2,  Next: 11-3,  Prev: 11-1,  Up: Chapter 11
+
+Subtypes of Vector
+==================
+
+All the vectors you've dealt with so far have been general vectors that
+can hold any type of object.  It's also possible to create specialized
+vectors that are restricted to holding certain types of elements.  One
+reason to use specialized vectors is they may be stored more compactly
+and can provide slightly faster access to their elements than general
+vectors.  However, for the moment let's focus on a couple kinds of
+specialized vectors that are important data types in their own right.
+
+   One of these you've seen already-strings are vectors specialized to
+hold characters.  Strings are important enough to get their own
+read/print syntax (double quotes) and the set of string-specific
+functions I discussed in the previous chapter.  But because they're also
+vectors, all the functions I'll discuss in the next few sections that
+take vector arguments can also be used with strings.  These functions
+will fill out the string library with functions for things such as
+searching a string for a substring, finding occurrences of a character
+within a string, and more.
+
+   Literal strings, such as "foo", are like literal vectors written with
+the #() syntax-their size is fixed, and they must not be modified.
+However, you can use MAKE-ARRAY to make resizable strings by adding
+another keyword argument, :element-type.  This argument takes a type
+descriptor.  I won't discuss all the possible type descriptors you can
+use here; for now it's enough to know you can create a string by passing
+the symbol CHARACTER as the :element-type argument.  Note that you need
+to quote the symbol to prevent it from being treated as a variable name.
+For example, to make an initially empty but resizable string, you can
+write this:
+
+   (make-array 5 :fill-pointer 0 :adjustable t :element-type 'character)
+"" Bit vectors-vectors whose elements are all zeros or ones-also get
+some special treatment.  They have a special read/print syntax that
+looks like #*00001111 and a fairly large library of functions, which I
+won't discuss, for performing bit-twiddling operations such as "anding"
+together two bit arrays.  The type descriptor to pass as the
+:element-type to create a bit vector is the symbol BIT.
+
+
+File: pcl.info,  Node: 11-3,  Next: 11-4,  Prev: 11-2,  Up: Chapter 11
+
+Vectors As Sequences
+====================
+
+As mentioned earlier, vectors and lists are the two concrete subtypes of
+the abstract type sequence.  All the functions I'll discuss in the next
+few sections are sequence functions; in addition to being applicable to
+vectors-both general and specialized-they can also be used with lists.
+
+   The two most basic sequence functions are LENGTH, which returns the
+length of a sequence, and ELT, which allows you to access individual
+elements via an integer index.  LENGTH takes a sequence as its only
+argument and returns the number of elements it contains.  For vectors
+with a fill pointer, this will be the value of the fill pointer.  ELT,
+short for element, takes a sequence and an integer index between zero
+(inclusive) and the length of the sequence (exclusive) and returns the
+corresponding element.  ELT will signal an error if the index is out of
+bounds.  Like LENGTH, ELT treats a vector with a fill pointer as having
+the length specified by the fill pointer.
+
+   (defparameter *x* (vector 1 2 3))
+
+   (length *x*) ==> 3 (elt *x* 0) ==> 1 (elt *x* 1) ==> 2 (elt *x* 2)
+==> 3 (elt *x* 3) ==> error ELT is also a SETFable place, so you can set
+the value of a particular element like this:
+
+   (setf (elt *x* 0) 10)
+
+   *x* ==> #(10 2 3)
+
+
+File: pcl.info,  Node: 11-4,  Next: 11-5,  Prev: 11-3,  Up: Chapter 11
+
+Sequence Iterating Functions
+============================
+
+While in theory all operations on sequences boil down to some
+combination of LENGTH, ELT, and SETF of ELT operations, Common Lisp
+provides a large library of sequence functions.
+
+   One group of sequence functions allows you to express certain
+operations on sequences such as finding or filtering specific elements
+without writing explicit loops.  Table 11-1 summarizes them.
+
+   Table 11-1.Basic Sequence Functions Name	Required Arguments	Returns
+COUNT	Item and sequence	Number of times item appears in sequence FIND
+Item and sequence	Item or NIL POSITION	Item and sequence	Index into
+sequence or NIL REMOVE	Item and sequence	Sequence with instances of item
+removed SUBSTITUTE	New item, item, and sequence	Sequence with instances
+of item replaced with new item Here are some simple examples of how to
+use these functions:
+
+   (count 1 #(1 2 1 2 3 1 2 3 4)) ==> 3 (remove 1 #(1 2 1 2 3 1 2 3 4))
+==> #(2 2 3 2 3 4) (remove 1 '(1 2 1 2 3 1 2 3 4)) ==> (2 2 3 2 3 4)
+(remove #\a "foobarbaz") ==> "foobrbz" (substitute 10 1 #(1 2 1 2 3 1 2
+3 4)) ==> #(10 2 10 2 3 10 2 3 4) (substitute 10 1 '(1 2 1 2 3 1 2 3 4))
+==> (10 2 10 2 3 10 2 3 4) (substitute #\x #\b "foobarbaz") ==>
+"fooxarxaz" (find 1 #(1 2 1 2 3 1 2 3 4)) ==> 1 (find 10 #(1 2 1 2 3 1 2
+3 4)) ==> NIL (position 1 #(1 2 1 2 3 1 2 3 4)) ==> 0 Note how REMOVE
+and SUBSTITUTE always return a sequence of the same type as their
+sequence argument.
+
+   You can modify the behavior of these five functions in a variety of
+ways using keyword arguments.  For instance, these functions, by
+default, look for elements in the sequence that are the same object as
+the item argument.  You can change this in two ways: First, you can use
+the :test keyword to pass a function that accepts two arguments and
+returns a boolean.  If provided, it will be used to compare item to each
+element instead of the default object equality test, EQL.5 Second, with
+the :key keyword you can pass a one-argument function to be called on
+each element of the sequence to extract a key value, which will then be
+compared to the item in the place of the element itself.  Note, however,
+that functions such as FIND that return elements of the sequence
+continue to return the actual element, not just the extracted key.
+
+   (count "foo" #("foo" "bar" "baz") :test #'string=) ==> 1 (find 'c
+#((a 10) (b 20) (c 30) (d 40)) :key #'first) ==> (C 30) To limit the
+effects of these functions to a particular subsequence of the sequence
+argument, you can provide bounding indices with :start and :end
+arguments.  Passing NIL for :end or omitting it is the same as
+specifying the length of the sequence.6
+
+   If a non-NIL :from-end argument is provided, then the elements of the
+sequence will be examined in reverse order.  By itself :from-end can
+affect the results of only FIND and POSITION. For instance:
+
+   (find 'a #((a 10) (b 20) (a 30) (b 40)) :key #'first) ==> (A 10)
+(find 'a #((a 10) (b 20) (a 30) (b 40)) :key #'first :from-end t) ==> (A
+30) However, the :from-end argument can affect REMOVE and SUBSTITUTE in
+conjunction with another keyword parameter, :count, that's used to
+specify how many elements to remove or substitute.  If you specify a
+:count lower than the number of matching elements, then it obviously
+matters which end you start from:
+
+   (remove #\a "foobarbaz" :count 1) ==> "foobrbaz" (remove #\a
+"foobarbaz" :count 1 :from-end t) ==> "foobarbz" And while :from-end
+can't change the results of the COUNT function, it does affect the order
+the elements are passed to any :test and :key functions, which could
+possibly have side effects.  For example:
+
+   CL-USER> (defparameter *v* #((a 10) (b 20) (a 30) (b 40))) *V*
+CL-USER> (defun verbose-first (x) (format t "Looking at ~s~%" x) (first
+x)) VERBOSE-FIRST CL-USER> (count 'a *v* :key #'verbose-first) Looking
+at (A 10) Looking at (B 20) Looking at (A 30) Looking at (B 40) 2
+CL-USER> (count 'a *v* :key #'verbose-first :from-end t) Looking at (B
+40) Looking at (A 30) Looking at (B 20) Looking at (A 10) 2 Table 11-2
+summarizes these arguments.
+
+   Table 11-2.  Standard Sequence Function Keyword Arguments Argument
+Meaning	Default :test	Two-argument function used to compare item (or
+value extracted by :key function) to element.	 EQL :key	One-argument
+function to extract key value from actual sequence element.  NIL means
+use element as is.	 NIL :start	Starting index (inclusive) of
+subsequence.	 0 :end	Ending index (exclusive) of subsequence.  NIL
+indicates end of sequence.	 NIL :from-end	If true, the sequence will be
+traversed in reverse order, from end to start.	 NIL :count	Number
+indicating the number of elements to remove or substitute or NIL to
+indicate all (REMOVE and SUBSTITUTE only).	 NIL
+
+
+File: pcl.info,  Node: 11-5,  Next: 11-6,  Prev: 11-4,  Up: Chapter 11
+
+Higher-Order Function Variants
+==============================
+
+For each of the functions just discussed, Common Lisp provides two
+higher-order function variants that, in the place of the item argument,
+take a function to be called on each element of the sequence.  One set
+of variants are named the same as the basic function with an -IF
+appended.  These functions count, find, remove, and substitute elements
+of the sequence for which the function argument returns true.  The other
+set of variants are named with an -IF-NOT suffix and count, find,
+remove, and substitute elements for which the function argument does not
+return true.
+
+   (count-if #'evenp #(1 2 3 4 5)) ==> 2
+
+   (count-if-not #'evenp #(1 2 3 4 5)) ==> 3
+
+   (position-if #'digit-char-p "abcd0001") ==> 4
+
+   (remove-if-not #'(lambda (x) (char= (elt x 0) #\f)) #("foo" "bar"
+"baz" "foom")) ==> #("foo" "foom") According to the language standard,
+the -IF-NOT variants are deprecated.  However, that deprecation is
+generally considered to have itself been ill-advised.  If the standard
+is ever revised, it's more likely the deprecation will be removed than
+the -IF-NOT functions.  For one thing, the REMOVE-IF-NOT variant is
+probably used more often than REMOVE-IF. Despite its negative-sounding
+name, REMOVE-IF-NOT is actually the positive variant-it returns the
+elements that do satisfy the predicate.  7
+
+   The -IF and -IF-NOT variants accept all the same keyword arguments as
+their vanilla counterparts except for :test, which isn't needed since
+the main argument is already a function.8 With a :key argument, the
+value extracted by the :key function is passed to the function instead
+of the actual element.
+
+   (count-if #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first) ==>
+2
+
+   (count-if-not #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first)
+==> 3
+
+   (remove-if-not #'alpha-char-p #("foo" "bar" "1baz") :key #'(lambda
+(x) (elt x 0))) ==> #("foo" "bar") The REMOVE family of functions also
+support a fourth variant, REMOVE-DUPLICATES, that has only one required
+argument, a sequence, from which it removes all but one instance of each
+duplicated element.  It takes the same keyword arguments as REMOVE,
+except for :count, since it always removes all duplicates.
+
+   (remove-duplicates #(1 2 1 2 3 1 2 3 4)) ==> #(1 2 3 4)
+
+
+File: pcl.info,  Node: 11-6,  Next: 11-7,  Prev: 11-5,  Up: Chapter 11
+
+Whole Sequence Manipulations
+============================
+
+A handful of functions perform operations on a whole sequence (or
+sequences) at a time.  These tend to be simpler than the other functions
+I've described so far.  For instance, COPY-SEQ and REVERSE each take a
+single argument, a sequence, and each returns a new sequence of the same
+type.  The sequence returned by COPY-SEQ contains the same elements as
+its argument while the sequence returned by REVERSE contains the same
+elements but in reverse order.  Note that neither function copies the
+elements themselves-only the returned sequence is a new object.
+
+   The CONCATENATE function creates a new sequence containing the
+concatenation of any number of sequences.  However, unlike REVERSE and
+COPY-SEQ, which simply return a sequence of the same type as their
+single argument, CONCATENATE must be told explicitly what kind of
+sequence to produce in case the arguments are of different types.  Its
+first argument is a type descriptor, like the :element-type argument to
+MAKE-ARRAY. In this case, the type descriptors you'll most likely use
+are the symbols VECTOR, LIST, or STRING.9 For example:
+
+   (concatenate 'vector #(1 2 3) '(4 5 6)) ==> #(1 2 3 4 5 6)
+(concatenate 'list #(1 2 3) '(4 5 6)) ==> (1 2 3 4 5 6) (concatenate
+'string "abc" '(#\d #\e #\f)) ==> "abcdef"
+
+
+File: pcl.info,  Node: 11-7,  Next: 11-8,  Prev: 11-6,  Up: Chapter 11
+
+Sorting and Merging
+===================
+
+The functions SORT and STABLE-SORT provide two ways of sorting a
+sequence.  They both take a sequence and a two-argument predicate and
+return a sorted version of the sequence.
+
+   (sort (vector "foo" "bar" "baz") #'string<) ==> #("bar" "baz" "foo")
+The difference is that STABLE-SORT is guaranteed to not reorder any
+elements considered equivalent by the predicate while SORT guarantees
+only that the result is sorted and may reorder equivalent elements.
+
+   Both these functions are examples of what are called destructive
+functions.  Destructive functions are allowed-typically for reasons of
+efficiency-to modify their arguments in more or less arbitrary ways.
+This has two implications: one, you should always do something with the
+return value of these functions (such as assign it to a variable or pass
+it to another function), and, two, unless you're done with the object
+you're passing to the destructive function, you should pass a copy
+instead.  I'll say more about destructive functions in the next chapter.
+
+   Typically you won't care about the unsorted version of a sequence
+after you've sorted it, so it makes sense to allow SORT and STABLE-SORT
+to destroy the sequence in the course of sorting it.  But it does mean
+you need to remember to write the following:10
+
+   (setf my-sequence (sort my-sequence #'string<)) rather than just
+this:
+
+   (sort my-sequence #'string<) Both these functions also take a keyword
+argument, :key, which, like the :key argument in other sequence
+functions, should be a function and will be used to extract the values
+to be passed to the sorting predicate in the place of the actual
+elements.  The extracted keys are used only to determine the ordering of
+elements; the sequence returned will contain the actual elements of the
+argument sequence.
+
+   The MERGE function takes two sequences and a predicate and returns a
+sequence produced by merging the two sequences, according to the
+predicate.  It's related to the two sorting functions in that if each
+sequence is already sorted by the same predicate, then the sequence
+returned by MERGE will also be sorted.  Like the sorting functions,
+MERGE takes a :key argument.  Like CONCATENATE, and for the same reason,
+the first argument to MERGE must be a type descriptor specifying the
+type of sequence to produce.
+
+   (merge 'vector #(1 3 5) #(2 4 6) #'<) ==> #(1 2 3 4 5 6) (merge 'list
+#(1 3 5) #(2 4 6) #'<) ==> (1 2 3 4 5 6)
+
+
+File: pcl.info,  Node: 11-8,  Next: 11-9,  Prev: 11-7,  Up: Chapter 11
+
+Subsequence Manipulations
+=========================
+
+Another set of functions allows you to manipulate subsequences of
+existing sequences.  The most basic of these is SUBSEQ, which extracts a
+subsequence starting at a particular index and continuing to a
+particular ending index or the end of the sequence.  For instance:
+
+   (subseq "foobarbaz" 3) ==> "barbaz" (subseq "foobarbaz" 3 6) ==>
+"bar" SUBSEQ is also SETFable, but it won't extend or shrink a sequence;
+if the new value and the subsequence to be replaced are different
+lengths, the shorter of the two determines how many characters are
+actually changed.
+
+   (defparameter *x* (copy-seq "foobarbaz"))
+
+   (setf (subseq *x* 3 6) "xxx") ; subsequence and new value are same
+length *x* ==> "fooxxxbaz"
+
+   (setf (subseq *x* 3 6) "abcd") ; new value too long, extra character
+ignored.  *x* ==> "fooabcbaz"
+
+   (setf (subseq *x* 3 6) "xx") ; new value too short, only two
+characters changed *x* ==> "fooxxcbaz" You can use the FILL function to
+set multiple elements of a sequence to a single value.  The required
+arguments are a sequence and the value with which to fill it.  By
+default every element of the sequence is set to the value; :start and
+:end keyword arguments can limit the effects to a given subsequence.
+
+   If you need to find a subsequence within a sequence, the SEARCH
+function works like POSITION except the first argument is a sequence
+rather than a single item.
+
+   (position #\b "foobarbaz") ==> 3 (search "bar" "foobarbaz") ==> 3 On
+the other hand, to find where two sequences with a common prefix first
+diverge, you can use the MISMATCH function.  It takes two sequences and
+returns the index of the first pair of mismatched elements.
+
+   (mismatch "foobarbaz" "foom") ==> 3 It returns NIL if the strings
+match.  MISMATCH also takes many of the standard keyword arguments: a
+:key argument for specifying a function to use to extract the values to
+be compared; a :test argument to specify the comparison function; and
+:start1, :end1, :start2, and :end2 arguments to specify subsequences
+within the two sequences.  And a :from-end argument of T specifies the
+sequences should be searched in reverse order, causing MISMATCH to
+return the index, in the first sequence, where whatever common suffix
+the two sequences share begins.
+
+   (mismatch "foobar" "bar" :from-end t) ==> 3
+
+
+File: pcl.info,  Node: 11-9,  Next: 11-10,  Prev: 11-8,  Up: Chapter 11
+
+Sequence Predicates
+===================
+
+Four other handy functions are EVERY, SOME, NOTANY, and NOTEVERY, which
+iterate over sequences testing a boolean predicate.  The first argument
+to all these functions is the predicate, and the remaining arguments are
+sequences.  The predicate should take as many arguments as the number of
+sequences passed.  The elements of the sequences are passed to the
+predicate-one element from each sequence-until one of the sequences runs
+out of elements or the overall termination test is met: EVERY
+terminates, returning false, as soon as the predicate fails.  If the
+predicate is always satisfied, it returns true.  SOME returns the first
+non-NIL value returned by the predicate or returns false if the
+predicate is never satisfied.  NOTANY returns false as soon as the
+predicate is satisfied or true if it never is.  And NOTEVERY returns
+true as soon as the predicate fails or false if the predicate is always
+satisfied.  Here are some examples of testing just one sequence:
+
+   (every #'evenp #(1 2 3 4 5)) ==> NIL (some #'evenp #(1 2 3 4 5)) ==>
+T (notany #'evenp #(1 2 3 4 5)) ==> NIL (notevery #'evenp #(1 2 3 4 5))
+==> T These calls compare elements of two sequences pairwise:
+
+   (every #'> #(1 2 3 4) #(5 4 3 2)) ==> NIL (some #'> #(1 2 3 4) #(5 4
+3 2)) ==> T (notany #'> #(1 2 3 4) #(5 4 3 2)) ==> NIL (notevery #'> #(1
+2 3 4) #(5 4 3 2)) ==> T
+
+
+File: pcl.info,  Node: 11-10,  Next: 11-11,  Prev: 11-9,  Up: Chapter 11
+
+Sequence Mapping Functions
+==========================
+
+Finally, the last of the sequence functions are the generic mapping
+functions.  MAP, like the sequence predicate functions, takes a
+n-argument function and n sequences.  But instead of a boolean value,
+MAP returns a new sequence containing the result of applying the
+function to subsequent elements of the sequences.  Like CONCATENATE and
+MERGE, MAP needs to be told what kind of sequence to create.
+
+   (map 'vector #'* #(1 2 3 4 5) #(10 9 8 7 6)) ==> #(10 18 24 28 30)
+MAP-INTO is like MAP except instead of producing a new sequence of a
+given type, it places the results into a sequence passed as the first
+argument.  This sequence can be the same as one of the sequences
+providing values for the function.  For instance, to sum several
+vectors-a, b, and c-into one, you could write this:
+
+   (map-into a #'+ a b c) If the sequences are different lengths,
+MAP-INTO affects only as many elements as are present in the shortest
+sequence, including the sequence being mapped into.  However, if the
+sequence being mapped into is a vector with a fill pointer, the number
+of elements affected isn't limited by the fill pointer but rather by the
+actual size of the vector.  After a call to MAP-INTO, the fill pointer
+will be set to the number of elements mapped.  MAP-INTO won't, however,
+extend an adjustable vector.
+
+   The last sequence function is REDUCE, which does another kind of
+mapping: it maps over a single sequence, applying a two-argument
+function first to the first two elements of the sequence and then to the
+value returned by the function and subsequent elements of the sequence.
+Thus, the following expression sums the numbers from one to ten:
+
+   (reduce #'+ #(1 2 3 4 5 6 7 8 9 10)) ==> 55 REDUCE is a surprisingly
+useful function-whenever you need to distill a sequence down to a single
+value, chances are you can write it with REDUCE, and it will often be
+quite a concise way to express what you want.  For instance, to find the
+maximum value in a sequence of numbers, you can write (reduce #'max
+numbers).  REDUCE also takes a full complement of keyword arguments
+(:key, :from-end, :start, and :end) and one unique to REDUCE
+(:initial-value).  The latter specifies a value that's logically placed
+before the first element of the sequence (or after the last if you also
+specify a true :from-end argument).
+
+
+File: pcl.info,  Node: 11-11,  Next: 11-12,  Prev: 11-10,  Up: Chapter 11
+
+Hash Tables
+===========
+
+The other general-purpose collection provided by Common Lisp is the hash
+table.  Where vectors provide an integer-indexed data structure, hash
+tables allow you to use arbitrary objects as the indexes, or keys.  When
+you add a value to a hash table, you store it under a particular key.
+Later you can use the same key to retrieve the value.  Or you can
+associate a new value with the same key-each key maps to a single value.
+
+   With no arguments MAKE-HASH-TABLE makes a hash table that considers
+two keys equivalent if they're the same object according to EQL. This is
+a good default unless you want to use strings as keys, since two strings
+with the same contents aren't necessarily EQL. In that case you'll want
+a so-called EQUAL hash table, which you can get by passing the symbol
+EQUAL as the :test keyword argument to MAKE-HASH-TABLE. Two other
+possible values for the :test argument are the symbols EQ and EQUALP.
+These are, of course, the names of the standard object comparison
+functions, which I discussed in Chapter 4.  However, unlike the :test
+argument passed to sequence functions, MAKE-HASH-TABLE's :test can't be
+used to specify an arbitrary function-only the values EQ, EQL, EQUAL,
+and EQUALP. This is because hash tables actually need two functions, an
+equivalence function and a hash function that computes a numerical hash
+code from the key in a way compatible with how the equivalence function
+will ultimately compare two keys.  However, although the language
+standard provides only for hash tables that use the standard equivalence
+functions, most implementations provide some mechanism for defining
+custom hash tables.
+
+   The GETHASH function provides access to the elements of a hash table.
+It takes two arguments-a key and the hash table-and returns the value,
+if any, stored in the hash table under that key or NIL.11 For example:
+
+   (defparameter *h* (make-hash-table))
+
+   (gethash 'foo *h*) ==> NIL
+
+   (setf (gethash 'foo *h*) 'quux)
+
+   (gethash 'foo *h*) ==> QUUX Since GETHASH returns NIL if the key
+isn't present in the table, there's no way to tell from the return value
+the difference between a key not being in a hash table at all and being
+in the table with the value NIL. GETHASH solves this problem with a
+feature I haven't discussed yet-multiple return values.  GETHASH
+actually returns two values; the primary value is the value stored under
+the given key or NIL. The secondary value is a boolean indicating
+whether the key is present in the hash table.  Because of the way
+multiple values work, the extra return value is silently discarded
+unless the caller explicitly handles it with a form that can "see"
+multiple values.
+
+   I'll discuss multiple return values in greater detail in Chapter 20,
+but for now I'll give you a sneak preview of how to use the
+MULTIPLE-VALUE-BIND macro to take advantage of GETHASH's extra return
+value.  MULTIPLE-VALUE-BIND creates variable bindings like LET does,
+filling them with the multiple values returned by a form.
+
+   The following function shows how you might use MULTIPLE-VALUE-BIND;
+the variables it binds are value and present:
+
+   (defun show-value (key hash-table) (multiple-value-bind (value
+present) (gethash key hash-table) (if present (format nil "Value ~a
+actually present."  value) (format nil "Value ~a because key not found."
+value))))
+
+   (setf (gethash 'bar *h*) nil) ; provide an explicit value of NIL
+
+   (show-value 'foo *h*) ==> "Value QUUX actually present."  (show-value
+'bar *h*) ==> "Value NIL actually present."  (show-value 'baz *h*) ==>
+"Value NIL because key not found."  Since setting the value under a key
+to NIL leaves the key in the table, you'll need another function to
+completely remove a key/value pair.  REMHASH takes the same arguments as
+GETHASH and removes the specified entry.  You can also completely clear
+a hash table of all its key/value pairs with CLRHASH.
+
+
+File: pcl.info,  Node: 11-12,  Next: Chapter 12,  Prev: 11-11,  Up: Chapter 11
+
+Hash Table Iteration
+====================
+
+Common Lisp provides a couple ways to iterate over the entries in a hash
+table.  The simplest of these is via the function MAPHASH. Analogous to
+the MAP function, MAPHASH takes a two-argument function and a hash table
+and invokes the function once for each key/value pair in the hash table.
+For instance, to print all the key/value pairs in a hash table, you
+could use MAPHASH like this:
+
+   (maphash #'(lambda (k v) (format t "~a => ~a~%" k v)) *h*) The
+consequences of adding or removing elements from a hash table while
+iterating over it aren't specified (and are likely to be bad) with two
+exceptions: you can use SETF with GETHASH to change the value of the
+current entry, and you can use REMHASH to remove the current entry.  For
+instance, to remove all the entries whose value is less than ten, you
+could write this:
+
+   (maphash #'(lambda (k v) (when (< v 10) (remhash k *h*))) *h*) The
+other way to iterate over a hash table is with the extended LOOP macro,
+which I'll discuss in Chapter 22.12 The LOOP equivalent of the first
+MAPHASH expression would look like this:
+
+   (loop for k being the hash-keys in *h* using (hash-value v) do
+(format t "~a => ~a~%" k v)) I could say a lot more about the nonlist
+collections supported by Common Lisp.  For instance, I haven't discussed
+multidimensional arrays at all or the library of functions for
+manipulating bit arrays.  However, what I've covered in this chapter
+should suffice for most of your general-purpose programming needs.  Now
+it's finally time to look at Lisp's eponymous data structure: lists.
+
+
+File: pcl.info,  Node: Chapter 12,  Next: Chapter 13,  Prev: Chapter 11,  Up: Top
+
+12. They Called It LISP for a Reason: List Processing
+=====================================================
+
+content 12-intro
+
+* Menu:
+
+* 12-1::             "There Is No List"
+* 12-2::             Functional Programming and Lists
+* 12-3::             "Destructive" Operations
+* 12-4::             Combining Recycling with Shared Structure
+* 12-5::             List-Manipulation Functions
+* 12-6::             Mapping
+* 12-7::             Other Structures
+
+
+File: pcl.info,  Node: 12-1,  Next: 12-2,  Prev: Chapter 12,  Up: Chapter 12
+
+"There Is No List"
+==================
+
+content 12-1
+
+
+File: pcl.info,  Node: 12-2,  Next: 12-3,  Prev: 12-1,  Up: Chapter 12
+
+Functional Programming and Lists
+================================
+
+content 12-2
+
+
+File: pcl.info,  Node: 12-3,  Next: 12-4,  Prev: 12-2,  Up: Chapter 12
+
+"Destructive" Operations
+========================
+
+content 12-3
+
+
+File: pcl.info,  Node: 12-4,  Next: 12-5,  Prev: 12-3,  Up: Chapter 12
+
+Combining Recycling with Shared Structure
+=========================================
+
+content 12-4
+
+
+File: pcl.info,  Node: 12-5,  Next: 12-6,  Prev: 12-4,  Up: Chapter 12
+
+List-Manipulation Functions
+===========================
+
+content 12-5
+
+
+File: pcl.info,  Node: 12-6,  Next: 12-7,  Prev: 12-5,  Up: Chapter 12
+
+Mapping
+=======
+
+content 12-6
+
+
+File: pcl.info,  Node: 12-7,  Next: Chapter 13,  Prev: 12-6,  Up: Chapter 12
+
+Other Structures
+================
+
+content 12-7
+
+
+File: pcl.info,  Node: Chapter 13,  Next: Chapter 14,  Prev: Chapter 12,  Up: Top
+
+13. Beyond Lists: Other Uses for Cons Cells
+===========================================
+
+content 13-intro
+
+* Menu:
+
+* 13-1::                Trees
+* 13-2::                Sets
+* 13-3::                Lookup Tables: Alists and Plists
+* 13-4::                DESTRUCTURING-BIND
+
+
+File: pcl.info,  Node: 13-1,  Next: 13-2,  Prev: Chapter 13,  Up: Chapter 13
+
+Trees
+=====
+
+content 13-1
+
+
+File: pcl.info,  Node: 13-2,  Next: 13-3,  Prev: 13-1,  Up: Chapter 13
+
+Sets
+====
+
+content 13-2
+
+
+File: pcl.info,  Node: 13-3,  Next: 13-4,  Prev: 13-2,  Up: Chapter 13
+
+Lookup Tables: Alists and Plists
+================================
+
+content 13-3
+
+
+File: pcl.info,  Node: 13-4,  Next: Chapter 14,  Prev: 13-3,  Up: Chapter 13
+
+DESTRUCTURING-BIND
+==================
+
+content 13-4
+
+
+File: pcl.info,  Node: Chapter 14,  Next: Chapter 15,  Prev: Chapter 13,  Up: Top
+
+14. Files and File I/O
+======================
+
+content 14-intro
+
+* Menu:
+
+* 14-1::      Reading File Data
+* 14-2::      Reading Binary Data
+* 14-3::      Bulk Reads
+* 14-4::      File Output
+* 14-5::      Closing Files
+* 14-6::      Filenames
+* 14-7::      How Pathnames Represent Filenames
+* 14-8::      Constructing New Pathnames
+* 14-9::      Two Representations of Directory Names
+* 14-10::     Interacting with the File System
+* 14-11::     Other Kinds of I/O
+
+
+File: pcl.info,  Node: 14-1,  Next: 14-2,  Prev: Chapter 14,  Up: Chapter 14
+
+Reading File Data
+=================
+
+content 14-1
+
+
+File: pcl.info,  Node: 14-2,  Next: 14-3,  Prev: 14-1,  Up: Chapter 14
+
+Reading Binary Data
+===================
+
+content 14-2
+
+
+File: pcl.info,  Node: 14-3,  Next: 14-4,  Prev: 14-2,  Up: Chapter 14
+
+Bulk Reads
+==========
+
+content 14-3
+
+
+File: pcl.info,  Node: 14-4,  Next: 14-5,  Prev: 14-3,  Up: Chapter 14
+
+File Output
+===========
+
+content 14-4
+
+
+File: pcl.info,  Node: 14-5,  Next: 14-6,  Prev: 14-4,  Up: Chapter 14
+
+Closing Files
+=============
+
+content 14-5
+
+
+File: pcl.info,  Node: 14-6,  Next: 14-7,  Prev: 14-5,  Up: Chapter 14
+
+Filenames
+=========
+
+content 14-6
+
+
+File: pcl.info,  Node: 14-7,  Next: 14-8,  Prev: 14-6,  Up: Chapter 14
+
+How Pathnames Represent Filenames
+=================================
+
+content 14-7
+
+
+File: pcl.info,  Node: 14-8,  Next: 14-9,  Prev: 14-7,  Up: Chapter 14
+
+Constructing New Pathnames
+==========================
+
+content 14-8
+
+
+File: pcl.info,  Node: 14-9,  Next: 14-10,  Prev: 14-8,  Up: Chapter 14
+
+Two Representations of Directory Names
+======================================
+
+content 14-9
+
+
+File: pcl.info,  Node: 14-10,  Next: 14-11,  Prev: 14-9,  Up: Chapter 14
+
+Interacting with the File System
+================================
+
+content 14-10
+
+
+File: pcl.info,  Node: 14-11,  Next: Chapter 15,  Prev: 14-10,  Up: Chapter 14
+
+Other Kinds of I/O
+==================
+
+content 14-11
+
+
+File: pcl.info,  Node: Chapter 15,  Next: Chapter 16,  Prev: Chapter 14,  Up: Top
+
+15. Practical: A Portable Pathname Library
+==========================================
+
+content 15-intro
+
+* Menu:
+
+* 15-1::       The API
+* 15-2::       *FEATURES* and Read-Time Conditionalization
+* 15-3::       Listing a Directory
+* 15-4::       Testing a File's Existence
+* 15-5::       Walking a Directory Tree
+
+
+File: pcl.info,  Node: 15-1,  Next: 15-2,  Prev: Chapter 15,  Up: Chapter 15
+
+The API
+=======
+
+content 15-1
+
+
+File: pcl.info,  Node: 15-2,  Next: 15-3,  Prev: 15-1,  Up: Chapter 15
+
+*FEATURES* and Read-Time Conditionalization
+===========================================
+
+content 15-2
+
+
+File: pcl.info,  Node: 15-3,  Next: 15-4,  Prev: 15-2,  Up: Chapter 15
+
+Listing a Directory
+===================
+
+content 15-3
+
+
+File: pcl.info,  Node: 15-4,  Next: 15-5,  Prev: 15-3,  Up: Chapter 15
+
+Testing a File's Existence
+==========================
+
+content 15-4
+
+
+File: pcl.info,  Node: 15-5,  Next: Chapter 16,  Prev: 15-4,  Up: Chapter 15
+
+Walking a Directory Tree
+========================
+
+content 15-5
+
+
+File: pcl.info,  Node: Chapter 16,  Next: Chapter 17,  Prev: Chapter 15,  Up: Top
+
+16. Object Reorientation: Generic Functions
+===========================================
+
+content 16-intro
+
+* Menu:
+
+* 16-1::   Generic Functions and Classes
+* 16-2::   Generic Functions and Methods
+* 16-3::   DEFGENERIC
+* 16-4::   DEFMETHOD
+* 16-5::   Method Combination
+* 16-6::   The Standard Method Combination
+* 16-7::   Other Method Combinations
+* 16-8::   Multimethods
+* 16-9::   To Be Continued . . .
+
+
+File: pcl.info,  Node: 16-1,  Next: 16-2,  Prev: Chapter 16,  Up: Chapter 16
+
+Generic Functions and Classes
+=============================
+
+content 16-1
+
+
+File: pcl.info,  Node: 16-2,  Next: 16-3,  Prev: 16-1,  Up: Chapter 16
+
+Generic Functions and Methods
+=============================
+
+content 16-2
+
+
+File: pcl.info,  Node: 16-3,  Next: 16-4,  Prev: 16-2,  Up: Chapter 16
+
+DEFGENERIC
+==========
+
+content 16-3
+
+
+File: pcl.info,  Node: 16-4,  Next: 16-5,  Prev: 16-3,  Up: Chapter 16
+
+DEFMETHOD
+=========
+
+content 16-4
+
+
+File: pcl.info,  Node: 16-5,  Next: 16-6,  Prev: 16-4,  Up: Chapter 16
+
+Method Combination
+==================
+
+content 16-5
+
+
+File: pcl.info,  Node: 16-6,  Next: 16-7,  Prev: 16-5,  Up: Chapter 16
+
+The Standard Method Combination
+===============================
+
+content 16-6
+
+
+File: pcl.info,  Node: 16-7,  Next: 16-8,  Prev: 16-6,  Up: Chapter 16
+
+Other Method Combinations
+=========================
+
+content 16-7
+
+
+File: pcl.info,  Node: 16-8,  Next: 16-9,  Prev: 16-7,  Up: Chapter 16
+
+Multimethods
+============
+
+content 16-8
+
+
+File: pcl.info,  Node: 16-9,  Next: Chapter 17,  Prev: 16-8,  Up: Chapter 16
+
+To Be Continued . . .
+=====================
+
+content 16-9
+
+
+File: pcl.info,  Node: Chapter 17,  Next: Chapter 18,  Prev: Chapter 16,  Up: Top
+
+17. Object Reorientation: Classes
+=================================
+
+content 17-intro
+
+* Menu:
+
+* 17-1::   DEFCLASS
+* 17-2::   Slot Specifiers
+* 17-3::   Object Initialization
+* 17-4::   Accessor Functions
+* 17-5::   WITH-SLOTS and WITH-ACCESSORS
+* 17-6::   Class-Allocated Slots
+* 17-7::   Slots and Inheritance
+* 17-8::   Multiple Inheritance
+* 17-9::   Good Object-Oriented Design
+
+
+File: pcl.info,  Node: 17-1,  Next: 17-2,  Prev: Chapter 17,  Up: Chapter 17
+
+DEFCLASS
+========
+
+content 17-1
+
+
+File: pcl.info,  Node: 17-2,  Next: 17-3,  Prev: 17-1,  Up: Chapter 17
+
+Slot Specifiers
+===============
+
+content 17-2
+
+
+File: pcl.info,  Node: 17-3,  Next: 17-4,  Prev: 17-2,  Up: Chapter 17
+
+Object Initialization
+=====================
+
+content 17-3
+
+
+File: pcl.info,  Node: 17-4,  Next: 17-5,  Prev: 17-3,  Up: Chapter 17
+
+Accessor Functions
+==================
+
+content 17-4
+
+
+File: pcl.info,  Node: 17-5,  Next: 17-6,  Prev: 17-4,  Up: Chapter 17
+
+WITH-SLOTS and WITH-ACCESSORS
+=============================
+
+content 17-5
+
+
+File: pcl.info,  Node: 17-6,  Next: 17-7,  Prev: 17-5,  Up: Chapter 17
+
+Class-Allocated Slots
+=====================
+
+content 17-6
+
+
+File: pcl.info,  Node: 17-7,  Next: 17-8,  Prev: 17-6,  Up: Chapter 17
+
+Slots and Inheritance
+=====================
+
+content 17-7
+
+
+File: pcl.info,  Node: 17-8,  Next: 17-9,  Prev: 17-7,  Up: Chapter 17
+
+Multiple Inheritance
+====================
+
+content 17-8
+
+
+File: pcl.info,  Node: 17-9,  Next: Chapter 18,  Prev: 17-8,  Up: Chapter 17
+
+Good Object-Oriented Design
+===========================
+
+content 17-9
+
+
+File: pcl.info,  Node: Chapter 18,  Next: Chapter 19,  Prev: Chapter 17,  Up: Top
+
+18. A Few FORMAT Recipes
+========================
+
+content 18-intro
+
+* Menu:
+
+* 18-1::         The FORMAT Function
+* 18-2::         FORMAT Directives
+* 18-3::         Basic Formatting
+* 18-4::         Character and Integer Directives
+* 18-5::         Floating-Point Directives
+* 18-6::         English-Language Directives
+* 18-7::         Conditional Formatting
+* 18-8::         Iteration
+* 18-9::         Hop, Skip, Jump
+* 18-10::        And More . . .
+
+
+File: pcl.info,  Node: 18-1,  Next: 18-2,  Prev: Chapter 18,  Up: Chapter 18
+
+The FORMAT Function
+===================
+
+content 18-1
+
+
+File: pcl.info,  Node: 18-2,  Next: 18-3,  Prev: 18-1,  Up: Chapter 18
+
+FORMAT Directives
+=================
+
+content 18-2
+
+
+File: pcl.info,  Node: 18-3,  Next: 18-4,  Prev: 18-2,  Up: Chapter 18
+
+Basic Formatting
+================
+
+content 18-3
+
+
+File: pcl.info,  Node: 18-4,  Next: 18-5,  Prev: 18-3,  Up: Chapter 18
+
+Character and Integer Directives
+================================
+
+content 18-4
+
+
+File: pcl.info,  Node: 18-5,  Next: 18-6,  Prev: 18-4,  Up: Chapter 18
+
+Floating-Point Directives
+=========================
+
+content 18-5
+
+
+File: pcl.info,  Node: 18-6,  Next: 18-7,  Prev: 18-5,  Up: Chapter 18
+
+English-Language Directives
+===========================
+
+content 18-6
+
+
+File: pcl.info,  Node: 18-7,  Next: 18-8,  Prev: 18-6,  Up: Chapter 18
+
+Conditional Formatting
+======================
+
+content 18-7
+
+
+File: pcl.info,  Node: 18-8,  Next: 18-9,  Prev: 18-7,  Up: Chapter 18
+
+Iteration
+=========
+
+content 18-8
+
+
+File: pcl.info,  Node: 18-9,  Next: 18-10,  Prev: 18-8,  Up: Chapter 18
+
+Hop, Skip, Jump
+===============
+
+content 18-9
+
+
+File: pcl.info,  Node: 18-10,  Next: Chapter 19,  Prev: 18-9,  Up: Chapter 18
+
+And More . . .
+==============
+
+content 18-10
+
+
+File: pcl.info,  Node: Chapter 19,  Next: Chapter 20,  Prev: Chapter 18,  Up: Top
+
+19. Beyond Exception Handling: Conditions and Restarts
+======================================================
+
+content 19-intro
+
+* Menu:
+
+* 19-1::             The Lisp Way
+* 19-2::             Conditions
+* 19-3::             Condition Handlers
+* 19-4::             Restarts
+* 19-5::             Providing Multiple Restarts
+* 19-6::             Other Uses for Conditions
+
+
+File: pcl.info,  Node: 19-1,  Next: 19-2,  Prev: Chapter 19,  Up: Chapter 19
+
+The Lisp Way
+============
+
+content 19-1
+
+
+File: pcl.info,  Node: 19-2,  Next: 19-3,  Prev: 19-1,  Up: Chapter 19
+
+Conditions
+==========
+
+content 19-2
+
+
+File: pcl.info,  Node: 19-3,  Next: 19-4,  Prev: 19-2,  Up: Chapter 19
+
+Condition Handlers
+==================
+
+content 19-3
+
+
+File: pcl.info,  Node: 19-4,  Next: 19-5,  Prev: 19-3,  Up: Chapter 19
+
+Restarts
+========
+
+content 19-4
+
+
+File: pcl.info,  Node: 19-5,  Next: 19-6,  Prev: 19-4,  Up: Chapter 19
+
+Providing Multiple Restarts
+===========================
+
+content 19-5
+
+
+File: pcl.info,  Node: 19-6,  Next: Chapter 20,  Prev: 19-5,  Up: Chapter 19
+
+Other Uses for Conditions
+=========================
+
+content 19-6
+
+
+File: pcl.info,  Node: Chapter 20,  Next: Chapter 21,  Prev: Chapter 19,  Up: Top
+
+20. The Special Operators
+=========================
+
+content 20-intro
+
+* Menu:
+
+* 20-1::        Controlling Evaluation
+* 20-2::        Manipulating the Lexical Environment
+* 20-3::        Local Flow of Control
+* 20-4::        Unwinding the Stack
+* 20-5::        Multiple Values
+* 20-6::        EVAL-WHEN
+* 20-7::        Other Special Operators
+
+
+File: pcl.info,  Node: 20-1,  Next: 20-2,  Prev: Chapter 20,  Up: Chapter 20
+
+Controlling Evaluation
+======================
+
+content 20-1
+
+
+File: pcl.info,  Node: 20-2,  Next: 20-3,  Prev: 20-1,  Up: Chapter 20
+
+Manipulating the Lexical Environment
+====================================
+
+content 20-2
+
+
+File: pcl.info,  Node: 20-3,  Next: 20-4,  Prev: 20-2,  Up: Chapter 20
+
+Local Flow of Control
+=====================
+
+content 20-3
+
+
+File: pcl.info,  Node: 20-4,  Next: 20-5,  Prev: 20-3,  Up: Chapter 20
+
+Unwinding the Stack
+===================
+
+content 20-4
+
+
+File: pcl.info,  Node: 20-5,  Next: 20-6,  Prev: 20-4,  Up: Chapter 20
+
+Multiple Values
+===============
+
+content 20-5
+
+
+File: pcl.info,  Node: 20-6,  Next: 20-7,  Prev: 20-5,  Up: Chapter 20
+
+EVAL-WHEN
+=========
+
+content 20-6
+
+
+File: pcl.info,  Node: 20-7,  Next: Chapter 21,  Prev: 20-6,  Up: Chapter 20
+
+Other Special Operators
+=======================
+
+content 20-7
+
+
+File: pcl.info,  Node: Chapter 21,  Next: Chapter 22,  Prev: Chapter 20,  Up: Top
+
+21. Programming in the Large: Packages and Symbols
+==================================================
+
+content 21-intro
+
+* Menu:
+
+* 21-1::        How the Reader Uses Packages
+* 21-2::        A Bit of Package and Symbol Vocabulary
+* 21-3::        Three Standard Packages
+* 21-4::        Defining Your Own Packages
+* 21-5::        Packaging Reusable Libraries
+* 21-6::        Importing Individual Names
+* 21-7::        Packaging Mechanics
+* 21-8::        Package Gotchas
+
+
+File: pcl.info,  Node: 21-1,  Next: 21-2,  Prev: Chapter 21,  Up: Chapter 21
+
+How the Reader Uses Packages
+============================
+
+content 21-1
+
+
+File: pcl.info,  Node: 21-2,  Next: 21-3,  Prev: 21-1,  Up: Chapter 21
+
+A Bit of Package and Symbol Vocabulary
+======================================
+
+content 21-2
+
+
+File: pcl.info,  Node: 21-3,  Next: 21-4,  Prev: 21-2,  Up: Chapter 21
+
+Three Standard Packages
+=======================
+
+content 21-3
+
+
+File: pcl.info,  Node: 21-4,  Next: 21-5,  Prev: 21-3,  Up: Chapter 21
+
+Defining Your Own Packages
+==========================
+
+content 21-4
+
+
+File: pcl.info,  Node: 21-5,  Next: 21-6,  Prev: 21-4,  Up: Chapter 21
+
+Packaging Reusable Libraries
+============================
+
+content 21-5
+
+
+File: pcl.info,  Node: 21-6,  Next: 21-7,  Prev: 21-5,  Up: Chapter 21
+
+Importing Individual Names
+==========================
+
+content 21-6
+
+
+File: pcl.info,  Node: 21-7,  Next: 21-8,  Prev: 21-6,  Up: Chapter 21
+
+Packaging Mechanics
+===================
+
+content 21-7
+
+
+File: pcl.info,  Node: 21-8,  Next: Chapter 22,  Prev: 21-7,  Up: Chapter 21
+
+Package Gotchas
+===============
+
+content 21-8
+
+
+File: pcl.info,  Node: Chapter 22,  Next: Chapter 23,  Prev: Chapter 21,  Up: Top
+
+22. LOOP for Black Belts
+========================
+
+content 22-intro
+
+* Menu:
+
+* 22-1::     The Parts of a LOOP
+* 22-2::     Iteration Control
+* 22-3::     Counting Loops
+* 22-4::     Looping Over Collections and Packages
+* 22-5::     Equals-Then Iteration
+* 22-6::     Local Variables
+* 22-7::     Destructuring Variables
+* 22-8::     Value Accumulation
+* 22-9::     Unconditional Execution
+* 22-10::    Conditional Execution
+* 22-11::    Setting Up and Tearing Down
+* 22-12::    Termination Tests
+* 22-13::    Putting It All Together
+
+
+File: pcl.info,  Node: 22-1,  Next: 22-2,  Prev: Chapter 22,  Up: Chapter 22
+
+The Parts of a LOOP
+===================
+
+content 22-1
+
+
+File: pcl.info,  Node: 22-2,  Next: 22-3,  Prev: 22-1,  Up: Chapter 22
+
+Iteration Control
+=================
+
+content 22-2
+
+
+File: pcl.info,  Node: 22-3,  Next: 22-4,  Prev: 22-2,  Up: Chapter 22
+
+Counting Loops
+==============
+
+content 22-3
+
+
+File: pcl.info,  Node: 22-4,  Next: 22-5,  Prev: 22-3,  Up: Chapter 22
+
+Looping Over Collections and Packages
+=====================================
+
+content 22-4
+
+
+File: pcl.info,  Node: 22-5,  Next: 22-6,  Prev: 22-4,  Up: Chapter 22
+
+Equals-Then Iteration
+=====================
+
+content 22-5
+
+
+File: pcl.info,  Node: 22-6,  Next: 22-7,  Prev: 22-5,  Up: Chapter 22
+
+Local Variables
+===============
+
+content 22-6
+
+
+File: pcl.info,  Node: 22-7,  Next: 22-8,  Prev: 22-6,  Up: Chapter 22
+
+Destructuring Variables
+=======================
+
+content 22-7
+
+
+File: pcl.info,  Node: 22-8,  Next: 22-9,  Prev: 22-7,  Up: Chapter 22
+
+Value Accumulation
+==================
+
+content 22-8
+
+
+File: pcl.info,  Node: 22-9,  Next: 22-10,  Prev: 22-8,  Up: Chapter 22
+
+Unconditional Execution
+=======================
+
+content 22-9
+
+
+File: pcl.info,  Node: 22-10,  Next: 22-11,  Prev: 22-9,  Up: Chapter 22
+
+Conditional Execution
+=====================
+
+content 22-10
+
+
+File: pcl.info,  Node: 22-11,  Next: 22-12,  Prev: 22-10,  Up: Chapter 22
+
+Setting Up and Tearing Down
+===========================
+
+content 22-11
+
+
+File: pcl.info,  Node: 22-12,  Next: 22-13,  Prev: 22-11,  Up: Chapter 22
+
+Termination Tests
+=================
+
+content 22-12
+
+
+File: pcl.info,  Node: 22-13,  Next: Chapter 23,  Prev: 22-12,  Up: Chapter 22
+
+Putting It All Together
+=======================
+
+content 22-13
+
+
+File: pcl.info,  Node: Chapter 23,  Next: Chapter 24,  Prev: Chapter 22,  Up: Top
+
+23. Practical: A Spam Filter
+============================
+
+content 23-intro
+
+* Menu:
+
+* 23-1::       The Heart of a Spam Filter
+* 23-2::       Training the Filter
+* 23-3::       Per-Word Statistics
+* 23-4::       Combining Probabilities
+* 23-5::       Inverse Chi Square
+* 23-6::       Training the Filter
+* 23-7::       Testing the Filter
+* 23-8::       A Couple of Utility Functions
+* 23-9::       Analyzing the Results
+* 23-10::      What's Next
+
+
+File: pcl.info,  Node: 23-1,  Next: 23-2,  Prev: Chapter 23,  Up: Chapter 23
+
+The Heart of a Spam Filter
+==========================
+
+content 23-1
+
+
+File: pcl.info,  Node: 23-2,  Next: 23-3,  Prev: 23-1,  Up: Chapter 23
+
+Training the Filter
+===================
+
+content 23-2
+
+
+File: pcl.info,  Node: 23-3,  Next: 23-4,  Prev: 23-2,  Up: Chapter 23
+
+Per-Word Statistics
+===================
+
+content 23-3
+
+
+File: pcl.info,  Node: 23-4,  Next: 23-5,  Prev: 23-3,  Up: Chapter 23
+
+Combining Probabilities
+=======================
+
+content 23-4
+
+
+File: pcl.info,  Node: 23-5,  Next: 23-6,  Prev: 23-4,  Up: Chapter 23
+
+Inverse Chi Square
+==================
+
+content 23-5
+
+
+File: pcl.info,  Node: 23-6,  Next: 23-7,  Prev: 23-5,  Up: Chapter 23
+
+Training the Filter
+===================
+
+content 23-6
+
+
+File: pcl.info,  Node: 23-7,  Next: 23-8,  Prev: 23-6,  Up: Chapter 23
+
+Testing the Filter
+==================
+
+content 23-7
+
+
+File: pcl.info,  Node: 23-8,  Next: 23-9,  Prev: 23-7,  Up: Chapter 23
+
+A Couple of Utility Functions
+=============================
+
+content 23-8
+
+
+File: pcl.info,  Node: 23-9,  Next: 23-10,  Prev: 23-8,  Up: Chapter 23
+
+Analyzing the Results
+=====================
+
+content 23-9
+
+
+File: pcl.info,  Node: 23-10,  Next: Chapter 24,  Prev: 23-9,  Up: Chapter 23
+
+What's Next
+===========
+
+content 23-10
+
+
+File: pcl.info,  Node: Chapter 24,  Next: Chapter 25,  Prev: Chapter 23,  Up: Top
+
+24. Practical: Parsing Binary Files
+===================================
+
+content 24-intro
+
+* Menu:
+
+* 24-1::       Binary Files
+* 24-2::       Binary Format Basics
+* 24-3::       Strings in Binary Files
+* 24-4::       Composite Structures
+* 24-5::       Designing the Macros
+* 24-6::       Making the Dream a Reality
+* 24-7::       Reading Binary Objects
+* 24-8::       Writing Binary Objects
+* 24-9::       Adding Inheritance and Tagged Structures
+* 24-10::      Keeping Track of Inherited Slots
+* 24-11::      Tagged Structures
+* 24-12::      Primitive Binary Types
+* 24-13::      The Current Object Stack
+
+
+File: pcl.info,  Node: 24-1,  Next: 24-2,  Prev: Chapter 24,  Up: Chapter 24
+
+Binary Files
+============
+
+content 24-1
+
+
+File: pcl.info,  Node: 24-2,  Next: 24-3,  Prev: 24-1,  Up: Chapter 24
+
+Binary Format Basics
+====================
+
+content 24-2
+
+
+File: pcl.info,  Node: 24-3,  Next: 24-4,  Prev: 24-2,  Up: Chapter 24
+
+Strings in Binary Files
+=======================
+
+content 24-3
+
+
+File: pcl.info,  Node: 24-4,  Next: 24-5,  Prev: 24-3,  Up: Chapter 24
+
+Composite Structures
+====================
+
+content 24-4
+
+
+File: pcl.info,  Node: 24-5,  Next: 24-6,  Prev: 24-4,  Up: Chapter 24
+
+Designing the Macros
+====================
+
+content 24-5
+
+
+File: pcl.info,  Node: 24-6,  Next: 24-7,  Prev: 24-5,  Up: Chapter 24
+
+Making the Dream a Reality
+==========================
+
+content 24-6
+
+
+File: pcl.info,  Node: 24-7,  Next: 24-8,  Prev: 24-6,  Up: Chapter 24
+
+Reading Binary Objects
+======================
+
+content 24-7
+
+
+File: pcl.info,  Node: 24-8,  Next: 24-9,  Prev: 24-7,  Up: Chapter 24
+
+Writing Binary Objects
+======================
+
+content 24-8
+
+
+File: pcl.info,  Node: 24-9,  Next: 24-10,  Prev: 24-8,  Up: Chapter 24
+
+Adding Inheritance and Tagged Structures
+========================================
+
+content 24-9
+
+
+File: pcl.info,  Node: 24-10,  Next: 24-11,  Prev: 24-9,  Up: Chapter 24
+
+Keeping Track of Inherited Slots
+================================
+
+content 24-10
+
+
+File: pcl.info,  Node: 24-11,  Next: 24-12,  Prev: 24-10,  Up: Chapter 24
+
+Tagged Structures
+=================
+
+content 24-11
+
+
+File: pcl.info,  Node: 24-12,  Next: 24-13,  Prev: 24-11,  Up: Chapter 24
+
+Primitive Binary Types
+======================
+
+content 24-12
+
+
+File: pcl.info,  Node: 24-13,  Next: Chapter 25,  Prev: 24-12,  Up: Chapter 24
+
+The Current Object Stack
+========================
+
+content 24-13
+
+
+File: pcl.info,  Node: Chapter 25,  Next: Chapter 26,  Prev: Chapter 24,  Up: Top
+
+25. Practical: An ID3 Parser
+============================
+
+content 25-intro
+
+* Menu:
+
+* 25-1::       Structure of an ID3v2 Tag
+* 25-2::       Defining a Package
+* 25-3::       Integer Types
+* 25-4::       String Types
+* 25-5::       ID3 Tag Header
+* 25-6::       ID3 Frames
+* 25-7::       Detecting Tag Padding
+* 25-8::       Supporting Multiple Versions of ID3
+* 25-9::       Versioned Frame Base Classes
+* 25-10::      Versioned Concrete Frame Classes
+* 25-11::      What Frames Do You Actually Need?
+* 25-12::      Text Information Frames
+* 25-13::      Comment Frames
+* 25-14::      Extracting Information from an ID3 Tag
+
+
+File: pcl.info,  Node: 25-1,  Next: 25-2,  Prev: Chapter 25,  Up: Chapter 25
+
+Structure of an ID3v2 Tag
+=========================
+
+content 25-1
+
+
+File: pcl.info,  Node: 25-2,  Next: 25-3,  Prev: 25-1,  Up: Chapter 25
+
+Defining a Package
+==================
+
+content 25-2
+
+
+File: pcl.info,  Node: 25-3,  Next: 25-4,  Prev: 25-2,  Up: Chapter 25
+
+Integer Types
+=============
+
+content 25-3
+
+
+File: pcl.info,  Node: 25-4,  Next: 25-5,  Prev: 25-3,  Up: Chapter 25
+
+String Types
+============
+
+content 25-4
+
+
+File: pcl.info,  Node: 25-5,  Next: 25-6,  Prev: 25-4,  Up: Chapter 25
+
+ID3 Tag Header
+==============
+
+content 25-5
+
+
+File: pcl.info,  Node: 25-6,  Next: 25-7,  Prev: 25-5,  Up: Chapter 25
+
+ID3 Frames
+==========
+
+content 25-6
+
+
+File: pcl.info,  Node: 25-7,  Next: 25-8,  Prev: 25-6,  Up: Chapter 25
+
+Detecting Tag Padding
+=====================
+
+content 25-7
+
+
+File: pcl.info,  Node: 25-8,  Next: 25-9,  Prev: 25-7,  Up: Chapter 25
+
+Supporting Multiple Versions of ID3
+===================================
+
+content 25-8
+
+
+File: pcl.info,  Node: 25-9,  Next: 25-10,  Prev: 25-8,  Up: Chapter 25
+
+Versioned Frame Base Classes
+============================
+
+content 25-9
+
+
+File: pcl.info,  Node: 25-10,  Next: 25-11,  Prev: 25-9,  Up: Chapter 25
+
+Versioned Concrete Frame Classes
+================================
+
+content 25-10
+
+
+File: pcl.info,  Node: 25-11,  Next: 25-12,  Prev: 25-10,  Up: Chapter 25
+
+What Frames Do You Actually Need?
+=================================
+
+content 25-11
+
+
+File: pcl.info,  Node: 25-12,  Next: 25-13,  Prev: 25-11,  Up: Chapter 25
+
+Text Information Frames
+=======================
+
+content 25-12
+
+
+File: pcl.info,  Node: 25-13,  Next: 25-14,  Prev: 25-12,  Up: Chapter 25
+
+Comment Frames
+==============
+
+content 25-13
+
+
+File: pcl.info,  Node: 25-14,  Next: Chapter 26,  Prev: 25-13,  Up: Chapter 25
+
+Extracting Information from an ID3 Tag
+======================================
+
+content 25-14
+
+
+File: pcl.info,  Node: Chapter 26,  Next: Chapter 27,  Prev: Chapter 25,  Up: Top
+
+26. Practical: Web Programming with AllegroServe
+================================================
+
+content 26-intro
+
+* Menu:
+
+* 26-1::       A 30-Second Intro to Server-Side Web Programming
+* 26-2::       AllegroServe
+* 26-3::       Generating Dynamic Content with AllegroServe
+* 26-4::       Generating HTML
+* 26-5::       HTML Macros
+* 26-6::       Query Parameters
+* 26-7::       Cookies
+* 26-8::       A Small Application Framework
+* 26-9::       The Implementation
+
+
+File: pcl.info,  Node: 26-1,  Next: 26-2,  Prev: Chapter 26,  Up: Chapter 26
+
+A 30-Second Intro to Server-Side Web Programming
+================================================
+
+content 26-1
+
+
+File: pcl.info,  Node: 26-2,  Next: 26-3,  Prev: 26-1,  Up: Chapter 26
+
+AllegroServe
+============
+
+content 26-2
+
+
+File: pcl.info,  Node: 26-3,  Next: 26-4,  Prev: 26-2,  Up: Chapter 26
+
+Generating Dynamic Content with AllegroServe
+============================================
+
+content 26-3
+
+
+File: pcl.info,  Node: 26-4,  Next: 26-5,  Prev: 26-3,  Up: Chapter 26
+
+Generating HTML
+===============
+
+content 26-4
+
+
+File: pcl.info,  Node: 26-5,  Next: 26-6,  Prev: 26-4,  Up: Chapter 26
+
+HTML Macros
+===========
+
+content 26-5
+
+
+File: pcl.info,  Node: 26-6,  Next: 26-7,  Prev: 26-5,  Up: Chapter 26
+
+Query Parameters
+================
+
+content 26-6
+
+
+File: pcl.info,  Node: 26-7,  Next: 26-8,  Prev: 26-6,  Up: Chapter 26
+
+Cookies
+=======
+
+content 26-7
+
+
+File: pcl.info,  Node: 26-8,  Next: 26-9,  Prev: 26-7,  Up: Chapter 26
+
+A Small Application Framework
+=============================
+
+content 26-8
+
+
+File: pcl.info,  Node: 26-9,  Next: Chapter 27,  Prev: 26-8,  Up: Chapter 26
+
+The Implementation
+==================
+
+content 26-9
+
+
+File: pcl.info,  Node: Chapter 27,  Next: Chapter 28,  Prev: Chapter 26,  Up: Top
+
+27. Practical: An MP3 Database
+==============================
+
+content 27-intro
+
+* Menu:
+
+* 27-1::       The Database
+* 27-2::       Defining a Schema
+* 27-3::       Inserting Values
+* 27-4::       Querying the Database
+* 27-5::       Matching Functions
+* 27-6::       Getting at the Results
+* 27-7::       Other Database Operations
+
+
+File: pcl.info,  Node: 27-1,  Next: 27-2,  Prev: Chapter 27,  Up: Chapter 27
+
+The Database
+============
+
+content 27-1
+
+
+File: pcl.info,  Node: 27-2,  Next: 27-3,  Prev: 27-1,  Up: Chapter 27
+
+Defining a Schema
+=================
+
+content 27-2
+
+
+File: pcl.info,  Node: 27-3,  Next: 27-4,  Prev: 27-2,  Up: Chapter 27
+
+Inserting Values
+================
+
+content 27-3
+
+
+File: pcl.info,  Node: 27-4,  Next: 27-5,  Prev: 27-3,  Up: Chapter 27
+
+Querying the Database
+=====================
+
+content 27-4
+
+
+File: pcl.info,  Node: 27-5,  Next: 27-6,  Prev: 27-4,  Up: Chapter 27
+
+Matching Functions
+==================
+
+content 27-5
+
+
+File: pcl.info,  Node: 27-6,  Next: 27-7,  Prev: 27-5,  Up: Chapter 27
+
+Getting at the Results
+======================
+
+content 27-6
+
+
+File: pcl.info,  Node: 27-7,  Next: Chapter 28,  Prev: 27-6,  Up: Chapter 27
+
+Other Database Operations
+=========================
+
+content 27-7
+
+
+File: pcl.info,  Node: Chapter 28,  Next: Chapter 29,  Prev: Chapter 27,  Up: Top
+
+28. Practical: A Shoutcast Server
+=================================
+
+content 28-intro
+
+* Menu:
+
+* 28-1::       The Shoutcast Protocol
+* 28-2::       Song Sources
+* 28-3::       Implementing Shoutcast
+
+
+File: pcl.info,  Node: 28-1,  Next: 28-2,  Prev: Chapter 28,  Up: Chapter 28
+
+The Shoutcast Protocol
+======================
+
+content 28-1
+
+
+File: pcl.info,  Node: 28-2,  Next: 28-3,  Prev: 28-1,  Up: Chapter 28
+
+Song Sources
+============
+
+content 28-2
+
+
+File: pcl.info,  Node: 28-3,  Next: Chapter 29,  Prev: 28-2,  Up: Chapter 28
+
+Implementing Shoutcast
+======================
+
+content 28-3
+
+
+File: pcl.info,  Node: Chapter 29,  Next: Chapter 30,  Prev: Chapter 28,  Up: Top
+
+29. Practical: An MP3 Browser
+=============================
+
+content 29-intro
+
+* Menu:
+
+* 29-1::       Playlists
+* 29-2::       Playlists As Song Sources
+* 29-3::       Manipulating the Playlist
+* 29-4::       Query Parameter Types
+* 29-5::       Boilerplate HTML
+* 29-6::       The Browse Page
+* 29-7::       The Playlist
+* 29-8::       Finding a Playlist
+* 29-9::       Running the App
+
+
+File: pcl.info,  Node: 29-1,  Next: 29-2,  Prev: Chapter 29,  Up: Chapter 29
+
+Playlists
+=========
+
+content 29-1
+
+
+File: pcl.info,  Node: 29-2,  Next: 29-3,  Prev: 29-1,  Up: Chapter 29
+
+Playlists As Song Sources
+=========================
+
+content 29-2
+
+
+File: pcl.info,  Node: 29-3,  Next: 29-4,  Prev: 29-2,  Up: Chapter 29
+
+Manipulating the Playlist
+=========================
+
+content 29-3
+
+
+File: pcl.info,  Node: 29-4,  Next: 29-5,  Prev: 29-3,  Up: Chapter 29
+
+Query Parameter Types
+=====================
+
+content 29-4
+
+
+File: pcl.info,  Node: 29-5,  Next: 29-6,  Prev: 29-4,  Up: Chapter 29
+
+Boilerplate HTML
+================
+
+content 29-5
+
+
+File: pcl.info,  Node: 29-6,  Next: 29-7,  Prev: 29-5,  Up: Chapter 29
+
+The Browse Page
+===============
+
+content 29-6
+
+
+File: pcl.info,  Node: 29-7,  Next: 29-8,  Prev: 29-6,  Up: Chapter 29
+
+The Playlist
+============
+
+content 29-7
+
+
+File: pcl.info,  Node: 29-8,  Next: 29-9,  Prev: 29-7,  Up: Chapter 29
+
+Finding a Playlist
+==================
+
+content 29-8
+
+
+File: pcl.info,  Node: 29-9,  Next: Chapter 30,  Prev: 29-8,  Up: Chapter 29
+
+Running the App
+===============
+
+content 29-9
+
+
+File: pcl.info,  Node: Chapter 30,  Next: Chapter 31,  Prev: Chapter 29,  Up: Top
+
+30. Practical: An HTML Generation Library, the Interpreter
+==========================================================
+
+content 30-intro
+
+* Menu:
+
+* 30-1::       Designing a Domain-Specific Language
+* 30-2::       The FOO Language
+* 30-3::       Character Escaping
+* 30-4::       Indenting Printer
+* 30-5::       HTML Processor Interface
+* 30-6::       The Pretty Printer Backend
+* 30-7::       The Basic Evaluation Rule
+* 30-8::       What's Next?
+
+
+File: pcl.info,  Node: 30-1,  Next: 30-2,  Prev: Chapter 30,  Up: Chapter 30
+
+Designing a Domain-Specific Language
+====================================
+
+content 30-1
+
+
+File: pcl.info,  Node: 30-2,  Next: 30-3,  Prev: 30-1,  Up: Chapter 30
+
+The FOO Language
+================
+
+content 30-2
+
+
+File: pcl.info,  Node: 30-3,  Next: 30-4,  Prev: 30-2,  Up: Chapter 30
+
+Character Escaping
+==================
+
+content 30-3
+
+
+File: pcl.info,  Node: 30-4,  Next: 30-5,  Prev: 30-3,  Up: Chapter 30
+
+Indenting Printer
+=================
+
+content 30-4
+
+
+File: pcl.info,  Node: 30-5,  Next: 30-6,  Prev: 30-4,  Up: Chapter 30
+
+HTML Processor Interface
+========================
+
+content 30-5
+
+
+File: pcl.info,  Node: 30-6,  Next: 30-7,  Prev: 30-5,  Up: Chapter 30
+
+The Pretty Printer Backend
+==========================
+
+content 30-6
+
+
+File: pcl.info,  Node: 30-7,  Next: 30-8,  Prev: 30-6,  Up: Chapter 30
+
+The Basic Evaluation Rule
+=========================
+
+content 30-7
+
+
+File: pcl.info,  Node: 30-8,  Next: Chapter 31,  Prev: 30-7,  Up: Chapter 30
+
+What's Next?
+============
+
+content 30-8
+
+
+File: pcl.info,  Node: Chapter 31,  Next: Chapter 32,  Prev: Chapter 30,  Up: Top
+
+31. Practical: An HTML Generation Library, the Compiler
+=======================================================
+
+content 31-intro
+
+* Menu:
+
+* 31-1::       The Compiler
+* 31-2::       FOO Special Operators
+* 31-3::       FOO Macros
+* 31-4::       The Public API
+* 31-5::       The End of the Line
+
+
+File: pcl.info,  Node: 31-1,  Next: 31-2,  Prev: Chapter 31,  Up: Chapter 31
+
+The Compiler
+============
+
+content 31-1
+
+
+File: pcl.info,  Node: 31-2,  Next: 31-3,  Prev: 31-1,  Up: Chapter 31
+
+FOO Special Operators
+=====================
+
+content 31-2
+
+
+File: pcl.info,  Node: 31-3,  Next: 31-4,  Prev: 31-2,  Up: Chapter 31
+
+FOO Macros
+==========
+
+content 31-3
+
+
+File: pcl.info,  Node: 31-4,  Next: 31-5,  Prev: 31-3,  Up: Chapter 31
+
+The Public API
+==============
+
+content 31-4
+
+
+File: pcl.info,  Node: 31-5,  Next: Chapter 32,  Prev: 31-4,  Up: Chapter 31
+
+The End of the Line
+===================
+
+content 31-5
+
+
+File: pcl.info,  Node: Chapter 32,  Prev: Chapter 31,  Up: Top
+
+32. Conclusion: What's Next?
+============================
+
+content 32-intro
+
+* Menu:
+
+* 32-1::        Finding Lisp Libraries
+* 32-2::        Interfacing with Other Languages
+* 32-3::        Make It Work, Make It Right, Make It Fast
+* 32-4::        Delivering Applications
+* 32-5::        Where to Go Next
+
+
+File: pcl.info,  Node: 32-1,  Next: 32-2,  Prev: Chapter 32,  Up: Chapter 32
+
+Finding Lisp Libraries
+======================
+
+content 32-1
+
+
+File: pcl.info,  Node: 32-2,  Next: 32-3,  Prev: 32-1,  Up: Chapter 32
+
+Interfacing with Other Languages
+================================
+
+content 32-2
+
+
+File: pcl.info,  Node: 32-3,  Next: 32-4,  Prev: 32-2,  Up: Chapter 32
+
+Make It Work, Make It Right, Make It Fast
+=========================================
+
+content 32-3
+
+
+File: pcl.info,  Node: 32-4,  Next: 32-5,  Prev: 32-3,  Up: Chapter 32
+
+Delivering Applications
+=======================
+
+content 32-4
+
+
+File: pcl.info,  Node: 32-5,  Next: Top,  Prev: 32-4,  Up: Chapter 32
+
+Where to Go Next
+================
+
+content 32-5
