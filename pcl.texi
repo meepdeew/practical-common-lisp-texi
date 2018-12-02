@@ -672,7 +672,7 @@ hello, world
 NIL
 You can see that the output is just the same as when you evaluated the FORMAT expression directly, including the NIL value printed by the REPL. Functions in Common Lisp automatically return the value of the last expression evaluated.
 
-@node	2-6,  , 2-5, Chapter 2
+@node	2-6,  Chapter 3, 2-5, Chapter 2
 @section Saving Your Work
 
 You could argue that this is a complete "hello, world" program of sorts. However, it still has a problem. If you exit Lisp and restart, the function definition will be gone. Having written such a fine function, you'll want to save your work.
@@ -750,7 +750,7 @@ CL-USER> (load (compile-file "hello.lisp"))
 ;;; Compiling file hello.lisp
 ;;; Writing fasl file hello.fasl
 ;;; Fasl write complete
-; Fast loading /home/peter/my-lisp-programs/hello.fasl
+v; Fast loading /home/peter/my-lisp-programs/hello.fasl
 T
 SLIME also provides support for loading and compiling files without using the REPL. When you're in a source code buffer, you can use C-c C-l to load the file with slime-load-file. Emacs will prompt for the name of a file to load with the name of the current file already filled in; you can just hit Enter. Or you can type C-c C-k to compile and load the file represented by the current buffer. In some Common Lisp implementations, compiling code this way will make it quite a bit faster; in others, it won't, typically because they always compile everything.
 
@@ -762,3 +762,1737 @@ An even more impressive instance of remote debugging occurred on NASA's 1998 Dee
 
 Debugging a program running on a $100M piece of hardware that is 100 million miles away is an interesting experience. Having a read-eval-print loop running on the spacecraft proved invaluable in finding and fixing the problem.
 You're not quite ready to send any Lisp code into deep space, but in the next chapter you'll take a crack at writing a program a bit more interesting than "hello, world."
+
+@node    Chapter 3, Chapter 4, Chapter 2, Top
+@section 3. Practical: A Simple Database
+
+content 3-intro
+
+@menu
+* 3-1::              CDs and Records
+* 3-2::              Filing CDs
+* 3-3::              Looking at the Database Contents
+* 3-4::              Improving the User Interaction
+* 3-5::              Saving and Loading the Database
+* 3-6::              Querying the Database
+* 3-7::              Updating Existing Records--Another Use for WHERE
+* 3-8::              Removing Duplication and Winning Big
+* 3-9::              Wrapping Up
+@end menu
+
+@node	3-1, 3-2, Chapter 3, Chapter 3
+@section CDs and Records
+
+content 3-1
+
+@node	3-2, 3-3, 3-1, Chapter 3
+@section Filing CDs
+
+content 3-2
+
+@node	3-3, 3-4, 3-2, Chapter 3
+@section Looking at the Database Contents
+
+content 3-3
+
+@node	3-4, 3-5, 3-3, Chapter 3
+@section Improving the User Interaction
+
+content 3-4
+
+@node	3-5, 3-6, 3-4, Chapter 3
+@section Saving and Loading the Database
+
+content 3-5
+
+@node	3-6, 3-7, 3-5, Chapter 3
+@section Querying the Database
+
+content 3-6
+
+@node	3-7, 3-8, 3-6, Chapter 3
+@section Updating Existing Records--Another Use for WHERE
+
+content 3-7
+
+@node	3-8, 3-9, 3-7, Chapter 3
+@section Removing Duplication and Winning Big
+
+content 3-8
+
+@node	3-9, Chapter 4, 3-7, Chapter 3
+@section Wrapping Up
+
+content 3-9
+
+@node    Chapter 4, Chapter 5, Chapter 3, Top
+@section 4. Syntax and Semantics
+
+content 4-intro
+
+@menu
+* 4-1::              What's with All the Parentheses?
+* 4-2::              Breaking Open the Black Box
+* 4-3::              S-expressions
+* 4-4::              S-expressions As Lisp Forms
+* 4-5::              Function Calls
+* 4-6::              Special Operators
+* 4-7::              Macros
+* 4-8::              Truth, Falsehood, and Equality
+* 4-9::             Formatting Lisp Code
+@end menu
+
+@node	4-1, 4-2, Chapter 4, Chapter 4
+@section What's with All the Parentheses?
+
+content 4-1
+
+@node	4-2, 4-3, 4-1, Chapter 4
+@section Breaking Open the Black Box
+
+content 4-2
+
+@node	4-3, 4-4, 4-2, Chapter 4
+@section S-expressions
+
+content 4-3
+
+@node	4-4, 4-5, 4-3, Chapter 4
+@section S-expressions As Lisp Forms
+
+content 4-4
+
+@node	4-5, 4-6, 4-4, Chapter 4
+@section Function Calls
+
+content 4-5
+
+@node	4-6, 4-7, 4-5, Chapter 4
+@section Special Operators
+
+content 4-6
+
+@node	4-7, 4-8, 4-6, Chapter 4
+@section Macros
+
+content 4-7
+
+@node	4-8, 4-9, 4-7, Chapter 4
+@section Truth, Falsehood, and Equality
+
+content 4-8
+
+@node	4-9, Chapter 5, 4-7, Chapter 4
+@section Formatting Lisp Code
+
+content 4-9
+
+@node    Chapter 5, Chapter 6, Chapter 4, Top
+@section 5. Functions
+
+content 5-intro
+
+@menu
+* 5-1::              Defining New Functions
+* 5-2::              Function Parameter Lists
+* 5-3::              Optional Parameters
+* 5-4::              Rest Parameters
+* 5-5::              Keyword Parameters
+* 5-6::              Mixing Different Parameter Types
+* 5-7::              Function Return Values
+* 5-8::              Functions As Data, a.k.a. Higher-Order Functions
+* 5-9::              Anonymous Functions
+@end menu
+
+@node	5-1, 5-2, Chapter 5, Chapter 5
+@section Defining New Functions
+
+content 5-1
+
+@node	5-2, 5-3, 5-1, Chapter 5
+@section Function Parameter Lists
+
+content 5-2
+
+@node	5-3, 5-4, 5-2, Chapter 5
+@section Optional Parameters
+
+content 5-3
+
+@node	5-4, 5-5, 5-3, Chapter 5
+@section Rest Parameters
+
+content 5-4
+
+@node	5-5, 5-6, 5-4, Chapter 5
+@section Keyword Parameters
+
+content 5-5
+
+@node	5-6, 5-7, 5-5, Chapter 5
+@section Mixing Different Parameter Types
+
+content 5-6
+
+@node	5-7, 5-8, 5-6, Chapter 5
+@section Function Return Values
+
+content 5-7
+
+@node	5-8, 5-9, 5-7, Chapter 5
+@section Functions As Data, a.k.a. Higher-Order Functions
+
+content 5-8
+
+@node	5-9, Chapter 6, 5-7, Chapter 5
+@section Anonymous Functions
+
+content 5-9
+
+@node    Chapter 6, Chapter 7, Chapter 5, Top
+@section 6. Variables
+
+content 6-intro
+
+@menu
+* 6-1::              Variable Basics
+* 6-2::              Lexical Variables and Closures
+* 6-3::              Dynamic, a.k.a. Special, Variables
+* 6-4::              Constants
+* 6-5::              Assignment
+* 6-6::              Generalized Assignment
+@end menu
+
+@node	6-1, 6-2, Chapter 6, Chapter 6
+@section Variable Basics
+
+content 6-1
+
+@node	6-2, 6-3, 6-1, Chapter 6
+@section Lexical Variables and Closures
+
+content 6-2
+
+@node	6-3, 6-4, 6-2, Chapter 6
+@section Dynamic, a.k.a. Special, Variables
+
+content 6-3
+
+@node	6-4, 6-5, 6-3, Chapter 6
+@section Constants
+
+content 6-4
+
+@node	6-5, 6-6, 6-4, Chapter 6
+@section Assignment
+
+content 6-5
+
+@node	6-6, Chapter 7, 6-5, Chapter 6
+@section Generalized Assignment
+
+content 6-6
+
+@node    Chapter 7, Chapter 8, Chapter 6, Top
+@section 7. Macros: Standard Control Constructs
+
+content 7-intro
+
+@menu
+* 7-1::              WHEN and UNLESS
+* 7-2::              COND
+* 7-3::              AND, OR, and NOT
+* 7-4::              Looping
+* 7-5::              DOLIST and DOTIMES
+* 7-6::              DO
+* 7-7::              The Mighty LOOP
+@end menu
+
+@node	7-1, 7-2, Chapter 7, Chapter 7
+@section WHEN and UNLESS
+
+content 7-1
+
+@node	7-2, 7-3, 7-1, Chapter 7
+@section COND
+
+content 7-2
+
+@node	7-3, 7-4, 7-2, Chapter 7
+@section AND, OR, and NOT
+
+content 7-3
+
+@node	7-4, 7-5, 7-3, Chapter 7
+@section Looping
+
+content 7-4
+
+@node	7-5, 7-6, 7-4, Chapter 7
+@section DOLIST and DOTIMES
+
+content 7-5
+
+@node	7-6, 7-7, 7-5, Chapter 7
+@section DO
+
+content 7-6
+
+@node	7-7, Chapter 8, 7-6, Chapter 7
+@section The Mighty LOOP
+
+content 7-7
+
+@node    Chapter 8, Chapter 9, Chapter 7, Top
+@section 8. Macros: Defining Your Own
+
+content 8-intro
+
+@menu
+* 8-1::                  The Story of Mac: A Just-So Story
+* 8-2::                  Macro Expansion Time vs. Runtime
+* 8-3::                  DEF MACRO
+* 8-4::                  A Sample Macro: do-primes
+* 8-5::                  Macro Parameters
+* 8-6::                  Generating the Expansion
+* 8-7::                  Plugging the Leaks
+* 8-8::                  Macro-Writing Macros
+* 8-9::                  Beyond Simple Macros
+@end menu
+
+@node	8-1, 8-2, Chapter 8, Chapter 8
+@section The Story of Mac: A Just-So Story
+
+content 8-1
+
+@node	8-2, 8-3, 8-1, Chapter 8
+@section Macro Expansion Time vs. Runtime
+
+content 8-2
+
+@node	8-3, 8-4, 8-2, Chapter 8
+@section DEF MACRO
+
+content 8-3
+
+@node	8-4, 8-5, 8-3, Chapter 8
+@section A Sample Macro: do-primes
+
+content 8-4
+
+@node	8-5, 8-6, 8-4, Chapter 8
+@section Macro Parameters
+
+content 8-5
+
+@node	8-6, 8-7, 8-5, Chapter 8
+@section Generating the Expansion
+
+content 8-6
+
+@node	8-7, 8-8, 8-6, Chapter 8
+@section Plugging the Leaks
+
+content 8-7
+
+@node	8-8, 8-9, 8-7, Chapter 8
+@section Macro-Writing Macros
+
+content 8-8
+
+@node	8-9, Chapter 9, 8-8, Chapter 8
+@section Beyond Simple Macros
+
+content 8-9
+
+@node    Chapter 9, Chapter 10, Chapter 8, Top
+@section 9. Practical: Building a Unit Test Framework
+
+content 9-intro
+
+@menu
+* 9-1::                  Two First Tries
+* 9-2::                  Refactoring
+* 9-3::                  Fixing the Return Value
+* 9-4::                  Better Result Reporting
+* 9-5::                  An Abstraction Emerges
+* 9-6::                  A Hierarchy of Tests
+* 9-7::                  Wrapping Up
+@end menu
+
+@node	9-1, 9-2, Chapter 9, Chapter 9
+@section Two First Tries
+
+content 9-1
+
+@node	9-2, 9-3, 9-1, Chapter 9
+@section Refactoring
+
+content 9-2
+
+@node	9-3, 9-4, 9-2, Chapter 9
+@section Fixing the Return Value
+
+content 9-3
+
+@node	9-4, 9-5, 9-3, Chapter 9
+@section Better Result Reporting
+
+content 9-4
+
+@node	9-5, 9-6, 9-4, Chapter 9
+@section An Abstraction Emerges
+
+content 9-5
+
+@node	9-6, 9-7, 9-5, Chapter 9
+@section A Hierarchy of Tests
+
+content 9-6
+
+@node	9-7, Chapter 10, 9-6, Chapter 9
+@section Wrapping Up
+
+content 9-7
+
+@node    Chapter 10, Chapter 11, Chapter 9, Top
+@section 10. Numbers, Characters, and Strings
+
+content 10-intro
+
+@menu
+* 10-1::                 Numbers
+* 10-2::                 Numeric Literals
+* 10-3::                 Basic Math
+* 10-4::                 Numeric Comparisons
+* 10-5::                 Higher Math
+* 10-6::                 Characters
+* 10-7::                 Character Comparisons
+* 10-8::                 Strings
+* 10-9::                 String Comparisons
+@end menu
+
+@node	10-1, 10-2, Chapter 10, Chapter 10
+@section Numbers
+
+content 10-1
+
+@node	10-2, 10-3, 10-1, Chapter 10
+@section Numeric Literals
+
+content 10-2
+
+@node	10-3, 10-4, 10-2, Chapter 10
+@section Basic Math
+
+content 10-3
+
+@node	10-4, 10-5, 10-3, Chapter 10
+@section Numeric Comparisons
+
+content 10-4
+
+@node	10-5, 10-6, 10-4, Chapter 10
+@section Higher Math
+
+content 10-5
+
+@node	10-6, 10-7, 10-5, Chapter 10
+@section Characters
+
+content 10-6
+
+@node	10-7, 10-8, 10-6, Chapter 10
+@section Character Comparisons
+
+content 10-7
+
+@node	10-8, 10-9, 10-7, Chapter 10
+@section Strings
+
+content 10-8
+
+@node	10-9, Chapter 11, 10-8, Chapter 10
+@section String Comparisons
+
+content 10-9
+
+@node    Chapter 11, Chapter 12, Chapter 10, Top
+@section 11. Collections
+
+content 11-intro
+
+@menu
+* 11-1::                            Vectors
+* 11-2::                            Subtypes of Vector
+* 11-3::                            Vectors As Sequences
+* 11-4::                            Sequence Iterating Functions
+* 11-5::                            Higher-Order Function Variants
+* 11-6::                            Whole Sequence Manipulations
+* 11-7::                            Sorting and Merging
+* 11-8::                            Subsequence Manipulations
+* 11-9::                            Sequence Predicates
+* 11-10::                           Sequence Mapping Functions
+* 11-11::                           Hash Tables
+* 11-12::                           Hash Table Iteration
+@end menu
+
+@node	11-1, 11-2, Chapter 11, Chapter 11
+@section Vectors
+
+content 11-1
+
+@node	11-2, 11-3, 11-1, Chapter 11
+@section Subtypes of Vector
+
+content 11-2
+
+@node	11-3, 11-4, 11-2, Chapter 11
+@section Vectors As Sequences
+
+content 11-3
+
+@node	11-4, 11-5, 11-3, Chapter 11
+@section Sequence Iterating Functions
+
+content 11-4
+
+@node	11-5, 11-6, 11-4, Chapter 11
+@section Higher-Order Function Variants
+
+content 11-5
+
+@node	11-6, 11-7, 11-5, Chapter 11
+@section Whole Sequence Manipulations
+
+content 11-6
+
+@node	11-7, 11-8, 11-6, Chapter 11
+@section Sorting and Merging
+
+content 11-7
+
+@node	11-8, 11-9, 11-7, Chapter 11
+@section Subsequence Manipulations
+
+content 11-8
+
+@node	11-9, 11-10, 11-8, Chapter 11
+@section Sequence Predicates
+
+content 11-9
+
+@node	11-10, 11-11, 11-9, Chapter 11
+@section Sequence Mapping Functions
+
+content 11-10
+
+@node	11-11, 11-12, 11-10, Chapter 11
+@section Hash Tables
+
+content 11-11
+
+@node	11-12, Chapter 12, 11-11, Chapter 11
+@section Hash Table Iteration
+
+content 11-12
+
+@node    Chapter 12, Chapter 13, Chapter 11, Top
+@section 12. They Called It LISP for a Reason: List Processing
+
+content 12-intro
+
+@menu
+* 12-1::             "There Is No List"
+* 12-2::             Functional Programming and Lists
+* 12-3::             "Destructive" Operations
+* 12-4::             Combining Recycling with Shared Structure
+* 12-5::             List-Manipulation Functions
+* 12-6::             Mapping
+* 12-7::             Other Structures
+@end menu
+
+@node	12-1, 12-2, Chapter 12, Chapter 12
+@section "There Is No List"
+
+content 12-1
+
+@node	12-2, 12-3, 12-1, Chapter 12
+@section Functional Programming and Lists
+
+content 12-2
+
+@node	12-3, 12-4, 12-2, Chapter 12
+@section "Destructive" Operations
+
+content 12-3
+
+@node	12-4, 12-5, 12-3, Chapter 12
+@section Combining Recycling with Shared Structure
+
+content 12-4
+
+@node	12-5, 12-6, 12-4, Chapter 12
+@section List-Manipulation Functions
+
+content 12-5
+
+@node	12-6, 12-7, 12-5, Chapter 12
+@section Mapping
+
+content 12-6
+
+@node	12-7, Chapter 13, 12-6, Chapter 12
+@section Other Structures
+
+content 12-7
+
+@node    Chapter 13, Chapter 14, Chapter 12, Top
+@section 13. Beyond Lists: Other Uses for Cons Cells
+
+content 13-intro
+
+@menu
+* 13-1::                Trees
+* 13-2::                Sets
+* 13-3::                Lookup Tables: Alists and Plists
+* 13-4::                DESTRUCTURING-BIND
+@end menu
+
+@node	13-1, 13-2, Chapter 13, Chapter 13
+@section Trees
+
+content 13-1
+
+@node	13-2, 13-3, 13-1, Chapter 13
+@section Sets
+
+content 13-2
+
+@node	13-3, 13-4, 13-2, Chapter 13
+@section Lookup Tables: Alists and Plists
+
+content 13-3
+
+@node	13-4, Chapter 14, 13-3, Chapter 13
+@section DESTRUCTURING-BIND
+
+content 13-4
+
+@node    Chapter 14, Chapter 15, Chapter 13, Top
+@section 14. Files and File I/O
+
+content 14-intro
+
+@menu
+* 14-1::      Reading File Data
+* 14-2::      Reading Binary Data
+* 14-3::      Bulk Reads
+* 14-4::      File Output
+* 14-5::      Closing Files
+* 14-6::      Filenames
+* 14-7::      How Pathnames Represent Filenames
+* 14-8::      Constructing New Pathnames
+* 14-9::      Two Representations of Directory Names
+* 14-10::     Interacting with the File System
+* 14-11::     Other Kinds of I/O
+@end menu
+
+@node	14-1, 14-2, Chapter 14, Chapter 14
+@section Reading File Data
+
+content 14-1
+
+@node	14-2, 14-3, 14-1, Chapter 14
+@section Reading Binary Data
+
+content 14-2
+
+@node	14-3, 14-4, 14-2, Chapter 14
+@section Bulk Reads
+
+content 14-3
+
+@node	14-4, 14-5, 14-3, Chapter 14
+@section File Output
+
+content 14-4
+
+@node	14-5, 14-6, 14-4, Chapter 14
+@section Closing Files
+
+content 14-5
+
+@node	14-6, 14-7, 14-5, Chapter 14
+@section Filenames
+
+content 14-6
+
+@node	14-7, 14-8, 14-6, Chapter 14
+@section How Pathnames Represent Filenames
+
+content 14-7
+
+@node	14-8, 14-9, 14-7, Chapter 14
+@section Constructing New Pathnames
+
+content 14-8
+
+@node	14-9, 14-10, 14-8, Chapter 14
+@section Two Representations of Directory Names
+
+content 14-9
+
+@node	14-10, 14-11, 14-9, Chapter 14
+@section Interacting with the File System
+
+content 14-10
+
+@node	14-11, Chapter 15, 14-10, Chapter 14
+@section Other Kinds of I/O
+
+content 14-11
+
+@node    Chapter 15, Chapter 16, Chapter 14, Top
+@section 15. Practical: A Portable Pathname Library
+
+content 15-intro
+
+@menu
+* 15-1::       The API
+* 15-2::       *FEATURES* and Read-Time Conditionalization
+* 15-3::       Listing a Directory
+* 15-4::       Testing a File's Existence
+* 15-5::       Walking a Directory Tree
+@end menu
+
+@node	15-1, 15-2, Chapter 15, Chapter 15
+@section The API
+
+content 15-1
+
+@node	15-2, 15-3, 15-1, Chapter 15
+@section *FEATURES* and Read-Time Conditionalization
+
+content 15-2
+
+@node	15-3, 15-4, 15-2, Chapter 15
+@section Listing a Directory
+
+content 15-3
+
+@node	15-4, 15-5, 15-3, Chapter 15
+@section Testing a File's Existence
+
+content 15-4
+
+@node	15-5, Chapter 16, 15-4, Chapter 15
+@section Walking a Directory Tree
+
+content 15-5
+
+@node    Chapter 16, Chapter 17, Chapter 15, Top
+@section 16. Object Reorientation: Generic Functions
+
+content 16-intro
+
+@menu
+* 16-1::   Generic Functions and Classes
+* 16-2::   Generic Functions and Methods
+* 16-3::   DEFGENERIC
+* 16-4::   DEFMETHOD
+* 16-5::   Method Combination
+* 16-6::   The Standard Method Combination
+* 16-7::   Other Method Combinations
+* 16-8::   Multimethods
+* 16-9::   To Be Continued . . .
+@end menu
+
+@node	16-1, 16-2, Chapter 16, Chapter 16
+@section Generic Functions and Classes
+
+content 16-1
+
+@node	16-2, 16-3, 16-1, Chapter 16
+@section Generic Functions and Methods
+
+content 16-2
+
+@node	16-3, 16-4, 16-2, Chapter 16
+@section DEFGENERIC
+
+content 16-3
+
+@node	16-4, 16-5, 16-3, Chapter 16
+@section DEFMETHOD
+
+content 16-4
+
+@node	16-5, 16-6, 16-4, Chapter 16
+@section Method Combination
+
+content 16-5
+
+@node	16-6, 16-7, 16-5, Chapter 16
+@section The Standard Method Combination
+
+content 16-6
+
+@node	16-7, 16-8, 16-6, Chapter 16
+@section Other Method Combinations
+
+content 16-7
+
+@node	16-8, 16-9, 16-7, Chapter 16
+@section Multimethods
+
+content 16-8
+
+@node	16-9, Chapter 17, 16-8, Chapter 16
+@section To Be Continued . . .
+
+content 16-9
+
+@node    Chapter 17, Chapter 18, Chapter 16, Top
+@section 17. Object Reorientation: Classes
+
+content 17-intro
+
+@menu
+* 17-1::   DEFCLASS
+* 17-2::   Slot Specifiers
+* 17-3::   Object Initialization
+* 17-4::   Accessor Functions
+* 17-5::   WITH-SLOTS and WITH-ACCESSORS
+* 17-6::   Class-Allocated Slots
+* 17-7::   Slots and Inheritance
+* 17-8::   Multiple Inheritance
+* 17-9::   Good Object-Oriented Design
+@end menu
+
+@node	17-1, 17-2, Chapter 17, Chapter 17
+@section DEFCLASS
+
+content 17-1
+
+@node	17-2, 17-3, 17-1, Chapter 17
+@section Slot Specifiers
+
+content 17-2
+
+@node	17-3, 17-4, 17-2, Chapter 17
+@section Object Initialization
+
+content 17-3
+
+@node	17-4, 17-5, 17-3, Chapter 17
+@section Accessor Functions
+
+content 17-4
+
+@node	17-5, 17-6, 17-4, Chapter 17
+@section WITH-SLOTS and WITH-ACCESSORS
+
+content 17-5
+
+@node	17-6, 17-7, 17-5, Chapter 17
+@section Class-Allocated Slots
+
+content 17-6
+
+@node	17-7, 17-8, 17-6, Chapter 17
+@section Slots and Inheritance
+
+content 17-7
+
+@node	17-8, 17-9, 17-7, Chapter 17
+@section Multiple Inheritance
+
+content 17-8
+
+@node	17-9, Chapter 18, 17-8, Chapter 17
+@section Good Object-Oriented Design
+
+content 17-9
+
+@node    Chapter 18, Chapter 19, Chapter 17, Top
+@section 18. A Few FORMAT Recipes
+
+content 18-intro
+
+@menu
+* 18-1::         The FORMAT Function
+* 18-2::         FORMAT Directives
+* 18-3::         Basic Formatting
+* 18-4::         Character and Integer Directives
+* 18-5::         Floating-Point Directives
+* 18-6::         English-Language Directives
+* 18-7::         Conditional Formatting
+* 18-8::         Iteration
+* 18-9::         Hop, Skip, Jump
+* 18-10::        And More . . .
+@end menu
+
+@node	18-1, 18-2, Chapter 18, Chapter 18
+@section The FORMAT Function
+
+content 18-1
+
+@node	18-2, 18-3, 18-1, Chapter 18
+@section FORMAT Directives
+
+content 18-2
+
+@node	18-3, 18-4, 18-2, Chapter 18
+@section Basic Formatting
+
+content 18-3
+
+@node	18-4, 18-5, 18-3, Chapter 18
+@section Character and Integer Directives
+
+content 18-4
+
+@node	18-5, 18-6, 18-4, Chapter 18
+@section Floating-Point Directives
+
+content 18-5
+
+@node	18-6, 18-7, 18-5, Chapter 18
+@section English-Language Directives
+
+content 18-6
+
+@node	18-7, 18-8, 18-6, Chapter 18
+@section Conditional Formatting
+
+content 18-7
+
+@node	18-8, 18-9, 18-7, Chapter 18
+@section Iteration
+
+content 18-8
+
+@node	18-9, 18-10, 18-8, Chapter 18
+@section Hop, Skip, Jump
+
+content 18-9
+
+@node	18-10, Chapter 19, 18-9, Chapter 18
+@section And More . . .
+
+content 18-10
+
+@node    Chapter 19, Chapter 20, Chapter 18, Top
+@section 19. Beyond Exception Handling: Conditions and Restarts
+
+content 19-intro
+
+@menu
+* 19-1::             The Lisp Way
+* 19-2::             Conditions
+* 19-3::             Condition Handlers
+* 19-4::             Restarts
+* 19-5::             Providing Multiple Restarts
+* 19-6::             Other Uses for Conditions
+@end menu
+
+@node	19-1, 19-2, Chapter 19, Chapter 19
+@section The Lisp Way
+
+content 19-1
+
+@node	19-2, 19-3, 19-1, Chapter 19
+@section Conditions
+
+content 19-2
+
+@node	19-3, 19-4, 19-2, Chapter 19
+@section Condition Handlers
+
+content 19-3
+
+@node	19-4, 19-5, 19-3, Chapter 19
+@section Restarts
+
+content 19-4
+
+@node	19-5, 19-6, 19-4, Chapter 19
+@section Providing Multiple Restarts
+
+content 19-5
+
+@node	19-6, Chapter 20, 19-5, Chapter 19
+@section Other Uses for Conditions
+
+content 19-6
+
+@node    Chapter 20, Chapter 21, Chapter 19, Top
+@section 20. The Special Operators
+
+content 20-intro
+
+@menu
+* 20-1::        Controlling Evaluation
+* 20-2::        Manipulating the Lexical Environment
+* 20-3::        Local Flow of Control
+* 20-4::        Unwinding the Stack
+* 20-5::        Multiple Values
+* 20-6::        EVAL-WHEN
+* 20-7::        Other Special Operators
+@end menu
+
+@node	20-1, 20-2, Chapter 20, Chapter 20
+@section Controlling Evaluation
+
+content 20-1
+
+@node	20-2, 20-3, 20-1, Chapter 20
+@section Manipulating the Lexical Environment
+
+content 20-2
+
+@node	20-3, 20-4, 20-2, Chapter 20
+@section Local Flow of Control
+
+content 20-3
+
+@node	20-4, 20-5, 20-3, Chapter 20
+@section Unwinding the Stack
+
+content 20-4
+
+@node	20-5, 20-6, 20-4, Chapter 20
+@section Multiple Values
+
+content 20-5
+
+@node	20-6, 20-7, 20-5, Chapter 20
+@section EVAL-WHEN
+
+content 20-6
+
+@node	20-7, Chapter 21, 20-6, Chapter 20
+@section Other Special Operators
+
+content 20-7
+
+@node    Chapter 21, Chapter 22, Chapter 20, Top
+@section 21. Programming in the Large: Packages and Symbols
+
+content 21-intro
+
+@menu
+* 21-1::        How the Reader Uses Packages
+* 21-2::        A Bit of Package and Symbol Vocabulary
+* 21-3::        Three Standard Packages
+* 21-4::        Defining Your Own Packages
+* 21-5::        Packaging Reusable Libraries
+* 21-6::        Importing Individual Names
+* 21-7::        Packaging Mechanics
+* 21-8::        Package Gotchas
+@end menu
+
+@node	21-1, 21-2, Chapter 21, Chapter 21
+@section How the Reader Uses Packages
+
+content 21-1
+
+@node	21-2, 21-3, 21-1, Chapter 21
+@section A Bit of Package and Symbol Vocabulary
+
+content 21-2
+
+@node	21-3, 21-4, 21-2, Chapter 21
+@section Three Standard Packages
+
+content 21-3
+
+@node	21-4, 21-5, 21-3, Chapter 21
+@section Defining Your Own Packages
+
+content 21-4
+
+@node	21-5, 21-6, 21-4, Chapter 21
+@section Packaging Reusable Libraries
+
+content 21-5
+
+@node	21-6, 21-7, 21-5, Chapter 21
+@section Importing Individual Names
+
+content 21-6
+
+@node	21-7, 21-8, 21-6, Chapter 21
+@section Packaging Mechanics
+
+content 21-7
+
+@node	21-8, Chapter 22, 21-7, Chapter 21
+@section Package Gotchas
+
+content 21-8
+
+@node    Chapter 22, Chapter 23, Chapter 21, Top
+@section 22. LOOP for Black Belts
+
+content 22-intro
+
+@menu
+* 22-1::     The Parts of a LOOP
+* 22-2::     Iteration Control
+* 22-3::     Counting Loops
+* 22-4::     Looping Over Collections and Packages
+* 22-5::     Equals-Then Iteration
+* 22-6::     Local Variables
+* 22-7::     Destructuring Variables
+* 22-8::     Value Accumulation
+* 22-9::     Unconditional Execution
+* 22-10::    Conditional Execution
+* 22-11::    Setting Up and Tearing Down
+* 22-12::    Termination Tests
+* 22-13::    Putting It All Together
+@end menu
+
+@node	22-1, 22-2, Chapter 22, Chapter 22
+@section The Parts of a LOOP
+
+content 22-1
+
+@node	22-2, 22-3, 22-1, Chapter 22
+@section Iteration Control
+
+content 22-2
+
+@node	22-3, 22-4, 22-2, Chapter 22
+@section Counting Loops
+
+content 22-3
+
+@node	22-4, 22-5, 22-3, Chapter 22
+@section Looping Over Collections and Packages
+
+content 22-4
+
+@node	22-5, 22-6, 22-4, Chapter 22
+@section Equals-Then Iteration
+
+content 22-5
+
+@node	22-6, 22-7, 22-5, Chapter 22
+@section Local Variables
+
+content 22-6
+
+@node	22-7, 22-8, 22-6, Chapter 22
+@section Destructuring Variables
+
+content 22-7
+
+@node	22-8, 22-9, 22-7, Chapter 22
+@section Value Accumulation
+
+content 22-8
+
+@node	22-9, 22-10, 22-8, Chapter 22
+@section Unconditional Execution
+
+content 22-9
+
+@node	22-10, 22-11, 22-9, Chapter 22
+@section Conditional Execution
+
+content 22-10
+
+@node	22-11, 22-12, 22-10, Chapter 22
+@section Setting Up and Tearing Down
+
+content 22-11
+
+@node	22-12, 22-13, 22-11, Chapter 22
+@section Termination Tests
+
+content 22-12
+
+@node	22-13, Chapter 23, 22-12, Chapter 22
+@section Putting It All Together
+
+content 22-13
+
+@node    Chapter 23, Chapter 24, Chapter 22, Top
+@section 23. Practical: A Spam Filter
+
+content 23-intro
+
+@menu
+* 23-1::       The Heart of a Spam Filter
+* 23-2::       Training the Filter
+* 23-3::       Per-Word Statistics
+* 23-4::       Combining Probabilities
+* 23-5::       Inverse Chi Square
+* 23-6::       Training the Filter
+* 23-7::       Testing the Filter
+* 23-8::       A Couple of Utility Functions
+* 23-9::       Analyzing the Results
+* 23-10::      What's Next
+@end menu
+
+@node	23-1, 23-2, Chapter 23, Chapter 23
+@section The Heart of a Spam Filter
+
+content 23-1
+
+@node	23-2, 23-3, 23-1, Chapter 23
+@section Training the Filter
+
+content 23-2
+
+@node	23-3, 23-4, 23-2, Chapter 23
+@section Per-Word Statistics
+
+content 23-3
+
+@node	23-4, 23-5, 23-3, Chapter 23
+@section Combining Probabilities
+
+content 23-4
+
+@node	23-5, 23-6, 23-4, Chapter 23
+@section Inverse Chi Square
+
+content 23-5
+
+@node	23-6, 23-7, 23-5, Chapter 23
+@section Training the Filter
+
+content 23-6
+
+@node	23-7, 23-8, 23-6, Chapter 23
+@section Testing the Filter
+
+content 23-7
+
+@node	23-8, 23-9, 23-7, Chapter 23
+@section A Couple of Utility Functions
+
+content 23-8
+
+@node	23-9, 23-10, 23-8, Chapter 23
+@section Analyzing the Results
+
+content 23-9
+
+@node	23-10, Chapter 24, 23-9, Chapter 23
+@section What's Next
+
+content 23-10
+
+@node    Chapter 24, Chapter 25, Chapter 23, Top
+@section 24. Practical: Parsing Binary Files
+
+content 24-intro
+
+@menu
+* 24-1::       Binary Files
+* 24-2::       Binary Format Basics
+* 24-3::       Strings in Binary Files
+* 24-4::       Composite Structures
+* 24-5::       Designing the Macros
+* 24-6::       Making the Dream a Reality
+* 24-7::       Reading Binary Objects
+* 24-8::       Writing Binary Objects
+* 24-9::       Adding Inheritance and Tagged Structures
+* 24-10::      Keeping Track of Inherited Slots
+* 24-11::      Tagged Structures
+* 24-12::      Primitive Binary Types
+* 24-13::      The Current Object Stack
+@end menu
+
+@node	24-1, 24-2, Chapter 24, Chapter 24
+@section Binary Files
+
+content 24-1
+
+@node	24-2, 24-3, 24-1, Chapter 24
+@section Binary Format Basics
+
+content 24-2
+
+@node	24-3, 24-4, 24-2, Chapter 24
+@section Strings in Binary Files
+
+content 24-3
+
+@node	24-4, 24-5, 24-3, Chapter 24
+@section Composite Structures
+
+content 24-4
+
+@node	24-5, 24-6, 24-4, Chapter 24
+@section Designing the Macros
+
+content 24-5
+
+@node	24-6, 24-7, 24-5, Chapter 24
+@section Making the Dream a Reality
+
+content 24-6
+
+@node	24-7, 24-8, 24-6, Chapter 24
+@section Reading Binary Objects
+
+content 24-7
+
+@node	24-8, 24-9, 24-7, Chapter 24
+@section Writing Binary Objects
+
+content 24-8
+
+@node	24-9, 24-10, 24-8, Chapter 24
+@section Adding Inheritance and Tagged Structures
+
+content 24-9
+
+@node	24-10, 24-11, 24-9, Chapter 24
+@section Keeping Track of Inherited Slots
+
+content 24-10
+
+@node	24-11, 24-12, 24-10, Chapter 24
+@section Tagged Structures
+
+content 24-11
+
+@node	24-12, 24-13, 24-11, Chapter 24
+@section Primitive Binary Types
+
+content 24-12
+
+@node	24-13, Chapter 25, 24-12, Chapter 24
+@section The Current Object Stack
+
+content 24-13
+
+@node    Chapter 25, Chapter 26, Chapter 24, Top
+@section 25. Practical: An ID3 Parser
+
+content 25-intro
+
+@menu
+* 25-1::       Structure of an ID3v2 Tag
+* 25-2::       Defining a Package
+* 25-3::       Integer Types
+* 25-4::       String Types
+* 25-5::       ID3 Tag Header
+* 25-6::       ID3 Frames
+* 25-7::       Detecting Tag Padding
+* 25-8::       Supporting Multiple Versions of ID3
+* 25-9::       Versioned Frame Base Classes
+* 25-10::      Versioned Concrete Frame Classes
+* 25-11::      What Frames Do You Actually Need?
+* 25-12::      Text Information Frames
+* 25-13::      Comment Frames
+* 25-14::      Extracting Information from an ID3 Tag
+@end menu
+
+@node	25-1, 25-2, Chapter 25, Chapter 25
+@section Structure of an ID3v2 Tag
+
+content 25-1
+
+@node	25-2, 25-3, 25-1, Chapter 25
+@section Defining a Package
+
+content 25-2
+
+@node	25-3, 25-4, 25-2, Chapter 25
+@section Integer Types
+
+content 25-3
+
+@node	25-4, 25-5, 25-3, Chapter 25
+@section String Types
+
+content 25-4
+
+@node	25-5, 25-6, 25-4, Chapter 25
+@section ID3 Tag Header
+
+content 25-5
+
+@node	25-6, 25-7, 25-5, Chapter 25
+@section ID3 Frames
+
+content 25-6
+
+@node	25-7, 25-8, 25-6, Chapter 25
+@section Detecting Tag Padding
+
+content 25-7
+
+@node	25-8, 25-9, 25-7, Chapter 25
+@section Supporting Multiple Versions of ID3
+
+content 25-8
+
+@node	25-9, 25-10, 25-8, Chapter 25
+@section Versioned Frame Base Classes
+
+content 25-9
+
+@node	25-10, 25-11, 25-9, Chapter 25
+@section Versioned Concrete Frame Classes
+
+content 25-10
+
+@node	25-11, 25-12, 25-10, Chapter 25
+@section What Frames Do You Actually Need?
+
+content 25-11
+
+@node	25-12, 25-13, 25-11, Chapter 25
+@section Text Information Frames
+
+content 25-12
+
+@node	25-13, 25-14, 25-12, Chapter 25
+@section Comment Frames
+
+content 25-13
+
+@node	25-14, Chapter 26, 25-13, Chapter 25
+@section Extracting Information from an ID3 Tag
+
+content 25-14
+
+@node    Chapter 26, Chapter 27, Chapter 25, Top
+@section 26. Practical: Web Programming with AllegroServe
+
+content 26-intro
+
+@menu
+* 26-1::       A 30-Second Intro to Server-Side Web Programming
+* 26-2::       AllegroServe
+* 26-3::       Generating Dynamic Content with AllegroServe
+* 26-4::       Generating HTML
+* 26-5::       HTML Macros
+* 26-6::       Query Parameters
+* 26-7::       Cookies
+* 26-8::       A Small Application Framework
+* 26-9::       The Implementation
+@end menu
+
+@node	26-1, 26-2, Chapter 26, Chapter 26
+@section A 30-Second Intro to Server-Side Web Programming
+
+content 26-1
+
+@node	26-2, 26-3, 26-1, Chapter 26
+@section AllegroServe
+
+content 26-2
+
+@node	26-3, 26-4, 26-2, Chapter 26
+@section Generating Dynamic Content with AllegroServe
+
+content 26-3
+
+@node	26-4, 26-5, 26-3, Chapter 26
+@section Generating HTML
+
+content 26-4
+
+@node	26-5, 26-6, 26-4, Chapter 26
+@section HTML Macros
+
+content 26-5
+
+@node	26-6, 26-7, 26-5, Chapter 26
+@section Query Parameters
+
+content 26-6
+
+@node	26-7, 26-8, 26-6, Chapter 26
+@section Cookies
+
+content 26-7
+
+@node	26-8, 26-9, 26-7, Chapter 26
+@section A Small Application Framework
+
+content 26-8
+
+@node	26-9, Chapter 27, 26-8, Chapter 26
+@section The Implementation
+
+content 26-9
+
+@node    Chapter 27, Chapter 28, Chapter 26, Top
+@section 27. Practical: An MP3 Database
+
+content 27-intro
+
+@menu
+* 27-1::       The Database
+* 27-2::       Defining a Schema
+* 27-3::       Inserting Values
+* 27-4::       Querying the Database
+* 27-5::       Matching Functions
+* 27-6::       Getting at the Results
+* 27-7::       Other Database Operations
+@end menu
+
+@node	27-1, 27-2, Chapter 27, Chapter 27
+@section The Database
+
+content 27-1
+
+@node	27-2, 27-3, 27-1, Chapter 27
+@section Defining a Schema
+
+content 27-2
+
+@node	27-3, 27-4, 27-2, Chapter 27
+@section Inserting Values
+
+content 27-3
+
+@node	27-4, 27-5, 27-3, Chapter 27
+@section Querying the Database
+
+content 27-4
+
+@node	27-5, 27-6, 27-4, Chapter 27
+@section Matching Functions
+
+content 27-5
+
+@node	27-6, 27-7, 27-5, Chapter 27
+@section Getting at the Results
+
+content 27-6
+
+@node	27-7, Chapter 28, 27-6, Chapter 27
+@section Other Database Operations
+
+content 27-7
+
+@node    Chapter 28, Chapter 29, Chapter 27, Top
+@section 28. Practical: A Shoutcast Server
+
+content 28-intro
+
+@menu
+* 28-1::       The Shoutcast Protocol
+* 28-2::       Song Sources
+* 28-3::       Implementing Shoutcast
+@end menu
+
+@node	28-1, 28-2, Chapter 28, Chapter 28
+@section The Shoutcast Protocol
+
+content 28-1
+
+@node	28-2, 28-3, 28-1, Chapter 28
+@section Song Sources
+
+content 28-2
+
+@node	28-3, Chapter 29, 28-2, Chapter 28
+@section Implementing Shoutcast
+
+content 28-3
+
+@node    Chapter 29, Chapter 30, Chapter 28, Top
+@section 29. Practical: An MP3 Browser
+
+content 29-intro
+
+@menu
+* 29-1::       Playlists
+* 29-2::       Playlists As Song Sources
+* 29-3::       Manipulating the Playlist
+* 29-4::       Query Parameter Types
+* 29-5::       Boilerplate HTML
+* 29-6::       The Browse Page
+* 29-7::       The Playlist
+* 29-8::       Finding a Playlist
+* 29-9::       Running the App
+@end menu
+
+@node	29-1, 29-2, Chapter 29, Chapter 29
+@section Playlists
+
+content 29-1
+
+@node	29-2, 29-3, 29-1, Chapter 29
+@section Playlists As Song Sources
+
+content 29-2
+
+@node	29-3, 29-4, 29-2, Chapter 29
+@section Manipulating the Playlist
+
+content 29-3
+
+@node	29-4, 29-5, 29-3, Chapter 29
+@section Query Parameter Types
+
+content 29-4
+
+@node	29-5, 29-6, 29-4, Chapter 29
+@section Boilerplate HTML
+
+content 29-5
+
+@node	29-6, 29-7, 29-5, Chapter 29
+@section The Browse Page
+
+content 29-6
+
+@node	29-7, 29-8, 29-6, Chapter 29
+@section The Playlist
+
+content 29-7
+
+@node	29-8, 29-9, 29-7, Chapter 29
+@section Finding a Playlist
+
+content 29-8
+
+@node	29-9, Chapter 30, 29-8, Chapter 29
+@section Running the App
+
+content 29-9
+
+@node    Chapter 30, Chapter 31, Chapter 29, Top
+@section 30. Practical: An HTML Generation Library, the Interpreter
+
+content 30-intro
+
+@menu
+* 30-1::       Designing a Domain-Specific Language
+* 30-2::       The FOO Language
+* 30-3::       Character Escaping
+* 30-4::       Indenting Printer
+* 30-5::       HTML Processor Interface
+* 30-6::       The Pretty Printer Backend
+* 30-7::       The Basic Evaluation Rule
+* 30-8::       What's Next?
+@end menu
+
+@node	30-1, 30-2, Chapter 30, Chapter 30
+@section Designing a Domain-Specific Language
+
+content 30-1
+
+@node	30-2, 30-3, 30-1, Chapter 30
+@section The FOO Language
+
+content 30-2
+
+@node	30-3, 30-4, 30-2, Chapter 30
+@section Character Escaping
+
+content 30-3
+
+@node	30-4, 30-5, 30-3, Chapter 30
+@section Indenting Printer
+
+content 30-4
+
+@node	30-5, 30-6, 30-4, Chapter 30
+@section HTML Processor Interface
+
+content 30-5
+
+@node	30-6, 30-7, 30-5, Chapter 30
+@section The Pretty Printer Backend
+
+content 30-6
+
+@node	30-7, 30-8, 30-6, Chapter 30
+@section The Basic Evaluation Rule
+
+content 30-7
+
+@node	30-8, Chapter 31, 30-7, Chapter 30
+@section What's Next?
+
+content 30-8
+
+@node    Chapter 31, Chapter 32, Chapter 30, Top
+@section 31. Practical: An HTML Generation Library, the Compiler
+
+content 31-intro
+
+@menu
+* 31-1::       The Compiler
+* 31-2::       FOO Special Operators
+* 31-3::       FOO Macros
+* 31-4::       The Public API
+* 31-5::       The End of the Line
+@end menu
+
+@node	31-1, 31-2, Chapter 31, Chapter 31
+@section The Compiler
+
+content 31-1
+
+@node	31-2, 31-3, 31-1, Chapter 31
+@section FOO Special Operators
+
+content 31-2
+
+@node	31-3, 31-4, 31-2, Chapter 31
+@section FOO Macros
+
+content 31-3
+
+@node	31-4, 31-5, 31-3, Chapter 31
+@section The Public API
+
+content 31-4
+
+@node	31-5, Chapter 32, 31-4, Chapter 31
+@section The End of the Line
+
+content 31-5
+
+@node    Chapter 32, , Chapter 31, Top
+@section 32. Conclusion: What's Next?
+
+content 32-intro
+
+@menu
+* 32-1::        Finding Lisp Libraries
+* 32-2::        Interfacing with Other Languages
+* 32-3::        Make It Work, Make It Right, Make It Fast
+* 32-4::        Delivering Applications
+* 32-5::        Where to Go Next
+@end menu
+
+@node	32-1, 32-2, Chapter 32, Chapter 32
+@section Finding Lisp Libraries
+
+content 32-1
+
+@node	32-2, 32-3, 32-1, Chapter 32
+@section Interfacing with Other Languages
+
+content 32-2
+
+@node	32-3, 32-4, 32-2, Chapter 32
+@section Make It Work, Make It Right, Make It Fast
+
+content 32-3
+
+@node	32-4, 32-5, 32-3, Chapter 32
+@section Delivering Applications
+
+content 32-4
+
+@node	32-5, Chapter 32, 32-4, Chapter 32
+@section Where to Go Next
+
+content 32-5
