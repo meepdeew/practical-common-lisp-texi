@@ -5,7 +5,7 @@
 @heading Practical Common Lisp
 
 @noindent
-that book is dead sexy —Xach on #lisp@*
+`that book is dead sexy` —Xach on #lisp@*
 @copyright{} 2003-2009, Peter Seibel
 
 @noindent
@@ -19,17 +19,47 @@ Unofficial Texinfo Format
 * Blurbs::      Blurbs
 * Chapter 1::   Introduction: Why Lisp?
 * Chapter 2::   Lather, Rinse, Repeat: A Tour of the REPL
+* Chapter 3::   Practical: A Simple Database
+* Chapter 4::   Syntax and Semantics
+* Chapter 5::   Functions
+* Chapter 6::   Variables
+* Chapter 7::   Macros: Standard Control Constructs
+* Chapter 8::   Macros: Defining Your Own
+* Chapter 9::   Practical: Building a Unit Test Framework
+* Chapter 10::  Numbers, Characters, and Strings
+* Chapter 11::  Collections
+* Chapter 12::  They Called It LISP for a Reason: List Processing
+* Chapter 13::  Beyond Lists: Other Uses for Cons Cells
+* Chapter 14::  Files and File I/O
+* Chapter 15::  Practical: A Portable Pathname Library
+* Chapter 16::  Object Reorientation: Generic Functions
+* Chapter 17::  Object Reorientation: Classes
+* Chapter 18::  A Few FORMAT Recipes
+* Chapter 19::  Beyond Exception Handling: Conditions and Restarts
+* Chapter 20::  The Special Operators
+* Chapter 21::  Programming in the Large: Packages and Symbols
+* Chapter 22::  LOOP for Black Belts
+* Chapter 23::  Practical: A Spam Filter
+* Chapter 24::  Practical: Parsing Binary Files
+* Chapter 25::  Practical: An ID3 Parser
+* Chapter 26::  Practical: Web Programming with AllegroServe
+* Chapter 27::  Practical: An MP3 Database
+* Chapter 28::  Practical: A Shoutcast Server
+* Chapter 29::  Practical: An MP3 Browser
+* Chapter 30::  Practical: An HTML Generation Library, the Interpreter
+* Chapter 31::  Practical: An HTML Generation Library, the Compiler
+* Chapter 32::  Conclusion: What's Next?
 
 @detailmenu
  --- The Detailed Node Listing ---
 
-Programming in Lisp
+1. Introduction: Why Lisp?
 
 * 1-1::              Why Lisp?
 * 1-2::              Where It Began
 * 1-3::              Who This Book Is For
 
-Building Abstractions with Data
+2. Lather, Rinse, Repeat: A Tour of the REPL
 
 * 2-1::              Choosing a Lisp Implementation
 * 2-2::              Getting Up and Running with Lisp in a Box
@@ -38,13 +68,353 @@ Building Abstractions with Data
 * 2-5::              "Hello, World," Lisp Style
 * 2-6::              Saving Your Work
 
+3. Practical: A Simple Database
+
+* 3-1::              CDs and Records
+* 3-2::              Filing CDs
+* 3-3::              Looking at the Database Contents
+* 3-4::              Improving the User Interaction
+* 3-5::              Saving and Loading the Database
+* 3-6::              Querying the Database
+* 3-7::              Updating Existing Records--Another Use for WHERE
+* 3-8::              Removing Duplication and Winning Big
+* 3-9::              Wrapping Up
+
+4. Syntax and Semantics
+
+* 4-1::              What's with All the Parentheses?
+* 4-2::              Breaking Open the Black Box
+* 4-3::              S-expressions
+* 4-4::              S-expressions As Lisp Forms
+* 4-5::              Function Calls
+* 4-6::              Special Operators
+* 4-7::              Macros
+* 4-8::              Truth, Falsehood, and Equality
+* 4-9::              Formatting Lisp Code
+
+5. Functions
+
+* 5-1::              Defining New Functions
+* 5-2::              Function Parameter Lists
+* 5-3::              Optional Parameters
+* 5-4::              Rest Parameters
+* 5-5::              Keyword Parameters
+* 5-6::              Mixing Different Parameter Types
+* 5-7::              Function Return Values
+* 5-8::              Functions As Data, a.k.a. Higher-Order Functions
+* 5-9::              Anonymous Functions
+
+6. Variables
+
+* 6-1::              Variable Basics
+* 6-2::              Lexical Variables and Closures
+* 6-3::              Dynamic, a.k.a. Special, Variables
+* 6-4::              Constants
+* 6-5::              Assignment
+* 6-6::              Generalized Assignment
+
+7. Macros: Standard Control Constructs
+
+* 7-1::              WHEN and UNLESS
+* 7-2::              COND
+* 7-3::              AND, OR, and NOT
+* 7-4::              Looping
+* 7-5::              DOLIST and DOTIMES
+* 7-6::              DO
+* 7-7::              The Mighty LOOP
+
+8. Macros: Defining Your Own
+
+* 8-1::                  The Story of Mac: A Just-So Story
+* 8-2::                  Macro Expansion Time vs. Runtime
+* 8-3::                  DEF MACRO
+* 8-4::                  A Sample Macro: do-primes
+* 8-5::                  Macro Parameters
+* 8-6::                  Generating the Expansion
+* 8-7::                  Plugging the Leaks
+* 8-8::                  Macro-Writing Macros
+* 8-9::                  Beyond Simple Macros
+
+9. Practical: Building a Unit Test Framework
+
+* 9-1::                  Two First Tries
+* 9-2::                  Refactoring
+* 9-3::                  Fixing the Return Value
+* 9-4::                  Better Result Reporting
+* 9-5::                  An Abstraction Emerges
+* 9-6::                  A Hierarchy of Tests
+* 9-7::                  Wrapping Up
+
+10. Numbers, Characters, and Strings
+
+* 10-1::                 Numbers
+* 10-2::                 Numeric Literals
+* 10-3::                 Basic Math
+* 10-4::                 Numeric Comparisons
+* 10-5::                 Higher Math
+* 10-6::                 Characters
+* 10-7::                 Character Comparisons
+* 10-8::                 Strings
+* 10-9::                 String Comparisons
+
+11. Collections
+
+* 11-1::                            Vectors
+* 11-2::                            Subtypes of Vector
+* 11-3::                            Vectors As Sequences
+* 11-4::                            Sequence Iterating Functions
+* 11-5::                            Higher-Order Function Variants
+* 11-6::                            Whole Sequence Manipulations
+* 11-7::                            Sorting and Merging
+* 11-8::                            Subsequence Manipulations
+* 11-9::                            Sequence Predicates
+* 11-10::                           Sequence Mapping Functions
+* 11-11::                           Hash Tables
+* 11-12::                           Hash Table Iteration
+
+12. They Called It LISP for a Reason: List Processing
+
+* 12-1::             "There Is No List"
+* 12-2::             Functional Programming and Lists
+* 12-3::             "Destructive" Operations
+* 12-4::             Combining Recycling with Shared Structure
+* 12-5::             List-Manipulation Functions
+* 12-6::             Mapping
+* 12-7::             Other Structures
+
+13. Beyond Lists: Other Uses for Cons Cells
+
+* 13-1::                Trees
+* 13-2::                Sets
+* 13-3::                Lookup Tables: Alists and Plists
+* 13-4::                DESTRUCTURING-BIND
+
+14. Files and File I/O
+
+* 14-1::      Reading File Data
+* 14-2::      Reading Binary Data
+* 14-3::      Bulk Reads
+* 14-4::      File Output
+* 14-5::      Closing Files
+* 14-6::      Filenames
+* 14-7::      How Pathnames Represent Filenames
+* 14-8::      Constructing New Pathnames
+* 14-9::      Two Representations of Directory Names
+* 14-10::     Interacting with the File System
+* 14-11::     Other Kinds of I/O
+
+15. Practical: A Portable Pathname Library
+
+* 15-1::       The API
+* 15-2::       *FEATURES* and Read-Time Conditionalization
+* 15-3::       Listing a Directory
+* 15-4::       Testing a File's Existence
+* 15-5::       Walking a Directory Tree
+
+16. Object Reorientation: Generic Functions
+
+* 16-1::   Generic Functions and Classes
+* 16-2::   Generic Functions and Methods
+* 16-3::   DEFGENERIC
+* 16-4::   DEFMETHOD
+* 16-5::   Method Combination
+* 16-6::   The Standard Method Combination
+* 16-7::   Other Method Combinations
+* 16-8::   Multimethods
+* 16-9::   To Be Continued . . .
+
+17. Object Reorientation: Classes
+
+* 17-1::   DEFCLASS
+* 17-2::   Slot Specifiers
+* 17-3::   Object Initialization
+* 17-4::   Accessor Functions
+* 17-5::   WITH-SLOTS and WITH-ACCESSORS
+* 17-6::   Class-Allocated Slots
+* 17-7::   Slots and Inheritance
+* 17-8::   Multiple Inheritance
+* 17-9::   Good Object-Oriented Design
+
+18. A Few FORMAT Recipes
+
+* 18-1::         The FORMAT Function
+* 18-2::         FORMAT Directives
+* 18-3::         Basic Formatting
+* 18-4::         Character and Integer Directives
+* 18-5::         Floating-Point Directives
+* 18-6::         English-Language Directives
+* 18-7::         Conditional Formatting
+* 18-8::         Iteration
+* 18-9::         Hop, Skip, Jump
+* 18-10::        And More . . .
+
+19. Beyond Exception Handling: Conditions and Restarts
+
+* 19-1::             The Lisp Way
+* 19-2::             Conditions
+* 19-3::             Condition Handlers
+* 19-4::             Restarts
+* 19-5::             Providing Multiple Restarts
+* 19-6::             Other Uses for Conditions
+
+20. The Special Operators
+
+* 20-1::        Controlling Evaluation
+* 20-2::        Manipulating the Lexical Environment
+* 20-3::        Local Flow of Control
+* 20-4::        Unwinding the Stack
+* 20-5::        Multiple Values
+* 20-6::        EVAL-WHEN
+* 20-7::        Other Special Operators
+
+21. Programming in the Large: Packages and Symbols
+
+* 21-1::        How the Reader Uses Packages
+* 21-2::        A Bit of Package and Symbol Vocabulary
+* 21-3::        Three Standard Packages
+* 21-4::        Defining Your Own Packages
+* 21-5::        Packaging Reusable Libraries
+* 21-6::        Importing Individual Names
+* 21-7::        Packaging Mechanics
+* 21-8::        Package Gotchas
+
+22. LOOP for Black Belts
+
+* 22-1::     The Parts of a LOOP
+* 22-2::     Iteration Control
+* 22-3::     Counting Loops
+* 22-4::     Looping Over Collections and Packages
+* 22-5::     Equals-Then Iteration
+* 22-6::     Local Variables
+* 22-7::     Destructuring Variables
+* 22-8::     Value Accumulation
+* 22-9::     Unconditional Execution
+* 22-10::    Conditional Execution
+* 22-11::    Setting Up and Tearing Down
+* 22-12::    Termination Tests
+* 22-13::    Putting It All Together
+
+23. Practical: A Spam Filter
+
+* 23-1::       The Heart of a Spam Filter
+* 23-2::       Training the Filter
+* 23-3::       Per-Word Statistics
+* 23-4::       Combining Probabilities
+* 23-5::       Inverse Chi Square
+* 23-6::       Training the Filter
+* 23-7::       Testing the Filter
+* 23-8::       A Couple of Utility Functions
+* 23-9::       Analyzing the Results
+* 23-10::      What's Next
+
+24. Practical: Parsing Binary Files
+
+* 24-1::       Binary Files
+* 24-2::       Binary Format Basics
+* 24-3::       Strings in Binary Files
+* 24-4::       Composite Structures
+* 24-5::       Designing the Macros
+* 24-6::       Making the Dream a Reality
+* 24-7::       Reading Binary Objects
+* 24-8::       Writing Binary Objects
+* 24-9::       Adding Inheritance and Tagged Structures
+* 24-10::      Keeping Track of Inherited Slots
+* 24-11::      Tagged Structures
+* 24-12::      Primitive Binary Types
+* 24-13::      The Current Object Stack
+
+25. Practical: An ID3 Parser
+
+* 25-1::       Structure of an ID3v2 Tag
+* 25-2::       Defining a Package
+* 25-3::       Integer Types
+* 25-4::       String Types
+* 25-5::       ID3 Tag Header
+* 25-6::       ID3 Frames
+* 25-7::       Detecting Tag Padding
+* 25-8::       Supporting Multiple Versions of ID3
+* 25-9::       Versioned Frame Base Classes
+* 25-10::      Versioned Concrete Frame Classes
+* 25-11::      What Frames Do You Actually Need?
+* 25-12::      Text Information Frames
+* 25-13::      Comment Frames
+* 25-14::      Extracting Information from an ID3 Tag
+
+26. Practical: Web Programming with AllegroServe
+
+* 26-1::       A 30-Second Intro to Server-Side Web Programming
+* 26-2::       AllegroServe
+* 26-3::       Generating Dynamic Content with AllegroServe
+* 26-4::       Generating HTML
+* 26-5::       HTML Macros
+* 26-6::       Query Parameters
+* 26-7::       Cookies
+* 26-8::       A Small Application Framework
+* 26-9::       The Implementation
+
+27. Practical: An MP3 Database
+
+* 27-1::       The Database
+* 27-2::       Defining a Schema
+* 27-3::       Inserting Values
+* 27-4::       Querying the Database
+* 27-5::       Matching Functions
+* 27-6::       Getting at the Results
+* 27-7::       Other Database Operations
+
+28. Practical: A Shoutcast Server
+
+* 28-1::       The Shoutcast Protocol
+* 28-2::       Song Sources
+* 28-3::       Implementing Shoutcast
+
+29. Practical: An MP3 Browser
+
+* 29-1::       Playlists
+* 29-2::       Playlists As Song Sources
+* 29-3::       Manipulating the Playlist
+* 29-4::       Query Parameter Types
+* 29-5::       Boilerplate HTML
+* 29-6::       The Browse Page
+* 29-7::       The Playlist
+* 29-8::       Finding a Playlist
+* 29-9::       Running the App
+
+30. Practical: An HTML Generation Library, the Interpreter
+
+* 30-1::       Designing a Domain-Specific Language
+* 30-2::       The FOO Language
+* 30-3::       Character Escaping
+* 30-4::       Indenting Printer
+* 30-5::       HTML Processor Interface
+* 30-6::       The Pretty Printer Backend
+* 30-7::       The Basic Evaluation Rule
+* 30-8::       What's Next?
+
+31. Practical: An HTML Generation Library, the Compiler
+
+* 31-1::       The Compiler
+* 31-2::       FOO Special Operators
+* 31-3::       FOO Macros
+* 31-4::       The Public API
+* 31-5::       The End of the Line
+
+32. Conclusion: What's Next?
+
+* 32-1::        Finding Lisp Libraries
+* 32-2::        Interfacing with Other Languages
+* 32-3::        Make It Work, Make It Right, Make It Fast
+* 32-4::        Delivering Applications
+* 32-5::        Where to Go Next
+
+
 @end detailmenu
 @end menu
 
 @node    Preface, Letter, Top, Top
 @unnumbered Preface
 
-This page, and the pages it links to, contain text of the Common Lisp book Practical Common Lisp published by Apress These pages now contain the final text as it appears in the book. If you find errors in these pages, please send email to book_at_gigamonkeys.com. These pages will remain online in perpetuity—I hope they will serve as a useful introduction to Common Lisp for folks who are curious about Lisp but maybe not yet curious enough to shell out big bucks for a dead-tree book and a good Common Lisp tutorial for folks who want to get down to real coding right away. However, don't let that stop you from buying the printed version available from Apress at your favorite local or online bookseller. For the complete bookstore browsing experience, you can read the letter to the reader that appears on the back cover of the treeware edition of the book.
+This page, and the pages it links to, contain text of the Common Lisp book Practical Common Lisp published by Apress. These pages now contain the final text as it appears in the book. If you find errors in these pages, please send email to @email{book@@gigamonkeys.com}. These pages will remain online in perpetuity—I hope they will serve as a useful introduction to Common Lisp for folks who are curious about Lisp but maybe not yet curious enough to shell out big bucks for a dead-tree book and a good Common Lisp tutorial for folks who want to get down to real coding right away. However, don't let that stop you from buying the printed version available from Apress at your favorite local or online bookseller. For the complete bookstore browsing experience, you can read the letter to the reader that appears on the back cover of the treeware edition of the book.
 
 @node    Letter, Blurbs, Preface, Top
 @unnumbered Letter to the Reader
@@ -66,11 +436,18 @@ Sincerely,
 Peter Seibel
 
 @node    Blurbs, Chapter 1, Letter, Top
+
+@quotation
+“I have been complimented many times and they always embarrass me; I always feel that they have not said enough.”
+—Mark Twain
+@end quotation
+
 @unnumbered Blurbs
 
-“I have been complimented many times and they always embarrass me; I always feel that they have not said enough.” —Mark Twain
-
-“Peter Seibel offers a fresh view of Lisp and its possibilities for elegantly solving problems. In Practical Common Lisp, he gives enough basic information to let you quickly see the power of the functional language paradigm. He then dazzles you with examples that seem almost magical in their simplicity and power. This read is pure fun from start to finish.” —Gary Pollice, from Dr. Dobb's Portal, May 17, 2006 article on the 2006 Jolt Awards
+@quotation
+“Peter Seibel offers a fresh view of Lisp and its possibilities for elegantly solving problems. In Practical Common Lisp, he gives enough basic information to let you quickly see the power of the functional language paradigm. He then dazzles you with examples that seem almost magical in their simplicity and power. This read is pure fun from start to finish.”
+-—Gary Pollice, from @uref{http://www.drdobbs.com/joltawards/2006-jolt-awards/187900423?pgno=4, Dr. Dobb's Portal, May 17, 2006 article on the 2006 Jolt Awards}
+@end quotation
 
 “Peter Seibel's Practical Common Lisp is just what the title implies: an excellent introduction to Common Lisp for someone who wants to dive in and start using the language for real work. The book is very well written and is fun to read—at least for those of us whose idea of fun extends to learning new programming languages.
 
@@ -108,7 +485,7 @@ In most chapters, the reading of the chapter feels just like the experience of w
 
 “When I met Peter, who just started writing this book, I asked to myself (not to him, of course) ‘why yet another book on Common Lisp, when there are many nice introductory books?’ One year later, I found a draft of the new book and recognized I was wrong. This book is not ‘yet another’ one. The author focuses on practical aspects rather than on technical details of the language. When I first studied Lisp by reading an introductory book, I felt I understood the language, but I also had an impression ‘so what?’, meaning I had no idea about how to use it. In contrast, this book leaps into a ‘PRACTICAL’ chapter after the first few chapters that explain the very basic notions of the language. Then the readers are expected to learn more about the language while they are following the PRACTICAL projects, which are combined together to form a product of a significant size. After reading this book, the readers will feel themselves expert programmers on Common Lisp since they have ‘finished’ a big project already. I think Lisp is the only language that allows this type of practical introduction. Peter makes use of this feature of the language in building up a fancy introduction on Common Lisp.” —Taiichi Yuasa, Professor, Department of Communications and Computer Engineering, Kyoto University
 
-Have something to say about this book? Something nice? Want to see it here? Send it along to book_at_gigamonkeys.com.
+Have something to say about this book? Something nice? Want to see it here? Send it along to @email{book@@gigamonkeys.com}.
 
 @node    Chapter 1, Chapter 2, Blurbs, Top
 @section 1. Introduction: Why Lisp?
@@ -144,28 +521,28 @@ It's hard, in only a few pages of an introductory chapter, to explain why users 
 
 For some languages, the payoff is relatively obvious. For instance, if you want to write low-level code on Unix, you should learn C. Or if you want to write certain kinds of cross-platform applications, you should learn Java. And any of a number companies still use a lot of C++, so if you want to get a job at one of them, you should learn C++.
 
-For most languages, however, the payoff isn't so easily categorized; it has to do with subjective criteria such as how it feels to use the language. Perl advocates like to say that Perl "makes easy things easy and hard things possible" and revel in the fact that, as the Perl motto has it, "There's more than one way to do it." @footnote{Perl is also worth learning as "the duct tape of the Internet."} Python's fans, on the other hand, think Python is clean and simple and think Python code is easier to understand because, as their motto says, "There's only one way to do it."
+For most languages, however, the payoff isn't so easily categorized; it has to do with subjective criteria such as how it feels to use the language. Perl advocates like to say that Perl "makes easy things easy and hard things possible" and revel in the fact that, as the Perl motto has it, "There's more than one way to do it." @footnote{Perl is also worth learning as "the duct tape of the Internet."} Python's fans, on the other hand, think Python is clean and simple and think Python code is easier to understand because, as @emph{their} motto says, "There's only one way to do it."
 
 So, why Common Lisp? There's no immediately obvious payoff for adopting Common Lisp the way there is for C, Java, and C++ (unless, of course, you happen to own a Lisp Machine). The benefits of using Lisp have much more to do with the experience of using it. I'll spend the rest of this book showing you the specific features of Common Lisp and how to use them so you can see for yourself what it's like. For now I'll try to give you a sense of Lisp's philosophy.
 
 The nearest thing Common Lisp has to a motto is the koan-like description, "the programmable programming language." While cryptic, that description gets at the root of the biggest advantage Common Lisp still has over other languages. More than any other language, Common Lisp follows the philosophy that what's good for the language's designer is good for the language's users. Thus, when you're programming in Common Lisp, you almost never find yourself wishing the language supported some feature that would make your program easier to write, because, as you'll see throughout this book, you can just add the feature yourself.
 
-Consequently, a Common Lisp program tends to provide a much clearer mapping between your ideas about how the program works and the code you actually write. Your ideas aren't obscured by boilerplate code and endlessly repeated idioms. This makes your code easier to maintain because you don't have to wade through reams of code every time you need to make a change. Even systemic changes to a program's behavior can often be achieved with relatively small changes to the actual code. This also means you'll develop code more quickly; there's less code to write, and you don't waste time thrashing around trying to find a clean way to express yourself within the limitations of the language.2
+Consequently, a Common Lisp program tends to provide a much clearer mapping between your ideas about how the program works and the code you actually write. Your ideas aren't obscured by boilerplate code and endlessly repeated idioms. This makes your code easier to maintain because you don't have to wade through reams of code every time you need to make a change. Even systemic changes to a program's behavior can often be achieved with relatively small changes to the actual code. This also means you'll develop code more quickly; there's less code to write, and you don't waste time thrashing around trying to find a clean way to express yourself within the limitations of the language. @footnote{Unfortunately, there's little actual research on the productivity of different languages. One report that shows Lisp coming out well compared to C++ and Java in the combination of programmer and program efficiency is discussed at http://www.norvig.com/java-lisp.html.}
 
 Common Lisp is also an excellent language for exploratory programming--if you don't know exactly how your program is going to work when you first sit down to write it, Common Lisp provides several features to help you develop your code incrementally and interactively.
 
-For starters, the interactive read-eval-print loop, which I'll introduce in the next chapter, lets you continually interact with your program as you develop it. Write a new function. Test it. Change it. Try a different approach. You never have to stop for a lengthy compilation cycle.3
+For starters, the interactive read-eval-print loop, which I'll introduce in the next chapter, lets you continually interact with your program as you develop it. Write a new function. Test it. Change it. Try a different approach. You never have to stop for a lengthy compilation cycle. @footnote{Psychologists have identified a state of mind called flow in which we're capable of incredible concentration and productivity. The importance of flow to programming has been recognized for nearly two decades since it was discussed in the classic book about human factors in programming Peopleware: Productive Projects and Teams by Tom DeMarco and Timothy Lister (Dorset House, 1987). The two key facts about flow are that it takes around 15 minutes to get into a state of flow and that even brief interruptions can break you right out of it, requiring another 15-minute immersion to reenter. DeMarco and Lister, like most subsequent authors, concerned themselves mostly with flow-destroying interruptions such as ringing telephones and inopportune visits from the boss. Less frequently considered but probably just as important to programmers are the interruptions caused by our tools. Languages that require, for instance, a lengthy compilation before you can try your latest code can be just as inimical to flow as a noisy phone or a nosy boss. So, one way to look at Lisp is as a language designed to keep you in a state of flow.}
 
-Other features that support a flowing, interactive programming style are Lisp's dynamic typing and the Common Lisp condition system. Because of the former, you spend less time convincing the compiler you should be allowed to run your code and more time actually running it and working on it,4 and the latter lets you develop even your error handling code interactively.
+Other features that support a flowing, interactive programming style are Lisp's dynamic typing and the Common Lisp condition system. Because of the former, you spend less time convincing the compiler you should be allowed to run your code and more time actually running it and working on it, @footnote{This point is bound to be somewhat controversial, at least with some folks. Static versus dynamic typing is one of the classic religious wars in programming. If you're coming from C++ and Java (or from statically typed functional languages such as Haskel and ML) and refuse to consider living without static type checks, you might as well put this book down now. However, before you do, you might first want to check out what self-described "statically typed bigot" Robert Martin (author of Designing Object Oriented C++ Applications Using the Booch Method [Prentice Hall, 1995]) and C++ and Java author Bruce Eckel (author of Thinking in C++ [Prentice Hall, 1995] and Thinking in Java [Prentice Hall, 1998]) have had to say about dynamic typing on their weblogs (http://www.artima.com/weblogs/viewpost.jsp?thread=4639 and http://www.mindview.net/WebLog/log-0025). On the other hand, folks coming from Smalltalk, Python, Perl, or Ruby should feel right at home with this aspect of Common Lisp.} and the latter lets you develop even your error handling code interactively.
 
 Another consequence of being "a programmable programming language" is that Common Lisp, in addition to incorporating small changes that make particular programs easier to write, can easily adopt big new ideas about how programming languages should work. For instance, the original implementation of the Common Lisp Object System (CLOS), Common Lisp's powerful object system, was as a library written in portable Common Lisp. This allowed Lisp programmers to gain actual experience with the facilities it provided before it was officially incorporated into the language.
 
-Whatever new paradigm comes down the pike next, it's extremely likely that Common Lisp will be able to absorb it without requiring any changes to the core language. For example, a Lisper has recently written a library, AspectL, that adds support for aspect-oriented programming (AOP) to Common Lisp.5 If AOP turns out to be the next big thing, Common Lisp will be able to support it without any changes to the base language and without extra preprocessors and extra compilers.6
+Whatever new paradigm comes down the pike next, it's extremely likely that Common Lisp will be able to absorb it without requiring any changes to the core language. For example, a Lisper has recently written a library, AspectL, that adds support for aspect-oriented programming (AOP) to Common Lisp. @footnote{AspectL is an interesting project insofar as AspectJ, its Java-based predecessor, was written by Gregor Kiczales, one of the designers of Common Lisp's object and metaobject systems. To many Lispers, AspectJ seems like Kiczales's attempt to backport his ideas from Common Lisp into Java. However, Pascal Costanza, the author of AspectL, thinks there are interesting ideas in AOP that could be useful in Common Lisp. Of course, the reason he's able to implement AspectL as a library is because of the incredible flexibility of the Common Lisp Meta Object Protocol Kiczales designed. To implement AspectJ, Kiczales had to write what was essentially a separate compiler that compiles a new language into Java source code. The AspectL project page is at http://common-lisp.net/ project/aspectl/.} If AOP turns out to be the next big thing, Common Lisp will be able to support it without any changes to the base language and without extra preprocessors and extra compilers. @footnote{Or to look at it another, more technically accurate, way, Common Lisp comes with a built-in facility for integrating compilers for embedded languages.}
 
 @node	1-2, 1-3, 1-1, Chapter 1
 @section Where It Began
 
-Common Lisp is the modern descendant of the Lisp language first conceived by John McCarthy in 1956. Lisp circa 1956 was designed for "symbolic data processing"7 and derived its name from one of the things it was quite good at: LISt Processing. We've come a long way since then: Common Lisp sports as fine an array of modern data types as you can ask for: a condition system that, as you'll see in Chapter 19, provides a whole level of flexibility missing from the exception systems of languages such as Java, Python, and C++; powerful facilities for doing object-oriented programming; and several language facilities that just don't exist in other programming languages. How is this possible? What on Earth would provoke the evolution of such a well-equipped language?
+Common Lisp is the modern descendant of the Lisp language first conceived by John McCarthy in 1956. Lisp circa 1956 was designed for "symbolic data processing" @footnote{Lisp 1.5 Programmer's Manual (M.I.T. Press, 1962)} and derived its name from one of the things it was quite good at: LISt Processing. We've come a long way since then: Common Lisp sports as fine an array of modern data types as you can ask for: a condition system that, as you'll see in Chapter 19, provides a whole level of flexibility missing from the exception systems of languages such as Java, Python, and C++; powerful facilities for doing object-oriented programming; and several language facilities that just don't exist in other programming languages. How is this possible? What on Earth would provoke the evolution of such a well-equipped language?
 
 Well, McCarthy was (and still is) an artificial intelligence (AI) researcher, and many of the features he built into his initial version of the language made it an excellent language for AI programming. During the AI boom of the 1980s, Lisp remained a favorite tool for programmers writing software to solve hard problems such as automated theorem proving, planning and scheduling, and computer vision. These were problems that required a lot of hard-to-write software; to make a dent in them, AI programmers needed a powerful language, and they grew Lisp into the language they needed. And the Cold War helped--as the Pentagon poured money into the Defense Advanced Research Projects Agency (DARPA), a lot of it went to folks working on problems such as large-scale battlefield simulations, automated planning, and natural language interfaces. These folks also used Lisp and continued pushing it to do what they needed.
 
@@ -177,7 +554,7 @@ In fact, by the early 1980s, with various AI labs and the Lisp machine vendors a
 
 By 1986 the first Common Lisp implementations were available, and the writing was on the wall for the dialects it was intended to replace. In 1996, the American National Standards Institute (ANSI) released a standard for Common Lisp that built on and extended the language specified in CLtL, adding some major new features such as the CLOS and the condition system. And even that wasn't the last word: like CLtL before it, the ANSI standard intentionally leaves room for implementers to experiment with the best way to do things: a full Lisp implementation provides a rich runtime environment with access to GUI widgets, multiple threads of control, TCP/IP sockets, and more. These days Common Lisp is evolving much like other open-source languages--the folks who use it write the libraries they need and often make them available to others. In the last few years, in particular, there has been a spurt of activity in open-source Lisp libraries.
 
-So, on one hand, Lisp is one of computer science's "classical" languages, based on ideas that have stood the test of time.8 On the other, it's a thoroughly modern, general-purpose language whose design reflects a deeply pragmatic approach to solving real problems as efficiently and robustly as possible. The only downside of Lisp's "classical" heritage is that lots of folks are still walking around with ideas about Lisp based on some particular flavor of Lisp they were exposed to at some particular time in the nearly half century since McCarthy invented Lisp. If someone tells you Lisp is only interpreted, that it's slow, or that you have to use recursion for everything, ask them what dialect of Lisp they're talking about and whether people were wearing bell-bottoms when they learned it.9
+So, on one hand, Lisp is one of computer science's "classical" languages, based on ideas that have stood the test of time. @footnote{Ideas first introduced in Lisp include the if/then/else construct, recursive function calls, dynamic memory allocation, garbage collection, first-class functions, lexical closures, interactive programming, incremental compilation, and dynamic typing.} On the other, it's a thoroughly modern, general-purpose language whose design reflects a deeply pragmatic approach to solving real problems as efficiently and robustly as possible. The only downside of Lisp's "classical" heritage is that lots of folks are still walking around with ideas about Lisp based on some particular flavor of Lisp they were exposed to at some particular time in the nearly half century since McCarthy invented Lisp. If someone tells you Lisp is only interpreted, that it's slow, or that you have to use recursion for everything, ask them what dialect of Lisp they're talking about and whether people were wearing bell-bottoms when they learned it. @footnote{One of the most commonly repeated myths about Lisp is that it's "dead." While it's true that Common Lisp isn't as widely used as, say, Visual Basic or Java, it seems strange to describe a language that continues to be used for new development and that continues to attract new users as "dead." Some recent Lisp success stories include Paul Graham's Viaweb, which became Yahoo Store when Yahoo bought his company; ITA Software's airfare pricing and shopping system, QPX, used by the online ticket seller Orbitz and others; Naughty Dog's game for the PlayStation 2, Jak and Daxter, which is largely written in a domain-specific Lisp dialect Naughty Dog invented called GOAL, whose compiler is itself written in Common Lisp; and the Roomba, the autonomous robotic vacuum cleaner, whose software is written in L, a downwardly compatible subset of Common Lisp. Perhaps even more telling is the growth of the Common-Lisp.net Web site, which hosts open-source Common Lisp projects, and the number of local Lisp user groups that have sprung up in the past couple of years.}
 
 @node	1-3,  , 1-2, Chapter 1
 @section Who This Book Is For
