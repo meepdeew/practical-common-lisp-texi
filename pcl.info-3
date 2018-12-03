@@ -1,0 +1,1069 @@
+This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
+
+
+File: pcl.info,  Node: Chapter 21,  Next: Chapter 22,  Prev: Chapter 20,  Up: Top
+
+21. Programming in the Large: Packages and Symbols
+==================================================
+
+content 21-intro
+
+* Menu:
+
+* 21-1::        How the Reader Uses Packages
+* 21-2::        A Bit of Package and Symbol Vocabulary
+* 21-3::        Three Standard Packages
+* 21-4::        Defining Your Own Packages
+* 21-5::        Packaging Reusable Libraries
+* 21-6::        Importing Individual Names
+* 21-7::        Packaging Mechanics
+* 21-8::        Package Gotchas
+
+
+File: pcl.info,  Node: 21-1,  Next: 21-2,  Prev: Chapter 21,  Up: Chapter 21
+
+How the Reader Uses Packages
+============================
+
+content 21-1
+
+
+File: pcl.info,  Node: 21-2,  Next: 21-3,  Prev: 21-1,  Up: Chapter 21
+
+A Bit of Package and Symbol Vocabulary
+======================================
+
+content 21-2
+
+
+File: pcl.info,  Node: 21-3,  Next: 21-4,  Prev: 21-2,  Up: Chapter 21
+
+Three Standard Packages
+=======================
+
+content 21-3
+
+
+File: pcl.info,  Node: 21-4,  Next: 21-5,  Prev: 21-3,  Up: Chapter 21
+
+Defining Your Own Packages
+==========================
+
+content 21-4
+
+
+File: pcl.info,  Node: 21-5,  Next: 21-6,  Prev: 21-4,  Up: Chapter 21
+
+Packaging Reusable Libraries
+============================
+
+content 21-5
+
+
+File: pcl.info,  Node: 21-6,  Next: 21-7,  Prev: 21-5,  Up: Chapter 21
+
+Importing Individual Names
+==========================
+
+content 21-6
+
+
+File: pcl.info,  Node: 21-7,  Next: 21-8,  Prev: 21-6,  Up: Chapter 21
+
+Packaging Mechanics
+===================
+
+content 21-7
+
+
+File: pcl.info,  Node: 21-8,  Next: Chapter 22,  Prev: 21-7,  Up: Chapter 21
+
+Package Gotchas
+===============
+
+content 21-8
+
+
+File: pcl.info,  Node: Chapter 22,  Next: Chapter 23,  Prev: Chapter 21,  Up: Top
+
+22. LOOP for Black Belts
+========================
+
+content 22-intro
+
+* Menu:
+
+* 22-1::     The Parts of a LOOP
+* 22-2::     Iteration Control
+* 22-3::     Counting Loops
+* 22-4::     Looping Over Collections and Packages
+* 22-5::     Equals-Then Iteration
+* 22-6::     Local Variables
+* 22-7::     Destructuring Variables
+* 22-8::     Value Accumulation
+* 22-9::     Unconditional Execution
+* 22-10::    Conditional Execution
+* 22-11::    Setting Up and Tearing Down
+* 22-12::    Termination Tests
+* 22-13::    Putting It All Together
+
+
+File: pcl.info,  Node: 22-1,  Next: 22-2,  Prev: Chapter 22,  Up: Chapter 22
+
+The Parts of a LOOP
+===================
+
+content 22-1
+
+
+File: pcl.info,  Node: 22-2,  Next: 22-3,  Prev: 22-1,  Up: Chapter 22
+
+Iteration Control
+=================
+
+content 22-2
+
+
+File: pcl.info,  Node: 22-3,  Next: 22-4,  Prev: 22-2,  Up: Chapter 22
+
+Counting Loops
+==============
+
+content 22-3
+
+
+File: pcl.info,  Node: 22-4,  Next: 22-5,  Prev: 22-3,  Up: Chapter 22
+
+Looping Over Collections and Packages
+=====================================
+
+content 22-4
+
+
+File: pcl.info,  Node: 22-5,  Next: 22-6,  Prev: 22-4,  Up: Chapter 22
+
+Equals-Then Iteration
+=====================
+
+content 22-5
+
+
+File: pcl.info,  Node: 22-6,  Next: 22-7,  Prev: 22-5,  Up: Chapter 22
+
+Local Variables
+===============
+
+content 22-6
+
+
+File: pcl.info,  Node: 22-7,  Next: 22-8,  Prev: 22-6,  Up: Chapter 22
+
+Destructuring Variables
+=======================
+
+content 22-7
+
+
+File: pcl.info,  Node: 22-8,  Next: 22-9,  Prev: 22-7,  Up: Chapter 22
+
+Value Accumulation
+==================
+
+content 22-8
+
+
+File: pcl.info,  Node: 22-9,  Next: 22-10,  Prev: 22-8,  Up: Chapter 22
+
+Unconditional Execution
+=======================
+
+content 22-9
+
+
+File: pcl.info,  Node: 22-10,  Next: 22-11,  Prev: 22-9,  Up: Chapter 22
+
+Conditional Execution
+=====================
+
+content 22-10
+
+
+File: pcl.info,  Node: 22-11,  Next: 22-12,  Prev: 22-10,  Up: Chapter 22
+
+Setting Up and Tearing Down
+===========================
+
+content 22-11
+
+
+File: pcl.info,  Node: 22-12,  Next: 22-13,  Prev: 22-11,  Up: Chapter 22
+
+Termination Tests
+=================
+
+content 22-12
+
+
+File: pcl.info,  Node: 22-13,  Next: Chapter 23,  Prev: 22-12,  Up: Chapter 22
+
+Putting It All Together
+=======================
+
+content 22-13
+
+
+File: pcl.info,  Node: Chapter 23,  Next: Chapter 24,  Prev: Chapter 22,  Up: Top
+
+23. Practical: A Spam Filter
+============================
+
+content 23-intro
+
+* Menu:
+
+* 23-1::       The Heart of a Spam Filter
+* 23-2::       Training the Filter
+* 23-3::       Per-Word Statistics
+* 23-4::       Combining Probabilities
+* 23-5::       Inverse Chi Square
+* 23-6::       Training the Filter
+* 23-7::       Testing the Filter
+* 23-8::       A Couple of Utility Functions
+* 23-9::       Analyzing the Results
+* 23-10::      What's Next
+
+
+File: pcl.info,  Node: 23-1,  Next: 23-2,  Prev: Chapter 23,  Up: Chapter 23
+
+The Heart of a Spam Filter
+==========================
+
+content 23-1
+
+
+File: pcl.info,  Node: 23-2,  Next: 23-3,  Prev: 23-1,  Up: Chapter 23
+
+Training the Filter
+===================
+
+content 23-2
+
+
+File: pcl.info,  Node: 23-3,  Next: 23-4,  Prev: 23-2,  Up: Chapter 23
+
+Per-Word Statistics
+===================
+
+content 23-3
+
+
+File: pcl.info,  Node: 23-4,  Next: 23-5,  Prev: 23-3,  Up: Chapter 23
+
+Combining Probabilities
+=======================
+
+content 23-4
+
+
+File: pcl.info,  Node: 23-5,  Next: 23-6,  Prev: 23-4,  Up: Chapter 23
+
+Inverse Chi Square
+==================
+
+content 23-5
+
+
+File: pcl.info,  Node: 23-6,  Next: 23-7,  Prev: 23-5,  Up: Chapter 23
+
+Training the Filter
+===================
+
+content 23-6
+
+
+File: pcl.info,  Node: 23-7,  Next: 23-8,  Prev: 23-6,  Up: Chapter 23
+
+Testing the Filter
+==================
+
+content 23-7
+
+
+File: pcl.info,  Node: 23-8,  Next: 23-9,  Prev: 23-7,  Up: Chapter 23
+
+A Couple of Utility Functions
+=============================
+
+content 23-8
+
+
+File: pcl.info,  Node: 23-9,  Next: 23-10,  Prev: 23-8,  Up: Chapter 23
+
+Analyzing the Results
+=====================
+
+content 23-9
+
+
+File: pcl.info,  Node: 23-10,  Next: Chapter 24,  Prev: 23-9,  Up: Chapter 23
+
+What's Next
+===========
+
+content 23-10
+
+
+File: pcl.info,  Node: Chapter 24,  Next: Chapter 25,  Prev: Chapter 23,  Up: Top
+
+24. Practical: Parsing Binary Files
+===================================
+
+content 24-intro
+
+* Menu:
+
+* 24-1::       Binary Files
+* 24-2::       Binary Format Basics
+* 24-3::       Strings in Binary Files
+* 24-4::       Composite Structures
+* 24-5::       Designing the Macros
+* 24-6::       Making the Dream a Reality
+* 24-7::       Reading Binary Objects
+* 24-8::       Writing Binary Objects
+* 24-9::       Adding Inheritance and Tagged Structures
+* 24-10::      Keeping Track of Inherited Slots
+* 24-11::      Tagged Structures
+* 24-12::      Primitive Binary Types
+* 24-13::      The Current Object Stack
+
+
+File: pcl.info,  Node: 24-1,  Next: 24-2,  Prev: Chapter 24,  Up: Chapter 24
+
+Binary Files
+============
+
+content 24-1
+
+
+File: pcl.info,  Node: 24-2,  Next: 24-3,  Prev: 24-1,  Up: Chapter 24
+
+Binary Format Basics
+====================
+
+content 24-2
+
+
+File: pcl.info,  Node: 24-3,  Next: 24-4,  Prev: 24-2,  Up: Chapter 24
+
+Strings in Binary Files
+=======================
+
+content 24-3
+
+
+File: pcl.info,  Node: 24-4,  Next: 24-5,  Prev: 24-3,  Up: Chapter 24
+
+Composite Structures
+====================
+
+content 24-4
+
+
+File: pcl.info,  Node: 24-5,  Next: 24-6,  Prev: 24-4,  Up: Chapter 24
+
+Designing the Macros
+====================
+
+content 24-5
+
+
+File: pcl.info,  Node: 24-6,  Next: 24-7,  Prev: 24-5,  Up: Chapter 24
+
+Making the Dream a Reality
+==========================
+
+content 24-6
+
+
+File: pcl.info,  Node: 24-7,  Next: 24-8,  Prev: 24-6,  Up: Chapter 24
+
+Reading Binary Objects
+======================
+
+content 24-7
+
+
+File: pcl.info,  Node: 24-8,  Next: 24-9,  Prev: 24-7,  Up: Chapter 24
+
+Writing Binary Objects
+======================
+
+content 24-8
+
+
+File: pcl.info,  Node: 24-9,  Next: 24-10,  Prev: 24-8,  Up: Chapter 24
+
+Adding Inheritance and Tagged Structures
+========================================
+
+content 24-9
+
+
+File: pcl.info,  Node: 24-10,  Next: 24-11,  Prev: 24-9,  Up: Chapter 24
+
+Keeping Track of Inherited Slots
+================================
+
+content 24-10
+
+
+File: pcl.info,  Node: 24-11,  Next: 24-12,  Prev: 24-10,  Up: Chapter 24
+
+Tagged Structures
+=================
+
+content 24-11
+
+
+File: pcl.info,  Node: 24-12,  Next: 24-13,  Prev: 24-11,  Up: Chapter 24
+
+Primitive Binary Types
+======================
+
+content 24-12
+
+
+File: pcl.info,  Node: 24-13,  Next: Chapter 25,  Prev: 24-12,  Up: Chapter 24
+
+The Current Object Stack
+========================
+
+content 24-13
+
+
+File: pcl.info,  Node: Chapter 25,  Next: Chapter 26,  Prev: Chapter 24,  Up: Top
+
+25. Practical: An ID3 Parser
+============================
+
+content 25-intro
+
+* Menu:
+
+* 25-1::       Structure of an ID3v2 Tag
+* 25-2::       Defining a Package
+* 25-3::       Integer Types
+* 25-4::       String Types
+* 25-5::       ID3 Tag Header
+* 25-6::       ID3 Frames
+* 25-7::       Detecting Tag Padding
+* 25-8::       Supporting Multiple Versions of ID3
+* 25-9::       Versioned Frame Base Classes
+* 25-10::      Versioned Concrete Frame Classes
+* 25-11::      What Frames Do You Actually Need?
+* 25-12::      Text Information Frames
+* 25-13::      Comment Frames
+* 25-14::      Extracting Information from an ID3 Tag
+
+
+File: pcl.info,  Node: 25-1,  Next: 25-2,  Prev: Chapter 25,  Up: Chapter 25
+
+Structure of an ID3v2 Tag
+=========================
+
+content 25-1
+
+
+File: pcl.info,  Node: 25-2,  Next: 25-3,  Prev: 25-1,  Up: Chapter 25
+
+Defining a Package
+==================
+
+content 25-2
+
+
+File: pcl.info,  Node: 25-3,  Next: 25-4,  Prev: 25-2,  Up: Chapter 25
+
+Integer Types
+=============
+
+content 25-3
+
+
+File: pcl.info,  Node: 25-4,  Next: 25-5,  Prev: 25-3,  Up: Chapter 25
+
+String Types
+============
+
+content 25-4
+
+
+File: pcl.info,  Node: 25-5,  Next: 25-6,  Prev: 25-4,  Up: Chapter 25
+
+ID3 Tag Header
+==============
+
+content 25-5
+
+
+File: pcl.info,  Node: 25-6,  Next: 25-7,  Prev: 25-5,  Up: Chapter 25
+
+ID3 Frames
+==========
+
+content 25-6
+
+
+File: pcl.info,  Node: 25-7,  Next: 25-8,  Prev: 25-6,  Up: Chapter 25
+
+Detecting Tag Padding
+=====================
+
+content 25-7
+
+
+File: pcl.info,  Node: 25-8,  Next: 25-9,  Prev: 25-7,  Up: Chapter 25
+
+Supporting Multiple Versions of ID3
+===================================
+
+content 25-8
+
+
+File: pcl.info,  Node: 25-9,  Next: 25-10,  Prev: 25-8,  Up: Chapter 25
+
+Versioned Frame Base Classes
+============================
+
+content 25-9
+
+
+File: pcl.info,  Node: 25-10,  Next: 25-11,  Prev: 25-9,  Up: Chapter 25
+
+Versioned Concrete Frame Classes
+================================
+
+content 25-10
+
+
+File: pcl.info,  Node: 25-11,  Next: 25-12,  Prev: 25-10,  Up: Chapter 25
+
+What Frames Do You Actually Need?
+=================================
+
+content 25-11
+
+
+File: pcl.info,  Node: 25-12,  Next: 25-13,  Prev: 25-11,  Up: Chapter 25
+
+Text Information Frames
+=======================
+
+content 25-12
+
+
+File: pcl.info,  Node: 25-13,  Next: 25-14,  Prev: 25-12,  Up: Chapter 25
+
+Comment Frames
+==============
+
+content 25-13
+
+
+File: pcl.info,  Node: 25-14,  Next: Chapter 26,  Prev: 25-13,  Up: Chapter 25
+
+Extracting Information from an ID3 Tag
+======================================
+
+content 25-14
+
+
+File: pcl.info,  Node: Chapter 26,  Next: Chapter 27,  Prev: Chapter 25,  Up: Top
+
+26. Practical: Web Programming with AllegroServe
+================================================
+
+content 26-intro
+
+* Menu:
+
+* 26-1::       A 30-Second Intro to Server-Side Web Programming
+* 26-2::       AllegroServe
+* 26-3::       Generating Dynamic Content with AllegroServe
+* 26-4::       Generating HTML
+* 26-5::       HTML Macros
+* 26-6::       Query Parameters
+* 26-7::       Cookies
+* 26-8::       A Small Application Framework
+* 26-9::       The Implementation
+
+
+File: pcl.info,  Node: 26-1,  Next: 26-2,  Prev: Chapter 26,  Up: Chapter 26
+
+A 30-Second Intro to Server-Side Web Programming
+================================================
+
+content 26-1
+
+
+File: pcl.info,  Node: 26-2,  Next: 26-3,  Prev: 26-1,  Up: Chapter 26
+
+AllegroServe
+============
+
+content 26-2
+
+
+File: pcl.info,  Node: 26-3,  Next: 26-4,  Prev: 26-2,  Up: Chapter 26
+
+Generating Dynamic Content with AllegroServe
+============================================
+
+content 26-3
+
+
+File: pcl.info,  Node: 26-4,  Next: 26-5,  Prev: 26-3,  Up: Chapter 26
+
+Generating HTML
+===============
+
+content 26-4
+
+
+File: pcl.info,  Node: 26-5,  Next: 26-6,  Prev: 26-4,  Up: Chapter 26
+
+HTML Macros
+===========
+
+content 26-5
+
+
+File: pcl.info,  Node: 26-6,  Next: 26-7,  Prev: 26-5,  Up: Chapter 26
+
+Query Parameters
+================
+
+content 26-6
+
+
+File: pcl.info,  Node: 26-7,  Next: 26-8,  Prev: 26-6,  Up: Chapter 26
+
+Cookies
+=======
+
+content 26-7
+
+
+File: pcl.info,  Node: 26-8,  Next: 26-9,  Prev: 26-7,  Up: Chapter 26
+
+A Small Application Framework
+=============================
+
+content 26-8
+
+
+File: pcl.info,  Node: 26-9,  Next: Chapter 27,  Prev: 26-8,  Up: Chapter 26
+
+The Implementation
+==================
+
+content 26-9
+
+
+File: pcl.info,  Node: Chapter 27,  Next: Chapter 28,  Prev: Chapter 26,  Up: Top
+
+27. Practical: An MP3 Database
+==============================
+
+content 27-intro
+
+* Menu:
+
+* 27-1::       The Database
+* 27-2::       Defining a Schema
+* 27-3::       Inserting Values
+* 27-4::       Querying the Database
+* 27-5::       Matching Functions
+* 27-6::       Getting at the Results
+* 27-7::       Other Database Operations
+
+
+File: pcl.info,  Node: 27-1,  Next: 27-2,  Prev: Chapter 27,  Up: Chapter 27
+
+The Database
+============
+
+content 27-1
+
+
+File: pcl.info,  Node: 27-2,  Next: 27-3,  Prev: 27-1,  Up: Chapter 27
+
+Defining a Schema
+=================
+
+content 27-2
+
+
+File: pcl.info,  Node: 27-3,  Next: 27-4,  Prev: 27-2,  Up: Chapter 27
+
+Inserting Values
+================
+
+content 27-3
+
+
+File: pcl.info,  Node: 27-4,  Next: 27-5,  Prev: 27-3,  Up: Chapter 27
+
+Querying the Database
+=====================
+
+content 27-4
+
+
+File: pcl.info,  Node: 27-5,  Next: 27-6,  Prev: 27-4,  Up: Chapter 27
+
+Matching Functions
+==================
+
+content 27-5
+
+
+File: pcl.info,  Node: 27-6,  Next: 27-7,  Prev: 27-5,  Up: Chapter 27
+
+Getting at the Results
+======================
+
+content 27-6
+
+
+File: pcl.info,  Node: 27-7,  Next: Chapter 28,  Prev: 27-6,  Up: Chapter 27
+
+Other Database Operations
+=========================
+
+content 27-7
+
+
+File: pcl.info,  Node: Chapter 28,  Next: Chapter 29,  Prev: Chapter 27,  Up: Top
+
+28. Practical: A Shoutcast Server
+=================================
+
+content 28-intro
+
+* Menu:
+
+* 28-1::       The Shoutcast Protocol
+* 28-2::       Song Sources
+* 28-3::       Implementing Shoutcast
+
+
+File: pcl.info,  Node: 28-1,  Next: 28-2,  Prev: Chapter 28,  Up: Chapter 28
+
+The Shoutcast Protocol
+======================
+
+content 28-1
+
+
+File: pcl.info,  Node: 28-2,  Next: 28-3,  Prev: 28-1,  Up: Chapter 28
+
+Song Sources
+============
+
+content 28-2
+
+
+File: pcl.info,  Node: 28-3,  Next: Chapter 29,  Prev: 28-2,  Up: Chapter 28
+
+Implementing Shoutcast
+======================
+
+content 28-3
+
+
+File: pcl.info,  Node: Chapter 29,  Next: Chapter 30,  Prev: Chapter 28,  Up: Top
+
+29. Practical: An MP3 Browser
+=============================
+
+content 29-intro
+
+* Menu:
+
+* 29-1::       Playlists
+* 29-2::       Playlists As Song Sources
+* 29-3::       Manipulating the Playlist
+* 29-4::       Query Parameter Types
+* 29-5::       Boilerplate HTML
+* 29-6::       The Browse Page
+* 29-7::       The Playlist
+* 29-8::       Finding a Playlist
+* 29-9::       Running the App
+
+
+File: pcl.info,  Node: 29-1,  Next: 29-2,  Prev: Chapter 29,  Up: Chapter 29
+
+Playlists
+=========
+
+content 29-1
+
+
+File: pcl.info,  Node: 29-2,  Next: 29-3,  Prev: 29-1,  Up: Chapter 29
+
+Playlists As Song Sources
+=========================
+
+content 29-2
+
+
+File: pcl.info,  Node: 29-3,  Next: 29-4,  Prev: 29-2,  Up: Chapter 29
+
+Manipulating the Playlist
+=========================
+
+content 29-3
+
+
+File: pcl.info,  Node: 29-4,  Next: 29-5,  Prev: 29-3,  Up: Chapter 29
+
+Query Parameter Types
+=====================
+
+content 29-4
+
+
+File: pcl.info,  Node: 29-5,  Next: 29-6,  Prev: 29-4,  Up: Chapter 29
+
+Boilerplate HTML
+================
+
+content 29-5
+
+
+File: pcl.info,  Node: 29-6,  Next: 29-7,  Prev: 29-5,  Up: Chapter 29
+
+The Browse Page
+===============
+
+content 29-6
+
+
+File: pcl.info,  Node: 29-7,  Next: 29-8,  Prev: 29-6,  Up: Chapter 29
+
+The Playlist
+============
+
+content 29-7
+
+
+File: pcl.info,  Node: 29-8,  Next: 29-9,  Prev: 29-7,  Up: Chapter 29
+
+Finding a Playlist
+==================
+
+content 29-8
+
+
+File: pcl.info,  Node: 29-9,  Next: Chapter 30,  Prev: 29-8,  Up: Chapter 29
+
+Running the App
+===============
+
+content 29-9
+
+
+File: pcl.info,  Node: Chapter 30,  Next: Chapter 31,  Prev: Chapter 29,  Up: Top
+
+30. Practical: An HTML Generation Library, the Interpreter
+==========================================================
+
+content 30-intro
+
+* Menu:
+
+* 30-1::       Designing a Domain-Specific Language
+* 30-2::       The FOO Language
+* 30-3::       Character Escaping
+* 30-4::       Indenting Printer
+* 30-5::       HTML Processor Interface
+* 30-6::       The Pretty Printer Backend
+* 30-7::       The Basic Evaluation Rule
+* 30-8::       What's Next?
+
+
+File: pcl.info,  Node: 30-1,  Next: 30-2,  Prev: Chapter 30,  Up: Chapter 30
+
+Designing a Domain-Specific Language
+====================================
+
+content 30-1
+
+
+File: pcl.info,  Node: 30-2,  Next: 30-3,  Prev: 30-1,  Up: Chapter 30
+
+The FOO Language
+================
+
+content 30-2
+
+
+File: pcl.info,  Node: 30-3,  Next: 30-4,  Prev: 30-2,  Up: Chapter 30
+
+Character Escaping
+==================
+
+content 30-3
+
+
+File: pcl.info,  Node: 30-4,  Next: 30-5,  Prev: 30-3,  Up: Chapter 30
+
+Indenting Printer
+=================
+
+content 30-4
+
+
+File: pcl.info,  Node: 30-5,  Next: 30-6,  Prev: 30-4,  Up: Chapter 30
+
+HTML Processor Interface
+========================
+
+content 30-5
+
+
+File: pcl.info,  Node: 30-6,  Next: 30-7,  Prev: 30-5,  Up: Chapter 30
+
+The Pretty Printer Backend
+==========================
+
+content 30-6
+
+
+File: pcl.info,  Node: 30-7,  Next: 30-8,  Prev: 30-6,  Up: Chapter 30
+
+The Basic Evaluation Rule
+=========================
+
+content 30-7
+
+
+File: pcl.info,  Node: 30-8,  Next: Chapter 31,  Prev: 30-7,  Up: Chapter 30
+
+What's Next?
+============
+
+content 30-8
+
+
+File: pcl.info,  Node: Chapter 31,  Next: Chapter 32,  Prev: Chapter 30,  Up: Top
+
+31. Practical: An HTML Generation Library, the Compiler
+=======================================================
+
+content 31-intro
+
+* Menu:
+
+* 31-1::       The Compiler
+* 31-2::       FOO Special Operators
+* 31-3::       FOO Macros
+* 31-4::       The Public API
+* 31-5::       The End of the Line
+
+
+File: pcl.info,  Node: 31-1,  Next: 31-2,  Prev: Chapter 31,  Up: Chapter 31
+
+The Compiler
+============
+
+content 31-1
+
+
+File: pcl.info,  Node: 31-2,  Next: 31-3,  Prev: 31-1,  Up: Chapter 31
+
+FOO Special Operators
+=====================
+
+content 31-2
+
+
+File: pcl.info,  Node: 31-3,  Next: 31-4,  Prev: 31-2,  Up: Chapter 31
+
+FOO Macros
+==========
+
+content 31-3
+
+
+File: pcl.info,  Node: 31-4,  Next: 31-5,  Prev: 31-3,  Up: Chapter 31
+
+The Public API
+==============
+
+content 31-4
+
+
+File: pcl.info,  Node: 31-5,  Next: Chapter 32,  Prev: 31-4,  Up: Chapter 31
+
+The End of the Line
+===================
+
+content 31-5
+
+
+File: pcl.info,  Node: Chapter 32,  Prev: Chapter 31,  Up: Top
+
+32. Conclusion: What's Next?
+============================
+
+content 32-intro
+
+* Menu:
+
+* 32-1::        Finding Lisp Libraries
+* 32-2::        Interfacing with Other Languages
+* 32-3::        Make It Work, Make It Right, Make It Fast
+* 32-4::        Delivering Applications
+* 32-5::        Where to Go Next
+
+
+File: pcl.info,  Node: 32-1,  Next: 32-2,  Prev: Chapter 32,  Up: Chapter 32
+
+Finding Lisp Libraries
+======================
+
+content 32-1
+
+
+File: pcl.info,  Node: 32-2,  Next: 32-3,  Prev: 32-1,  Up: Chapter 32
+
+Interfacing with Other Languages
+================================
+
+content 32-2
+
+
+File: pcl.info,  Node: 32-3,  Next: 32-4,  Prev: 32-2,  Up: Chapter 32
+
+Make It Work, Make It Right, Make It Fast
+=========================================
+
+content 32-3
+
+
+File: pcl.info,  Node: 32-4,  Next: 32-5,  Prev: 32-3,  Up: Chapter 32
+
+Delivering Applications
+=======================
+
+content 32-4
+
+
+File: pcl.info,  Node: 32-5,  Next: Top,  Prev: 32-4,  Up: Chapter 32
+
+Where to Go Next
+================
+
+content 32-5
