@@ -305,18 +305,18 @@ One of the key insights the designers of the LOOP language had about actual loop
 
 my $evens_sum = 0;
 my $odds_sum  = 0;
-foreach my $i (@list_of_numbers) {
-  if ($i % 2) {
+foreach my $i (@@list_of_numbers) @{
+  if ($i % 2) @{
     $odds_sum += $i;
-  } else {
+  @} else @{
     $evens_sum += $i;
-  }
-}
-if ($evens_sum > $odds_sum) {
+  @}
+@}
+if ($evens_sum > $odds_sum) @{
   print "Sum of evens greater\n";
-} else {
+@} else @{
   print "Sum of odds greater\n";
-}
+@}
 The loop proper in this code is the foreach statement. But the foreach loop doesn't stand on its own: the code in the loop body refers to variables declared in the two lines before the loop.9 And the work the loop does is all for naught without the if statement after the loop that actually reports the results. In Common Lisp, of course, the LOOP construct is an expression that returns a value, so there's even more often a need to do something after the loop proper, namely, generate the return value.
 
 So, said the LOOP designers, let's give a way to include the code that's really part of the loop in the loop itself. Thus, LOOP provides two keywords, initially and finally, that introduce code to be run outside the loop's main body.

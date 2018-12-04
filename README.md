@@ -24,6 +24,14 @@ TODOs:
     `Writing Robust Software`
   - [ ] @node 27-1 The Database
     `The Package`
+  - [ ] @node 28-2 Song Sources
+    `The Package`
+  - [ ] @node 29-1 Playlists
+    `The Package`
+  - [ ] @node 30-3 Character Escaping
+    `The Package`
+  - [ ] @node 30-6 The Pretty Printer Backend
+    `Using Conditions to Have Your Cake and Eat It Too`
 - [ ] tables
   - [ ] Table 6-1.
     `Assignment with = in Other Languages`
@@ -41,6 +49,8 @@ TODOs:
     `Standard Sequence Function Keyword Arguments`
   - [ ] Table 12-1.
     `Other List Functions`
+  - [ ] Table 30-1.
+    `FOO Output for Self-Evaluating Objects`
 - [ ] footnotes
 - [ ] inline text formatting
 - [ ] images

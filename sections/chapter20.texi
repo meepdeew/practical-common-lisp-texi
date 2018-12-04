@@ -270,8 +270,8 @@ The single protected-form is evaluated, and then, regardless of how it returns, 
 You'll occasionally use UNWIND-PROTECT directly. More often you'll use it as the basis for WITH- style macros, similar to WITH-OPEN-FILE, that evaluate any number of body forms in a context where they have access to some resource that needs to be cleaned up after they're done, regardless of whether they return normally or bail via a restart or other nonlocal exit. For example, if you were writing a database library that defined functions open-connection and close-connection, you might write a macro like this:10
 
 (defmacro with-database-connection ((var &rest open-args) &body body)
-  `(let ((,var (open-connection ,@open-args)))
-    (unwind-protect (progn ,@body)
+  `(let ((,var (open-connection ,@@open-args)))
+    (unwind-protect (progn ,@@body)
       (close-connection ,var))))
 which lets you write code like this:
 

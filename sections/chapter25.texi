@@ -739,7 +739,7 @@ ID3V2> (find "TT2" (frames *id3*) :test #'string= :key #'id)
 Now, to get at the actual information in the frame, do this:
 
 ID3V2> (information (find "TT2" (frames *id3*) :test #'string= :key #'id))
-"Byla Cesta^@"
+"Byla Cesta^@@"
 Whoops. That ^@ is how Emacs prints a null character. In a maneuver reminiscent of the kludge that turned ID3v1 into ID3v1.1, the information slot of a text information frame, though not officially a null-terminated string, can contain a null, and ID3 readers are supposed to ignore any characters after the null. So, you need a function that takes a string and returns the contents up to the first null character, if any. That's easy enough using the +null+ constant from the binary data library.
 
 (defun upto-null (string)

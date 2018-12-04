@@ -352,7 +352,7 @@ Probably the most common thing you'll need to do with the results of a query is 
 For now these operations are trivial to implement; they're merely wrappers around the code you'd write if you didn't have these abstractions. You can provide two ways to iterate over the rows of a table: a macro do-rows, which provides a basic looping construct, and a function map-rows, which builds a list containing the results of applying a function to each row in the table.5
 
 (defmacro do-rows ((row table) &body body)
-  `(loop for ,row across (rows ,table) do ,@body))
+  `(loop for ,row across (rows ,table) do ,@@body))
 
 (defun map-rows (fn table)
   (loop for row across (rows table) collect (funcall fn row)))
@@ -376,7 +376,7 @@ Again, the actual implementation isn't complicated if you use the once-only macr
 
 (defmacro with-column-values ((&rest vars) row &body body)
   (once-only (row)
-    `(let ,(column-bindings vars row) ,@body)))
+    `(let ,(column-bindings vars row) ,@@body)))
 
 (defun column-bindings (vars row)
   (loop for v in vars collect `(,v (column-value ,row ,(as-keyword v)))))

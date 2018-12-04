@@ -278,7 +278,7 @@ However, there's a difference between this code and the DEFCLASS slot specifier:
 
 (defun slot->read-value (spec stream)
   (destructuring-bind (name (type &rest args)) (normalize-slot-spec spec)
-    `(setf ,name (read-value ',type ,stream ,@args))))
+    `(setf ,name (read-value ',type ,stream ,@@args))))
 The function normalize-slot-spec normalizes the second element of the slot specifier, converting a symbol like u1 to the list (u1) so the DESTRUCTURING-BIND can parse it. It looks like this:
 
 (defun normalize-slot-spec (spec)
@@ -313,7 +313,7 @@ So, you can change define-binary-class as follows:
        (defmethod read-value ((,typevar (eql ',name)) ,streamvar &key)
          (let ((,objectvar (make-instance ',name)))
            (with-slots ,(mapcar #'first slots) ,objectvar
-             ,@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots))
+             ,@@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots))
            ,objectvar)))))
 
 @node	24-8, 24-9, 24-7, Chapter 24
@@ -327,7 +327,7 @@ Then you define a helper function that translates a define-binary-class slot spe
 
 (defun slot->write-value (spec stream)
   (destructuring-bind (name (type &rest args)) (normalize-slot-spec spec)
-    `(write-value ',type ,stream ,name ,@args)))
+    `(write-value ',type ,stream ,name ,@@args)))
 Now you can add a write-value template to the define-binary-class macro.
 
 (defmacro define-binary-class (name slots)
@@ -339,12 +339,12 @@ Now you can add a write-value template to the define-binary-class macro.
        (defmethod read-value ((,typevar (eql ',name)) ,streamvar &key)
          (let ((,objectvar (make-instance ',name)))
            (with-slots ,(mapcar #'first slots) ,objectvar
-             ,@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots))
+             ,@@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots))
            ,objectvar))
 
        (defmethod write-value ((,typevar (eql ',name)) ,streamvar ,objectvar &key)
          (with-slots ,(mapcar #'first slots) ,objectvar
-           ,@(mapcar #'(lambda (x) (slot->write-value x streamvar)) slots))))))
+           ,@@(mapcar #'(lambda (x) (slot->write-value x streamvar)) slots))))))
 
 @node	24-9, 24-10, 24-8, Chapter 24
 @section Adding Inheritance and Tagged Structures
@@ -401,11 +401,11 @@ The actual changes to define-binary-class to define methods on read-object and w
 
        (defmethod read-object progn ((,objectvar ,name) ,streamvar)
          (with-slots ,(mapcar #'first slots) ,objectvar
-           ,@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots)))
+           ,@@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots)))
 
        (defmethod write-object progn ((,objectvar ,name) ,streamvar)
          (with-slots ,(mapcar #'first slots) ,objectvar
-           ,@(mapcar #'(lambda (x) (slot->write-value x streamvar)) slots))))))
+           ,@@(mapcar #'(lambda (x) (slot->write-value x streamvar)) slots))))))
 
 @node	24-10, 24-11, 24-9, Chapter 24
 @section Keeping Track of Inherited Slots
@@ -474,11 +474,11 @@ With these functions defined, you can change define-binary-class to store the in
 
        (defmethod read-object progn ((,objectvar ,name) ,streamvar)
          (with-slots ,(new-class-all-slots slots superclasses) ,objectvar
-           ,@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots)))
+           ,@@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots)))
 
        (defmethod write-object progn ((,objectvar ,name) ,streamvar)
          (with-slots ,(new-class-all-slots slots superclasses) ,objectvar
-           ,@(mapcar #'(lambda (x) (slot->write-value x streamvar)) slots))))))
+           ,@@(mapcar #'(lambda (x) (slot->write-value x streamvar)) slots))))))
 
 @node	24-11, 24-12, 24-10, Chapter 24
 @section Tagged Structures
@@ -518,7 +518,7 @@ Since the expansions of define-tagged-binary-class and define-binary-class are g
        (defmethod write-object progn ((,objectvar ,name) ,streamvar)
          (declare (ignorable ,streamvar))
          (with-slots ,(new-class-all-slots slots superclasses) ,objectvar
-           ,@(mapcar #'(lambda (x) (slot->write-value x streamvar)) slots))))))
+           ,@@(mapcar #'(lambda (x) (slot->write-value x streamvar)) slots))))))
 Now you can define both define-binary-class and define-tagged-binary-class to expand into a call to define-generic-binary-class. Here's a new version of define-binary-class that generates the same code as the earlier version when it's fully expanded:
 
 (defmacro define-binary-class (name (&rest superclasses) slots)
@@ -527,7 +527,7 @@ Now you can define both define-binary-class and define-tagged-binary-class to ex
        (defmethod read-object progn ((,objectvar ,name) ,streamvar)
          (declare (ignorable ,streamvar))
          (with-slots ,(new-class-all-slots slots superclasses) ,objectvar
-           ,@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots))))))
+           ,@@(mapcar #'(lambda (x) (slot->read-value x streamvar)) slots))))))
 And here's define-tagged-binary-class along with two new helper functions it uses:
 
 (defmacro define-tagged-binary-class (name (&rest superclasses) slots &rest options)
@@ -537,15 +537,15 @@ And here's define-tagged-binary-class along with two new helper functions it use
         (let* ,(mapcar #'(lambda (x) (slot->binding x streamvar)) slots)
           (let ((,objectvar
                  (make-instance
-                  ,@(or (cdr (assoc :dispatch options))
+                  ,@@(or (cdr (assoc :dispatch options))
                         (error "Must supply :dispatch form."))
-                  ,@(mapcan #'slot->keyword-arg slots))))
+                  ,@@(mapcan #'slot->keyword-arg slots))))
             (read-object ,objectvar ,streamvar)
             ,objectvar))))))
 
 (defun slot->binding (spec stream)
   (destructuring-bind (name (type &rest args)) (normalize-slot-spec spec)
-    `(,name (read-value ',type ,stream ,@args))))
+    `(,name (read-value ',type ,stream ,@@args))))
 
 (defun slot->keyword-arg (spec)
   (let ((name (first spec)))
@@ -584,11 +584,11 @@ From there it's just a matter of interpolating the extracted values into the bac
   (with-gensyms (type)
     `(progn
       ,(destructuring-bind ((in) &body body) (rest (assoc :reader spec))
-        `(defmethod read-value ((,type (eql ',name)) ,in &key ,@args)
-          ,@body))
+        `(defmethod read-value ((,type (eql ',name)) ,in &key ,@@args)
+          ,@@body))
       ,(destructuring-bind ((out value) &body body) (rest (assoc :writer spec))
-        `(defmethod write-value ((,type (eql ',name)) ,out ,value &key ,@args)
-          ,@body)))))
+        `(defmethod write-value ((,type (eql ',name)) ,out ,value &key ,@@args)
+          ,@@body)))))
 Note how the backquoted templates are nested: the outermost template starts with the backquoted PROGN form. That template consists of the symbol PROGN and two comma-unquoted DESTRUCTURING-BIND expressions. Thus, the outer template is filled in by evaluating the DESTRUCTURING-BIND expressions and interpolating their values. Each DESTRUCTURING-BIND expression in turn contains another backquoted template, which is used to generate one of the method definitions to be interpolated in the outer template.
 
 With this macro defined, the define-binary-type form given previously expands to this code:
@@ -624,19 +624,19 @@ To support both long- and short-form define-binary-type calls, you need to diffe
      (with-gensyms (type stream value)
        (destructuring-bind (derived-from &rest derived-args) (mklist (first spec))
          `(progn
-            (defmethod read-value ((,type (eql ',name)) ,stream &key ,@args)
-              (read-value ',derived-from ,stream ,@derived-args))
-            (defmethod write-value ((,type (eql ',name)) ,stream ,value &key ,@args)
-              (write-value ',derived-from ,stream ,value ,@derived-args))))))
+            (defmethod read-value ((,type (eql ',name)) ,stream &key ,@@args)
+              (read-value ',derived-from ,stream ,@@derived-args))
+            (defmethod write-value ((,type (eql ',name)) ,stream ,value &key ,@@args)
+              (write-value ',derived-from ,stream ,value ,@@derived-args))))))
     (2
      (with-gensyms (type)
        `(progn
           ,(destructuring-bind ((in) &body body) (rest (assoc :reader spec))
-             `(defmethod read-value ((,type (eql ',name)) ,in &key ,@args)
-                ,@body))
+             `(defmethod read-value ((,type (eql ',name)) ,in &key ,@@args)
+                ,@@body))
           ,(destructuring-bind ((out value) &body body) (rest (assoc :writer spec))
-             `(defmethod write-value ((,type (eql ',name)) ,out ,value &key ,@args)
-                ,@body)))))))
+             `(defmethod write-value ((,type (eql ',name)) ,out ,value &key ,@@args)
+                ,@@body)))))))
 
 
 @node	24-13, Chapter 25, 24-12, Chapter 24

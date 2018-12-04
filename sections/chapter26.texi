@@ -194,7 +194,7 @@ However, emit-html isn't always the most efficient way to generate HTML because 
        (:title "Random numbers"))
      (:body
        (:h1 "Random numbers")
-       (:p ,@(loop repeat 10000 collect (random 1000) collect " ")))))
+       (:p ,@@(loop repeat 10000 collect (random 1000) collect " ")))))
 However, this has to build a tree containing a 10,000-element list before it can even start emitting HTML, and the whole s-expression will become garbage as soon as the HTML is emitted. To avoid this inefficiency, FOO also provides a macro html, which allows you to embed bits of Lisp code in the middle of an HTML s-expression.
 
 Literal values such as strings and numbers in the input to html are interpolated into the output HTML. Likewise, symbols are treated as variable references, and code is generated to emit their value at runtime. Thus, both of these:
@@ -267,7 +267,7 @@ You could define an HTML macro to capture that pattern like this:
      (:head (:title ,title))
      (:body
       (:h1 ,title)
-      ,@body)))
+      ,@@body)))
 Now you can use the "tag" :standard-page in your s-expression HTML, and it'll be expanded before being interpreted or compiled. For instance, the following:
 
 (html (:standard-page (:title "Hello") (:p "Hello, world.")))
@@ -454,11 +454,11 @@ I'll explain the implementation of define-url-function from the top down. The ma
       `(progn
          (defun ,name (,request ,entity)
            (with-http-response (,request ,entity :content-type "text/html")
-             (let* (,@(param-bindings name request params))
-               ,@(set-cookies-code name request params)
+             (let* (,@@(param-bindings name request params))
+               ,@@(set-cookies-code name request params)
                (with-http-body (,request ,entity)
                  (with-html-output ((request-reply-stream ,request))
-                   (html ,@body))))))
+                   (html ,@@body))))))
          (publish :path ,(format nil "/~(~a~)" name) :function ',name)))))
 Let's take it bit by bit, starting with the first few lines.
 
@@ -479,8 +479,8 @@ Then comes the PROGN. You must expand into a PROGN because you need to generate 
   (with-http-response (,request ,entity :content-type "text/html")
 Now you do the real work. The following two lines generate the bindings for the parameters specified in define-url-function other than request and the code that calls set-cookie-header for the sticky parameters. Of course, the real work is done by helper functions that you'll look at in a moment.12
 
-    (let* (,@(param-bindings name request params))
-      ,@(set-cookies-code name request params)
+    (let* (,@@(param-bindings name request params))
+      ,@@(set-cookies-code name request params)
 The rest is just more boilerplate, putting the body from the define-url-function definition in the appropriate context of with-http-body, with-html-output, and html macros. Then comes the call to publish.
 
    (publish :path ,(format nil "/~(~a~)" name) :function ',name)
@@ -498,7 +498,7 @@ Now let's look at the helper functions used to generate the DEFUN form. To gener
           (cookie-name (symbol->cookie-name function-name name sticky)))
       `(,name (or
                (string->type ',type (request-query-value ,query-name ,request))
-               ,@(if cookie-name
+               ,@@(if cookie-name
                      (list `(string->type ',type (get-cookie-value ,request ,cookie-name))))
                ,default)))))
 The function string->type, which you use to convert strings obtained from the query parameters and cookies to the desired type, is a generic function with the following signature:

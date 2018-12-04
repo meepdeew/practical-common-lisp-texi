@@ -5683,7 +5683,31 @@ File: pcl.info,  Node: Chapter 20,  Next: Chapter 21,  Prev: Chapter 19,  Up: To
 20. The Special Operators
 =========================
 
-content 20-intro
+In a way, the most impressive aspect of the condition system covered in
+the previous chapter is that if it wasn't already part of the language,
+it could be written entirely as a user-level library.  This is possible
+because Common Lisp's special operators-while none touches directly on
+signaling or handling conditions-provide enough access to the underlying
+machinery of the language to be able to do things such as control the
+unwinding of the stack.
+
+   In previous chapters I've discussed the most frequently used special
+operators, but it's worth being familiar with the others for two
+reasons.  First, some of the infrequently used special operators are
+used infrequently simply because whatever need they address doesn't
+arise that often.  It's good to be familiar with these special operators
+so when one of them is called for, you'll at least know it exists.
+Second, because the 25 special operators-along with the basic rule for
+evaluating function calls and the built-in data types-provide the
+foundation for the rest of the language, a passing familiarity with them
+will help you understand how the language works.
+
+   In this chapter, I'll discuss all the special operators, some briefly
+and some at length, so you can see how they fit together.  I'll point
+out which ones you can expect to use directly in your own code, which
+ones serve as the basis for other constructs that you use all the time,
+and which ones you'll rarely use directly but which can be handy in
+macro-generated code.
 
 * Menu:
 
@@ -5695,58 +5719,3 @@ content 20-intro
 * 20-6::        EVAL-WHEN
 * 20-7::        Other Special Operators
 
-
-File: pcl.info,  Node: 20-1,  Next: 20-2,  Prev: Chapter 20,  Up: Chapter 20
-
-Controlling Evaluation
-======================
-
-content 20-1
-
-
-File: pcl.info,  Node: 20-2,  Next: 20-3,  Prev: 20-1,  Up: Chapter 20
-
-Manipulating the Lexical Environment
-====================================
-
-content 20-2
-
-
-File: pcl.info,  Node: 20-3,  Next: 20-4,  Prev: 20-2,  Up: Chapter 20
-
-Local Flow of Control
-=====================
-
-content 20-3
-
-
-File: pcl.info,  Node: 20-4,  Next: 20-5,  Prev: 20-3,  Up: Chapter 20
-
-Unwinding the Stack
-===================
-
-content 20-4
-
-
-File: pcl.info,  Node: 20-5,  Next: 20-6,  Prev: 20-4,  Up: Chapter 20
-
-Multiple Values
-===============
-
-content 20-5
-
-
-File: pcl.info,  Node: 20-6,  Next: 20-7,  Prev: 20-5,  Up: Chapter 20
-
-EVAL-WHEN
-=========
-
-content 20-6
-
-
-File: pcl.info,  Node: 20-7,  Next: Chapter 21,  Prev: 20-6,  Up: Chapter 20
-
-Other Special Operators
-=======================
-
-content 20-7
