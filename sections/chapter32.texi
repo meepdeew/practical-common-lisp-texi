@@ -1,0 +1,37 @@
+@node    Chapter 32, , Chapter 31, Top
+@section 32. Conclusion: What's Next?
+
+content 32-intro
+
+@menu
+* 32-1::        Finding Lisp Libraries
+* 32-2::        Interfacing with Other Languages
+* 32-3::        Make It Work, Make It Right, Make It Fast
+* 32-4::        Delivering Applications
+* 32-5::        Where to Go Next
+@end menu
+
+@node	32-1, 32-2, Chapter 32, Chapter 32
+@section Finding Lisp Libraries
+
+content 32-1
+
+@node	32-2, 32-3, 32-1, Chapter 32
+@section Interfacing with Other Languages
+
+content 32-2
+
+@node	32-3, 32-4, 32-2, Chapter 32
+@section Make It Work, Make It Right, Make It Fast
+
+content 32-3
+
+@node	32-4, 32-5, 32-3, Chapter 32
+@section Delivering Applications
+
+content 32-4
+
+@node	32-5, Top, 32-4, Chapter 32
+@section Where to Go Next
+
+content 32-5

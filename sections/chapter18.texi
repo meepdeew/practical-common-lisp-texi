@@ -326,7 +326,7 @@ Within an ~@{ directive, ~* skips or backs up over the items in the list. For in
 (format nil "~@{~s~*~^ ~@}" '(:a 10 :b 20)) ==> ":A :B"
 The ~* directive can also be given a prefix parameter. With no modifiers or with the colon modifier, this parameter specifies the number of arguments to move forward or backward and defaults to one. With an at-sign modifier, the prefix parameter specifies an absolute, zero-based index of the argument to jump to, defaulting to zero. The at-sign variant of ~* can be useful if you want to use different control strings to generate different messages for the same arguments and if different messages need to use the arguments in different orders.8
 
-@node	18-10, Chapter 19, 18-9, Chapter 18
+@node 18-10, Chapter 19, 18-9, Chapter 18
 @section And More . . .
 
 And there's more--I haven't mentioned the ~? directive, which can take snippets of control strings from the format arguments or the ~/ directive, which allows you to call an arbitrary function to handle the next format argument. And then there are all the directives for generating tabular and pretty-printed output. But the directives discussed in this chapter should be plenty for the time being.

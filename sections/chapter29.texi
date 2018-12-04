@@ -1,0 +1,61 @@
+@node    Chapter 29, Chapter 30, Chapter 28, Top
+@section 29. Practical: An MP3 Browser
+
+content 29-intro
+
+@menu
+* 29-1::       Playlists
+* 29-2::       Playlists As Song Sources
+* 29-3::       Manipulating the Playlist
+* 29-4::       Query Parameter Types
+* 29-5::       Boilerplate HTML
+* 29-6::       The Browse Page
+* 29-7::       The Playlist
+* 29-8::       Finding a Playlist
+* 29-9::       Running the App
+@end menu
+
+@node	29-1, 29-2, Chapter 29, Chapter 29
+@section Playlists
+
+content 29-1
+
+@node	29-2, 29-3, 29-1, Chapter 29
+@section Playlists As Song Sources
+
+content 29-2
+
+@node	29-3, 29-4, 29-2, Chapter 29
+@section Manipulating the Playlist
+
+content 29-3
+
+@node	29-4, 29-5, 29-3, Chapter 29
+@section Query Parameter Types
+
+content 29-4
+
+@node	29-5, 29-6, 29-4, Chapter 29
+@section Boilerplate HTML
+
+content 29-5
+
+@node	29-6, 29-7, 29-5, Chapter 29
+@section The Browse Page
+
+content 29-6
+
+@node	29-7, 29-8, 29-6, Chapter 29
+@section The Playlist
+
+content 29-7
+
+@node	29-8, 29-9, 29-7, Chapter 29
+@section Finding a Playlist
+
+content 29-8
+
+@node	29-9, Chapter 30, 29-8, Chapter 29
+@section Running the App
+
+content 29-9

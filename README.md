@@ -20,8 +20,10 @@ TODOs:
     `What Are "User-Defined Classes"?`
   - [ ] @node 19-3 Condition Handlers
     `JAVA-STYLE EXCEPTON HANDLING`
-    - [ ] @node 19-6 Other Uses for Conditions
+  - [ ] @node 19-6 Other Uses for Conditions
     `Writing Robust Software`
+  - [ ] @node 27-1 The Database
+    `The Package`
 - [ ] tables
   - [ ] Table 6-1.
     `Assignment with = in Other Languages`
@@ -48,3 +50,12 @@ TODOs:
   - [ ] @node 13-3 cons cell diagrams
   - [ ] @node 16-3 class hierarchy
   - [ ] @node 19-4 more con cells
+  - [ ] @node 26-1 `Figure 26-1. Sample Web page`
+  - [ ] @node 26-2 `Figure 26-2. http://localhost:2001/hello.html`
+  - [ ] @node 26-3 `Figure 26-3. http://localhost:2001/random-number`
+  - [ ] @node 26-6 `Figure 26-4. http://localhost:2001/show-query-params?foo=bar&baz=10`
+  - [ ] @node 26-6 `Figure 26-5. http://localhost:2001/simple-form`
+  - [ ] @node 26-6 `Figure 26-6. Result of submitting the simple form`
+  - [ ] @node 26-7 `Figure 26-7. http://localhost:2001/show-cookies with no cookies`
+  - [ ] @node 26-7 `Figure 26-8. http://localhost:2001/set-cookie`
+  - [ ] @node 26-7 `Figure 26-9. http://localhost:2001/show-cookies after setting a cookie`

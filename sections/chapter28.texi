@@ -1,0 +1,25 @@
+@node    Chapter 28, Chapter 29, Chapter 27, Top
+@section 28. Practical: A Shoutcast Server
+
+content 28-intro
+
+@menu
+* 28-1::       The Shoutcast Protocol
+* 28-2::       Song Sources
+* 28-3::       Implementing Shoutcast
+@end menu
+
+@node	28-1, 28-2, Chapter 28, Chapter 28
+@section The Shoutcast Protocol
+
+content 28-1
+
+@node	28-2, 28-3, 28-1, Chapter 28
+@section Song Sources
+
+content 28-2
+
+@node	28-3, Chapter 29, 28-2, Chapter 28
+@section Implementing Shoutcast
+
+content 28-3
