@@ -69,3 +69,18 @@ TODOs:
   - [ ] @node 26-7 `Figure 26-7. http://localhost:2001/show-cookies with no cookies`
   - [ ] @node 26-7 `Figure 26-8. http://localhost:2001/set-cookie`
   - [ ] @node 26-7 `Figure 26-9. http://localhost:2001/show-cookies after setting a cookie`
+
+
+@emph for bold
+
+@itemize @bullet
+@item
+Some text for foo.
+
+@item
+Some text
+for bar.
+@end itemize
+
+green font!
+‘Here's how you do it—and why’

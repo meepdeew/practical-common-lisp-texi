@@ -6,10 +6,7 @@ File: pcl.info,  Node: Top,  Next: Preface,  Prev: (dir),  Up: (dir)
 Practical Common Lisp
 =====================
 
-'that book is dead sexy' —Xach on #lisp
-(C) 2003-2009, Peter Seibel
-
-Unofficial Texinfo Format
+Unofficial Texinfo Format (C) Peter Seibel
 
 * Menu:
 
@@ -414,19 +411,23 @@ File: pcl.info,  Node: Preface,  Next: Letter,  Prev: Top,  Up: Top
 Preface
 *******
 
-This page, and the pages it links to, contain text of the Common Lisp
-book Practical Common Lisp published by Apress.  These pages now contain
+     “that book is dead sexy” — ‘Xach on #lisp’
+     (*Note Blurbs::.)
+
+   This page, and the pages it links to, contain text of the Common Lisp
+book Practical Common Lisp published by Apress
+(https://www.apress.com/us/book/9781590592397).  These pages now contain
 the final text as it appears in the book.  If you find errors in these
 pages, please send email to <book@gigamonkeys.com>.  These pages will
-remain online in perpetuity—I hope they will serve as a useful
+remain online in perpetuity -— I hope they will serve as a useful
 introduction to Common Lisp for folks who are curious about Lisp but
 maybe not yet curious enough to shell out big bucks for a dead-tree book
 and a good Common Lisp tutorial for folks who want to get down to real
 coding right away.  However, don't let that stop you from buying the
 printed version available from Apress at your favorite local or online
 bookseller.  For the complete bookstore browsing experience, you can
-read the letter to the reader that appears on the back cover of the
-treeware edition of the book.
+read the letter to the reader (*Note Letter::.)  that appears on the
+back cover of the treeware edition of the book.
 
 
 File: pcl.info,  Node: Letter,  Next: Blurbs,  Prev: Preface,  Up: Top
@@ -437,11 +438,11 @@ Letter to the Reader
 Dear Reader,
 
    Practical Common Lisp ...  isn't that an oxymoron?  If you're like
-most programmers, you probably know something about Lisp—from a comp
-sci course in college or from learning enough Elisp to customize Emacs a
-bit.  Or maybe you just know someone who won't shut up about Lisp, the
-greatest language ever.  But you probably never figured you'd see
-practical and Lisp in the same book title.
+most programmers, you probably know something about Lisp -— from a
+comp sci course in college or from learning enough Elisp to customize
+Emacs a bit.  Or maybe you just know someone who won't shut up about
+Lisp, the greatest language ever.  But you probably never figured you'd
+see practical and Lisp in the same book title.
 
    Yet, you're reading this; you must want to know more.  Maybe you
 believe learning Lisp will make you a better programmer in any language.
@@ -452,24 +453,24 @@ quite made the leap to using it to write interesting software.
    If any of those is true, this book is for you.  Using Common Lisp, an
 ANSI standardized, industrial-strength dialect of Lisp, I show you how
 to write software that goes well beyond silly academic exercises or
-trivial editor customizations.  And I show you how Lisp—even with many
-of its features adopted by other languages—still has a few tricks up
-its sleeve.
+trivial editor customizations.  And I show you how Lisp -— even with
+many of its features adopted by other languages—still has a few tricks
+up its sleeve.
 
    But unlike many Lisp books, this one doesn't just touch on a few of
 Lisp's greatest features and then leave you on your own to actually use
 them.  I cover all the language features you'll need to write real
 programs and devote well over a third of the book to developing
-nontrivial software—a statistical spam filter, a library for parsing
-binary files, and a server for streaming MP3s over a network complete
-with an online MP3 database and Web interface.
+nontrivial software —- a statistical spam filter, a library for
+parsing binary files, and a server for streaming MP3s over a network
+complete with an online MP3 database and Web interface.
 
    So turn the book over, open it up, and see for yourself how eminently
 practical using the greatest language ever invented can be.
 
-   Sincerely,
+Sincerely,
 
-   Peter Seibel
+Peter Seibel
 
 
 File: pcl.info,  Node: Blurbs,  Next: Chapter 1,  Prev: Letter,  Up: Top
@@ -480,164 +481,205 @@ File: pcl.info,  Node: Blurbs,  Next: Chapter 1,  Prev: Letter,  Up: Top
 Blurbs
 ******
 
+     “that book is dead sexy” — ‘Xach on #lisp’
+
+     -------------------------------------------------------------
+
      “Peter Seibel offers a fresh view of Lisp and its possibilities
      for elegantly solving problems.  In Practical Common Lisp, he gives
      enough basic information to let you quickly see the power of the
      functional language paradigm.  He then dazzles you with examples
      that seem almost magical in their simplicity and power.  This read
-     is pure fun from start to finish.” -—Gary Pollice, from May 17,
-     2006 article on the 2006 Jolt Awards
+     is pure fun from start to finish.” - ‘Gary Pollice’, from Dr.
+     Dobb's Portal May-17-2006 article on the 2006 Jolt Awards
+     (http://www.drdobbs.com/joltawards/2006-jolt-awards/187900423?pgno=4)
 
-   “Peter Seibel's Practical Common Lisp is just what the title
-implies: an excellent introduction to Common Lisp for someone who wants
-to dive in and start using the language for real work.  The book is very
-well written and is fun to read—at least for those of us whose idea of
-fun extends to learning new programming languages.
+     -------------------------------------------------------------
 
-   Rather than spending a lot of time on abstract discussion of Lisp's
-place in the universe of programming lnaguages, Seibel dives right in,
-guiding the reader through a series of programming examples of
-increasing complexity.  This approach places the most emphasis on those
-parts of Common Lisp that skilled programmers use the most, without
-getting bogged down in the odd corners of Common Lisp that even the
-experts must look up in the manual.  The result of Seibel's
-example-driven approach is to give the reader an excellent appreciation
-of the power of Common Lisp in building complex, evolving software
-systems with a minimum of effort.
+     “Peter Seibel's Practical Common Lisp is just what the title
+     implies: an excellent introduction to Common Lisp for someone who
+     wants to dive in and start using the language for real work.  The
+     book is very well written and is fun to read—at least for those
+     of us whose idea of fun extends to learning new programming
+     languages.
 
-   There are already many good books on Common Lisp that offer a more
-abstract and comparative approach, but a good ‘Here's how you do
-it—and why’ book, aimed at the working programmer, is a valuable
-contribution, both to current Common Lisp users and those who should
-be.” —Scott E. Fahlman, Research Professor of Computer Science,
-Carnegie Mellon University
+     Rather than spending a lot of time on abstract discussion of Lisp's
+     place in the universe of programming lnaguages, Seibel dives right
+     in, guiding the reader through a series of programming examples of
+     increasing complexity.  This approach places the most emphasis on
+     those parts of Common Lisp that skilled programmers use the most,
+     without getting bogged down in the odd corners of Common Lisp that
+     even the experts must look up in the manual.  The result of
+     Seibel's example-driven approach is to give the reader an excellent
+     appreciation of the power of Common Lisp in building complex,
+     evolving software systems with a minimum of effort.
 
-   “This book shows the power of Lisp not only in the areas that it
-has traditionally been noted for—such as developing a complete unit
-test framework in only 26 lines of code—but also in new areas such as
-parsing binary MP3 files, building a web application for browsing a
-collection of songs, and streaming audio over the web.  Many readers
-will be surprised that Lisp allows you to do all this with conciseness
-similar to scripting languages such as Python, efficiency similar to
-C++, and unparalleled flexibility in designing your own language
-extensions.” —Peter Norvig, Director of Search Quality, Google Inc;
-author of Paradigms of Artificial Intelligence Programming: Case Studies
-in Common Lisp
+     There are already many good books on Common Lisp that offer a more
+     abstract and comparative approach, but a good 'Here's how you do
+     it—and why' book, aimed at the working programmer, is a valuable
+     contribution, both to current Common Lisp users and those who
+     should be.” — ‘Scott E. Fahlman, Research Professor of
+     Computer Science, Carnegie Mellon Universit’
 
-   “I wish this book had already existed when I started learning Lisp.
-It's not that there aren't other good books about (Common) Lisp out
-there, but none of them has such a pragmatic, up-to-date approach.  And
-let's not forget that Peter covers topics like pathnames or conditions
-and restarts which are completely ignored in the rest of the Lisp
-literature.
+     -------------------------------------------------------------
 
-   If you're new to Lisp and want to dive right in don't hesitate to buy
-this book.  Once you've read it and worked with it you can continue with
-the ‘classics’ like Graham, Norvig, Keene, or Steele.” —Edi
-Weitz, maintainer of the Common Lisp Cookbook and author of CL-PPCRE
-regular expression library.
+     “This book shows the power of Lisp not only in the areas that it
+     has traditionally been noted for—such as developing a complete
+     unit test framework in only 26 lines of code—but also in new
+     areas such as parsing binary MP3 files, building a web application
+     for browsing a collection of songs, and streaming audio over the
+     web.  Many readers will be surprised that Lisp allows you to do all
+     this with conciseness similar to scripting languages such as
+     Python, efficiency similar to C++, and unparalleled flexibility in
+     designing your own language extensions.” - ‘Peter Norvig,
+     Director of Search Quality, Google Inc; author of Paradigms of
+     Artificial Intelligence Programming: Case Studies in Common Lisp’
 
-   “Two prehensile toes up!” —Kenny Tilton, comp.lang.lisp demon,
-reporting on behalf of his development team.
+     -------------------------------------------------------------
 
-   “Experienced programmers learn best from examples and it is
-delightful to see that Lisp is finally being served with Seibel's
-example-rich tutorial text.  Especially delightful is the fact that this
-book includes so many examples that fall within the realm of problems
-today's programmers might be called upon to tackle, such as Web
-development and streaming media.—Philip Greenspun, author of Software
-Engineering for Internet Applications, MIT Department of Electrical
-Engineering and Computer Science
+     “I wish this book had already existed when I started learning
+     Lisp.  It's not that there aren't other good books about (Common)
+     Lisp out there, but none of them has such a pragmatic, up-to-date
+     approach.  And let's not forget that Peter covers topics like
+     pathnames or conditions and restarts which are completely ignored
+     in the rest of the Lisp literature.
 
-   “Practical Common Lisp is an excellent book that covers the breadth
-of the Common Lisp language and also demonstrates the unique features of
-Common Lisp with real-world applications that the reader can run and
-extend.  This book not only shows what Common Lisp is but also why every
-programmer should be familiar with Lisp.” —John Foderaro, Senior
-Scientist, Franz Inc.
+     If you're new to Lisp and want to dive right in don't hesitate to
+     buy this book.  Once you've read it and worked with it you can
+     continue with the ‘classics’ like Graham, Norvig, Keene, or
+     Steele.” — ‘Edi Weitz, maintainer of the Common Lisp Cookbook
+     and author of CL-PPCRE regular expression library.’
 
-   “The Maxima Project frequently gets queries from potential new
-contributors who would like to learn Common Lisp.  I am pleased to
-finally have a book that I can recommend to them without reservation.
-Peter Seibel's clear, direct style allows the reader to quickly
-appreciate the power of Common Lisp.  His many included examples, which
-focus on contemporary programming problems, demonstrate that Lisp is
-much more than an academic programming language.  Practical Common Lisp
-is a welcome addition to the literature.” —James Amundson, Maxima
-Project Leader
+     -------------------------------------------------------------
 
-   “I like the interspersed Practical chapters on 'real' and useful
-programs.  We need books of this kind telling the world that crunching
-strings and numbers into trees or graphs is easily done in
-Lisp.—Professor Christian Queinnec, Universite Paris 6 (Pierre et
-Marie Curie)
+     “Two prehensile toes up!” - ‘Kenny Tilton, comp.lang.lisp
+     demon, reporting on behalf of his development team.’
 
-   “One of the most important parts of learning a programming language
-is learning its proper programming style.  This is hard to teach, but it
-can be painlessly absorbed from Practical Common Lisp.  Just reading the
-practical examples made me a better programmer in any language.”
-—Peter Scott, Lisp programmer
+     -------------------------------------------------------------
 
-   “Finally, a Lisp book for the rest of us.  If you want to learn how
-to write a factorial function, this is not your book.  Seibel writes for
-the practical programmer, emphasizing the engineer/artist over the
-scientist, subtly and gracefully implying the power of the language
-while solving understandable real-world problems.
+     “Experienced programmers learn best from examples and it is
+     delightful to see that Lisp is finally being served with Seibel's
+     example-rich tutorial text.  Especially delightful is the fact that
+     this book includes so many examples that fall within the realm of
+     problems today's programmers might be called upon to tackle, such
+     as Web development and streaming media.  - ‘Philip Greenspun,
+     author of Software Engineering for Internet Applications, MIT
+     Department of Electrical Engineering and Computer Science’
 
-   In most chapters, the reading of the chapter feels just like the
-experience of writing a program, starting with a little understanding,
-then having that understanding grow, like building the shoulders upon
-which you can then stand.  When Seibel introduced macros as an aside
-while building a test framework, I was shocked at how such a simple
-example made me really 'get' them.  Narrative context is extremely
-powerful and the technical books that use it are a cut above.
-Congrats!” —Keith Irwin, Lisp Programmer
+     -------------------------------------------------------------
 
-   “While learning Lisp, one is often refered to the CL HyperSpec if
-they do not know what a particular function does, however, I found that
-I often did not 'get it' just reading the HyperSpec.  When I had a
-problem of this manner, I turned to Practical Common Lisp every single
-time—it is by far the most readable source on the subject that shows
-you how to program, not just tell you.” —Philip Haddad, Lisp
-Programmer
+     “Practical Common Lisp is an excellent book that covers the
+     breadth of the Common Lisp language and also demonstrates the
+     unique features of Common Lisp with real-world applications that
+     the reader can run and extend.  This book not only shows what
+     Common Lisp is but also why every programmer should be familiar
+     with Lisp.” - ‘John Foderaro, Senior Scientist, Franz Inc.’
 
-   “With the IT world evolving at an ever increasing pace,
-professionals need the most powerful tools available.  This is why
-Common Lisp—the most powerful, flexible, and stable programming
-language ever—is seeing such a rise in popularity.  Practical Common
-Lisp is the long-awaited book that will help you harness the power of
-Common Lisp to tackle today's complex real world problems.” —Marc
-Battyani, author of CL-PDF, CL-TYPESETTING, and mod_lisp.
+     -------------------------------------------------------------
 
-   “Please don't assume Common Lisp is only useful for Databases, Unit
-Test Frameworks, Spam Filters, ID3 Parsers, Web Programming, Shoutcast
-Servers, HTML Generation Interpreters, and HTML Generation Compilers
-just because these are the only things happened to be implemented in the
-book Practical Common Lisp.—Tobias C. Rittweiler, Lisp Programmer
+     “The Maxima Project frequently gets queries from potential new
+     contributors who would like to learn Common Lisp.  I am pleased to
+     finally have a book that I can recommend to them without
+     reservation.  Peter Seibel's clear, direct style allows the reader
+     to quickly appreciate the power of Common Lisp.  His many included
+     examples, which focus on contemporary programming problems,
+     demonstrate that Lisp is much more than an academic programming
+     language.  Practical Common Lisp is a welcome addition to the
+     literature.” — ‘James Amundson, Maxima Project Leader’
 
-   “When I met Peter, who just started writing this book, I asked to
-myself (not to him, of course) ‘why yet another book on Common Lisp,
-when there are many nice introductory books?’ One year later, I found
-a draft of the new book and recognized I was wrong.  This book is not
-‘yet another’ one.  The author focuses on practical aspects rather
-than on technical details of the language.  When I first studied Lisp by
-reading an introductory book, I felt I understood the language, but I
-also had an impression ‘so what?’, meaning I had no idea about how
-to use it.  In contrast, this book leaps into a ‘PRACTICAL’ chapter
-after the first few chapters that explain the very basic notions of the
-language.  Then the readers are expected to learn more about the
-language while they are following the PRACTICAL projects, which are
-combined together to form a product of a significant size.  After
-reading this book, the readers will feel themselves expert programmers
-on Common Lisp since they have ‘finished’ a big project already.  I
-think Lisp is the only language that allows this type of practical
-introduction.  Peter makes use of this feature of the language in
-building up a fancy introduction on Common Lisp.” —Taiichi Yuasa,
-Professor, Department of Communications and Computer Engineering, Kyoto
-University
+     -------------------------------------------------------------
 
-   Have something to say about this book?  Something nice?  Want to see
-it here?  Send it along to <book@gigamonkeys.com>.
+     “I like the interspersed Practical chapters on 'real' and useful
+     programs.  We need books of this kind telling the world that
+     crunching strings and numbers into trees or graphs is easily done
+     in Lisp.  — ‘Professor Christian Queinnec, Universite Paris 6
+     (Pierre et Marie Curie)’
+
+     -------------------------------------------------------------
+
+     “One of the most important parts of learning a programming
+     language is learning its proper programming style.  This is hard to
+     teach, but it can be painlessly absorbed from Practical Common
+     Lisp.  Just reading the practical examples made me a better
+     programmer in any language.” - ‘Peter Scott, Lisp programmer’
+
+     -------------------------------------------------------------
+
+     “Finally, a Lisp book for the rest of us.  If you want to learn
+     how to write a factorial function, this is not your book.  Seibel
+     writes for the practical programmer, emphasizing the
+     engineer/artist over the scientist, subtly and gracefully implying
+     the power of the language while solving understandable real-world
+     problems.
+
+     In most chapters, the reading of the chapter feels just like the
+     experience of writing a program, starting with a little
+     understanding, then having that understanding grow, like building
+     the shoulders upon which you can then stand.  When Seibel
+     introduced macros as an aside while building a test framework, I
+     was shocked at how such a simple example made me really 'get' them.
+     Narrative context is extremely powerful and the technical books
+     that use it are a cut above.  Congrats!” — ‘Keith Irwin, Lisp
+     Programmer’
+
+     -------------------------------------------------------------
+
+     “While learning Lisp, one is often refered to the CL HyperSpec if
+     they do not know what a particular function does, however, I found
+     that I often did not 'get it' just reading the HyperSpec.  When I
+     had a problem of this manner, I turned to Practical Common Lisp
+     every single time—it is by far the most readable source on the
+     subject that shows you how to program, not just tell you.” —
+     ‘Philip Haddad, Lisp Programmer’
+
+     -------------------------------------------------------------
+
+     “With the IT world evolving at an ever increasing pace,
+     professionals need the most powerful tools available.  This is why
+     Common Lisp—the most powerful, flexible, and stable programming
+     language ever—is seeing such a rise in popularity.  Practical
+     Common Lisp is the long-awaited book that will help you harness the
+     power of Common Lisp to tackle today's complex real world
+     problems.” — ‘Marc Battyani, author of CL-PDF,
+     CL-TYPESETTING, and mod_lisp.’
+
+     -------------------------------------------------------------
+
+     “Please don't assume Common Lisp is only useful for Databases,
+     Unit Test Frameworks, Spam Filters, ID3 Parsers, Web Programming,
+     Shoutcast Servers, HTML Generation Interpreters, and HTML
+     Generation Compilers just because these are the only things
+     happened to be implemented in the book Practical Common Lisp.  —
+     ‘Tobias C. Rittweiler, Lisp Programmer’
+
+     -------------------------------------------------------------
+
+     “When I met Peter, who just started writing this book, I asked to
+     myself (not to him, of course) ‘why yet another book on Common
+     Lisp, when there are many nice introductory books?’ One year
+     later, I found a draft of the new book and recognized I was wrong.
+     This book is not ‘yet another’ one.  The author focuses on
+     practical aspects rather than on technical details of the language.
+     When I first studied Lisp by reading an introductory book, I felt I
+     understood the language, but I also had an impression ‘so
+     what?’, meaning I had no idea about how to use it.  In contrast,
+     this book leaps into a ‘PRACTICAL’ chapter after the first few
+     chapters that explain the very basic notions of the language.  Then
+     the readers are expected to learn more about the language while
+     they are following the PRACTICAL projects, which are combined
+     together to form a product of a significant size.  After reading
+     this book, the readers will feel themselves expert programmers on
+     Common Lisp since they have ‘finished’ a big project already.
+     I think Lisp is the only language that allows this type of
+     practical introduction.  Peter makes use of this feature of the
+     language in building up a fancy introduction on Common Lisp.” —
+     ‘Taiichi Yuasa, Professor, Department of Communications and
+     Computer Engineering, Kyoto University’
+
+     -------------------------------------------------------------
+
+     Have something to say about this book?  Something nice?  Want to
+     see it here?  Send it along to <book@gigamonkeys.com>.
 
 
 File: pcl.info,  Node: Chapter 1,  Next: Chapter 2,  Prev: Blurbs,  Up: Top
@@ -1071,8 +1113,8 @@ In this chapter you'll set up your programming environment and write
 your first Common Lisp programs.  We'll use the easy-to-install Lisp in
 a Box developed by Matthew Danish and Mikel Evins, which packages a
 Common Lisp implementation with Emacs, a powerful Lisp-aware text
-editor, and SLIME,1 a Common Lisp development environment built on top
-of Emacs.
+editor, and SLIME (1), a Common Lisp development environment built on
+top of Emacs.
 
    This combo provides a state-of-the-art Common Lisp development
 environment that supports the incremental, interactive development style
@@ -1084,7 +1126,7 @@ development environment to talk about; folks who want to explore other
 development environments such as the graphical integrated development
 environments (IDEs) provided by some of the commercial Lisp vendors or
 environments based on other editors shouldn't have too much trouble
-translating the basics.2
+translating the basics (2).
 
 * Menu:
 
@@ -1094,6 +1136,28 @@ translating the basics.2
 * 2-4::              Experimenting in the REPL
 * 2-5::              "Hello, World," Lisp Style
 * 2-6::              Saving Your Work
+
+   ---------- Footnotes ----------
+
+   (1) Superior Lisp Interaction Mode for Emacs
+
+   (2) If you've had a bad experience with Emacs previously, you should
+treat Lisp in a Box as an IDE that happens to use an Emacs-like editor
+as its text editor; there will be no need to become an Emacs guru to
+program Lisp.  It is, however, orders of magnitude more enjoyable to
+program Lisp with an editor that has some basic Lisp awareness.  At a
+minimum, you'll want an editor that can automatically match ()s for you
+and knows how to automatically indent Lisp code.  Because Emacs is
+itself largely written in a Lisp dialect, Elisp, it has quite a bit of
+support for editing Lisp code.  Emacs is also deeply embedded into the
+history of Lisp and the culture of Lisp hackers: the original Emacs and
+its immediate predecessors, TECMACS and TMACS, were written by Lispers
+at the Massachusetts Institute of Technology (MIT). The editors on the
+Lisp Machines were versions of Emacs written entirely in Lisp.  The
+first two Lisp Machine Emacs, following the hacker tradition of
+recursive acronyms, were EINE and ZWEI, which stood for EINE Is Not
+Emacs and ZWEI Was EINE Initially.  Later ones used a descendant of
+ZWEI, named, more prosaically, ZMACS.
 
 
 File: pcl.info,  Node: 2-1,  Next: 2-2,  Prev: Chapter 2,  Up: Chapter 2
@@ -1113,7 +1177,7 @@ to do so.  Furthermore, changes to the standard have to be made in
 accordance with a process controlled by the standards body American
 National Standards Institute (ANSI). That process is designed to keep
 any one entity, such as a single vendor, from being able to arbitrarily
-change the standard.3 Thus, the Common Lisp standard is a contract
+change the standard (1).  Thus, the Common Lisp standard is a contract
 between any Common Lisp vendor and Common Lisp programmers.  The
 contract tells you that if you write a program that uses the features of
 the language the way they're described in the standard, you can count on
@@ -1142,18 +1206,19 @@ implementation is whether it runs on our favorite operating system.  The
 folks at Franz, makers of Allegro Common Lisp, are making available a
 trial version of their product for use with this book that runs on
 Linux, Windows, and OS X. Folks looking for an open-source
-implementation have several options.  SBCL4 is a high-quality
+implementation have several options.  SBCL (2) is a high-quality
 open-source implementation that compiles to native code and runs on a
 wide variety of Unixes, including Linux and OS X. SBCL is derived from
-CMUCL,5 which is a Common Lisp developed at Carnegie Mellon University,
-and, like CMUCL, is largely in the public domain, except a few sections
-licensed under Berkeley Software Distribution (BSD) style licenses.
-CMUCL itself is another fine choice, though SBCL tends to be easier to
-install and now supports 21-bit Unicode.6 For OS X users, OpenMCL is an
-excellent choice-it compiles to machine code, supports threads, and has
-quite good integration with OS X's Carbon and Cocoa toolkits.  Other
-open-source and commercial implementations are available.  See Chapter
-32 for resources from which you can get more information.
+CMUCL (3), which is a Common Lisp developed at Carnegie Mellon
+University, and, like CMUCL, is largely in the public domain, except a
+few sections licensed under Berkeley Software Distribution (BSD) style
+licenses.  CMUCL itself is another fine choice, though SBCL tends to be
+easier to install and now supports 21-bit Unicode (4).  For OS X users,
+OpenMCL is an excellent choice-it compiles to machine code, supports
+threads, and has quite good integration with OS X's Carbon and Cocoa
+toolkits.  Other open-source and commercial implementations are
+available.  See Chapter 32 for resources from which you can get more
+information.
 
    All the Lisp code in this book should work in any conforming Common
 Lisp implementation unless otherwise noted, and SLIME will smooth out
@@ -1161,6 +1226,31 @@ some of the differences between implementations by providing us with a
 common interface for interacting with Lisp.  The output shown in this
 book is from Allegro running on GNU/Linux; in some cases, other Lisp's
 may generate slightly different error messages or debugger output.
+
+   ---------- Footnotes ----------
+
+   (1) Practically speaking, there's very little likelihood of the
+language standard itself being revised-while there are a small handful
+of warts that folks might like to clean up, the ANSI process isn't
+amenable to opening an existing standard for minor tweaks, and none of
+the warts that might be cleaned up actually cause anyone any serious
+difficulty.  The future of Common Lisp standardization is likely to
+proceed via de facto standards, much like the "standardization" of Perl
+and Python-as different implementers experiment with application
+programming interfaces (APIs) and libraries for doing things not
+specified in the language standard, other implementers may adopt them or
+people will develop portability libraries to smooth over the differences
+between implementations for features not specified in the language
+standard.
+
+   (2) Steel Bank Common Lisp
+
+   (3) CMU Common Lisp
+
+   (4) SBCL forked from CMUCL in order to focus on cleaning up the
+internals and making it easier to maintain.  But the fork has been
+amiable; bug fixes tend to propagate between the two projects, and
+there's talk that someday they will merge back together.
 
 
 File: pcl.info,  Node: 2-2,  Next: 2-3,  Prev: 2-1,  Up: Chapter 2
@@ -1234,15 +1324,17 @@ Free Your Mind: Interactive Programming
 When you start Lisp in a Box, you should see a buffer containing a
 prompt that looks like this:
 
-   CL-USER> This is the Lisp prompt.  Like a Unix or DOS shell prompt,
-the Lisp prompt is a place where you can type expressions that will
-cause things to happen.  However, instead of reading and interpreting a
-line of shell commands, Lisp reads Lisp expressions, evaluates them
-according to the rules of Lisp, and prints the result.  Then it does it
-again with the next expression you type.  That endless cycle of reading,
-evaluating, and printing is why it's called the read-eval-print loop, or
-REPL for short.  It's also referred to as the top-level, the top-level
-listener, or the Lisp listener.
+     CL-USER>
+
+   This is the Lisp prompt.  Like a Unix or DOS shell prompt, the Lisp
+prompt is a place where you can type expressions that will cause things
+to happen.  However, instead of reading and interpreting a line of shell
+commands, Lisp reads Lisp expressions, evaluates them according to the
+rules of Lisp, and prints the result.  Then it does it again with the
+next expression you type.  That endless cycle of reading, evaluating,
+and printing is why it's called the read-eval-print loop, or REPL for
+short.  It's also referred to as the top-level, the top-level listener,
+or the Lisp listener.
 
    From within the environment provided by the REPL, you can define and
 redefine program elements such as variables, functions, classes, and
@@ -1274,26 +1366,32 @@ and printed.  One of the simplest kinds of Lisp expressions is a number.
 At the Lisp prompt, you can type 10 followed by Return and should see
 something like this:
 
-   CL-USER> 10 10 The first 10 is the one you typed.  The Lisp reader,
-the R in REPL, reads the text "10" and creates a Lisp object
-representing the number 10.  This object is a self-evaluating object,
-which means that when given to the evaluator, the E in REPL, it
-evaluates to itself.  This value is then given to the printer, which
-prints the 10 on the line by itself.  While that may seem like a lot of
-work just to get back to where you started, things get a bit more
-interesting when you give Lisp something meatier to chew on.  For
-instance, you can type (+ 2 3) at the Lisp prompt.
+     CL-USER> 10
+     10
 
-   CL-USER> (+ 2 3) 5 Anything in parentheses is a list, in this case a
-list of three elements, the symbol +, and the numbers 2 and 3.  Lisp, in
-general, evaluates lists by treating the first element as the name of a
-function and the rest of the elements as expressions to be evaluated to
-yield the arguments to the function.  In this case, the symbol + names a
-function that performs addition.  2 and 3 evaluate to themselves and are
-then passed to the addition function, which returns 5.  The value 5 is
-passed to the printer, which prints it.  Lisp can evaluate a list
-expression in other ways, but we needn't get into them right away.
-First we have to write.  .  .
+   The first 10 is the one you typed.  The Lisp reader, the R in REPL,
+reads the text "10" and creates a Lisp object representing the number
+10.  This object is a self-evaluating object, which means that when
+given to the evaluator, the E in REPL, it evaluates to itself.  This
+value is then given to the printer, which prints the 10 on the line by
+itself.  While that may seem like a lot of work just to get back to
+where you started, things get a bit more interesting when you give Lisp
+something meatier to chew on.  For instance, you can type (+ 2 3) at the
+Lisp prompt.
+
+     CL-USER> (+ 2 3)
+     5
+
+   Anything in parentheses is a list, in this case a list of three
+elements, the symbol +, and the numbers 2 and 3.  Lisp, in general,
+evaluates lists by treating the first element as the name of a function
+and the rest of the elements as expressions to be evaluated to yield the
+arguments to the function.  In this case, the symbol + names a function
+that performs addition.  2 and 3 evaluate to themselves and are then
+passed to the addition function, which returns 5.  The value 5 is passed
+to the printer, which prints it.  Lisp can evaluate a list expression in
+other ways, but we needn't get into them right away.  First we have to
+write.  .  .
 
 
 File: pcl.info,  Node: 2-5,  Next: 2-6,  Prev: 2-4,  Up: Chapter 2
@@ -1301,19 +1399,21 @@ File: pcl.info,  Node: 2-5,  Next: 2-6,  Prev: 2-4,  Up: Chapter 2
 "Hello, World," Lisp Style
 ==========================
 
-No programming book is complete without a "hello, world"7 program.  As
-it turns out, it's trivially easy to get the REPL to print "hello,
+No programming book is complete without a "hello, world" (1) program.
+As it turns out, it's trivially easy to get the REPL to print "hello,
 world."
 
-   CL-USER> "hello, world" "hello, world" This works because strings,
-like numbers, have a literal syntax that's understood by the Lisp reader
-and are self-evaluating objects: Lisp reads the double-quoted string and
-instantiates a string object in memory that, when evaluated, evaluates
-to itself and is then printed in the same literal syntax.  The quotation
-marks aren't part of the string object in memory-they're just the syntax
-that tells the reader to read a string.  The printer puts them back on
-when it prints the string because it tries to print objects in the same
-syntax the reader understands.
+     CL-USER> "hello, world"
+     "hello, world"
+
+   This works because strings, like numbers, have a literal syntax
+that's understood by the Lisp reader and are self-evaluating objects:
+Lisp reads the double-quoted string and instantiates a string object in
+memory that, when evaluated, evaluates to itself and is then printed in
+the same literal syntax.  The quotation marks aren't part of the string
+object in memory-they're just the syntax that tells the reader to read a
+string.  The printer puts them back on when it prints the string because
+it tries to print objects in the same syntax the reader understands.
 
    However, this may not really qualify as a "hello, world" program.
 It's more like the "hello, world" value.
@@ -1328,16 +1428,20 @@ embedded directives that allow you to interpolate subsequent arguments
 into the string, à la printf or Python's string-%.  As long as the
 string doesn't contain an ~, it will be emitted as-is.  If you pass t as
 its first argument, it sends its output to standard output.  So a FORMAT
-expression that will print "hello, world" looks like this:8
+expression that will print "hello, world" looks like this: (2)
 
-   CL-USER> (format t "hello, world") hello, world NIL One thing to note
-about the result of the FORMAT expression is the NIL on the line after
-the "hello, world" output.  That NIL is the result of evaluating the
-FORMAT expression, printed by the REPL. (NIL is Lisp's version of false
-and/or null.  More on that in Chapter 4.)  Unlike the other expressions
-we've seen so far, a FORMAT expression is more interesting for its side
-effect-printing to standard output in this case-than for its return
-value.  But every expression in Lisp evaluates to some result.9
+     CL-USER> (format t "hello, world")
+     hello, world
+     NIL
+
+   One thing to note about the result of the FORMAT expression is the
+NIL on the line after the "hello, world" output.  That NIL is the result
+of evaluating the FORMAT expression, printed by the REPL. (NIL is Lisp's
+version of false and/or null.  More on that in Chapter 4.)  Unlike the
+other expressions we've seen so far, a FORMAT expression is more
+interesting for its side effect-printing to standard output in this
+case-than for its return value.  But every expression in Lisp evaluates
+to some result (3).
 
    However, it's still arguable whether you've yet written a true
 "program."  But you're getting there.  And you're seeing the bottom-up
@@ -1348,11 +1452,13 @@ you just need to package it in a function.  Functions are one of the
 basic program building blocks in Lisp and can be defined with a DEFUN
 expression such as this:
 
-   CL-USER> (defun hello-world () (format t "hello, world")) HELLO-WORLD
-The hello-world after the DEFUN is the name of the function.  In Chapter
-4 we'll look at exactly what characters can be used in a name, but for
-now suffice it to say that lots of characters, such as -, that are
-illegal in names in other languages are legal in Common Lisp.  It's
+     CL-USER> (defun hello-world () (format t "hello, world"))
+     HELLO-WORLD
+
+   The hello-world after the DEFUN is the name of the function.  In
+Chapter 4 we'll look at exactly what characters can be used in a name,
+but for now suffice it to say that lots of characters, such as -, that
+are illegal in names in other languages are legal in Common Lisp.  It's
 standard Lisp style-not to mention more in line with normal English
 typography-to form compound names with hyphens, such as hello-world,
 rather than with underscores, as in hello_world, or with inner caps such
@@ -1363,7 +1469,7 @@ is the body of the function.
    At one level, this expression, like all the others you've seen, is
 just another expression to be read, evaluated, and printed by the REPL.
 The return value in this case is the name of the function you just
-defined.10 But like the FORMAT expression, this expression is more
+defined (4).  But like the FORMAT expression, this expression is more
 interesting for the side effects it has than for its return value.
 Unlike the FORMAT expression, however, the side effects are invisible:
 when this expression is evaluated, a new function that takes no
@@ -1372,10 +1478,35 @@ given the name HELLO-WORLD.
 
    Once you've defined the function, you can call it like this:
 
-   CL-USER> (hello-world) hello, world NIL You can see that the output
-is just the same as when you evaluated the FORMAT expression directly,
-including the NIL value printed by the REPL. Functions in Common Lisp
-automatically return the value of the last expression evaluated.
+     CL-USER> (hello-world)
+     hello, world
+     NIL
+
+   You can see that the output is just the same as when you evaluated
+the FORMAT expression directly, including the NIL value printed by the
+REPL. Functions in Common Lisp automatically return the value of the
+last expression evaluated.
+
+   ---------- Footnotes ----------
+
+   (1) The venerable "hello, world" predates even the classic Kernighan
+and Ritchie C book that played a big role in its popularization.  The
+original "hello, world" seems to have come from Brian Kernighan's "A
+Tutorial Introduction to the Language B" that was part of the Bell
+Laboratories Computing Science Technical Report #8: The Programming
+Language B published in January 1973.  (It's available online at
+http://cm.bell-labs.com/cm/cs/who/dmr/bintro.html.)
+
+   (2) These are some other expressions that also print the string
+"hello, world":
+
+   (3) Well, as you'll see when I discuss returning multiple values,
+it's technically possible to write expressions that evaluate to no
+value, but even such expressions are treated as returning NIL when
+evaluated in a context that expects a value.
+
+   (4) I'll discuss in Chapter 4 why the name has been converted to all
+uppercase.
 
 
 File: pcl.info,  Node: 2-6,  Next: Chapter 3,  Prev: 2-5,  Up: Chapter 2
@@ -1402,19 +1533,23 @@ Emacs window, SLIME will tell you the arguments expected.  The exact
 form will depend somewhat on what Common Lisp implementation you're
 using, but it'll probably look something like this:
 
-   (defun name varlist &rest body) The message will disappear as you
-start to type each new element but will reappear each time you enter a
-space.  When you're entering the definition in the file, you might
-choose to break the definition across two lines after the parameter
-list.  If you hit Return and then Tab, SLIME will automatically indent
-the second line appropriately, like this:11
+     (defun name varlist &rest body)
 
-   (defun hello-world () (format t "hello, world")) SLIME will also help
-match up the parentheses-as you type a closing parenthesis, it will
-flash the corresponding opening parenthesis.  Or you can just type C-c
-C-q to invoke the command slime-close-parens-at-point, which will insert
-as many closing parentheses as necessary to match all the currently open
-parentheses.
+   The message will disappear as you start to type each new element but
+will reappear each time you enter a space.  When you're entering the
+definition in the file, you might choose to break the definition across
+two lines after the parameter list.  If you hit Return and then Tab,
+SLIME will automatically indent the second line appropriately, like this
+(1):
+
+     (defun hello-world ()
+       (format t "hello, world"))
+
+   SLIME will also help match up the parentheses-as you type a closing
+parenthesis, it will flash the corresponding opening parenthesis.  Or
+you can just type C-c C-q to invoke the command
+slime-close-parens-at-point, which will insert as many closing
+parentheses as necessary to match all the currently open parentheses.
 
    Now you can get this definition into your Lisp environment in several
 ways.  The easiest is to type C-c C-c with the cursor anywhere in or
@@ -1425,47 +1560,60 @@ change to hello-world, recompile it, and then go back to the REPL, using
 C-c C-z or C-x b, and call it again.  For instance, you could make it a
 bit more grammatical.
 
-   (defun hello-world () (format t "Hello, world!"))  Next, recompile
-with C-c C-c and then type C-c C-z to switch to the REPL to try the new
-version.
+     (defun hello-world ()
+       (format t "Hello, world!"))
 
-   CL-USER> (hello-world) Hello, world!  NIL You'll also probably want
-to save the file you've been working on; in the hello.lisp buffer, type
-C-x C-s to invoke the Emacs command save-buffer.
+   Next, recompile with C-c C-c and then type C-c C-z to switch to the
+REPL to try the new version.
+
+     CL-USER> (hello-world)
+     Hello, world!
+     NIL
+
+   You'll also probably want to save the file you've been working on; in
+the hello.lisp buffer, type C-x C-s to invoke the Emacs command
+save-buffer.
 
    Now to try reloading this function from the source file, you'll need
 to quit Lisp and restart.  To quit you can use a SLIME shortcut: at the
 REPL, type a comma.  At the bottom of the Emacs window, you will be
 prompted for a command.  Type quit (or sayoonara), and then hit Enter.
 This will quit Lisp and close all the buffers created by SLIME such as
-the REPL buffer.12 Now restart SLIME by typing M-x slime.
+the REPL buffer (2).  Now restart SLIME by typing M-x slime.
 
    Just for grins, you can try to invoke hello-world.
 
-   CL-USER> (hello-world) At that point SLIME will pop up a new buffer
-that starts with something that looks like this:
+     CL-USER> (hello-world)
 
-   attempt to call 'HELLO-WORLD' which is an undefined function.
-[Condition of type UNDEFINED-FUNCTION]
+   At that point SLIME will pop up a new buffer that starts with
+something that looks like this:
 
-   Restarts: 0: [TRY-AGAIN] Try calling HELLO-WORLD again.  1:
-[RETURN-VALUE] Return a value instead of calling HELLO-WORLD. 2:
-[USE-VALUE] Try calling a function other than HELLO-WORLD. 3:
-[STORE-VALUE] Setf the symbol-function of HELLO-WORLD and call it again.
-4: [ABORT] Abort handling SLIME request.  5: [ABORT] Abort entirely from
-this process.
+     attempt to call `HELLO-WORLD' which is an undefined function.
+        [Condition of type UNDEFINED-FUNCTION]
 
-   Backtrace: 0: (SWANK::DEBUG-IN-EMACS #<UNDEFINED-FUNCTION
- #x716b082a>) 1: ((FLET SWANK:SWANK-DEBUGGER-HOOK SWANK::DEBUG-IT)) 2:
-(SWANK:SWANK-DEBUGGER-HOOK #<UNDEFINED-FUNCTION  #x716b082a> #<Function
-SWANK-DEBUGGER-HOOK>) 3: (ERROR #<UNDEFINED-FUNCTION  #x716b082a>) 4:
-(EVAL (HELLO-WORLD)) 5: (SWANK::EVAL-REGION "(hello-world) " T) Blammo!
-What happened?  Well, you tried to invoke a function that doesn't exist.
-But despite the burst of output, Lisp is actually handling this
-situation gracefully.  Unlike Java or Python, Common Lisp doesn't just
-bail-throwing an exception and unwinding the stack.  And it definitely
-doesn't dump core just because you tried to invoke a missing function.
-Instead Lisp drops you into the debugger.
+     Restarts:
+       0: [TRY-AGAIN] Try calling HELLO-WORLD again.
+       1: [RETURN-VALUE] Return a value instead of calling HELLO-WORLD.
+       2: [USE-VALUE] Try calling a function other than HELLO-WORLD.
+       3: [STORE-VALUE] Setf the symbol-function of HELLO-WORLD and call it again.
+       4: [ABORT] Abort handling SLIME request.
+       5: [ABORT] Abort entirely from this process.
+
+     Backtrace:
+       0: (SWANK::DEBUG-IN-EMACS #<UNDEFINED-FUNCTION  #x716b082a>)
+       1: ((FLET SWANK:SWANK-DEBUGGER-HOOK SWANK::DEBUG-IT))
+       2: (SWANK:SWANK-DEBUGGER-HOOK #<UNDEFINED-FUNCTION  #x716b082a> #<Function SWANK-DEBUGGER-HOOK>)
+       3: (ERROR #<UNDEFINED-FUNCTION  #x716b082a>)
+       4: (EVAL (HELLO-WORLD))
+       5: (SWANK::EVAL-REGION "(hello-world)
+     " T)
+
+   Blammo!  What happened?  Well, you tried to invoke a function that
+doesn't exist.  But despite the burst of output, Lisp is actually
+handling this situation gracefully.  Unlike Java or Python, Common Lisp
+doesn't just bail-throwing an exception and unwinding the stack.  And it
+definitely doesn't dump core just because you tried to invoke a missing
+function.  Instead Lisp drops you into the debugger.
 
    While you're in the debugger you still have full access to Lisp, so
 you can evaluate expressions to examine the state of our program and
@@ -1473,12 +1621,15 @@ maybe even fix things.  For now don't worry about that; just type q to
 exit the debugger and get back to the REPL. The debugger buffer will go
 away, and the REPL will show this:
 
-   CL-USER> (hello-world) ; Evaluation aborted CL-USER> There's
-obviously more that can be done from within the debugger than just
-abort-we'll see, for instance, in Chapter 19 how the debugger integrates
-with the error handling system.  For now, however, the important thing
-to know is that you can always get out of it, and back to the REPL, by
-typing q.
+     CL-USER> (hello-world)
+     ; Evaluation aborted
+     CL-USER>
+
+   There's obviously more that can be done from within the debugger than
+just abort-we'll see, for instance, in Chapter 19 how the debugger
+integrates with the error handling system.  For now, however, the
+important thing to know is that you can always get out of it, and back
+to the REPL, by typing q.
 
    Back at the REPL you can try again.  Things blew up because Lisp
 didn't know the definition of hello-world.  So you need to let Lisp know
@@ -1490,30 +1641,41 @@ load the whole file, which would be a more convenient approach if the
 file contained a bunch of definitions, using the LOAD function at the
 REPL like this:
 
-   CL-USER> (load "hello.lisp") ; Loading
-/home/peter/my-lisp-programs/hello.lisp T The T means everything loaded
-correctly.13 Loading a file with LOAD is essentially equivalent to
-typing each of the expressions in the file at the REPL in the order they
-appear in the file, so after the call to LOAD, hello-world should be
-defined:
+     CL-USER> (load "hello.lisp")
+     ; Loading /home/peter/my-lisp-programs/hello.lisp
+     T
 
-   CL-USER> (hello-world) Hello, world!  NIL Another way to load a
-file's worth of definitions is to compile the file first with
-COMPILE-FILE and then LOAD the resulting compiled file, called a FASL
-file, which is short for fast-load file.  COMPILE-FILE returns the name
-of the FASL file, so we can compile and load from the REPL like this:
+   The T means everything loaded correctly (3).  Loading a file with
+LOAD is essentially equivalent to typing each of the expressions in the
+file at the REPL in the order they appear in the file, so after the call
+to LOAD, hello-world should be defined:
 
-   CL-USER> (load (compile-file "hello.lisp")) ;;; Compiling file
-hello.lisp ;;; Writing fasl file hello.fasl ;;; Fasl write complete v;
-Fast loading /home/peter/my-lisp-programs/hello.fasl T SLIME also
-provides support for loading and compiling files without using the REPL.
-When you're in a source code buffer, you can use C-c C-l to load the
-file with slime-load-file.  Emacs will prompt for the name of a file to
-load with the name of the current file already filled in; you can just
-hit Enter.  Or you can type C-c C-k to compile and load the file
-represented by the current buffer.  In some Common Lisp implementations,
-compiling code this way will make it quite a bit faster; in others, it
-won't, typically because they always compile everything.
+     CL-USER> (hello-world)
+     Hello, world!
+     NIL
+
+   Another way to load a file's worth of definitions is to compile the
+file first with COMPILE-FILE and then LOAD the resulting compiled file,
+called a FASL file, which is short for fast-load file.  COMPILE-FILE
+returns the name of the FASL file, so we can compile and load from the
+REPL like this:
+
+     CL-USER> (load (compile-file "hello.lisp"))
+     ;;; Compiling file hello.lisp
+     ;;; Writing fasl file hello.fasl
+     ;;; Fasl write complete
+     v; Fast loading /home/peter/my-lisp-programs/hello.fasl
+     T
+
+   SLIME also provides support for loading and compiling files without
+using the REPL. When you're in a source code buffer, you can use C-c C-l
+to load the file with slime-load-file.  Emacs will prompt for the name
+of a file to load with the name of the current file already filled in;
+you can just hit Enter.  Or you can type C-c C-k to compile and load the
+file represented by the current buffer.  In some Common Lisp
+implementations, compiling code this way will make it quite a bit
+faster; in others, it won't, typically because they always compile
+everything.
 
    This should be enough to give you a flavor of how Lisp programming
 works.  Of course I haven't covered all the tricks and techniques yet,
@@ -1536,15 +1698,36 @@ days while conducting a sequence of experiments.  Unfortunately, a
 subtle race condition in the code had escaped detection during ground
 testing and was already in space.  When the bug manifested in the
 wild-100 million miles away from Earth-the team was able to diagnose and
-fix the running code, allowing the experiments to complete.14 One of the
-programmers described it as follows:
+fix the running code, allowing the experiments to complete (4).  One of
+the programmers described it as follows:
 
-   Debugging a program running on a $100M piece of hardware that is 100
-million miles away is an interesting experience.  Having a
-read-eval-print loop running on the spacecraft proved invaluable in
-finding and fixing the problem.  You're not quite ready to send any Lisp
-code into deep space, but in the next chapter you'll take a crack at
-writing a program a bit more interesting than "hello, world."
+     Debugging a program running on a $100M piece of hardware that is
+     100 million miles away is an interesting experience.  Having a
+     read-eval-print loop running on the spacecraft proved invaluable in
+     finding and fixing the problem.
+
+   You're not quite ready to send any Lisp code into deep space, but in
+the next chapter you'll take a crack at writing a program a bit more
+interesting than "hello, world."
+
+   ---------- Footnotes ----------
+
+   (1) You could also have entered the definition as two lines at the
+REPL, as the REPL reads whole expressions, not lines.
+
+   (2) SLIME shortcuts aren't part of Common Lisp-they're commands to
+SLIME.
+
+   (3) If for some reason the LOAD doesn't go cleanly, you'll get
+another error and drop back into the debugger.  If this happens, the
+most likely reason is that Lisp can't find the file, probably because
+its idea of the current working directory isn't the same as where the
+file is located.  In that case, you can quit the debugger by typing q
+and then use the SLIME shortcut cd to change Lisp's idea of the current
+directory-type a comma and then cd when prompted for a command and then
+the name of the directory where hello.lisp was saved.
+
+   (4) http://www.flownet.com/gat/jpl-lisp.html
 
 
 File: pcl.info,  Node: Chapter 3,  Next: Chapter 4,  Prev: Chapter 2,  Up: Top
@@ -5886,108 +6069,3 @@ result reporting without touching the test functions.
 and a little practical experience using them, you're ready to start
 exploring Common Lisp's rich standard library of functions and data
 types.
-
-
-File: pcl.info,  Node: Chapter 10,  Next: Chapter 11,  Prev: Chapter 9,  Up: Top
-
-10. Numbers, Characters, and Strings
-====================================
-
-While functions, variables, macros, and 25 special operators provide the
-basic building blocks of the language itself, the building blocks of
-your programs will be the data structures you use.  As Fred Brooks
-observed in The Mythical Man-Month, "Representation is the essence of
-programming."1
-
-   Common Lisp provides built-in support for most of the data types
-typically found in modern languages: numbers (integer, floating point,
-and complex), characters, strings, arrays (including multidimensional
-arrays), lists, hash tables, input and output streams, and an
-abstraction for portably representing filenames.  Functions are also a
-first-class data type in Lisp-they can be stored in variables, passed as
-arguments, returned as return values, and created at runtime.
-
-   And these built-in types are just the beginning.  They're defined in
-the language standard so programmers can count on them being available
-and because they tend to be easier to implement efficiently when tightly
-integrated with the rest of the implementation.  But, as you'll see in
-later chapters, Common Lisp also provides several ways for you to define
-new data types, define operations on them, and integrate them with the
-built-in data types.
-
-   For now, however, you can start with the built-in data types.
-Because Lisp is a high-level language, the details of exactly how
-different data types are implemented are largely hidden.  From your
-point of view as a user of the language, the built-in data types are
-defined by the functions that operate on them.  So to learn a data type,
-you just have to learn about the functions you can use with it.
-Additionally, most of the built-in data types have a special syntax that
-the Lisp reader understands and that the Lisp printer uses.  That's why,
-for instance, you can write strings as "foo"; numbers as 123, 1/23, and
-1.23; and lists as (a b c).  I'll describe the syntax for different
-kinds of objects when I describe the functions for manipulating them.
-
-   In this chapter, I'll cover the built-in "scalar" data types:
-numbers, characters, and strings.  Technically, strings aren't true
-scalars-a string is a sequence of characters, and you can access
-individual characters and manipulate strings with a function that
-operates on sequences.  But I'll discuss strings here because most of
-the string-specific functions manipulate them as single values and also
-because of the close relation between several of the string functions
-and their character counterparts.
-
-* Menu:
-
-* 10-1::                 Numbers
-* 10-2::                 Numeric Literals
-* 10-3::                 Basic Math
-* 10-4::                 Numeric Comparisons
-* 10-5::                 Higher Math
-* 10-6::                 Characters
-* 10-7::                 Character Comparisons
-* 10-8::                 Strings
-* 10-9::                 String Comparisons
-
-
-File: pcl.info,  Node: 10-1,  Next: 10-2,  Prev: Chapter 10,  Up: Chapter 10
-
-Numbers
-=======
-
-Math, as Barbie says, is hard.2 Common Lisp can't make the math part any
-easier, but it does tend to get in the way a lot less than other
-programming languages.  That's not surprising given its mathematical
-heritage.  Lisp was originally designed by a mathematician as a tool for
-studying mathematical functions.  And one of the main projects of the
-MAC project at MIT was the Macsyma symbolic algebra system, written in
-Maclisp, one of Common Lisp's immediate predecessors.  Additionally,
-Lisp has been used as a teaching language at places such as MIT where
-even the computer science professors cringe at the thought of telling
-their students that 10/4 = 2, leading to Lisp's support for exact
-ratios.  And at various times Lisp has been called upon to compete with
-FORTRAN in the high-performance numeric computing arena.
-
-   One of the reasons Lisp is a nice language for math is its numbers
-behave more like true mathematical numbers than the approximations of
-numbers that are easy to implement in finite computer hardware.  For
-instance, integers in Common Lisp can be almost arbitrarily large rather
-than being limited by the size of a machine word.3 And dividing two
-integers results in an exact ratio, not a truncated value.  And since
-ratios are represented as pairs of arbitrarily sized integers, ratios
-can represent arbitrarily precise fractions.4
-
-   On the other hand, for high-performance numeric programming, you may
-be willing to trade the exactitude of rationals for the speed offered by
-using the hardware's underlying floating-point operations.  So, Common
-Lisp also offers several types of floating-point numbers, which are
-mapped by the implementation to the appropriate hardware-supported
-floating-point representations.5 Floats are also used to represent the
-results of a computation whose true mathematical value would be an
-irrational number.
-
-   Finally, Common Lisp supports complex numbers-the numbers that result
-from doing things such as taking square roots and logarithms of negative
-numbers.  The Common Lisp standard even goes so far as to specify the
-principal values and branch cuts for irrational and transcendental
-functions on the complex domain.
-

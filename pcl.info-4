@@ -1,6 +1,187 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
 
+File: pcl.info,  Node: 26-5,  Next: 26-6,  Prev: 26-4,  Up: Chapter 26
+
+HTML Macros
+===========
+
+Another feature of FOO is that it allows you to define HTML "macros"
+that can translate arbitrary forms into HTML s-expressions that the html
+macro understands.  For instance, suppose you frequently find yourself
+writing pages of this form:
+
+   (:html (:head (:title "Some title")) (:body (:h1 "Some title") ...
+stuff ...))  You could define an HTML macro to capture that pattern like
+this:
+
+   (define-html-macro :standard-page ((&key title) &body body) '(:html
+(:head (:title ,title)) (:body (:h1 ,title) ,@body))) Now you can use
+the "tag" :standard-page in your s-expression HTML, and it'll be
+expanded before being interpreted or compiled.  For instance, the
+following:
+
+   (html (:standard-page (:title "Hello") (:p "Hello, world.")))
+generates the following HTML:
+
+   <html> <head> <title>Hello</title> </head> <body> <h1>Hello</h1>
+<p>Hello, world.</p> </body> </html>
+
+
+File: pcl.info,  Node: 26-6,  Next: 26-7,  Prev: 26-5,  Up: Chapter 26
+
+Query Parameters
+================
+
+Of course, generating HTML output is only half of Web programming.  The
+other thing you need to do is get input from the user.  As I discussed
+in the "A 30-Second Intro to Server-Side Web Programming" section, when
+a browser requests a page from a Web server, it can send query
+parameters in the URL and post data, both of which act as input to the
+server-side code.
+
+   AllegroServe, like most Web programming frameworks, takes care of
+parsing both these sources of input for you.  By the time your published
+functions are called, all the key/value pairs from the query string
+and/or post data have been decoded and placed into an alist that you can
+retrieve from the request object with the function request-query.  The
+following function returns a page showing all the query parameters it
+receives:
+
+   (defun show-query-params (request entity) (with-http-response
+(request entity :content-type "text/html") (with-http-body (request
+entity) (with-html-output ((request-reply-stream request)) (html
+(:standard-page (:title "Query Parameters") (if (request-query request)
+(html (:table :border 1 (loop for (k .  v) in (request-query request) do
+(html (:tr (:td k) (:td v)))))) (html (:p "No query
+parameters.")))))))))
+
+   (publish :path "/show-query-params" :function 'show-query-params) If
+you give your browser a URL with a query string in it like the
+following:
+
+   http://localhost:2001/show-query-params?foo=bar&baz=10 you should get
+back a page similar to the one shown in Figure 26-4.
+
+   Figure 26-4.  http://localhost:2001/show-query-params?foo=bar&baz=10
+To generate some post data, you need an HTML form.  The following
+function generates a simple form, which submits its data to
+show-query-params:
+
+   (defun simple-form (request entity) (with-http-response (request
+entity :content-type "text/html") (with-http-body (request entity) (let
+((*html-output* (request-reply-stream request))) (html (:html (:head
+(:title "Simple Form")) (:body (:form :method "POST" :action
+"/show-query-params" (:table (:tr (:td "Foo") (:td (:input :name "foo"
+:size 20))) (:tr (:td "Password") (:td (:input :name "password" :type
+"password" :size 20)))) (:p (:input :name "submit" :type "submit" :value
+"Okay") (:input ::type "reset" :value "Reset"))))))))))
+
+   (publish :path "/simple-form" :function 'simple-form) Point your
+browser to http://localhost:2001/simple-form, and you should see a page
+like the one in Figure 26-5.
+
+   If you fill in the form with the "abc" and "def" values, clicking the
+Okay button should take you to a page like the one in Figure 26-6.
+
+   Figure 26-5.  http://localhost:2001/simple-form
+
+   Figure 26-6.  Result of submitting the simple form However, most of
+the time you won't need to iterate over all the query parameters; you'll
+want to pick out individual parameters.  For instance, you might want to
+modify random-number so the limit value you pass to RANDOM can be
+supplied via a query parameter.  In that case, you use the function
+request-query-value, which takes the request object and the name of the
+parameter whose value you want and returns the value as a string or NIL
+if no such parameter has been supplied.  A parameterizable version of
+random-number might look like this:
+
+   (defun random-number (request entity) (with-http-response (request
+entity :content-type "text/html") (with-http-body (request entity) (let*
+((*html-output* (request-reply-stream request)) (limit-string (or
+(request-query-value "limit" request) "")) (limit (or (parse-integer
+limit-string :junk-allowed t) 1000))) (html (:html (:head (:title
+"Random")) (:body (:p "Random number: " (:print (random limit))))))))))
+Because request-query-value can return either NIL or an empty string,
+you have to deal with both those cases when parsing the parameter into a
+number to pass to RANDOM. You can deal with a NIL value when you bind
+limit-string, binding it to "" if there's no "limit" query parameter.
+Then you can use the :junk-allowed argument to PARSE-INTEGER to ensure
+that it returns either NIL (if it can't parse an integer from the string
+given) or an integer.  In the section "A Small Application Framework,"
+you'll develop some macros to make it easier to deal with grabbing query
+parameters and converting them to various types.
+
+
+File: pcl.info,  Node: 26-7,  Next: 26-8,  Prev: 26-6,  Up: Chapter 26
+
+Cookies
+=======
+
+In AllegroServe you can send a Set-Cookie header that tells the browser
+to save a cookie and send it along with subsequent requests by calling
+the function set-cookie-header within the body of with-http-response but
+before the call to with-http-body.  The first argument to the function
+is the request object, and the remaining arguments are keyword arguments
+used to set the various properties of the cookie.  The only two you must
+pass are the :name and :value arguments, both of which should be
+strings.  The other possible arguments that affect the cookie sent to
+the browser are :expires, :path, :domain, and :secure.
+
+   Of these, you need to worry only about :expires.  It controls how
+long the browser should save the cookie.  If :expires is NIL (the
+default), the browser will save the cookie only until it exits.  Other
+possible values are :never, which means the cookie should be kept
+forever, or a universal time as returned by GET-UNIVERSAL-TIME or
+ENCODE-UNIVERSAL-TIME. An :expires of zero tells the client to
+immediately discard an existing cookie.11
+
+   After you've set a cookie, you can use the function get-cookie-values
+to get an alist containing one name/value pair for each cookie sent by
+the browser.  From that alist, you can pick out individual cookie values
+using ASSOC and CDR.
+
+   The following function shows the names and values of all the cookies
+sent by the browser:
+
+   (defun show-cookies (request entity) (with-http-response (request
+entity :content-type "text/html") (with-http-body (request entity)
+(with-html-output ((request-reply-stream request)) (html (:standard-page
+(:title "Cookies") (if (null (get-cookie-values request)) (html (:p "No
+cookies."))  (html (:table (loop for (key .  value) in
+(get-cookie-values request) do (html (:tr (:td key) (:td
+value)))))))))))))
+
+   (publish :path "/show-cookies" :function 'show-cookies) The first
+time you load the page http://localhost:2001/show-cookies it should say
+"No cookies" as shown in Figure 26-7 since you haven't set any yet.
+
+   Figure 26-7.  http://localhost:2001/show-cookies with no cookies To
+set a cookie, you need another function, such as the following:
+
+   (defun set-cookie (request entity) (with-http-response (request
+entity :content-type "text/html") (set-cookie-header request :name
+"MyCookie" :value "A cookie value") (with-http-body (request entity)
+(with-html-output ((request-reply-stream request)) (html (:standard-page
+(:title "Set Cookie") (:p "Cookie set.")  (:p (:a :href "/show-cookies"
+"Look at cookie jar."))))))))
+
+   (publish :path "/set-cookie" :function 'set-cookie) If you enter the
+URL http://localhost:2001/set-cookie, your browser should display a page
+like the one in Figure 26-8.  Additionally, the server will send a
+Set-Cookie header with a cookie named "MyCookie" with "A cookie value"
+as its value.  If you click the link Look at cookie jar, you'll be taken
+to the /show-cookies page where you'll see the new cookie, as shown in
+Figure 26-9.  Because you didn't specify an :expires argument, the
+browser will continue to send the cookie with each request until you
+quit the browser.
+
+   Figure 26-8.  http://localhost:2001/set-cookie
+
+   Figure 26-9.  http://localhost:2001/show-cookies after setting a
+cookie
+
+
 File: pcl.info,  Node: 26-8,  Next: 26-9,  Prev: 26-7,  Up: Chapter 26
 
 A Small Application Framework
@@ -3521,22 +3702,26 @@ best bet is to go to the Web.  With the usual caveats about URLs going
 stale as soon as they're printed on paper, these are three of the best
 current starting points:
 
-   Common-Lisp.net (http://www.common-lisp.net/) is a site that hosts
-free and open-source Common Lisp projects, providing version control,
-mailing lists, and Web hosting of project pages.  In the first year and
-a half after the site went live, nearly a hundred projects were
-registered.  The Common Lisp Open Code Collection (CLOCC)
-(http://clocc.sourceforge.net/) is a slightly older collection of free
-software libraries, which are intended to be portable between Common
-Lisp implementations and self-contained, not relying on any libraries
-not included in CLOCC itself.  Cliki (http://www.cliki.net/) is a wiki
-devoted to free software in Common Lisp.  While, like any wiki, it may
-change at any time, typically it has quite a few links to libraries as
-well to various open-source Common Lisp implementations.  The eponymous
-software it runs on is also written in Common Lisp.  Linux users running
-the Debian or Gentoo distributions can also easily install an
-ever-growing number of Lisp libraries that have been packaged with those
-distributions' packing tools, apt-get on Debian and emerge on Gentoo.
+   * Common-Lisp.net (http://www.common-lisp.net/) is a site that hosts
+     free and open-source Common Lisp projects, providing version
+     control, mailing lists, and Web hosting of project pages.  In the
+     first year and a half after the site went live, nearly a hundred
+     projects were registered.
+   * The Common Lisp Open Code Collection (CLOCC)
+     (http://clocc.sourceforge.net/) is a slightly older collection of
+     free software libraries, which are intended to be portable between
+     Common Lisp implementations and self-contained, not relying on any
+     libraries not included in CLOCC itself.
+   * Cliki (http://www.cliki.net/) is a wiki devoted to free software in
+     Common Lisp.  While, like any wiki, it may change at any time,
+     typically it has quite a few links to libraries as well to various
+     open-source Common Lisp implementations.  The eponymous software it
+     runs on is also written in Common Lisp.
+
+   Linux users running the Debian or Gentoo distributions can also
+easily install an ever-growing number of Lisp libraries that have been
+packaged with those distributions' packing tools, apt-get on Debian and
+emerge on Gentoo.
 
    I won't recommend any specific libraries here since the library
 situation is changing every day-after years of envying the library

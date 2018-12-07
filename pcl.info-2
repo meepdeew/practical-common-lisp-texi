@@ -1,5 +1,110 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
+
+
+File: pcl.info,  Node: Chapter 10,  Next: Chapter 11,  Prev: Chapter 9,  Up: Top
+
+10. Numbers, Characters, and Strings
+====================================
+
+While functions, variables, macros, and 25 special operators provide the
+basic building blocks of the language itself, the building blocks of
+your programs will be the data structures you use.  As Fred Brooks
+observed in The Mythical Man-Month, "Representation is the essence of
+programming."1
+
+   Common Lisp provides built-in support for most of the data types
+typically found in modern languages: numbers (integer, floating point,
+and complex), characters, strings, arrays (including multidimensional
+arrays), lists, hash tables, input and output streams, and an
+abstraction for portably representing filenames.  Functions are also a
+first-class data type in Lisp-they can be stored in variables, passed as
+arguments, returned as return values, and created at runtime.
+
+   And these built-in types are just the beginning.  They're defined in
+the language standard so programmers can count on them being available
+and because they tend to be easier to implement efficiently when tightly
+integrated with the rest of the implementation.  But, as you'll see in
+later chapters, Common Lisp also provides several ways for you to define
+new data types, define operations on them, and integrate them with the
+built-in data types.
+
+   For now, however, you can start with the built-in data types.
+Because Lisp is a high-level language, the details of exactly how
+different data types are implemented are largely hidden.  From your
+point of view as a user of the language, the built-in data types are
+defined by the functions that operate on them.  So to learn a data type,
+you just have to learn about the functions you can use with it.
+Additionally, most of the built-in data types have a special syntax that
+the Lisp reader understands and that the Lisp printer uses.  That's why,
+for instance, you can write strings as "foo"; numbers as 123, 1/23, and
+1.23; and lists as (a b c).  I'll describe the syntax for different
+kinds of objects when I describe the functions for manipulating them.
+
+   In this chapter, I'll cover the built-in "scalar" data types:
+numbers, characters, and strings.  Technically, strings aren't true
+scalars-a string is a sequence of characters, and you can access
+individual characters and manipulate strings with a function that
+operates on sequences.  But I'll discuss strings here because most of
+the string-specific functions manipulate them as single values and also
+because of the close relation between several of the string functions
+and their character counterparts.
+
+* Menu:
+
+* 10-1::                 Numbers
+* 10-2::                 Numeric Literals
+* 10-3::                 Basic Math
+* 10-4::                 Numeric Comparisons
+* 10-5::                 Higher Math
+* 10-6::                 Characters
+* 10-7::                 Character Comparisons
+* 10-8::                 Strings
+* 10-9::                 String Comparisons
+
+
+File: pcl.info,  Node: 10-1,  Next: 10-2,  Prev: Chapter 10,  Up: Chapter 10
+
+Numbers
+=======
+
+Math, as Barbie says, is hard.2 Common Lisp can't make the math part any
+easier, but it does tend to get in the way a lot less than other
+programming languages.  That's not surprising given its mathematical
+heritage.  Lisp was originally designed by a mathematician as a tool for
+studying mathematical functions.  And one of the main projects of the
+MAC project at MIT was the Macsyma symbolic algebra system, written in
+Maclisp, one of Common Lisp's immediate predecessors.  Additionally,
+Lisp has been used as a teaching language at places such as MIT where
+even the computer science professors cringe at the thought of telling
+their students that 10/4 = 2, leading to Lisp's support for exact
+ratios.  And at various times Lisp has been called upon to compete with
+FORTRAN in the high-performance numeric computing arena.
+
+   One of the reasons Lisp is a nice language for math is its numbers
+behave more like true mathematical numbers than the approximations of
+numbers that are easy to implement in finite computer hardware.  For
+instance, integers in Common Lisp can be almost arbitrarily large rather
+than being limited by the size of a machine word.3 And dividing two
+integers results in an exact ratio, not a truncated value.  And since
+ratios are represented as pairs of arbitrarily sized integers, ratios
+can represent arbitrarily precise fractions.4
+
+   On the other hand, for high-performance numeric programming, you may
+be willing to trade the exactitude of rationals for the speed offered by
+using the hardware's underlying floating-point operations.  So, Common
+Lisp also offers several types of floating-point numbers, which are
+mapped by the implementation to the appropriate hardware-supported
+floating-point representations.5 Floats are also used to represent the
+results of a computation whose true mathematical value would be an
+irrational number.
+
+   Finally, Common Lisp supports complex numbers-the numbers that result
+from doing things such as taking square roots and logarithms of negative
+numbers.  The Common Lisp standard even goes so far as to specify the
+principal values and branch cuts for irrational and transcendental
+functions on the complex domain.
+
 
 File: pcl.info,  Node: 10-2,  Next: 10-3,  Prev: 10-1,  Up: Chapter 10
 
@@ -5591,131 +5696,4 @@ handler could get the same effect by invoking the use-value restart with
 NIL as the argument; that would require the condition handler to have
 intimate knowledge of how the parse-log-file works.  As it stands, the
 skip-log-entry is a properly abstracted part of the log-parsing API.
-
-
-File: pcl.info,  Node: 19-6,  Next: Chapter 20,  Prev: 19-5,  Up: Chapter 19
-
-Other Uses for Conditions
-=========================
-
-While conditions are mainly used for error handling, they can be used
-for other purposes-you can use conditions, condition handlers, and
-restarts to build a variety of protocols between low- and high-level
-code.  The key to understanding the potential of conditions is to
-understand that merely signaling a condition has no effect on the flow
-of control.
-
-   The primitive signaling function SIGNAL implements the mechanism of
-searching for an applicable condition handler and invoking its handler
-function.  The reason a handler can decline to handle a condition by
-returning normally is because the call to the handler function is just a
-regular function call-when the handler returns, control passes back to
-SIGNAL, which then looks for another, less recently bound handler that
-can handle the condition.  If SIGNAL runs out of condition handlers
-before the condition is handled, it also returns normally.
-
-   The ERROR function you've been using calls SIGNAL. If the error is
-handled by a condition handler that transfers control via HANDLER-CASE
-or by invoking a restart, then the call to SIGNAL never returns.  But if
-SIGNAL returns, ERROR invokes the debugger by calling the function
-stored in *DEBUGGER-HOOK*.  Thus, a call to ERROR can never return
-normally; the condition must be handled either by a condition handler or
-in the debugger.
-
-   Another condition signaling function, WARN, provides an example of a
-different kind of protocol built on the condition system.  Like ERROR,
-WARN calls SIGNAL to signal a condition.  But if SIGNAL returns, WARN
-doesn't invoke the debugger-it prints the condition to *ERROR-OUTPUT*
-and returns NIL, allowing its caller to proceed.  WARN also establishes
-a restart, MUFFLE-WARNING, around the call to SIGNAL that can be used by
-a condition handler to make WARN return without printing anything.  The
-restart function MUFFLE-WARNING finds and invokes its eponymous restart,
-signaling a CONTROL-ERROR if no such restart is available.  Of course, a
-condition signaled with WARN could also be handled in some other way-a
-condition handler could "promote" a warning to an error by handling it
-as if it were an error.
-
-   For instance, in the log-parsing application, if there were ways a
-log entry could be slightly malformed but still parsable, you could
-write parse-log-entry to go ahead and parse the slightly defective
-entries but to signal a condition with WARN when it did.  Then the
-larger application could choose to let the warning print, to muffle the
-warning, or to treat the warning like an error, recovering the same way
-it would from a malformed-log-entry-error.
-
-   A third error-signaling function, CERROR, provides yet another
-protocol.  Like ERROR, CERROR will drop you into the debugger if the
-condition it signals isn't handled.  But like WARN, it establishes a
-restart before it signals the condition.  The restart, CONTINUE, causes
-CERROR to return normally-if the restart is invoked by a condition
-handler, it will keep you out of the debugger altogether.  Otherwise,
-you can use the restart once you're in the debugger to resume the
-computation immediately after the call to CERROR. The function CONTINUE
-finds and invokes the CONTINUE restart if it's available and returns NIL
-otherwise.
-
-   You can also build your own protocols on SIGNAL-whenever low-level
-code needs to communicate information back up the call stack to
-higher-level code, the condition mechanism is a reasonable mechanism to
-use.  But for most purposes, one of the standard error or warning
-protocols should suffice.
-
-   You'll use the condition system in future practical chapters, both
-for regular error handling and, in Chapter 25, to help in handling a
-tricky corner case of parsing ID3 files.  Unfortunately, it's the fate
-of error handling to always get short shrift in programming texts-proper
-error handling, or lack thereof, is often the biggest difference between
-illustrative code and hardened, production-quality code.  The trick to
-writing the latter has more to do with adopting a particularly rigorous
-way of thinking about software than with the details of any particular
-programming language constructs.  That said, if your goal is to write
-that kind of software, you'll find the Common Lisp condition system is
-an excellent tool for writing robust code and one that fits quite nicely
-into Common Lisp's incremental development style.
-
-   In the next chapter I'll give a quick overview of some of the 25
-special operators you haven't had a chance to use yet, at least not
-directly.
-
-
-File: pcl.info,  Node: Chapter 20,  Next: Chapter 21,  Prev: Chapter 19,  Up: Top
-
-20. The Special Operators
-=========================
-
-In a way, the most impressive aspect of the condition system covered in
-the previous chapter is that if it wasn't already part of the language,
-it could be written entirely as a user-level library.  This is possible
-because Common Lisp's special operators-while none touches directly on
-signaling or handling conditions-provide enough access to the underlying
-machinery of the language to be able to do things such as control the
-unwinding of the stack.
-
-   In previous chapters I've discussed the most frequently used special
-operators, but it's worth being familiar with the others for two
-reasons.  First, some of the infrequently used special operators are
-used infrequently simply because whatever need they address doesn't
-arise that often.  It's good to be familiar with these special operators
-so when one of them is called for, you'll at least know it exists.
-Second, because the 25 special operators-along with the basic rule for
-evaluating function calls and the built-in data types-provide the
-foundation for the rest of the language, a passing familiarity with them
-will help you understand how the language works.
-
-   In this chapter, I'll discuss all the special operators, some briefly
-and some at length, so you can see how they fit together.  I'll point
-out which ones you can expect to use directly in your own code, which
-ones serve as the basis for other constructs that you use all the time,
-and which ones you'll rarely use directly but which can be handy in
-macro-generated code.
-
-* Menu:
-
-* 20-1::        Controlling Evaluation
-* 20-2::        Manipulating the Lexical Environment
-* 20-3::        Local Flow of Control
-* 20-4::        Unwinding the Stack
-* 20-5::        Multiple Values
-* 20-6::        EVAL-WHEN
-* 20-7::        Other Special Operators
 

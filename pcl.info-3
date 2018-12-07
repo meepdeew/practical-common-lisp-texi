@@ -1,6 +1,133 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
 
+File: pcl.info,  Node: 19-6,  Next: Chapter 20,  Prev: 19-5,  Up: Chapter 19
+
+Other Uses for Conditions
+=========================
+
+While conditions are mainly used for error handling, they can be used
+for other purposes-you can use conditions, condition handlers, and
+restarts to build a variety of protocols between low- and high-level
+code.  The key to understanding the potential of conditions is to
+understand that merely signaling a condition has no effect on the flow
+of control.
+
+   The primitive signaling function SIGNAL implements the mechanism of
+searching for an applicable condition handler and invoking its handler
+function.  The reason a handler can decline to handle a condition by
+returning normally is because the call to the handler function is just a
+regular function call-when the handler returns, control passes back to
+SIGNAL, which then looks for another, less recently bound handler that
+can handle the condition.  If SIGNAL runs out of condition handlers
+before the condition is handled, it also returns normally.
+
+   The ERROR function you've been using calls SIGNAL. If the error is
+handled by a condition handler that transfers control via HANDLER-CASE
+or by invoking a restart, then the call to SIGNAL never returns.  But if
+SIGNAL returns, ERROR invokes the debugger by calling the function
+stored in *DEBUGGER-HOOK*.  Thus, a call to ERROR can never return
+normally; the condition must be handled either by a condition handler or
+in the debugger.
+
+   Another condition signaling function, WARN, provides an example of a
+different kind of protocol built on the condition system.  Like ERROR,
+WARN calls SIGNAL to signal a condition.  But if SIGNAL returns, WARN
+doesn't invoke the debugger-it prints the condition to *ERROR-OUTPUT*
+and returns NIL, allowing its caller to proceed.  WARN also establishes
+a restart, MUFFLE-WARNING, around the call to SIGNAL that can be used by
+a condition handler to make WARN return without printing anything.  The
+restart function MUFFLE-WARNING finds and invokes its eponymous restart,
+signaling a CONTROL-ERROR if no such restart is available.  Of course, a
+condition signaled with WARN could also be handled in some other way-a
+condition handler could "promote" a warning to an error by handling it
+as if it were an error.
+
+   For instance, in the log-parsing application, if there were ways a
+log entry could be slightly malformed but still parsable, you could
+write parse-log-entry to go ahead and parse the slightly defective
+entries but to signal a condition with WARN when it did.  Then the
+larger application could choose to let the warning print, to muffle the
+warning, or to treat the warning like an error, recovering the same way
+it would from a malformed-log-entry-error.
+
+   A third error-signaling function, CERROR, provides yet another
+protocol.  Like ERROR, CERROR will drop you into the debugger if the
+condition it signals isn't handled.  But like WARN, it establishes a
+restart before it signals the condition.  The restart, CONTINUE, causes
+CERROR to return normally-if the restart is invoked by a condition
+handler, it will keep you out of the debugger altogether.  Otherwise,
+you can use the restart once you're in the debugger to resume the
+computation immediately after the call to CERROR. The function CONTINUE
+finds and invokes the CONTINUE restart if it's available and returns NIL
+otherwise.
+
+   You can also build your own protocols on SIGNAL-whenever low-level
+code needs to communicate information back up the call stack to
+higher-level code, the condition mechanism is a reasonable mechanism to
+use.  But for most purposes, one of the standard error or warning
+protocols should suffice.
+
+   You'll use the condition system in future practical chapters, both
+for regular error handling and, in Chapter 25, to help in handling a
+tricky corner case of parsing ID3 files.  Unfortunately, it's the fate
+of error handling to always get short shrift in programming texts-proper
+error handling, or lack thereof, is often the biggest difference between
+illustrative code and hardened, production-quality code.  The trick to
+writing the latter has more to do with adopting a particularly rigorous
+way of thinking about software than with the details of any particular
+programming language constructs.  That said, if your goal is to write
+that kind of software, you'll find the Common Lisp condition system is
+an excellent tool for writing robust code and one that fits quite nicely
+into Common Lisp's incremental development style.
+
+   In the next chapter I'll give a quick overview of some of the 25
+special operators you haven't had a chance to use yet, at least not
+directly.
+
+
+File: pcl.info,  Node: Chapter 20,  Next: Chapter 21,  Prev: Chapter 19,  Up: Top
+
+20. The Special Operators
+=========================
+
+In a way, the most impressive aspect of the condition system covered in
+the previous chapter is that if it wasn't already part of the language,
+it could be written entirely as a user-level library.  This is possible
+because Common Lisp's special operators-while none touches directly on
+signaling or handling conditions-provide enough access to the underlying
+machinery of the language to be able to do things such as control the
+unwinding of the stack.
+
+   In previous chapters I've discussed the most frequently used special
+operators, but it's worth being familiar with the others for two
+reasons.  First, some of the infrequently used special operators are
+used infrequently simply because whatever need they address doesn't
+arise that often.  It's good to be familiar with these special operators
+so when one of them is called for, you'll at least know it exists.
+Second, because the 25 special operators-along with the basic rule for
+evaluating function calls and the built-in data types-provide the
+foundation for the rest of the language, a passing familiarity with them
+will help you understand how the language works.
+
+   In this chapter, I'll discuss all the special operators, some briefly
+and some at length, so you can see how they fit together.  I'll point
+out which ones you can expect to use directly in your own code, which
+ones serve as the basis for other constructs that you use all the time,
+and which ones you'll rarely use directly but which can be handy in
+macro-generated code.
+
+* Menu:
+
+* 20-1::        Controlling Evaluation
+* 20-2::        Manipulating the Lexical Environment
+* 20-3::        Local Flow of Control
+* 20-4::        Unwinding the Stack
+* 20-5::        Multiple Values
+* 20-6::        EVAL-WHEN
+* 20-7::        Other Special Operators
+
+
 File: pcl.info,  Node: 20-1,  Next: 20-2,  Prev: Chapter 20,  Up: Chapter 20
 
 Controlling Evaluation
@@ -5647,185 +5774,4 @@ entity :content-type "text/html") (with-http-body (request entity)
 (with-html-output ((request-reply-stream request)) (html (:html (:head
 (:title "Random")) (:body (:p "Random number: " (:print (random
 1000))))))))))
-
-
-File: pcl.info,  Node: 26-5,  Next: 26-6,  Prev: 26-4,  Up: Chapter 26
-
-HTML Macros
-===========
-
-Another feature of FOO is that it allows you to define HTML "macros"
-that can translate arbitrary forms into HTML s-expressions that the html
-macro understands.  For instance, suppose you frequently find yourself
-writing pages of this form:
-
-   (:html (:head (:title "Some title")) (:body (:h1 "Some title") ...
-stuff ...))  You could define an HTML macro to capture that pattern like
-this:
-
-   (define-html-macro :standard-page ((&key title) &body body) '(:html
-(:head (:title ,title)) (:body (:h1 ,title) ,@body))) Now you can use
-the "tag" :standard-page in your s-expression HTML, and it'll be
-expanded before being interpreted or compiled.  For instance, the
-following:
-
-   (html (:standard-page (:title "Hello") (:p "Hello, world.")))
-generates the following HTML:
-
-   <html> <head> <title>Hello</title> </head> <body> <h1>Hello</h1>
-<p>Hello, world.</p> </body> </html>
-
-
-File: pcl.info,  Node: 26-6,  Next: 26-7,  Prev: 26-5,  Up: Chapter 26
-
-Query Parameters
-================
-
-Of course, generating HTML output is only half of Web programming.  The
-other thing you need to do is get input from the user.  As I discussed
-in the "A 30-Second Intro to Server-Side Web Programming" section, when
-a browser requests a page from a Web server, it can send query
-parameters in the URL and post data, both of which act as input to the
-server-side code.
-
-   AllegroServe, like most Web programming frameworks, takes care of
-parsing both these sources of input for you.  By the time your published
-functions are called, all the key/value pairs from the query string
-and/or post data have been decoded and placed into an alist that you can
-retrieve from the request object with the function request-query.  The
-following function returns a page showing all the query parameters it
-receives:
-
-   (defun show-query-params (request entity) (with-http-response
-(request entity :content-type "text/html") (with-http-body (request
-entity) (with-html-output ((request-reply-stream request)) (html
-(:standard-page (:title "Query Parameters") (if (request-query request)
-(html (:table :border 1 (loop for (k .  v) in (request-query request) do
-(html (:tr (:td k) (:td v)))))) (html (:p "No query
-parameters.")))))))))
-
-   (publish :path "/show-query-params" :function 'show-query-params) If
-you give your browser a URL with a query string in it like the
-following:
-
-   http://localhost:2001/show-query-params?foo=bar&baz=10 you should get
-back a page similar to the one shown in Figure 26-4.
-
-   Figure 26-4.  http://localhost:2001/show-query-params?foo=bar&baz=10
-To generate some post data, you need an HTML form.  The following
-function generates a simple form, which submits its data to
-show-query-params:
-
-   (defun simple-form (request entity) (with-http-response (request
-entity :content-type "text/html") (with-http-body (request entity) (let
-((*html-output* (request-reply-stream request))) (html (:html (:head
-(:title "Simple Form")) (:body (:form :method "POST" :action
-"/show-query-params" (:table (:tr (:td "Foo") (:td (:input :name "foo"
-:size 20))) (:tr (:td "Password") (:td (:input :name "password" :type
-"password" :size 20)))) (:p (:input :name "submit" :type "submit" :value
-"Okay") (:input ::type "reset" :value "Reset"))))))))))
-
-   (publish :path "/simple-form" :function 'simple-form) Point your
-browser to http://localhost:2001/simple-form, and you should see a page
-like the one in Figure 26-5.
-
-   If you fill in the form with the "abc" and "def" values, clicking the
-Okay button should take you to a page like the one in Figure 26-6.
-
-   Figure 26-5.  http://localhost:2001/simple-form
-
-   Figure 26-6.  Result of submitting the simple form However, most of
-the time you won't need to iterate over all the query parameters; you'll
-want to pick out individual parameters.  For instance, you might want to
-modify random-number so the limit value you pass to RANDOM can be
-supplied via a query parameter.  In that case, you use the function
-request-query-value, which takes the request object and the name of the
-parameter whose value you want and returns the value as a string or NIL
-if no such parameter has been supplied.  A parameterizable version of
-random-number might look like this:
-
-   (defun random-number (request entity) (with-http-response (request
-entity :content-type "text/html") (with-http-body (request entity) (let*
-((*html-output* (request-reply-stream request)) (limit-string (or
-(request-query-value "limit" request) "")) (limit (or (parse-integer
-limit-string :junk-allowed t) 1000))) (html (:html (:head (:title
-"Random")) (:body (:p "Random number: " (:print (random limit))))))))))
-Because request-query-value can return either NIL or an empty string,
-you have to deal with both those cases when parsing the parameter into a
-number to pass to RANDOM. You can deal with a NIL value when you bind
-limit-string, binding it to "" if there's no "limit" query parameter.
-Then you can use the :junk-allowed argument to PARSE-INTEGER to ensure
-that it returns either NIL (if it can't parse an integer from the string
-given) or an integer.  In the section "A Small Application Framework,"
-you'll develop some macros to make it easier to deal with grabbing query
-parameters and converting them to various types.
-
-
-File: pcl.info,  Node: 26-7,  Next: 26-8,  Prev: 26-6,  Up: Chapter 26
-
-Cookies
-=======
-
-In AllegroServe you can send a Set-Cookie header that tells the browser
-to save a cookie and send it along with subsequent requests by calling
-the function set-cookie-header within the body of with-http-response but
-before the call to with-http-body.  The first argument to the function
-is the request object, and the remaining arguments are keyword arguments
-used to set the various properties of the cookie.  The only two you must
-pass are the :name and :value arguments, both of which should be
-strings.  The other possible arguments that affect the cookie sent to
-the browser are :expires, :path, :domain, and :secure.
-
-   Of these, you need to worry only about :expires.  It controls how
-long the browser should save the cookie.  If :expires is NIL (the
-default), the browser will save the cookie only until it exits.  Other
-possible values are :never, which means the cookie should be kept
-forever, or a universal time as returned by GET-UNIVERSAL-TIME or
-ENCODE-UNIVERSAL-TIME. An :expires of zero tells the client to
-immediately discard an existing cookie.11
-
-   After you've set a cookie, you can use the function get-cookie-values
-to get an alist containing one name/value pair for each cookie sent by
-the browser.  From that alist, you can pick out individual cookie values
-using ASSOC and CDR.
-
-   The following function shows the names and values of all the cookies
-sent by the browser:
-
-   (defun show-cookies (request entity) (with-http-response (request
-entity :content-type "text/html") (with-http-body (request entity)
-(with-html-output ((request-reply-stream request)) (html (:standard-page
-(:title "Cookies") (if (null (get-cookie-values request)) (html (:p "No
-cookies."))  (html (:table (loop for (key .  value) in
-(get-cookie-values request) do (html (:tr (:td key) (:td
-value)))))))))))))
-
-   (publish :path "/show-cookies" :function 'show-cookies) The first
-time you load the page http://localhost:2001/show-cookies it should say
-"No cookies" as shown in Figure 26-7 since you haven't set any yet.
-
-   Figure 26-7.  http://localhost:2001/show-cookies with no cookies To
-set a cookie, you need another function, such as the following:
-
-   (defun set-cookie (request entity) (with-http-response (request
-entity :content-type "text/html") (set-cookie-header request :name
-"MyCookie" :value "A cookie value") (with-http-body (request entity)
-(with-html-output ((request-reply-stream request)) (html (:standard-page
-(:title "Set Cookie") (:p "Cookie set.")  (:p (:a :href "/show-cookies"
-"Look at cookie jar."))))))))
-
-   (publish :path "/set-cookie" :function 'set-cookie) If you enter the
-URL http://localhost:2001/set-cookie, your browser should display a page
-like the one in Figure 26-8.  Additionally, the server will send a
-Set-Cookie header with a cookie named "MyCookie" with "A cookie value"
-as its value.  If you click the link Look at cookie jar, you'll be taken
-to the /show-cookies page where you'll see the new cookie, as shown in
-Figure 26-9.  Because you didn't specify an :expires argument, the
-browser will continue to send the cookie with each request until you
-quit the browser.
-
-   Figure 26-8.  http://localhost:2001/set-cookie
-
-   Figure 26-9.  http://localhost:2001/show-cookies after setting a
-cookie
 

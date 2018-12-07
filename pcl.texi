@@ -5,11 +5,8 @@
 @heading Practical Common Lisp
 
 @noindent
-`that book is dead sexy` —Xach on #lisp@*
-@copyright{} 2003-2009, Peter Seibel
-
-@noindent
 Unofficial Texinfo Format
+@copyright{} Peter Seibel
 
 @end ifinfo
 
