@@ -1,5 +1,148 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
+
+File: pcl.info,  Node: 9-6,  Next: 9-7,  Prev: 9-5,  Up: Chapter 9
+
+A Hierarchy of Tests
+====================
+
+Now that you've established test functions as first-class citizens, the
+question might arise, should test-arithmetic be a test function?  As
+things stand, it doesn't really matter-if you did define it with
+deftest, its binding of *test-name* would be shadowed by the bindings in
+test-+ and test-* before any results are reported.
+
+   But now imagine you've got thousands of test cases to organize.  The
+first level of organization is provided by test functions such as test-+
+and test-* that directly call check.  But with thousands of test cases,
+you'll likely need other levels of organization.  Functions such as
+test-arithmetic can group related test functions into test suites.  Now
+suppose some low-level test functions are called from multiple test
+suites.  It's not unheard of for a test case to pass in one context but
+fail in another.  If that happens, you'll probably want to know more
+than just what low-level test function contains the test case.
+
+   If you define the test suite functions such as test-arithmetic with
+deftest and make a small change to the *test-name* bookkeeping, you can
+have results reported with a "fully qualified" path to the test case,
+something like this:
+
+   pass ...  (TEST-ARITHMETIC TEST-+): (= (+ 1 2) 3) Because you've
+already abstracted the process of defining a test function, you can
+change the bookkeeping details without modifying the code of the test
+functions.6 To make *test-name* hold a list of test function names
+instead of just the name of the most recently entered test function, you
+just need to change this binding form:
+
+   (let ((*test-name* ',name)) to the following:
+
+   (let ((*test-name* (append *test-name* (list ',name)))) Since APPEND
+returns a new list made up of the elements of its arguments, this
+version will bind *test-name* to a list containing the old contents of
+*test-name* with the new name tacked onto the end.7 When each test
+function returns, the old value of *test-name* will be restored.
+
+   Now you can redefine test-arithmetic with deftest instead of DEFUN.
+
+   (deftest test-arithmetic () (combine-results (test-+) (test-*))) The
+results now show exactly how you got to each test expression.
+
+   CL-USER> (test-arithmetic) pass ...  (TEST-ARITHMETIC TEST-+): (= (+
+1 2) 3) pass ...  (TEST-ARITHMETIC TEST-+): (= (+ 1 2 3) 6) pass ...
+(TEST-ARITHMETIC TEST-+): (= (+ -1 -3) -4) pass ...  (TEST-ARITHMETIC
+TEST-*): (= (* 2 2) 4) pass ...  (TEST-ARITHMETIC TEST-*): (= (* 3 5)
+15) T As your test suite grows, you can add new layers of test
+functions; as long as they're defined with deftest, the results will be
+reported correctly.  For instance, the following:
+
+   (deftest test-math () (test-arithmetic)) would generate these
+results:
+
+   CL-USER> (test-math) pass ...  (TEST-MATH TEST-ARITHMETIC TEST-+): (=
+(+ 1 2) 3) pass ...  (TEST-MATH TEST-ARITHMETIC TEST-+): (= (+ 1 2 3) 6)
+pass ...  (TEST-MATH TEST-ARITHMETIC TEST-+): (= (+ -1 -3) -4) pass ...
+(TEST-MATH TEST-ARITHMETIC TEST-*): (= (* 2 2) 4) pass ...  (TEST-MATH
+TEST-ARITHMETIC TEST-*): (= (* 3 5) 15) T
+
+
+File: pcl.info,  Node: 9-7,  Next: Chapter 10,  Prev: 9-6,  Up: Chapter 9
+
+Wrapping Up
+===========
+
+You could keep going, adding more features to this test framework.  But
+as a framework for writing tests with a minimum of busywork and easily
+running them from the REPL, this is a reasonable start.  Here's the
+complete code, all 26 lines of it:
+
+   (defvar *test-name* nil)
+
+   (defmacro deftest (name parameters &body body) "Define a test
+function.  Within a test function we can call other test functions or
+use 'check' to run individual test cases."  '(defun ,name ,parameters
+(let ((*test-name* (append *test-name* (list ',name)))) ,@body)))
+
+   (defmacro check (&body forms) "Run each expression in 'forms' as a
+test case."  '(combine-results ,@(loop for f in forms collect
+'(report-result ,f ',f))))
+
+   (defmacro combine-results (&body forms) "Combine the results (as
+booleans) of evaluating 'forms' in order."  (with-gensyms (result) '(let
+((,result t)) ,@(loop for f in forms collect '(unless ,f (setf ,result
+nil))) ,result)))
+
+   (defun report-result (result form) "Report the results of a single
+test case.  Called by 'check'."  (format t "~:[FAIL~;pass~] ...  ~a:
+~a~%" result *test-name* form) result) It's worth reviewing how you got
+here because it's illustrative of how programming in Lisp often goes.
+
+   You started by defining a simple version of your problem-how to
+evaluate a bunch of boolean expressions and find out if they all
+returned true.  Just ANDing them together worked and was syntactically
+clean but revealed the need for better result reporting.  So you wrote
+some really simpleminded code, chock-full of duplication and error-prone
+idioms that reported the results the way you wanted.
+
+   The next step was to see if you could refactor the second version
+into something as clean as the former.  You started with a standard
+refactoring technique of extracting some code into a function,
+report-result.  Unfortunately, you could see that using report-result
+was going to be tedious and error-prone since you had to pass the test
+expression twice, once for the value and once as quoted data.  So you
+wrote the check macro to automate the details of calling report-result
+correctly.
+
+   While writing check, you realized as long as you were generating
+code, you could make a single call to check to generate multiple calls
+to report-result, getting you back to a version of test-+ about as
+concise as the original AND version.
+
+   At that point you had the check API nailed down, which allowed you to
+start mucking with how it worked on the inside.  The next task was to
+fix check so the code it generated would return a boolean indicating
+whether all the test cases had passed.  Rather than immediately hacking
+away at check, you paused to indulge in a little language design by
+fantasy.  What if-you fantasized-there was already a
+non-short-circuiting AND construct.  Then fixing check would be trivial.
+Returning from fantasyland you realized there was no such construct but
+that you could write one in a few lines.  After writing combine-results,
+the fix to check was indeed trivial.
+
+   At that point all that was left was to make a few more improvements
+to the way you reported test results.  Once you started making changes
+to the test functions, you realized those functions represented a
+special category of function that deserved its own abstraction.  So you
+wrote deftest to abstract the pattern of code that turns a regular
+function into a test function.
+
+   With deftest providing an abstraction barrier between the test
+definitions and the underlying machinery, you were able to enhance the
+result reporting without touching the test functions.
+
+   Now, with the basics of functions, variables, and macros mastered,
+and a little practical experience using them, you're ready to start
+exploring Common Lisp's rich standard library of functions and data
+types.
 
 
 File: pcl.info,  Node: Chapter 10,  Next: Chapter 11,  Prev: Chapter 9,  Up: Top
@@ -5647,53 +5790,4 @@ Thus, when skip-log-entry is bound with HANDLER-BIND, it will handle the
 condition by invoking the skip-log-entry restart if one is available and
 otherwise will return normally, giving other condition handlers, bound
 higher on the stack, a chance to handle the condition.
-
-
-File: pcl.info,  Node: 19-5,  Next: 19-6,  Prev: 19-4,  Up: Chapter 19
-
-Providing Multiple Restarts
-===========================
-
-Since restarts must be explicitly invoked to have any effect, you can
-define multiple restarts, each providing a different recovery strategy.
-As I mentioned earlier, not all log-parsing applications will
-necessarily want to skip malformed entries.  Some applications might
-want parse-log-file to include a special kind of object representing
-malformed entries in the list of log-entry objects; other applications
-may have some way to repair a malformed entry and may want a way to pass
-the fixed entry back to parse-log-entry.
-
-   To allow more complex recovery protocols, restarts can take arbitrary
-arguments, which are passed in the call to INVOKE-RESTART. You can
-provide support for both the recovery strategies I just mentioned by
-adding two restarts to parse-log-entry, each of which takes a single
-argument.  One simply returns the value it's passed as the return value
-of parse-log-entry, while the other tries to parse its argument in the
-place of the original log entry.
-
-   (defun parse-log-entry (text) (if (well-formed-log-entry-p text)
-(make-instance 'log-entry ...)  (restart-case (error
-'malformed-log-entry-error :text text) (use-value (value) value)
-(reparse-entry (fixed-text) (parse-log-entry fixed-text))))) The name
-USE-VALUE is a standard name for this kind of restart.  Common Lisp
-defines a restart function for USE-VALUE similar to the skip-log-entry
-function you just defined.  So, if you wanted to change the policy on
-malformed entries to one that created an instance of
-malformed-log-entry, you could change log-analyzer to this (assuming the
-existence of a malformed-log-entry class with a :text initarg):
-
-   (defun log-analyzer () (handler-bind ((malformed-log-entry-error
-#'(lambda (c) (use-value (make-instance 'malformed-log-entry :text (text
-c)))))) (dolist (log (find-all-logs)) (analyze-log log)))) You could
-also have put these new restarts into parse-log-file instead of
-parse-log-entry.  However, you generally want to put restarts in the
-lowest-level code possible.  It wouldn't, though, be appropriate to move
-the skip-log-entry restart into parse-log-entry since that would cause
-parse-log-entry to sometimes return normally with NIL, the very thing
-you started out trying to avoid.  And it'd be an equally bad idea to
-remove the skip-log-entry restart on the theory that the condition
-handler could get the same effect by invoking the use-value restart with
-NIL as the argument; that would require the condition handler to have
-intimate knowledge of how the parse-log-file works.  As it stands, the
-skip-log-entry is a properly abstracted part of the log-parsing API.
 

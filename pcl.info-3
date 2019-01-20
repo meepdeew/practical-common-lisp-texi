@@ -1,6 +1,55 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
 
+File: pcl.info,  Node: 19-5,  Next: 19-6,  Prev: 19-4,  Up: Chapter 19
+
+Providing Multiple Restarts
+===========================
+
+Since restarts must be explicitly invoked to have any effect, you can
+define multiple restarts, each providing a different recovery strategy.
+As I mentioned earlier, not all log-parsing applications will
+necessarily want to skip malformed entries.  Some applications might
+want parse-log-file to include a special kind of object representing
+malformed entries in the list of log-entry objects; other applications
+may have some way to repair a malformed entry and may want a way to pass
+the fixed entry back to parse-log-entry.
+
+   To allow more complex recovery protocols, restarts can take arbitrary
+arguments, which are passed in the call to INVOKE-RESTART. You can
+provide support for both the recovery strategies I just mentioned by
+adding two restarts to parse-log-entry, each of which takes a single
+argument.  One simply returns the value it's passed as the return value
+of parse-log-entry, while the other tries to parse its argument in the
+place of the original log entry.
+
+   (defun parse-log-entry (text) (if (well-formed-log-entry-p text)
+(make-instance 'log-entry ...)  (restart-case (error
+'malformed-log-entry-error :text text) (use-value (value) value)
+(reparse-entry (fixed-text) (parse-log-entry fixed-text))))) The name
+USE-VALUE is a standard name for this kind of restart.  Common Lisp
+defines a restart function for USE-VALUE similar to the skip-log-entry
+function you just defined.  So, if you wanted to change the policy on
+malformed entries to one that created an instance of
+malformed-log-entry, you could change log-analyzer to this (assuming the
+existence of a malformed-log-entry class with a :text initarg):
+
+   (defun log-analyzer () (handler-bind ((malformed-log-entry-error
+#'(lambda (c) (use-value (make-instance 'malformed-log-entry :text (text
+c)))))) (dolist (log (find-all-logs)) (analyze-log log)))) You could
+also have put these new restarts into parse-log-file instead of
+parse-log-entry.  However, you generally want to put restarts in the
+lowest-level code possible.  It wouldn't, though, be appropriate to move
+the skip-log-entry restart into parse-log-entry since that would cause
+parse-log-entry to sometimes return normally with NIL, the very thing
+you started out trying to avoid.  And it'd be an equally bad idea to
+remove the skip-log-entry restart on the theory that the condition
+handler could get the same effect by invoking the use-value restart with
+NIL as the argument; that would require the condition handler to have
+intimate knowledge of how the parse-log-file works.  As it stands, the
+skip-log-entry is a properly abstracted part of the log-parsing API.
+
+
 File: pcl.info,  Node: 19-6,  Next: Chapter 20,  Prev: 19-5,  Up: Chapter 19
 
 Other Uses for Conditions
@@ -5656,122 +5705,4 @@ http:// localhost:2001/random-number to get a page with a random number
 on it, as shown in Figure 26-3.
 
    Figure 26-3.  http://localhost:2001/random-number
-
-
-File: pcl.info,  Node: 26-4,  Next: 26-5,  Prev: 26-3,  Up: Chapter 26
-
-Generating HTML
-===============
-
-Although using FORMAT to emit HTML works fine for the simple pages I've
-discussed so far, as you start building more elaborate pages it'd be
-nice to have a more concise way to generate HTML. Several libraries are
-available for generating HTML from an s-expression representation
-including one, htmlgen, that's included with AllegroServe.  In this
-chapter you'll use a library called FOO,10 which is loosely modeled on
-Franz's htmlgen and whose implementation you'll look at in more detail
-in Chapters 30 and 31.  For now, however, you just need to know how to
-use FOO.
-
-   Generating HTML from within Lisp is quite natural since s-expressions
-and HTML are essentially isomorphic.  You can represent HTML elements
-with s-expressions by treating each element in HTML as a list "tagged"
-with an appropriate first element, such as a keyword symbol of the same
-name as the HTML tag.  Thus, the HTML <p>foo</p> is represented by the
-s-expression (:p "foo").  Because HTML elements nest the same way lists
-in s-expressions do, this scheme extends to more complex HTML. For
-instance, this HTML:
-
-   <html> <head> <title>Hello</title> </head> <body> <p>Hello,
-world!</p> </body> </html> could be represented with the following
-s-expression:
-
-   (:html (:head (:title "Hello")) (:body (:p "Hello, world!")))  HTML
-elements with attributes complicate things a bit but not in an
-insurmountable way.  FOO supports two ways of including attributes in a
-tag.  One is to simply follow the first item of the list with
-keyword/value pairs.  The first element that follows a keyword/value
-pair that's not itself a keyword symbol marks the beginning of the
-element's contents.  Thus, you'd represent this HTML:
-
-   <a href="foo.html">This is a link</a> with the following
-s-expression:
-
-   (:a :href "foo.html" "This is a link") The other syntax FOO supports
-is to group the tag name and attributes into their own list like this:
-
-   ((:a :href "foo.html") "This is link.")  FOO can use the s-expression
-representation of HTML in two ways.  The function emit-html takes an
-HTML s-expression and outputs the corresponding HTML.
-
-   WEB> (emit-html '(:html (:head (:title "Hello")) (:body (:p "Hello,
-world!"))))  <html> <head> <title>Hello</title> </head> <body> <p>Hello,
-world!</p> </body> </html> T However, emit-html isn't always the most
-efficient way to generate HTML because its argument must be a complete
-s-expression representation of the HTML to be generated.  While it's
-easy to build such a representation, it's not always particularly
-efficient.  For instance, suppose you wanted to make an HTML page
-containing a list of 10,000 random numbers.  You could build the
-s-expression using a backquote template and then pass it to emit-html
-like this:
-
-   (emit-html '(:html (:head (:title "Random numbers")) (:body (:h1
-"Random numbers") (:p ,@(loop repeat 10000 collect (random 1000) collect
-" "))))) However, this has to build a tree containing a 10,000-element
-list before it can even start emitting HTML, and the whole s-expression
-will become garbage as soon as the HTML is emitted.  To avoid this
-inefficiency, FOO also provides a macro html, which allows you to embed
-bits of Lisp code in the middle of an HTML s-expression.
-
-   Literal values such as strings and numbers in the input to html are
-interpolated into the output HTML. Likewise, symbols are treated as
-variable references, and code is generated to emit their value at
-runtime.  Thus, both of these:
-
-   (html (:p "foo"))
-
-   (let ((x "foo")) (html (:p x))) will emit the following:
-
-   <p>foo</p> List forms that don't start with a keyword symbol are
-assumed to be code and are embedded in the generated code.  Any values
-the embedded code returns will be ignored, but the code can emit more
-HTML by calling html itself.  For instance, to emit the contents of a
-list in HTML, you might write this:
-
-   (html (:ul (dolist (item (list 1 2 3)) (html (:li item))))) which
-will emit the following HTML:
-
-   <ul> <li>1</li> <li>2</li> <li>3</li> </ul> If you want to emit the
-value of a list form, you must wrap it in the pseudotag :print.  Thus,
-this expression:
-
-   (html (:p (+ 1 2))) generates this HTML after computing and
-discarding the value 3:
-
-   <p></p> To emit the 3, you must write this:
-
-   (html (:p (:print (+ 1 2)))) Or you could compute the value and store
-it in a variable outside the call to html like this:
-
-   (let ((x (+ 1 2))) (html (:p x))) Thus, you can use the html macro to
-generate the list of random numbers like this:
-
-   (html (:html (:head (:title "Random numbers")) (:body (:h1 "Random
-numbers") (:p (loop repeat 10 do (html (:print (random 1000)) " "))))))
-The macro version will be quite a bit more efficient than the emit-html
-version.  Not only do you never have to generate an s-expression
-representing the whole page, also much of the work that emit-html does
-at runtime to interpret the s-expression will be done once, when the
-macro is expanded, rather than every time the code is run.
-
-   You can control where the output generated by both html and emit-html
-is sent with the macro with-html-output, which is part of the FOO
-library.  Thus, you can use the with-html-output and html macros from
-FOO to rewrite random-number like this:
-
-   (defun random-number (request entity) (with-http-response (request
-entity :content-type "text/html") (with-http-body (request entity)
-(with-html-output ((request-reply-stream request)) (html (:html (:head
-(:title "Random")) (:body (:p "Random number: " (:print (random
-1000))))))))))
 

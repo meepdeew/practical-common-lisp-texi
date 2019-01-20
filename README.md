@@ -1,8 +1,10 @@
 # practical-common-lisp-texi
 
-[Practical Common Lisp](http://gigamonkeys.com/book/) typeset for [GNU Texinfo](https://www.gnu.org/software/texinfo/), Emacs' interactive documentation system.
+[Practical Common Lisp](http://gigamonkeys.com/book/) typeset for [GNU Texinfo](https://www.gnu.org/software/texinfo/), Emacs' interactive documentation system. For when you've read enough in your browser to know that you don't want to read it in your browser.
 
 To view in info-reader mode, open `pcl.info` with `C-u C-h i` (just as you would visit a file with `C-x C-f`).
+
+![How It Looks](./pcl-info-screenshot.png)
 
 TODOs:
 - [ ] mid-section asides
@@ -84,3 +86,5 @@ for bar.
 
 green font!
 ‘Here's how you do it—and why’
+
+Build from the project root with $ makeinfo pcl.texi
