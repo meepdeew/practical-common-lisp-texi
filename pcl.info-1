@@ -4106,11 +4106,11 @@ File: pcl.info,  Node: Chapter 6,  Next: Chapter 7,  Prev: Chapter 5,  Up: Top
 ============
 
 The next basic building block we need to look at are variables.  Common
-Lisp supports two kinds of variables: lexical and dynamic.1 These two
-types correspond roughly to "local" and "global" variables in other
+Lisp supports two kinds of variables: lexical and dynamic.  (1) These
+two types correspond roughly to "local" and "global" variables in other
 languages.  However, the correspondence is only approximate.  On one
 hand, some languages' "local" variables are in fact much like Common
-Lisp's dynamic variables.2 And on the other, some languages' local
+Lisp's dynamic variables.  (2) And on the other, some languages' local
 variables are lexically scoped without providing all the capabilities
 provided by Common Lisp's lexical variables.  In particular, not all
 languages that provide lexically scoped variables support closures.
@@ -4133,6 +4133,24 @@ variables and just about every other place that can hold a value.
 * 6-6::              Generalized Assignment
 * 6-7::              Other Ways to Modify Places
 
+   ---------- Footnotes ----------
+
+   (1) Dynamic variables are also sometimes called special variables for
+reasons you'll see later in this chapter.  It's important to be aware of
+this synonym, as some folks (and Lisp implementations) use one term
+while others use the other.
+
+   (2) Early Lisps tended to use dynamic variables for local variables,
+at least when interpreted.  Elisp, the Lisp dialect used in Emacs, is a
+bit of a throwback in this respect, continuing to support only dynamic
+variables.  Other languages have recapitulated this transition from
+dynamic to lexical variables-Perl's local variables, for instance, are
+dynamic while its my variables, introduced in Perl 5, are lexical.
+Python never had true dynamic variables but only introduced true lexical
+scoping in version 2.2.  (Python's lexical variables are still somewhat
+limited compared to Lisp's because of the conflation of assignment and
+binding in the language's syntax.)
+
 
 File: pcl.info,  Node: 6-1,  Next: 6-2,  Prev: Chapter 6,  Up: Chapter 6
 
@@ -4150,11 +4168,11 @@ instance, if you pass something other than a number to the + function,
 Common Lisp will signal a type error.  On the other hand, Common Lisp is
 a strongly typed language in the sense that all type errors will be
 detected-there's no way to treat an object as an instance of a class
-that it's not.3
+that it's not.  (1)
 
    All values in Common Lisp are, conceptually at least, references to
-objects.4 Consequently, assigning a variable a new value changes what
-object the variable refers to but has no effect on the previously
+objects.  (2) Consequently, assigning a variable a new value changes
+what object the variable refers to but has no effect on the previously
 referenced object.  However, if a variable holds a reference to a
 mutable object, you can use that reference to modify the object, and the
 modification will be visible to any code that has a reference to the
@@ -4166,43 +4184,49 @@ define a function with DEFUN, the parameter list defines the variables
 that will hold the function's arguments when it's called.  For example,
 this function defines three variables-x, y, and z-to hold its arguments.
 
-   (defun foo (x y z) (+ x y z)) Each time a function is called, Lisp
-creates new bindings to hold the arguments passed by the function's
-caller.  A binding is the runtime manifestation of a variable.  A single
-variable-the thing you can point to in the program's source code-can
-have many different bindings during a run of the program.  A single
-variable can even have multiple bindings at the same time; parameters to
-a recursive function, for example, are rebound for each call to the
-function.
+     (defun foo (x y z) (+ x y z))
+
+   Each time a function is called, Lisp creates new bindings to hold the
+arguments passed by the function's caller.  A binding is the runtime
+manifestation of a variable.  A single variable-the thing you can point
+to in the program's source code-can have many different bindings during
+a run of the program.  A single variable can even have multiple bindings
+at the same time; parameters to a recursive function, for example, are
+rebound for each call to the function.
 
    As with all Common Lisp variables, function parameters hold object
-references.5 Thus, you can assign a new value to a function parameter
-within the body of the function, and it will not affect the bindings
-created for another call to the same function.  But if the object passed
-to a function is mutable and you change it in the function, the changes
-will be visible to the caller since both the caller and the callee will
-be referencing the same object.
+references.  (3) Thus, you can assign a new value to a function
+parameter within the body of the function, and it will not affect the
+bindings created for another call to the same function.  But if the
+object passed to a function is mutable and you change it in the
+function, the changes will be visible to the caller since both the
+caller and the callee will be referencing the same object.
 
    Another form that introduces new variables is the LET special
 operator.  The skeleton of a LET form looks like this:
 
-   (let (variable*) body-form*) where each variable is a variable
-initialization form.  Each initialization form is either a list
-containing a variable name and an initial value form or-as a shorthand
-for initializing the variable to NIL-a plain variable name.  The
-following LET form, for example, binds the three variables x, y, and z
-with initial values 10, 20, and NIL:
+     (let (variable*)
+       body-form*)
 
-   (let ((x 10) (y 20) z) ...)  When the LET form is evaluated, all the
-initial value forms are first evaluated.  Then new bindings are created
-and initialized to the appropriate initial values before the body forms
-are executed.  Within the body of the LET, the variable names refer to
-the newly created bindings.  After the LET, the names refer to whatever,
-if anything, they referred to before the LET.
+   where each variable is a variable initialization form.  Each
+initialization form is either a list containing a variable name and an
+initial value form or-as a shorthand for initializing the variable to
+NIL-a plain variable name.  The following LET form, for example, binds
+the three variables x, y, and z with initial values 10, 20, and NIL:
+
+     (let ((x 10) (y 20) z)
+       ...)
+
+   When the LET form is evaluated, all the initial value forms are first
+evaluated.  Then new bindings are created and initialized to the
+appropriate initial values before the body forms are executed.  Within
+the body of the LET, the variable names refer to the newly created
+bindings.  After the LET, the names refer to whatever, if anything, they
+referred to before the LET.
 
    The value of the last expression in the body is returned as the value
 of the LET expression.  Like function parameters, variables introduced
-with LET are rebound each time the LET is entered.6
+with LET are rebound each time the LET is entered.  (4)
 
    The scope of function parameters and LET variables-the area of the
 program where the variable name can be used to refer to the variable's
@@ -4220,19 +4244,31 @@ Then the first LET creates a new binding with the initial value 2, and
 the inner LET creates yet another binding, this one with the initial
 value 3.  The bars on the right mark the scope of each binding.
 
-   (defun foo (x) (format t "Parameter: ~a~%" x) ; |<---- x is argument
-(let ((x 2)) ; | (format t "Outer LET: ~a~%" x) ; | |<--- x is 2 (let
-((x 3)) ; | | (format t "Inner LET: ~a~%" x)) ; | | |<- x is 3 (format t
-"Outer LET: ~a~%" x)) ; | | (format t "Parameter: ~a~%" x)) ; | Each
-reference to x will refer to the binding with the smallest enclosing
-scope.  Once control leaves the scope of one binding form, the binding
-from the immediately enclosing scope is unshadowed and x refers to it
-instead.  Thus, calling foo results in this output:
+     (defun foo (x)
+       (format t "Parameter: ~a~%" x)      ; |<------ x is argument
+       (let ((x 2))                        ; |
+         (format t "Outer LET: ~a~%" x)    ; | |<---- x is 2
+         (let ((x 3))                      ; | |
+           (format t "Inner LET: ~a~%" x)) ; | | |<-- x is 3
+         (format t "Outer LET: ~a~%" x))   ; | |
+       (format t "Parameter: ~a~%" x))     ; |
 
-   CL-USER> (foo 1) Parameter: 1 Outer LET: 2 Inner LET: 3 Outer LET: 2
-Parameter: 1 NIL In future chapters I'll discuss other constructs that
-also serve as binding forms-any construct that introduces a new variable
-name that's usable only within the construct is a binding form.
+   Each reference to x will refer to the binding with the smallest
+enclosing scope.  Once control leaves the scope of one binding form, the
+binding from the immediately enclosing scope is unshadowed and x refers
+to it instead.  Thus, calling foo results in this output:
+
+     CL-USER> (foo 1)
+     Parameter: 1
+     Outer LET: 2
+     Inner LET: 3
+     Outer LET: 2
+     Parameter: 1
+     NIL
+
+   In future chapters I'll discuss other constructs that also serve as
+binding forms-any construct that introduces a new variable name that's
+usable only within the construct is a binding form.
 
    For instance, in Chapter 7 you'll meet the DOTIMES loop, a basic
 counting loop.  It introduces a variable that holds the value of a
@@ -4240,19 +4276,61 @@ counter that's incremented each time through the loop.  The following
 loop, for example, which prints the numbers from 0 to 9, binds the
 variable x:
 
-   (dotimes (x 10) (format t "~d " x)) Another binding form is a variant
-of LET, LET*.  The difference is that in a LET, the variable names can
-be used only in the body of the LET-the part of the LET after the
-variables list-but in a LET*, the initial value forms for each variable
-can refer to variables introduced earlier in the variables list.  Thus,
-you can write the following:
+     (dotimes (x 10) (format t "~d " x))
 
-   (let* ((x 10) (y (+ x 10))) (list x y)) but not this:
+   Another binding form is a variant of LET, LET*.  The difference is
+that in a LET, the variable names can be used only in the body of the
+LET-the part of the LET after the variables list-but in a LET*, the
+initial value forms for each variable can refer to variables introduced
+earlier in the variables list.  Thus, you can write the following:
 
-   (let ((x 10) (y (+ x 10))) (list x y)) However, you could achieve the
-same result with nested LETs.
+     (let* ((x 10)
+            (y (+ x 10)))
+       (list x y))
 
-   (let ((x 10)) (let ((y (+ x 10))) (list x y)))
+   but not this:
+
+     (let ((x 10)
+           (y (+ x 10)))
+       (list x y))
+
+   However, you could achieve the same result with nested LETs.
+
+     (let ((x 10))
+       (let ((y (+ x 10)))
+         (list x y)))
+
+   ---------- Footnotes ----------
+
+   (1) Actually, it's not quite true to say that all type errors will
+always be detected-it's possible to use optional declarations to tell
+the compiler that certain variables will always contain objects of a
+particular type and to turn off runtime type checking in certain regions
+of code.  However, declarations of this sort are used to optimize code
+after it has been developed and debugged, not during normal development.
+
+   (2) As an optimization certain kinds of objects, such as integers
+below a certain size and characters, may be represented directly in
+memory where other objects would be represented by a pointer to the
+actual object.  However, since integers and characters are immutable, it
+doesn't matter that there may be multiple copies of "the same" object in
+different variables.  This is the root of the difference between EQ and
+EQL discussed in Chapter 4.
+
+   (3) In compiler-writer terms Common Lisp functions are
+"pass-by-value."  However, the values that are passed are references to
+objects.  This is similar to how Java and Python work.
+
+   (4) The variables in LET forms and function parameters are created by
+exactly the same mechanism.  In fact, in some Lisp dialects-though not
+Common Lisp-LET is simply a macro that expands into a call to an
+anonymous function.  That is, in those dialects, the following:
+
+     (let ((x 10)) (format t "~a" x))
+
+   is a macro form that expands into this:
+
+     ((lambda (x) (format t "~a" x)) 10)
 
 
 File: pcl.info,  Node: 6-2,  Next: 6-3,  Prev: 6-1,  Up: Chapter 6
@@ -4276,17 +4354,18 @@ form can refer to a lexical variable.  But what happens when an
 anonymous function contains a reference to a lexical variable from an
 enclosing scope?  For instance, in this expression:
 
-   (let ((count 0)) #'(lambda () (setf count (1+ count)))) the reference
-to count inside the LAMBDA form should be legal according to the rules
-of lexical scoping.  Yet the anonymous function containing the reference
-will be returned as the value of the LET form and can be invoked, via
-FUNCALL, by code that's not in the scope of the LET. So what happens?
-As it turns out, when count is a lexical variable, it just works.  The
-binding of count created when the flow of control entered the LET form
-will stick around for as long as needed, in this case for as long as
-someone holds onto a reference to the function object returned by the
-LET form.  The anonymous function is called a closure because it "closes
-over" the binding created by the LET.
+     (let ((count 0)) #'(lambda () (setf count (1+ count))))
+
+   the reference to count inside the LAMBDA form should be legal
+according to the rules of lexical scoping.  Yet the anonymous function
+containing the reference will be returned as the value of the LET form
+and can be invoked, via FUNCALL, by code that's not in the scope of the
+LET. So what happens?  As it turns out, when count is a lexical
+variable, it just works.  The binding of count created when the flow of
+control entered the LET form will stick around for as long as needed, in
+this case for as long as someone holds onto a reference to the function
+object returned by the LET form.  The anonymous function is called a
+closure because it "closes over" the binding created by the LET.
 
    The key thing to understand about closures is that it's the binding,
 not the value of the variable, that's captured.  Thus, a closure can not
@@ -4295,19 +4374,29 @@ assign new values that will persist between calls to the closure.  For
 instance, you can capture the closure created by the previous expression
 in a global variable like this:
 
-   (defparameter *fn* (let ((count 0)) #'(lambda () (setf count (1+
-count))))) Then each time you invoke it, the value of count will
-increase by one.
+     (defparameter *fn* (let ((count 0)) #'(lambda () (setf count (1+ count)))))
 
-   CL-USER> (funcall *fn*) 1 CL-USER> (funcall *fn*) 2 CL-USER> (funcall
-*fn*) 3 A single closure can close over many variable bindings simply by
+   Then each time you invoke it, the value of count will increase by
+one.
+
+     CL-USER> (funcall *fn*)
+     1
+     CL-USER> (funcall *fn*)
+     2
+     CL-USER> (funcall *fn*)
+     3
+
+   A single closure can close over many variable bindings simply by
 referring to them.  Or multiple closures can capture the same binding.
 For instance, the following expression returns a list of three closures,
 one that increments the value of the closed over count binding, one that
 decrements it, and one that returns the current value:
 
-   (let ((count 0)) (list #'(lambda () (incf count)) #'(lambda () (decf
-count)) #'(lambda () count)))
+     (let ((count 0))
+       (list
+        #'(lambda () (incf count))
+        #'(lambda () (decf count))
+        #'(lambda () count)))
 
 
 File: pcl.info,  Node: 6-3,  Next: 6-4,  Prev: 6-2,  Up: Chapter 6
@@ -4322,8 +4411,8 @@ however, you really want a global variable-a variable that you can refer
 to from anywhere in your program.  While it's true that indiscriminate
 use of global variables can turn code into spaghetti nearly as quickly
 as unrestrained use of goto, global variables do have legitimate uses
-and exist in one form or another in almost every programming language.7
-And as you'll see in a moment, Lisp's version of global variables,
+and exist in one form or another in almost every programming language.
+(1) And as you'll see in a moment, Lisp's version of global variables,
 dynamic variables, are both more useful and more manageable.
 
    Common Lisp provides two ways to create global variables: DEFVAR and
@@ -4336,14 +4425,17 @@ with *.  You'll see later in this section why it's quite important to
 follow that naming convention.  Examples of DEFVAR and DEFPARAMETER look
 like this:
 
-   (defvar *count* 0 "Count of widgets made so far.")
+     (defvar *count* 0
+       "Count of widgets made so far.")
 
-   (defparameter *gap-tolerance* 0.001 "Tolerance to be allowed in
-widget gaps.")  The difference between the two forms is that
-DEFPARAMETER always assigns the initial value to the named variable
-while DEFVAR does so only if the variable is undefined.  A DEFVAR form
-can also be used with no initial value to define a global variable
-without giving it a value.  Such a variable is said to be unbound.
+     (defparameter *gap-tolerance* 0.001
+       "Tolerance to be allowed in widget gaps.")
+
+   The difference between the two forms is that DEFPARAMETER always
+assigns the initial value to the named variable while DEFVAR does so
+only if the variable is undefined.  A DEFVAR form can also be used with
+no initial value to define a global variable without giving it a value.
+Such a variable is said to be unbound.
 
    Practically speaking, you should use DEFVAR to define variables that
 will contain data you'd want to keep even if you made a change to the
@@ -4351,7 +4443,7 @@ source code that uses the variable.  For instance, suppose the two
 variables defined previously are part of an application for controlling
 a widget factory.  It's appropriate to define the *count* variable with
 DEFVAR because the number of widgets made so far isn't invalidated just
-because you make some changes to the widget-making code.8
+because you make some changes to the widget-making code.  (2)
 
    On the other hand, the variable *gap-tolerance* presumably has some
 effect on the behavior of the widget-making code itself.  If you decide
@@ -4363,12 +4455,13 @@ recompile and reload the file.
 to it from anywhere.  For instance, you might define this function to
 increment the count of widgets made:
 
-   (defun increment-widget-count () (incf *count*)) The advantage of
-global variables is that you don't have to pass them around.  Most
-languages store the standard input and output streams in global
-variables for exactly this reason-you never know when you're going to
-want to print something to standard out, and you don't want every
-function to have to accept and pass on arguments containing those
+     (defun increment-widget-count () (incf *count*))
+
+   The advantage of global variables is that you don't have to pass them
+around.  Most languages store the standard input and output streams in
+global variables for exactly this reason-you never know when you're
+going to want to print something to standard out, and you don't want
+every function to have to accept and pass on arguments containing those
 streams just in case someone further down the line needs them.
 
    However, once a value, such as the standard output stream, is stored
@@ -4387,7 +4480,7 @@ to the file.
    This works fine until you forget to set *standard-output* back to the
 original stream when you're done.  If you forget to reset
 *standard-output*, all the other code in the program that uses
-*standard-output* will also send its output to the file.9
+*standard-output* will also send its output to the file.  (3)
 
    What you really want, it seems, is a way to wrap a piece of code in
 something that says, "All code below here-all the functions it calls,
@@ -4403,14 +4496,16 @@ binding that's created on entry to the binding form replaces the global
 binding for the duration of the binding form.  Unlike a lexical binding,
 which can be referenced by code only within the lexical scope of the
 binding form, a dynamic binding can be referenced by any code that's
-invoked during the execution of the binding form.10 And it turns out
+invoked during the execution of the binding form.  (4) And it turns out
 that all global variables are, in fact, dynamic variables.
 
    Thus, if you want to temporarily redefine *standard-output*, the way
 to do it is simply to rebind it, say, with a LET.
 
-   (let ((*standard-output* *some-other-stream*)) (stuff)) In any code
-that runs as a result of the call to stuff, references to
+     (let ((*standard-output* *some-other-stream*))
+       (stuff))
+
+   In any code that runs as a result of the call to stuff, references to
 *standard-output* will use the binding established by the LET. And when
 stuff returns and control leaves the LET, the new binding of
 *standard-output* will go away and subsequent references to
@@ -4420,57 +4515,94 @@ other bindings.  Conceptually, each new binding for a given dynamic
 variable is pushed onto a stack of bindings for that variable, and
 references to the variable always use the most recent binding.  As
 binding forms return, the bindings they created are popped off the
-stack, exposing previous bindings.11
+stack, exposing previous bindings.  (5)
 
    A simple example shows how this works.
 
-   (defvar *x* 10) (defun foo () (format t "X: ~d~%" *x*)) The DEFVAR
-creates a global binding for the variable *x* with the value 10.  The
-reference to *x* in foo will look up the current binding dynamically.
-If you call foo from the top level, the global binding created by the
-DEFVAR is the only binding available, so it prints 10.
+     (defvar *x* 10)
+     (defun foo () (format t "X: ~d~%" *x*))
 
-   CL-USER> (foo) X: 10 NIL But you can use LET to create a new binding
-that temporarily shadows the global binding, and foo will print a
-different value.
+   The DEFVAR creates a global binding for the variable *x* with the
+value 10.  The reference to *x* in foo will look up the current binding
+dynamically.  If you call foo from the top level, the global binding
+created by the DEFVAR is the only binding available, so it prints 10.
 
-   CL-USER> (let ((*x* 20)) (foo)) X: 20 NIL Now call foo again, with no
-LET, and it again sees the global binding.
+     CL-USER> (foo)
+     X: 10
+     NIL
 
-   CL-USER> (foo) X: 10 NIL Now define another function.
+   But you can use LET to create a new binding that temporarily shadows
+the global binding, and foo will print a different value.
 
-   (defun bar () (foo) (let ((*x* 20)) (foo)) (foo)) Note that the
-middle call to foo is wrapped in a LET that binds *x* to the new value
-20.  When you run bar, you get this result:
+     CL-USER> (let ((*x* 20)) (foo))
+     X: 20
+     NIL
 
-   CL-USER> (bar) X: 10 X: 20 X: 10 NIL As you can see, the first call
-to foo sees the global binding, with its value of 10.  The middle call,
-however, sees the new binding, with the value 20.  But after the LET,
-foo once again sees the global binding.
+   Now call foo again, with no LET, and it again sees the global
+binding.
+
+     CL-USER> (foo)
+     X: 10
+     NIL
+
+   Now define another function.
+
+     (defun bar ()
+       (foo)
+       (let ((*x* 20)) (foo))
+       (foo))
+
+   Note that the middle call to foo is wrapped in a LET that binds *x*
+to the new value 20.  When you run bar, you get this result:
+
+     CL-USER> (bar)
+     X: 10
+     X: 20
+     X: 10
+     NIL
+
+   As you can see, the first call to foo sees the global binding, with
+its value of 10.  The middle call, however, sees the new binding, with
+the value 20.  But after the LET, foo once again sees the global
+binding.
 
    As with lexical bindings, assigning a new value affects only the
 current binding.  To see this, you can redefine foo to include an
 assignment to *x*.
 
-   (defun foo () (format t "Before assignment~18tX: ~d~%" *x*) (setf *x*
-(+ 1 *x*)) (format t "After assignment~18tX: ~d~%" *x*)) Now foo prints
-the value of *x*, increments it, and prints it again.  If you just run
-foo, you'll see this:
+     (defun foo ()
+       (format t "Before assignment~18tX: ~d~%" *x*)
+       (setf *x* (+ 1 *x*))
+       (format t "After assignment~18tX: ~d~%" *x*))
 
-   CL-USER> (foo) Before assignment X: 10 After assignment X: 11 NIL Not
-too surprising.  Now run bar.
+   Now foo prints the value of *x*, increments it, and prints it again.
+If you just run foo, you'll see this:
 
-   CL-USER> (bar) Before assignment X: 11 After assignment X: 12 Before
-assignment X: 20 After assignment X: 21 Before assignment X: 12 After
-assignment X: 13 NIL Notice that *x* started at 11-the earlier call to
-foo really did change the global value.  The first call to foo from bar
-increments the global binding to 12.  The middle call doesn't see the
-global binding because of the LET. Then the last call can see the global
-binding again and increments it from 12 to 13.
+     CL-USER> (foo)
+     Before assignment X: 10
+     After assignment  X: 11
+     NIL
+
+   Not too surprising.  Now run bar.
+
+     CL-USER> (bar)
+     Before assignment X: 11
+     After assignment  X: 12
+     Before assignment X: 20
+     After assignment  X: 21
+     Before assignment X: 12
+     After assignment  X: 13
+     NIL
+
+   Notice that *x* started at 11-the earlier call to foo really did
+change the global value.  The first call to foo from bar increments the
+global binding to 12.  The middle call doesn't see the global binding
+because of the LET. Then the last call can see the global binding again
+and increments it from 12 to 13.
 
    So how does this work?  How does LET know that when it binds *x* it's
 supposed to create a dynamic binding rather than a normal lexical
-binding?  It knows because the name has been declared special.12 The
+binding?  It knows because the name has been declared special.  (6) The
 name of every variable defined with DEFVAR and DEFPARAMETER is
 automatically declared globally special.  This means whenever you use
 such a name in a binding form-in a LET or as a function parameter or any
@@ -4490,7 +4622,7 @@ binding form, you declare a name special, then the binding created for
 that variable will be dynamic rather than lexical.  Other code can
 locally declare a name special in order to refer to the dynamic binding.
 However, locally special variables are relatively rare, so you needn't
-worry about them.13
+worry about them.  (7)
 
    Dynamic bindings make global variables much more manageable, but it's
 important to notice they still allow action at a distance.  Binding a
@@ -4499,6 +4631,49 @@ of downstream code, and it also opens the possibility that downstream
 code will assign a new value to a binding established higher up on the
 stack.  You should use dynamic variables only when you need to take
 advantage of one or both of these characteristics.
+
+   ---------- Footnotes ----------
+
+   (1) Java disguises global variables as public static fields, C uses
+extern variables, and Python's module-level and Perl's package-level
+variables can likewise be accessed from anywhere.
+
+   (2) If you specifically want to reset a DEFVARed variable, you can
+either set it directly with SETF or make it unbound using MAKUNBOUND and
+then reevaluate the DEFVAR form.
+
+   (3) The strategy of temporarily reassigning *standard-output* also
+breaks if the system is multithreaded-if there are multiple threads of
+control trying to print to different streams at the same time, they'll
+all try to set the global variable to the stream they want to use,
+stomping all over each other.  You could use a lock to control access to
+the global variable, but then you're not really getting the benefit of
+multiple concurrent threads, since whatever thread is printing has to
+lock out all the other threads until it's done even if they want to
+print to a different stream.
+
+   (4) The technical term for the interval during which references may
+be made to a binding is its extent.  Thus, scope and extent are
+complementary notions-scope refers to space while extent refers to time.
+Lexical variables have lexical scope but indefinite extent, meaning they
+stick around for an indefinite interval, determined by how long they're
+needed.  Dynamic variables, by contrast, have indefinite scope since
+they can be referred to from anywhere but dynamic extent.  To further
+confuse matters, the combination of indefinite scope and dynamic extent
+is frequently referred to by the misnomer dynamic scope.
+
+   (5) Though the standard doesn't specify how to incorporate
+multithreading into Common Lisp, implementations that provide
+multithreading follow the practice established on the Lisp machines and
+create dynamic bindings on a per-thread basis.  A reference to a global
+variable will find the binding most recently established in the current
+thread, or the global binding.
+
+   (6) This is why dynamic variables are also sometimes called special
+variables.
+
+   (7) If you must know, you can look up DECLARE, SPECIAL, and LOCALLY
+in the HyperSpec.
 
 
 File: pcl.info,  Node: 6-4,  Next: 6-5,  Prev: 6-3,  Up: Chapter 6
@@ -4510,14 +4685,16 @@ One other kind of variable I haven't mentioned at all is the oxymoronic
 "constant variable."  All constants are global and are defined with
 DEFCONSTANT. The basic form of DEFCONSTANT is like DEFPARAMETER.
 
-   (defconstant name initial-value-form [ documentation-string ]) As
-with DEFVAR and DEFPARAMETER, DEFCONSTANT has a global effect on the
-name used-thereafter the name can be used only to refer to the constant;
-it can't be used as a function parameter or rebound with any other
-binding form.  Thus, many Lisp programmers follow a naming convention of
-using names starting and ending with + for constants.  This convention
-is somewhat less universally followed than the *-naming convention for
-globally special names but is a good idea for the same reason.14
+     (defconstant name initial-value-form [ documentation-string ])
+
+   As with DEFVAR and DEFPARAMETER, DEFCONSTANT has a global effect on
+the name used-thereafter the name can be used only to refer to the
+constant; it can't be used as a function parameter or rebound with any
+other binding form.  Thus, many Lisp programmers follow a naming
+convention of using names starting and ending with + for constants.
+This convention is somewhat less universally followed than the *-naming
+convention for globally special names but is a good idea for the same
+reason.  (1)
 
    Another thing to note about DEFCONSTANT is that while the language
 allows you to redefine a constant by reevaluating a DEFCONSTANT with a
@@ -4528,6 +4705,14 @@ to see the new value since the old value may well have been inlined.
 Consequently, it's a good idea to use DEFCONSTANT only to define things
 that are really constant, such as the value of NIL. For things you might
 ever want to change, you should use DEFPARAMETER instead.
+
+   ---------- Footnotes ----------
+
+   (1) Several key constants defined by the language itself don't follow
+this convention-not least of which are T and NIL. This is occasionally
+annoying when one wants to use t as a local variable name.  Another is
+PI, which holds the best long-float approximation of the mathematical
+constant pi.
 
 
 File: pcl.info,  Node: 6-5,  Next: 6-6,  Prev: 6-4,  Up: Chapter 6
@@ -4543,37 +4728,57 @@ value to a binding, you use the SETF macro, Common Lisp's
 general-purpose assignment operator.  The basic form of SETF is as
 follows:
 
-   (setf place value) Because SETF is a macro, it can examine the form
-of the place it's assigning to and expand into appropriate lower-level
-operations to manipulate that place.  When the place is a variable, it
-expands into a call to the special operator SETQ, which, as a special
-operator, has access to both lexical and dynamic bindings.15 For
-instance, to assign the value 10 to the variable x, you can write this:
+     (setf place value)
 
-   (setf x 10) As I discussed earlier, assigning a new value to a
-binding has no effect on any other bindings of that variable.  And it
-doesn't have any effect on the value that was stored in the binding
-prior to the assignment.  Thus, the SETF in this function:
+   Because SETF is a macro, it can examine the form of the place it's
+assigning to and expand into appropriate lower-level operations to
+manipulate that place.  When the place is a variable, it expands into a
+call to the special operator SETQ, which, as a special operator, has
+access to both lexical and dynamic bindings.  (1) For instance, to
+assign the value 10 to the variable x, you can write this:
 
-   (defun foo (x) (setf x 10)) will have no effect on any value outside
-of foo.  The binding that was created when foo was called is set to 10,
-immediately replacing whatever value was passed as an argument.  In
-particular, a form such as the following:
+     (setf x 10)
 
-   (let ((y 20)) (foo y) (print y)) will print 20, not 10, as it's the
-value of y that's passed to foo where it's briefly the value of the
-variable x before the SETF gives x a new value.
+   As I discussed earlier, assigning a new value to a binding has no
+effect on any other bindings of that variable.  And it doesn't have any
+effect on the value that was stored in the binding prior to the
+assignment.  Thus, the SETF in this function:
+
+     (defun foo (x) (setf x 10))
+
+   will have no effect on any value outside of foo.  The binding that
+was created when foo was called is set to 10, immediately replacing
+whatever value was passed as an argument.  In particular, a form such as
+the following:
+
+     (let ((y 20))
+       (foo y)
+       (print y))
+
+   will print 20, not 10, as it's the value of y that's passed to foo
+where it's briefly the value of the variable x before the SETF gives x a
+new value.
 
    SETF can also assign to multiple places in sequence.  For instance,
 instead of the following:
 
-   (setf x 1) (setf y 2) you can write this:
+     (setf x 1)
+     (setf y 2)
 
-   (setf x 1 y 2) SETF returns the newly assigned value, so you can also
-nest calls to SETF as in the following expression, which assigns both x
-and y the same random value:
+   you can write this:
 
-   (setf x (setf y (random 10)))
+     (setf x 1 y 2)
+
+   SETF returns the newly assigned value, so you can also nest calls to
+SETF as in the following expression, which assigns both x and y the same
+random value:
+
+     (setf x (setf y (random 10)))
+
+   ---------- Footnotes ----------
+
+   (1) Some old-school Lispers prefer to use SETQ with variables, but
+modern style tends to use SETF for all assignments.
 
 
 File: pcl.info,  Node: 6-6,  Next: 6-7,  Prev: 6-5,  Up: Chapter 6
@@ -4592,7 +4797,8 @@ place a value.  As I cover the different composite data structures, I'll
 point out which functions can serve as "SETFable places."  The short
 version, however, is if you need to assign a value to a place, SETF is
 almost certainly the tool to use.  It's even possible to extend SETF to
-allow it to assign to user-defined places though I won't cover that.16
+allow it to assign to user-defined places though I won't cover that.
+(1)
 
    In this regard SETF is no different from the = assignment operator in
 most C-derived languages.  In those languages, the = operator assigns
@@ -4601,25 +4807,47 @@ languages such as Perl and Python that support hash tables as a built-in
 data type, = can also set the values of individual hash table entries.
 Table 6-1 summarizes the various ways = is used in those languages.
 
-   Table 6-1.  Assignment with = in Other Languages Assigning to ...
-Java, C, C++	Perl	Python ...  variable	x = 10;	$x = 10;	x = 10 ...
-array element	a[0] = 10;	$a[0] = 10;	a[0] = 10 ...  hash table entry	-
-$hash{'key'} = 10;	hash['key'] = 10 ...  field in object	o.field = 10;
-$o->{'field'} = 10;	o.field = 10 SETF works the same way-the first
-"argument" to SETF is a place to store the value, and the second
-argument provides the value.  As with the = operator in these languages,
-you use the same form to express the place as you'd normally use to
-fetch the value.17 Thus, the Lisp equivalents of the assignments in
-Table 6-1-given that AREF is the array access function, GETHASH does a
-hash table lookup, and field might be a function that accesses a slot
-named field of a user-defined object-are as follows:
+   Table 6-1.  Assignment with = in Other Languages
 
-   Simple variable: (setf x 10) Array: (setf (aref a 0) 10) Hash table:
-(setf (gethash 'key hash) 10) Slot named 'field': (setf (field o) 10)
-Note that SETFing a place that's part of a larger object has the same
+ [image src="tables/6-1.png" ]
+
+   SETF works the same way-the first "argument" to SETF is a place to
+store the value, and the second argument provides the value.  As with
+the = operator in these languages, you use the same form to express the
+place as you'd normally use to fetch the value.  (2) Thus, the Lisp
+equivalents of the assignments in Table 6-1-given that AREF is the array
+access function, GETHASH does a hash table lookup, and field might be a
+function that accesses a slot named field of a user-defined object-are
+as follows:
+
+     Simple variable:    (setf x 10)
+     Array:              (setf (aref a 0) 10)
+     Hash table:         (setf (gethash 'key hash) 10)
+     Slot named 'field': (setf (field o) 10)
+
+   Note that SETFing a place that's part of a larger object has the same
 semantics as SETFing a variable: the place is modified without any
 effect on the object that was previously stored in the place.  Again,
-this is similar to how = behaves in Java, Perl, and Python.18
+this is similar to how = behaves in Java, Perl, and Python.  (3)
+
+   ---------- Footnotes ----------
+
+   (1) Look up DEFSETF, DEFINE-SETF-EXPANDER for more information.
+
+   (2) The prevalence of Algol-derived syntax for assignment with the
+"place" on the left side of the = and the new value on the right side
+has spawned the terminology lvalue, short for "left value," meaning
+something that can be assigned to, and rvalue, meaning something that
+provides a value.  A compiler hacker would say, "SETF treats its first
+argument as an lvalue."
+
+   (3) C programmers may want to think of variables and other places as
+holding a pointer to the real object; assigning to a variable simply
+changes what object it points to while assigning to a part of a
+composite object is similar to indirecting through the pointer to the
+actual object.  C++ programmers should note that the behavior of = in
+C++ when dealing with objects-namely, a memberwise copy-is quite
+idiosyncratic.
 
 
 File: pcl.info,  Node: 6-7,  Next: Chapter 7,  Prev: 6-6,  Up: Chapter 6
@@ -4632,43 +4860,56 @@ involving assigning a new value based on the current value are
 sufficiently common to warrant their own operators.  For instance, while
 you could increment a number with SETF, like this:
 
-   (setf x (+ x 1)) or decrement it with this:
+     (setf x (+ x 1))
 
-   (setf x (- x 1)) it's a bit tedious, compared to the C-style ++x and
--x.  Instead, you can use the macros INCF and DECF, which increment and
-decrement a place by a certain amount that defaults to 1.
+   or decrement it with this:
 
-   (incf x) === (setf x (+ x 1)) (decf x) === (setf x (- x 1)) (incf x
-10) === (setf x (+ x 10)) INCF and DECF are examples of a kind of macro
-called modify macros.  Modify macros are macros built on top of SETF
-that modify places by assigning a new value based on the current value
-of the place.  The main benefit of modify macros is that they're more
-concise than the same modification written out using SETF. Additionally,
-modify macros are defined in a way that makes them safe to use with
-places where the place expression must be evaluated only once.  A silly
-example is this expression, which increments the value of an arbitrary
-element of an array:
+     (setf x (- x 1))
 
-   (incf (aref *array* (random (length *array*)))) A naive translation
-of that into a SETF expression might look like this:
+   it's a bit tedious, compared to the C-style ++x and -x.  Instead, you
+can use the macros INCF and DECF, which increment and decrement a place
+by a certain amount that defaults to 1.
 
-   (setf (aref *array* (random (length *array*))) (1+ (aref *array*
-(random (length *array*))))) However, that doesn't work because the two
-calls to RANDOM won't necessarily return the same value-this expression
-will likely grab the value of one element of the array, increment it,
-and then store it back as the new value of a different element.  The
-INCF expression, however, does the right thing because it knows how to
-take apart this expression:
+     (incf x)    === (setf x (+ x 1))
+     (decf x)    === (setf x (- x 1))
+     (incf x 10) === (setf x (+ x 10))
 
-   (aref *array* (random (length *array*))) to pull out the parts that
-could possibly have side effects to make sure they're evaluated only
-once.  In this case, it would probably expand into something more or
-less equivalent to this:
+   INCF and DECF are examples of a kind of macro called modify macros.
+Modify macros are macros built on top of SETF that modify places by
+assigning a new value based on the current value of the place.  The main
+benefit of modify macros is that they're more concise than the same
+modification written out using SETF. Additionally, modify macros are
+defined in a way that makes them safe to use with places where the place
+expression must be evaluated only once.  A silly example is this
+expression, which increments the value of an arbitrary element of an
+array:
 
-   (let ((tmp (random (length *array*)))) (setf (aref *array* tmp) (1+
-(aref *array* tmp)))) In general, modify macros are guaranteed to
-evaluate both their arguments and the subforms of the place form exactly
-once each, in left-to-right order.
+     (incf (aref *array* (random (length *array*))))
+
+   A naive translation of that into a SETF expression might look like
+this:
+
+     (setf (aref *array* (random (length *array*)))
+           (1+ (aref *array* (random (length *array*)))))
+
+   However, that doesn't work because the two calls to RANDOM won't
+necessarily return the same value-this expression will likely grab the
+value of one element of the array, increment it, and then store it back
+as the new value of a different element.  The INCF expression, however,
+does the right thing because it knows how to take apart this expression:
+
+     (aref *array* (random (length *array*)))
+
+   to pull out the parts that could possibly have side effects to make
+sure they're evaluated only once.  In this case, it would probably
+expand into something more or less equivalent to this:
+
+     (let ((tmp (random (length *array*))))
+       (setf (aref *array* tmp) (1+ (aref *array* tmp))))
+
+   In general, modify macros are guaranteed to evaluate both their
+arguments and the subforms of the place form exactly once each, in
+left-to-right order.
 
    The macro PUSH, which you used in the mini-database to add elements
 to the *db* variable, is another modify macro.  You'll take a closer
@@ -4679,12 +4920,16 @@ when I talk about how lists are represented in Lisp.
 and SHIFTF. ROTATEF rotates values between places.  For instance, if you
 have two variables, a and b, this call:
 
-   (rotatef a b) swaps the values of the two variables and returns NIL.
-Since a and b are variables and you don't have to worry about side
-effects, the previous ROTATEF expression is equivalent to this:
+     (rotatef a b)
 
-   (let ((tmp a)) (setf a b b tmp) nil) With other kinds of places, the
-equivalent expression using SETF would be quite a bit more complex.
+   swaps the values of the two variables and returns NIL. Since a and b
+are variables and you don't have to worry about side effects, the
+previous ROTATEF expression is equivalent to this:
+
+     (let ((tmp a)) (setf a b b tmp) nil)
+
+   With other kinds of places, the equivalent expression using SETF
+would be quite a bit more complex.
 
    SHIFTF is similar except instead of rotating values it shifts them to
 the left-the last argument provides a value that's moved to the
@@ -4692,12 +4937,16 @@ second-to-last argument while the rest of the values are moved one to
 the left.  The original value of the first argument is simply returned.
 Thus, the following:
 
-   (shiftf a b 10) is equivalent-again, since you don't have to worry
-about side effects-to this:
+     (shiftf a b 10)
 
-   (let ((tmp a)) (setf a b b 10) tmp) Both ROTATEF and SHIFTF can be
-used with any number of arguments and, like all modify macros, are
-guaranteed to evaluate them exactly once, in left to right order.
+   is equivalent-again, since you don't have to worry about side
+effects-to this:
+
+     (let ((tmp a)) (setf a b b 10) tmp)
+
+   Both ROTATEF and SHIFTF can be used with any number of arguments and,
+like all modify macros, are guaranteed to evaluate them exactly once, in
+left to right order.
 
    With the basics of Common Lisp's functions and variables under your
 belt, now you're ready to move onto the feature that continues to
@@ -5322,25 +5571,31 @@ the correct inputs were, code running at macro expansion time can deal
 only with the data that's inherent in the source code.  For instance,
 suppose the following source code appears somewhere in a program:
 
-   (defun foo (x) (when (> x 10) (print 'big))) Normally you'd think of
-x as a variable that will hold the argument passed in a call to foo.
-But at macro expansion time, such as when the compiler is running the
-WHEN macro, the only data available is the source code.  Since the
-program isn't running yet, there's no call to foo and thus no value
-associated with x.  Instead, the values the compiler passes to WHEN are
-the Lisp lists representing the source code, namely, (> x 10) and (print
-'big).  Suppose that WHEN is defined, as you saw in the previous
-chapter, with something like the following macro:
+     (defun foo (x)
+       (when (> x 10) (print 'big)))
 
-   (defmacro when (condition &rest body) '(if ,condition (progn
-,@body))) When the code in foo is compiled, the WHEN macro will be run
-with those two forms as arguments.  The parameter condition will be
-bound to the form (> x 10), and the form (print 'big) will be collected
-into a list that will become the value of the &rest body parameter.  The
+   Normally you'd think of x as a variable that will hold the argument
+passed in a call to foo.  But at macro expansion time, such as when the
+compiler is running the WHEN macro, the only data available is the
+source code.  Since the program isn't running yet, there's no call to
+foo and thus no value associated with x.  Instead, the values the
+compiler passes to WHEN are the Lisp lists representing the source code,
+namely, (> x 10) and (print 'big).  Suppose that WHEN is defined, as you
+saw in the previous chapter, with something like the following macro:
+
+     (defmacro when (condition &rest body)
+       `(if ,condition (progn ,@body)))
+
+   When the code in foo is compiled, the WHEN macro will be run with
+those two forms as arguments.  The parameter condition will be bound to
+the form (> x 10), and the form (print 'big) will be collected into a
+list that will become the value of the &rest body parameter.  The
 backquote expression will then generate this code:
 
-   (if (> x 10) (progn (print 'big))) by interpolating in the value of
-condition and splicing the value of body into the PROGN.
+     (if (> x 10) (progn (print 'big)))
+
+   by interpolating in the value of condition and splicing the value of
+body into the PROGN.
 
    When Lisp is interpreted, rather than compiled, the distinction
 between macro expansion time and runtime is less clear because they're
@@ -5364,9 +5619,12 @@ though it stands-of course-for DEFine MACRO, not Definition for Mac.
 The basic skeleton of a DEFMACRO is quite similar to the skeleton of a
 DEFUN.
 
-   (defmacro name (parameter*) "Optional documentation string."
-body-form*) Like a function, a macro consists of a name, a parameter
-list, an optional documentation string, and a body of Lisp expressions.1
+     (defmacro name (parameter*)
+       "Optional documentation string."
+       body-form*)
+
+   Like a function, a macro consists of a name, a parameter list, an
+optional documentation string, and a body of Lisp expressions.  (1)
 However, as I just discussed, the job of a macro isn't to do anything
 directly-its job is to generate code that will later do what you want.
 
@@ -5409,10 +5667,16 @@ how in the section "Plugging the Leaks."
 
    To sum up, the steps to writing a macro are as follows:
 
-   Write a sample call to the macro and the code it should expand into,
-or vice versa.  Write code that generates the handwritten expansion from
-the arguments in the sample call.  Make sure the macro abstraction
-doesn't "leak."
+   * Write a sample call to the macro and the code it should expand
+     into, or vice versa.
+   * Write code that generates the handwritten expansion from the
+     arguments in the sample call.
+   * Make sure the macro abstraction doesn't "leak."
+
+   ---------- Footnotes ----------
+
+   (1) As with functions, macros can also contain declarations, but you
+don't need to worry about those for now.
 
 
 File: pcl.info,  Node: 8-4,  Next: 8-5,  Prev: 8-3,  Up: Chapter 8
@@ -5432,29 +5696,37 @@ number is prime and another that returns the next prime number greater
 or equal to its argument.  In both cases you can use a simple, but
 inefficient, brute-force approach.
 
-   (defun primep (number) (when (> number 1) (loop for fac from 2 to
-(isqrt number) never (zerop (mod number fac)))))
+     (defun primep (number)
+       (when (> number 1)
+         (loop for fac from 2 to (isqrt number) never (zerop (mod number fac)))))
 
-   (defun next-prime (number) (loop for n from number when (primep n)
-return n)) Now you can write the macro.  Following the procedure
-outlined previously, you need at least one example of a call to the
-macro and the code into which it should expand.  Suppose you start with
-the idea that you want to be able to write this:
+     (defun next-prime (number)
+       (loop for n from number when (primep n) return n))
 
-   (do-primes (p 0 19) (format t "~d " p)) to express a loop that
-executes the body once each for each prime number greater or equal to 0
-and less than or equal to 19, with the variable p holding the prime
-number.  It makes sense to model this macro on the form of the standard
-DOLIST and DOTIMES macros; macros that follow the pattern of existing
-macros are easier to understand and use than macros that introduce
-gratuitously novel syntax.
+   Now you can write the macro.  Following the procedure outlined
+previously, you need at least one example of a call to the macro and the
+code into which it should expand.  Suppose you start with the idea that
+you want to be able to write this:
+
+     (do-primes (p 0 19)
+       (format t "~d " p))
+
+   to express a loop that executes the body once each for each prime
+number greater or equal to 0 and less than or equal to 19, with the
+variable p holding the prime number.  It makes sense to model this macro
+on the form of the standard DOLIST and DOTIMES macros; macros that
+follow the pattern of existing macros are easier to understand and use
+than macros that introduce gratuitously novel syntax.
 
    Without the do-primes macro, you could write such a loop with DO (and
 the two utility functions defined previously) like this:
 
-   (do ((p (next-prime 0) (next-prime (1+ p)))) ((> p 19)) (format t "~d
-" p)) Now you're ready to start writing the macro code that will
-translate from the former to the latter.
+     (do ((p (next-prime 0) (next-prime (1+ p))))
+         ((> p 19))
+       (format t "~d " p))
+
+   Now you're ready to start writing the macro code that will translate
+from the former to the latter.
 
 
 File: pcl.info,  Node: 8-5,  Next: 8-6,  Prev: 8-4,  Up: Chapter 8
@@ -5479,14 +5751,19 @@ expansion; the three element are split up and put in different places.
 and a &rest parameter to hold the body forms, and then take apart the
 list by hand, something like this:
 
-   (defmacro do-primes (var-and-range &rest body) (let ((var (first
-var-and-range)) (start (second var-and-range)) (end (third
-var-and-range))) '(do ((,var (next-prime ,start) (next-prime (1+
-,var)))) ((> ,var ,end)) ,@body))) In a moment I'll explain how the body
-generates the correct expansion; for now you can just note that the
-variables var, start, and end each hold a value, extracted from
-var-and-range, that's then interpolated into the backquote expression
-that generates do-primes's expansion.
+     (defmacro do-primes (var-and-range &rest body)
+       (let ((var (first var-and-range))
+             (start (second var-and-range))
+             (end (third var-and-range)))
+         `(do ((,var (next-prime ,start) (next-prime (1+ ,var))))
+              ((> ,var ,end))
+            ,@body)))
+
+   In a moment I'll explain how the body generates the correct
+expansion; for now you can just note that the variables var, start, and
+end each hold a value, extracted from var-and-range, that's then
+interpolated into the backquote expression that generates do-primes's
+expansion.
 
    However, you don't need to take apart var-and-range "by hand" because
 macro parameter lists are what are called destructuring parameter lists.
@@ -5513,26 +5790,32 @@ of the macro.
 both human readers and your development tools about its intended use by
 defining it like this:
 
-   (defmacro do-primes ((var start end) &body body) '(do ((,var
-(next-prime ,start) (next-prime (1+ ,var)))) ((> ,var ,end)) ,@body)) In
-addition to being more concise, destructuring parameter lists also give
-you automatic error checking-with do-primes defined this way, Lisp will
-be able to detect a call whose first argument isn't a three-element list
-and will give you a meaningful error message just as if you had called a
-function with too few or too many arguments.  Also, in development
-environments such as SLIME that indicate what arguments are expected as
-soon as you type the name of a function or macro, if you use a
-destructuring parameter list, the environment will be able to tell you
+     (defmacro do-primes ((var start end) &body body)
+       `(do ((,var (next-prime ,start) (next-prime (1+ ,var))))
+            ((> ,var ,end))
+          ,@body))
+
+   In addition to being more concise, destructuring parameter lists also
+give you automatic error checking-with do-primes defined this way, Lisp
+will be able to detect a call whose first argument isn't a three-element
+list and will give you a meaningful error message just as if you had
+called a function with too few or too many arguments.  Also, in
+development environments such as SLIME that indicate what arguments are
+expected as soon as you type the name of a function or macro, if you use
+a destructuring parameter list, the environment will be able to tell you
 more specifically the syntax of the macro call.  With the original
 definition, SLIME would tell you do-primes is called like this:
 
-   (do-primes var-and-range &rest body) But with the new definition, it
-can tell you that a call should look like this:
+     (do-primes var-and-range &rest body)
 
-   (do-primes (var start end) &body body) Destructuring parameter lists
-can contain &optional, &key, and &rest parameters and can contain nested
-destructuring lists.  However, you don't need any of those options to
-write do-primes.
+   But with the new definition, it can tell you that a call should look
+like this:
+
+     (do-primes (var start end) &body body)
+
+   Destructuring parameter lists can contain &optional, &key, and &rest
+parameters and can contain nested destructuring lists.  However, you
+don't need any of those options to write do-primes.
 
 
 File: pcl.info,  Node: 8-6,  Next: 8-7,  Prev: 8-5,  Up: Chapter 8
@@ -5563,40 +5846,51 @@ produce as long as it generates the right list structure.
 
    Table 8-1 shows some examples of backquoted expressions along with
 equivalent list-building code and the result you'd get if you evaluated
-either the backquoted expression or the equivalent code.2
+either the backquoted expression or the equivalent code.  (1)
 
-   Table 8-1.  Backquote Examples Backquote Syntax	Equivalent
-List-Building Code	Result '(a (+ 1 2) c)	(list 'a '(+ 1 2) 'c)	(a (+ 1
-2) c) '(a ,(+ 1 2) c)	(list 'a (+ 1 2) 'c)	(a 3 c) '(a (list 1 2) c)
-(list 'a '(list 1 2) 'c)	(a (list 1 2) c) '(a ,(list 1 2) c)	(list 'a
-(list 1 2) 'c)	(a (1 2) c) '(a ,@(list 1 2) c)	(append (list 'a) (list 1
-2) (list 'c))	(a 1 2 c) It's important to note that backquote is just a
-convenience.  But it's a big convenience.  To appreciate how big,
-compare the backquoted version of do-primes to the following version,
-which uses explicit list-building code:
+   Table 8-1.  Backquote Examples
 
-   (defmacro do-primes-a ((var start end) &body body) (append '(do)
-(list (list (list var (list 'next-prime start) (list 'next-prime (list
-'1+ var))))) (list (list (list '> var end))) body)) As you'll see in a
-moment, the current implementation of do-primes doesn't handle certain
-edge cases correctly.  But first you should verify that it at least
-works for the original example.  You can test it in two ways.  You can
-test it indirectly by simply using it-presumably, if the resulting
-behavior is correct, the expansion is correct.  For instance, you can
-type the original example's use of do-primes to the REPL and see that it
-indeed prints the right series of prime numbers.
+ [image src="tables/8-1.png" ]
 
-   CL-USER> (do-primes (p 0 19) (format t "~d " p)) 2 3 5 7 11 13 17 19
-NIL Or you can check the macro directly by looking at the expansion of a
+   It's important to note that backquote is just a convenience.  But
+it's a big convenience.  To appreciate how big, compare the backquoted
+version of do-primes to the following version, which uses explicit
+list-building code:
+
+     (defmacro do-primes-a ((var start end) &body body)
+       (append '(do)
+               (list  (list (list var
+                                  (list 'next-prime start)
+                                  (list 'next-prime (list '1+ var)))))
+               (list (list (list '> var end)))
+               body))
+
+   As you'll see in a moment, the current implementation of do-primes
+doesn't handle certain edge cases correctly.  But first you should
+verify that it at least works for the original example.  You can test it
+in two ways.  You can test it indirectly by simply using it-presumably,
+if the resulting behavior is correct, the expansion is correct.  For
+instance, you can type the original example's use of do-primes to the
+REPL and see that it indeed prints the right series of prime numbers.
+
+     CL-USER> (do-primes (p 0 19) (format t "~d " p))
+     2 3 5 7 11 13 17 19
+     NIL
+
+   Or you can check the macro directly by looking at the expansion of a
 particular call.  The function MACROEXPAND-1 takes any Lisp expression
 as an argument and returns the result of doing one level of macro
-expansion.3 Because MACROEXPAND-1 is a function, to pass it a literal
-macro form you must quote it.  You can use it to see the expansion of
-the previous call.4
+expansion.  (2) Because MACROEXPAND-1 is a function, to pass it a
+literal macro form you must quote it.  You can use it to see the
+expansion of the previous call.  (3)
 
-   CL-USER> (macroexpand-1 '(do-primes (p 0 19) (format t "~d " p))) (DO
-((P (NEXT-PRIME 0) (NEXT-PRIME (1+ P)))) ((> P 19)) (FORMAT T "~d " P))
-T Or, more conveniently, in SLIME you can check a macro's expansion by
+     CL-USER> (macroexpand-1 '(do-primes (p 0 19) (format t "~d " p)))
+     (DO ((P (NEXT-PRIME 0) (NEXT-PRIME (1+ P))))
+         ((> P 19))
+       (FORMAT T "~d " P))
+     T
+
+   Or, more conveniently, in SLIME you can check a macro's expansion by
 placing the cursor on the opening parenthesis of a macro form in your
 source code and typing C-c RET to invoke the Emacs function
 slime-macroexpand-1, which will pass the macro form to MACROEXPAND-1 and
@@ -5605,6 +5899,24 @@ slime-macroexpand-1, which will pass the macro form to MACROEXPAND-1 and
    However you get to it, you can see that the result of macro expansion
 is the same as the original handwritten expansion, so it seems that
 do-primes works.
+
+   ---------- Footnotes ----------
+
+   (1) APPEND, which I haven't discussed yet, is a function that takes
+any number of list arguments and returns the result of splicing them
+together into a single list.
+
+   (2) Another function, MACROEXPAND, keeps expanding the result as long
+as the first element of the resulting expansion is the name of the
+macro.  However, this will often show you a much lower-level view of
+what the code is doing than you want, since basic control constructs
+such as DO are also implemented as macros.  In other words, while it can
+be educational to see what your macro ultimately expands into, it isn't
+a very useful view into what your own macros are doing.
+
+   (3) If the macro expansion is shown all on one line, it's probably
+because the variable *PRINT-PRETTY* is NIL. If it is, evaluating (setf
+*print-pretty* t) should make the macro expansion easier to read.
 
 
 File: pcl.info,  Node: 8-7,  Next: 8-8,  Prev: 8-6,  Up: Chapter 8
@@ -5616,7 +5928,7 @@ In his essay "The Law of Leaky Abstractions," Joel Spolsky coined the
 term leaky abstraction to describe an abstraction that "leaks" details
 it's supposed to be abstracting away.  Since writing a macro is a way of
 creating an abstraction, you need to make sure your macros don't leak
-needlessly.5
+needlessly.  (1)
 
    As it turns out, a macro can leak details of its inner workings in
 three ways.  Luckily, it's pretty easy to tell whether a given macro
@@ -5627,20 +5939,26 @@ leaks: namely, it evaluates the end subform too many times.  Suppose you
 were to call do-primes with, instead of a literal number such as 19, an
 expression such as (random 100) in the end position.
 
-   (do-primes (p 0 (random 100)) (format t "~d " p)) Presumably the
-intent here is to loop over the primes from zero to whatever random
-number is returned by (random 100).  However, this isn't what the
-current implementation does, as MACROEXPAND-1 shows.
+     (do-primes (p 0 (random 100))
+       (format t "~d " p))
 
-   CL-USER> (macroexpand-1 '(do-primes (p 0 (random 100)) (format t "~d
-" p))) (DO ((P (NEXT-PRIME 0) (NEXT-PRIME (1+ P)))) ((> P (RANDOM 100)))
-(FORMAT T "~d " P)) T When this expansion code is run, RANDOM will be
-called each time the end test for the loop is evaluated.  Thus, instead
-of looping until p is greater than an initially chosen random number,
-this loop will iterate until it happens to draw a random number less
-than or equal to the current value of p.  While the total number of
-iterations will still be random, it will be drawn from a much different
-distribution than the uniform distribution RANDOM returns.
+   Presumably the intent here is to loop over the primes from zero to
+whatever random number is returned by (random 100).  However, this isn't
+what the current implementation does, as MACROEXPAND-1 shows.
+
+     CL-USER> (macroexpand-1 '(do-primes (p 0 (random 100)) (format t "~d " p)))
+     (DO ((P (NEXT-PRIME 0) (NEXT-PRIME (1+ P))))
+         ((> P (RANDOM 100)))
+       (FORMAT T "~d " P))
+     T
+
+   When this expansion code is run, RANDOM will be called each time the
+end test for the loop is evaluated.  Thus, instead of looping until p is
+greater than an initially chosen random number, this loop will iterate
+until it happens to draw a random number less than or equal to the
+current value of p.  While the total number of iterations will still be
+random, it will be drawn from a much different distribution than the
+uniform distribution RANDOM returns.
 
    This is a leak in the abstraction because, to use the macro
 correctly, the caller needs to be aware that the end form is going to be
@@ -5649,7 +5967,7 @@ define this as the behavior of do-primes.  But that's not very
 satisfactory-you should try to observe the Principle of Least
 Astonishment when implementing macros.  And programmers will typically
 expect the forms they pass to macros to be evaluated no more times than
-absolutely necessary.6 Furthermore, since do-primes is built on the
+absolutely necessary.  (2) Furthermore, since do-primes is built on the
 model of the standard macros, DOTIMES and DOLIST, neither of which
 causes any of the forms except those in the body to be evaluated more
 than once, most programmers will expect do-primes to behave similarly.
@@ -5661,10 +5979,14 @@ initialization form and no step form don't change from iteration to
 iteration.  So you can fix the multiple evaluation problem with this
 definition:
 
-   (defmacro do-primes ((var start end) &body body) '(do ((ending-value
-,end) (,var (next-prime ,start) (next-prime (1+ ,var)))) ((> ,var
-ending-value)) ,@body)) Unfortunately, this fix introduces two new leaks
-to the macro abstraction.
+     (defmacro do-primes ((var start end) &body body)
+       `(do ((ending-value ,end)
+             (,var (next-prime ,start) (next-prime (1+ ,var))))
+            ((> ,var ending-value))
+          ,@body))
+
+   Unfortunately, this fix introduces two new leaks to the macro
+abstraction.
 
    One new leak is similar to the multiple-evaluation leak you just
 fixed.  Because the initialization forms for variables in a DO loop are
@@ -5679,38 +6001,56 @@ of the Principle of Least Astonishment.
    This leak is trivially plugged by swapping the order of the two
 variable definitions.
 
-   (defmacro do-primes ((var start end) &body body) '(do ((,var
-(next-prime ,start) (next-prime (1+ ,var))) (ending-value ,end)) ((>
-,var ending-value)) ,@body)) The last leak you need to plug was created
-by using the variable name ending-value.  The problem is that the name,
-which ought to be a purely internal detail of the macro implementation,
-can end up interacting with code passed to the macro or in the context
-where the macro is called.  The following seemingly innocent call to
-do-primes doesn't work correctly because of this leak:
+     (defmacro do-primes ((var start end) &body body)
+       `(do ((,var (next-prime ,start) (next-prime (1+ ,var)))
+             (ending-value ,end))
+            ((> ,var ending-value))
+          ,@body))
 
-   (do-primes (ending-value 0 10) (print ending-value)) Neither does
-this one:
+   The last leak you need to plug was created by using the variable name
+ending-value.  The problem is that the name, which ought to be a purely
+internal detail of the macro implementation, can end up interacting with
+code passed to the macro or in the context where the macro is called.
+The following seemingly innocent call to do-primes doesn't work
+correctly because of this leak:
 
-   (let ((ending-value 0)) (do-primes (p 0 10) (incf ending-value p))
-ending-value) Again, MACROEXPAND-1 can show you the problem.  The first
-call expands to this:
+     (do-primes (ending-value 0 10)
+       (print ending-value))
 
-   (do ((ending-value (next-prime 0) (next-prime (1+ ending-value)))
-(ending-value 10)) ((> ending-value ending-value)) (print ending-value))
-Some Lisps may reject this code because ending-value is used twice as a
-variable name in the same DO loop.  If not rejected outright, the code
+   Neither does this one:
+
+     (let ((ending-value 0))
+       (do-primes (p 0 10)
+         (incf ending-value p))
+       ending-value)
+
+   Again, MACROEXPAND-1 can show you the problem.  The first call
+expands to this:
+
+     (do ((ending-value (next-prime 0) (next-prime (1+ ending-value)))
+          (ending-value 10))
+         ((> ending-value ending-value))
+       (print ending-value))
+
+   Some Lisps may reject this code because ending-value is used twice as
+a variable name in the same DO loop.  If not rejected outright, the code
 will loop forever since ending-value will never be greater than itself.
 
    The second problem call expands to the following:
 
-   (let ((ending-value 0)) (do ((p (next-prime 0) (next-prime (1+ p)))
-(ending-value 10)) ((> p ending-value)) (incf ending-value p))
-ending-value) In this case the generated code is perfectly legal, but
-the behavior isn't at all what you want.  Because the binding of
-ending-value established by the LET outside the loop is shadowed by the
-variable with the same name inside the DO, the form (incf ending-value
-p) increments the loop variable ending-value instead of the outer
-variable with the same name, creating another infinite loop.7
+     (let ((ending-value 0))
+       (do ((p (next-prime 0) (next-prime (1+ p)))
+            (ending-value 10))
+           ((> p ending-value))
+         (incf ending-value p))
+       ending-value)
+
+   In this case the generated code is perfectly legal, but the behavior
+isn't at all what you want.  Because the binding of ending-value
+established by the LET outside the loop is shadowed by the variable with
+the same name inside the DO, the form (incf ending-value p) increments
+the loop variable ending-value instead of the outer variable with the
+same name, creating another infinite loop.  (3)
 
    Clearly, what you need to patch this leak is a symbol that will never
 be used outside the code generated by the macro.  You could try using a
@@ -5724,44 +6064,61 @@ will be because it isn't interned in any package.  Thus, instead of
 using a literal name like ending-value, you can generate a new symbol
 each time do-primes is expanded.
 
-   (defmacro do-primes ((var start end) &body body) (let
-((ending-value-name (gensym))) '(do ((,var (next-prime ,start)
-(next-prime (1+ ,var))) (,ending-value-name ,end)) ((> ,var
-,ending-value-name)) ,@body))) Note that the code that calls GENSYM
-isn't part of the expansion; it runs as part of the macro expander and
-thus creates a new symbol each time the macro is expanded.  This may
-seem a bit strange at first-ending-value-name is a variable whose value
-is the name of another variable.  But really it's no different from the
-parameter var whose value is the name of a variable-the difference is
-the value of var was created by the reader when the macro form was read,
-and the value of ending-value-name is generated programmatically when
-the macro code runs.
+     (defmacro do-primes ((var start end) &body body)
+       (let ((ending-value-name (gensym)))
+         `(do ((,var (next-prime ,start) (next-prime (1+ ,var)))
+               (,ending-value-name ,end))
+              ((> ,var ,ending-value-name))
+            ,@body)))
+
+   Note that the code that calls GENSYM isn't part of the expansion; it
+runs as part of the macro expander and thus creates a new symbol each
+time the macro is expanded.  This may seem a bit strange at
+first-ending-value-name is a variable whose value is the name of another
+variable.  But really it's no different from the parameter var whose
+value is the name of a variable-the difference is the value of var was
+created by the reader when the macro form was read, and the value of
+ending-value-name is generated programmatically when the macro code
+runs.
 
    With this definition the two previously problematic forms expand into
 code that works the way you want.  The first form:
 
-   (do-primes (ending-value 0 10) (print ending-value)) expands into the
-following:
+     (do-primes (ending-value 0 10)
+       (print ending-value))
 
-   (do ((ending-value (next-prime 0) (next-prime (1+ ending-value)))
-(#:g2141 10)) ((> ending-value #:g2141)) (print ending-value)) Now the
-variable used to hold the ending value is the gensymed symbol, #:g2141.
-The name of the symbol, G2141, was generated by GENSYM but isn't
-significant; the thing that matters is the object identity of the
-symbol.  Gensymed symbols are printed in the normal syntax for
+   expands into the following:
+
+     (do ((ending-value (next-prime 0) (next-prime (1+ ending-value)))
+          (#:g2141 10))
+         ((> ending-value #:g2141))
+       (print ending-value))
+
+   Now the variable used to hold the ending value is the gensymed
+symbol, #:g2141.  The name of the symbol, G2141, was generated by GENSYM
+but isn't significant; the thing that matters is the object identity of
+the symbol.  Gensymed symbols are printed in the normal syntax for
 uninterned symbols, with a leading #:.
 
    The other previously problematic form:
 
-   (let ((ending-value 0)) (do-primes (p 0 10) (incf ending-value p))
-ending-value) looks like this if you replace the do-primes form with its
-expansion:
+     (let ((ending-value 0))
+       (do-primes (p 0 10)
+         (incf ending-value p))
+       ending-value)
 
-   (let ((ending-value 0)) (do ((p (next-prime 0) (next-prime (1+ p)))
-(#:g2140 10)) ((> p #:g2140)) (incf ending-value p)) ending-value)
-Again, there's no leak since the ending-value variable bound by the LET
-surrounding the do-primes loop is no longer shadowed by any variables
-introduced in the expanded code.
+   looks like this if you replace the do-primes form with its expansion:
+
+     (let ((ending-value 0))
+       (do ((p (next-prime 0) (next-prime (1+ p)))
+            (#:g2140 10))
+           ((> p #:g2140))
+         (incf ending-value p))
+       ending-value)
+
+   Again, there's no leak since the ending-value variable bound by the
+LET surrounding the do-primes loop is no longer shadowed by any
+variables introduced in the expanded code.
 
    Not all literal names used in a macro expansion will necessarily
 cause a problem-as you get more experience with the various binding
@@ -5775,14 +6132,35 @@ your belt, you'll learn to write macros with these kinds of leaks
 preplugged.  It's actually fairly simple if you follow these rules of
 thumb:
 
-   Unless there's a particular reason to do otherwise, include any
-subforms in the expansion in positions that will be evaluated in the
-same order as the subforms appear in the macro call.  Unless there's a
-particular reason to do otherwise, make sure subforms are evaluated only
-once by creating a variable in the expansion to hold the value of
-evaluating the argument form and then using that variable anywhere else
-the value is needed in the expansion.  Use GENSYM at macro expansion
-time to create variable names used in the expansion.
+   * Unless there's a particular reason to do otherwise, include any
+     subforms in the expansion in positions that will be evaluated in
+     the same order as the subforms appear in the macro call.
+   * Unless there's a particular reason to do otherwise, make sure
+     subforms are evaluated only once by creating a variable in the
+     expansion to hold the value of evaluating the argument form and
+     then using that variable anywhere else the value is needed in the
+     expansion.
+   * Use GENSYM at macro expansion time to create variable names used in
+     the expansion.
+
+   ---------- Footnotes ----------
+
+   (1) This is from Joel on Software by Joel Spolsky, also available at
+http://www.joelonsoftware.com/ articles/LeakyAbstractions.html.
+Spolsky's point in the essay is that all abstractions leak to some
+extent; that is, there are no perfect abstractions.  But that doesn't
+mean you should tolerate leaks you can easily plug.
+
+   (2) Of course, certain forms are supposed to be evaluated more than
+once, such as the forms in the body of a do-primes loop.
+
+   (3) It may not be obvious that this loop is necessarily infinite
+given the nonuniform occurrences of prime numbers.  The starting point
+for a proof that it is in fact infinite is Bertrand's postulate, which
+says for any n > 1, there exists a prime p, n < p < 2n.  From there you
+can prove that for any prime number, P less than the sum of the
+preceding prime numbers, the next prime, P', is also smaller than the
+original sum plus P.
 
 
 File: pcl.info,  Node: 8-8,  Next: 8-9,  Prev: 8-7,  Up: Chapter 8
@@ -5811,44 +6189,55 @@ will serve as a useful but not too strenuous mental limbering exercise.
 
    You want to be able to write something like this:
 
-   (defmacro do-primes ((var start end) &body body) (with-gensyms
-(ending-value-name) '(do ((,var (next-prime ,start) (next-prime (1+
-,var))) (,ending-value-name ,end)) ((> ,var ,ending-value-name))
-,@body))) and have it be equivalent to the previous version of
-do-primes.  In other words, the with-gensyms needs to expand into a LET
-that binds each named variable, ending-value-name in this case, to a
-gensymed symbol.  That's easy enough to write with a simple backquote
-template.
+     (defmacro do-primes ((var start end) &body body)
+       (with-gensyms (ending-value-name)
+         `(do ((,var (next-prime ,start) (next-prime (1+ ,var)))
+               (,ending-value-name ,end))
+              ((> ,var ,ending-value-name))
+            ,@body)))
 
-   (defmacro with-gensyms ((&rest names) &body body) '(let ,(loop for n
-in names collect '(,n (gensym))) ,@body)) Note how you can use a comma
-to interpolate the value of the LOOP expression.  The loop generates a
-list of binding forms where each binding form consists of a list
-containing one of the names given to with-gensyms and the literal code
-(gensym).  You can test what code the LOOP expression would generate at
-the REPL by replacing names with a list of symbols.
+   and have it be equivalent to the previous version of do-primes.  In
+other words, the with-gensyms needs to expand into a LET that binds each
+named variable, ending-value-name in this case, to a gensymed symbol.
+That's easy enough to write with a simple backquote template.
 
-   CL-USER> (loop for n in '(a b c) collect '(,n (gensym))) ((A
-(GENSYM)) (B (GENSYM)) (C (GENSYM))) After the list of binding forms,
-the body argument to with-gensyms is spliced in as the body of the LET.
-Thus, in the code you wrap in a with-gensyms you can refer to any of the
-variables named in the list of variables passed to with-gensyms.
+     (defmacro with-gensyms ((&rest names) &body body)
+       `(let ,(loop for n in names collect `(,n (gensym)))
+          ,@body))
+
+   Note how you can use a comma to interpolate the value of the LOOP
+expression.  The loop generates a list of binding forms where each
+binding form consists of a list containing one of the names given to
+with-gensyms and the literal code (gensym).  You can test what code the
+LOOP expression would generate at the REPL by replacing names with a
+list of symbols.
+
+     CL-USER> (loop for n in '(a b c) collect `(,n (gensym)))
+     ((A (GENSYM)) (B (GENSYM)) (C (GENSYM)))
+
+   After the list of binding forms, the body argument to with-gensyms is
+spliced in as the body of the LET. Thus, in the code you wrap in a
+with-gensyms you can refer to any of the variables named in the list of
+variables passed to with-gensyms.
 
    If you macro-expand the with-gensyms form in the new definition of
 do-primes, you should see something like this:
 
-   (let ((ending-value-name (gensym))) '(do ((,var (next-prime ,start)
-(next-prime (1+ ,var))) (,ending-value-name ,end)) ((> ,var
-,ending-value-name)) ,@body)) Looks good.  While this macro is fairly
-trivial, it's important to keep clear about when the different macros
-are expanded: when you compile the DEFMACRO of do-primes, the
-with-gensyms form is expanded into the code just shown and compiled.
-Thus, the compiled version of do-primes is just the same as if you had
-written the outer LET by hand.  When you compile a function that uses
-do-primes, the code generated by with-gensyms runs generating the
-do-primes expansion, but with-gensyms itself isn't needed to compile a
-do-primes form since it has already been expanded, back when do-primes
-was compiled.
+     (let ((ending-value-name (gensym)))
+       `(do ((,var (next-prime ,start) (next-prime (1+ ,var)))
+             (,ending-value-name ,end))
+            ((> ,var ,ending-value-name))
+          ,@body))
+
+   Looks good.  While this macro is fairly trivial, it's important to
+keep clear about when the different macros are expanded: when you
+compile the DEFMACRO of do-primes, the with-gensyms form is expanded
+into the code just shown and compiled.  Thus, the compiled version of
+do-primes is just the same as if you had written the outer LET by hand.
+When you compile a function that uses do-primes, the code generated by
+with-gensyms runs generating the do-primes expansion, but with-gensyms
+itself isn't needed to compile a do-primes form since it has already
+been expanded, back when do-primes was compiled.
 
 
 File: pcl.info,  Node: 8-9,  Next: Chapter 9,  Prev: 8-8,  Up: Chapter 8
@@ -6020,175 +6409,4 @@ like this:
 as the first version of test-+ but expands into code that does the same
 thing as the second version.  And now any changes you want to make to
 how test-+ behaves, you can make by changing check.
-
-
-File: pcl.info,  Node: 9-3,  Next: 9-4,  Prev: 9-2,  Up: Chapter 9
-
-Fixing the Return Value
-=======================
-
-You can start with fixing test-+ so its return value indicates whether
-all the test cases passed.  Since check is responsible for generating
-the code that ultimately runs the test cases, you just need to change it
-to generate code that also keeps track of the results.
-
-   As a first step, you can make a small change to report-result so it
-returns the result of the test case it's reporting.
-
-   (defun report-result (result form) (format t "~:[FAIL~;pass~] ...
-~a~%" result form) result) Now that report-result returns the result of
-its test case, it might seem you could just change the PROGN to an AND
-to combine the results.  Unfortunately, AND doesn't do quite what you
-want in this case because of its short-circuiting behavior: as soon as
-one test case fails, AND will skip the rest.  On the other hand, if you
-had a construct that worked like AND without the short-circuiting, you
-could use it in the place of PROGN, and you'd be done.  Common Lisp
-doesn't provide such a construct, but that's no reason you can't use it:
-it's a trivial matter to write a macro to provide it yourself.
-
-   Leaving test cases aside for a moment, what you want is a macro-let's
-call it combine-results-that will let you say this:
-
-   (combine-results (foo) (bar) (baz)) and have it mean something like
-this:
-
-   (let ((result t)) (unless (foo) (setf result nil)) (unless (bar)
-(setf result nil)) (unless (baz) (setf result nil)) result) The only
-tricky bit to writing this macro is that you need to introduce a
-variable-result in the previous code-in the expansion.  As you saw in
-the previous chapter, using a literal name for variables in macro
-expansions can introduce a leak in your macro abstraction, so you'll
-need to create a unique name.  This is a job for with-gensyms.  You can
-define combine-results like this:
-
-   (defmacro combine-results (&body forms) (with-gensyms (result) '(let
-((,result t)) ,@(loop for f in forms collect '(unless ,f (setf ,result
-nil))) ,result))) Now you can fix check by simply changing the expansion
-to use combine-results instead of PROGN.
-
-   (defmacro check (&body forms) '(combine-results ,@(loop for f in
-forms collect '(report-result ,f ',f)))) With that version of check,
-test-+ should emit the results of its three test expressions and then
-return T to indicate that everything passed.4
-
-   CL-USER> (test-+) pass ...  (= (+ 1 2) 3) pass ...  (= (+ 1 2 3) 6)
-pass ...  (= (+ -1 -3) -4) T And if you change one of the test cases so
-it fails,5 the final return value changes to NIL.
-
-   CL-USER> (test-+) pass ...  (= (+ 1 2) 3) pass ...  (= (+ 1 2 3) 6)
-FAIL ...  (= (+ -1 -3) -5) NIL
-
-
-File: pcl.info,  Node: 9-4,  Next: 9-5,  Prev: 9-3,  Up: Chapter 9
-
-Better Result Reporting
-=======================
-
-As long as you have only one test function, the current result reporting
-is pretty clear.  If a particular test case fails, all you have to do is
-find the test case in the check form and figure out why it's failing.
-But if you write a lot of tests, you'll probably want to organize them
-somehow, rather than shoving them all into one function.  For instance,
-suppose you wanted to add some test cases for the * function.  You might
-write a new test function.
-
-   (defun test-* () (check (= (* 2 2) 4) (= (* 3 5) 15))) Now that you
-have two test functions, you'll probably want another function that runs
-all the tests.  That's easy enough.
-
-   (defun test-arithmetic () (combine-results (test-+) (test-*))) In
-this function you use combine-results instead of check since both test-+
-and test-* will take care of reporting their own results.  When you run
-test-arithmetic, you'll get the following results:
-
-   CL-USER> (test-arithmetic) pass ...  (= (+ 1 2) 3) pass ...  (= (+ 1
-2 3) 6) pass ...  (= (+ -1 -3) -4) pass ...  (= (* 2 2) 4) pass ...  (=
-(* 3 5) 15) T Now imagine that one of the test cases failed and you need
-to track down the problem.  With only five test cases and two test
-functions, it won't be too hard to find the code of the failing test
-case.  But suppose you had 500 test cases spread across 20 functions.
-It might be nice if the results told you what function each test case
-came from.
-
-   Since the code that prints the results is centralized in
-report-result, you need a way to pass information about what test
-function you're in to report-result.  You could add a parameter to
-report-result to pass this information, but check, which generates the
-calls to report-result, doesn't know what function it's being called
-from, which means you'd also have to change the way you call check,
-passing it an argument that it simply passes onto report-result.
-
-   This is exactly the kind of problem dynamic variables were designed
-to solve.  If you create a dynamic variable that each test function
-binds to the name of the function before calling check, then
-report-result can use it without check having to know anything about it.
-
-   Step one is to declare the variable at the top level.
-
-   (defvar *test-name* nil) Now you need to make another tiny change to
-report-result to include *test-name* in the FORMAT output.
-
-   (format t "~:[FAIL~;pass~] ...  ~a: ~a~%" result *test-name* form)
-With those changes, the test functions will still work but will produce
-the following output because *test-name* is never rebound:
-
-   CL-USER> (test-arithmetic) pass ...  NIL: (= (+ 1 2) 3) pass ...
-NIL: (= (+ 1 2 3) 6) pass ...  NIL: (= (+ -1 -3) -4) pass ...  NIL: (=
-(* 2 2) 4) pass ...  NIL: (= (* 3 5) 15) T For the name to be reported
-properly, you need to change the two test functions.
-
-   (defun test-+ () (let ((*test-name* 'test-+)) (check (= (+ 1 2) 3) (=
-(+ 1 2 3) 6) (= (+ -1 -3) -4))))
-
-   (defun test-* () (let ((*test-name* 'test-*)) (check (= (* 2 2) 4) (=
-(* 3 5) 15)))) Now the results are properly labeled.
-
-   CL-USER> (test-arithmetic) pass ...  TEST-+: (= (+ 1 2) 3) pass ...
-TEST-+: (= (+ 1 2 3) 6) pass ...  TEST-+: (= (+ -1 -3) -4) pass ...
-TEST-*: (= (* 2 2) 4) pass ...  TEST-*: (= (* 3 5) 15) T
-
-
-File: pcl.info,  Node: 9-5,  Next: 9-6,  Prev: 9-4,  Up: Chapter 9
-
-An Abstraction Emerges
-======================
-
-In fixing the test functions, you've introduced several new bits of
-duplication.  Not only does each function have to include the name of
-the function twice-once as the name in the DEFUN and once in the binding
-of *test-name*-but the same three-line code pattern is duplicated
-between the two functions.  You could remove the duplication simply on
-the grounds that duplication is bad.  But if you look more closely at
-the root cause of the duplication, you can learn an important lesson
-about how to use macros.
-
-   The reason both these functions start the same way is because they're
-both test functions.  The duplication arises because, at the moment,
-test function is only half an abstraction.  The abstraction exists in
-your mind, but in the code there's no way to express "this is a test
-function" other than to write code that follows a particular pattern.
-
-   Unfortunately, partial abstractions are a crummy tool for building
-software.  Because a half abstraction is expressed in code by a
-manifestation of the pattern, you're guaranteed to have massive code
-duplication with all the normal bad consequences that implies for
-maintainability.  More subtly, because the abstraction exists only in
-the minds of programmers, there's no mechanism to make sure different
-programmers (or even the same programmer working at different times)
-actually understand the abstraction the same way.  To make a complete
-abstraction, you need a way to express "this is a test function" and
-have all the code required by the pattern be generated for you.  In
-other words, you need a macro.
-
-   Because the pattern you're trying to capture is a DEFUN plus some
-boilerplate code, you need to write a macro that will expand into a
-DEFUN. You'll then use this macro, instead of a plain DEFUN to define
-test functions, so it makes sense to call it deftest.
-
-   (defmacro deftest (name parameters &body body) '(defun ,name
-,parameters (let ((*test-name* ',name)) ,@body))) With this macro you
-can rewrite test-+ as follows:
-
-   (deftest test-+ () (check (= (+ 1 2) 3) (= (+ 1 2 3) 6) (= (+ -1 -3)
--4)))
 

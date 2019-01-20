@@ -6,6 +6,8 @@ To view in info-reader mode, open `pcl.info` with `C-u C-h i` (just as you would
 
 ![How It Looks](./pcl-info-screenshot.png)
 
+Build from the project root with `$ makeinfo pcl.texi`
+
 TODOs:
 - [ ] mid-section asides
   - [ ] @node 1-2 Where It Began
@@ -34,28 +36,27 @@ TODOs:
     `The Package`
   - [ ] @node 30-6 The Pretty Printer Backend
     `Using Conditions to Have Your Cake and Eat It Too`
-- [ ] tables
-  - [ ] Table 6-1.
+- [X] tables
+  - [X] Table 6-1.
     `Assignment with = in Other Languages`
-  - [ ] Table 8-1.
+  - [X] Table 8-1.
     `Backquote Examples`
-  - [ ] Table 10-1.
+  - [X] Table 10-1.
     `Character Comparison Functions`
-  - [ ] Table 10-2.
+  - [X] Table 10-2.
     `Literal Strings`
-  - [ ] Table 10-3.
+  - [X] Table 10-3.
     `String Comparison Functions`
-  - [ ] Table 11-1.
+  - [X] Table 11-1.
     `Basic Sequence Functions`
-  - [ ] Table 11-2.
+  - [X] Table 11-2.
     `Standard Sequence Function Keyword Arguments`
-  - [ ] Table 12-1.
+  - [X] Table 12-1.
     `Other List Functions`
-  - [ ] Table 30-1.
+  - [X] Table 30-1.
     `FOO Output for Self-Evaluating Objects`
-- [ ] footnotes
-- [ ] inline text formatting
-- [ ] images
+- [ ] inline text formatting (bold and italicized)
+- [X] images
   - [X] @node 12-1 cons cell diagrams
   - [X] @node 12-2 cons cell diagrams
   - [X] @node 13-1 cons cell diagrams
@@ -71,6 +72,39 @@ TODOs:
   - [X] @node 26-7 `Figure 26-7. http://localhost:2001/show-cookies with no cookies`
   - [X] @node 26-7 `Figure 26-8. http://localhost:2001/set-cookie`
   - [X] @node 26-7 `Figure 26-9. http://localhost:2001/show-cookies after setting a cookie`
+- [ ] Code blocks and footnotes
+  - [X] Chapter 01
+  - [X] Chapter 02
+  - [X] Chapter 03
+  - [ ] Chapter 04
+  - [ ] Chapter 05
+  - [X] Chapter 06
+  - [ ] Chapter 07
+  - [X] Chapter 08
+  - [ ] Chapter 09
+  - [X] Chapter 10
+  - [X] Chapter 11
+  - [X] Chapter 12
+  - [X] Chapter 13
+  - [ ] Chapter 14
+  - [ ] Chapter 15
+  - [X] Chapter 16
+  - [ ] Chapter 17
+  - [ ] Chapter 18
+  - [X] Chapter 19
+  - [ ] Chapter 20
+  - [ ] Chapter 21
+  - [ ] Chapter 22
+  - [ ] Chapter 23
+  - [ ] Chapter 24
+  - [ ] Chapter 25
+  - [X] Chapter 26
+  - [ ] Chapter 27
+  - [ ] Chapter 28
+  - [ ] Chapter 29
+  - [X] Chapter 30
+  - [ ] Chapter 31
+  - [ ] Chapter 32
 
 
 @emph for bold
@@ -86,5 +120,3 @@ for bar.
 
 green font!
 ‘Here's how you do it—and why’
-
-Build from the project root with `$ makeinfo pcl.texi`

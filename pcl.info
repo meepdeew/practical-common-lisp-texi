@@ -3,9 +3,9 @@ This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
 Indirect:
 pcl.info-1: 67
-pcl.info-2: 301357
-pcl.info-3: 604448
-pcl.info-4: 901250
+pcl.info-2: 302481
+pcl.info-3: 603857
+pcl.info-4: 910597
 
 Tag Table:
 (Indirect)
@@ -90,302 +90,358 @@ Node: 5-7185742
 Node: 5-8187746
 Node: 5-9193426
 Node: Chapter 6195811
-Node: 6-1197338
-Node: 6-2203723
-Node: 6-3206599
-Node: 6-4216778
-Node: 6-5218249
-Node: 6-6220240
-Node: 6-7222778
-Node: Chapter 7226719
-Node: 7-1231051
-Node: 7-2234582
-Node: 7-3236107
-Node: 7-4237350
-Node: 7-5239547
-Node: 7-6241220
-Node: 7-7245757
-Node: Chapter 8249716
-Node: 8-1251773
-Node: 8-2256591
-Node: 8-3259687
-Node: 8-4262692
-Node: 8-5264628
-Node: 8-6268625
-Node: 8-7272445
-Node: 8-8281723
-Node: 8-9285090
-Node: Chapter 9285664
-Node: 9-1287473
-Node: 9-2289899
-Node: 9-3292984
-Node: 9-4295725
-Node: 9-5299084
-Node: 9-6301357
-Node: 9-7304525
-Node: Chapter 10308433
-Node: 10-1311454
-Node: 10-2313740
-Node: 10-3319721
-Node: 10-4323086
-Node: 10-5325005
-Node: 10-6325625
-Node: 10-7327098
-Node: 10-8329126
-Node: 10-9331076
-Node: Chapter 11333783
-Node: 11-1336206
-Node: 11-2340415
-Node: 11-3342720
-Node: 11-4344078
-Node: 11-5348913
-Node: 11-6351295
-Node: 11-7352701
-Node: 11-8355239
-Node: 11-9357666
-Node: 11-10359131
-Node: 11-11361587
-Node: 11-12365578
-Node: Chapter 12367264
-Node: 12-1368915
-Ref: 12-1-Footnote-1374793
-Ref: 12-1-Footnote-2374861
-Ref: 12-1-Footnote-3374919
-Ref: 12-1-Footnote-4375177
-Node: 12-2375583
-Node: 12-3379569
-Ref: 12-3-Footnote-1386373
-Ref: 12-3-Footnote-2386608
-Node: 12-4386824
-Ref: 12-4-Footnote-1391745
-Ref: 12-4-Footnote-2392022
-Ref: 12-4-Footnote-3392239
-Ref: 12-4-Footnote-4392327
-Node: 12-5392545
-Ref: 12-5-Footnote-1396732
-Ref: 12-5-Footnote-2397076
-Node: 12-6397502
-Ref: 12-6-Footnote-1400044
-Ref: 12-6-Footnote-2400220
-Node: 12-7400431
-Node: Chapter 13400986
-Node: 13-1401883
-Ref: 13-1-Footnote-1406229
-Ref: 13-1-Footnote-2406419
-Node: 13-2406722
-Ref: 13-2-Footnote-1410382
-Node: 13-3410523
-Ref: 13-3-Footnote-1420214
-Node: 13-4420524
-Ref: 13-4-Footnote-1423558
-Ref: 13-4-Footnote-2423788
-Node: Chapter 14423936
-Node: 14-1425077
-Node: 14-2429267
-Node: 14-3430066
-Node: 14-4430909
-Node: 14-5434744
-Node: 14-6437381
-Node: 14-7439887
-Node: 14-8444041
-Node: 14-9449397
-Node: 14-10451561
-Node: 14-11456742
-Node: Chapter 15461027
-Node: 15-1463012
-Node: 15-2463804
-Node: 15-3467791
-Node: 15-4475208
-Node: 15-5478836
-Node: Chapter 16480569
-Ref: Chapter 16-Footnote-1483064
-Ref: Chapter 16-Footnote-2483074
-Node: 16-1483084
-Ref: 16-1-Footnote-1487786
-Ref: 16-1-Footnote-2487796
-Node: 16-2487806
-Ref: 16-2-Footnote-1492009
-Node: 16-3492019
-Node: 16-4493955
-Ref: 16-4-Footnote-1499544
-Ref: 16-4-Footnote-2499554
-Ref: 16-4-Footnote-3499564
-Node: 16-5499574
-Ref: 16-5-Footnote-1503700
-Ref: 16-5-Footnote-2503710
-Node: 16-6503721
-Node: 16-7509248
-Node: 16-8513827
-Ref: 16-8-Footnote-1516547
-Node: 16-9516558
-Node: Chapter 17516856
-Node: 17-1518415
-Node: 17-2520260
-Node: 17-3523072
-Node: 17-4528965
-Node: 17-5536150
-Node: 17-6540619
-Node: 17-7542103
-Node: 17-8546456
-Node: 17-9554805
-Node: Chapter 18555977
-Node: 18-1560007
-Node: 18-2561945
-Node: 18-3564925
-Node: 18-4567642
-Node: 18-5572466
-Node: 18-6574464
-Node: 18-7577827
-Node: 18-8581035
-Node: 18-9586638
-Node: 18-10588601
-Node: Chapter 19589270
-Ref: Chapter 19-Footnote-1594932
-Ref: Chapter 19-Footnote-2594991
-Node: 19-1595042
-Node: 19-2596525
-Ref: 19-2-Footnote-1598469
-Ref: 19-2-Footnote-2598622
-Node: 19-3598837
-Node: 19-4604448
-Ref: 19-4-Footnote-1611605
-Node: 19-5611790
-Node: 19-6614699
-Node: Chapter 20619371
-Node: 20-1621288
-Node: 20-2622027
-Node: 20-3629066
-Node: 20-4636251
-Node: 20-5645094
-Node: 20-6650200
-Node: 20-7657139
-Node: Chapter 21660031
-Node: 21-1662231
-Node: 21-2666798
-Node: 21-3670190
-Node: 21-4672338
-Node: 21-5677876
-Node: 21-6679223
-Node: 21-7683264
-Node: 21-8687734
-Node: Chapter 22693309
-Node: 22-1694984
-Node: 22-2695835
-Node: 22-3696910
-Node: 22-4699927
-Node: 22-5703165
-Node: 22-6705244
-Node: 22-7706171
-Node: 22-8707959
-Node: 22-9710481
-Node: 22-10712266
-Node: 22-11715474
-Node: 22-12718633
-Node: 22-13722331
-Node: Chapter 23724211
-Node: 23-1726045
-Node: 23-2734026
-Node: 23-3737915
-Node: 23-4742973
-Node: 23-5751047
-Node: 23-6753151
-Node: 23-7756027
-Node: 23-8760879
-Node: 23-9763425
-Node: 23-10768591
-Node: Chapter 24770302
-Node: 24-1771734
-Node: 24-2772931
-Node: 24-3776417
-Node: 24-4782558
-Node: 24-5786194
-Node: 24-6788815
-Node: 24-7792507
-Node: 24-8799342
-Node: 24-9800807
-Node: 24-10806395
-Node: 24-11812476
-Node: 24-12817075
-Node: 24-13824835
-Node: Chapter 25827380
-Node: 25-1832561
-Node: 25-2835591
-Node: 25-3836464
-Node: 25-4839865
-Node: 25-5848480
-Node: 25-6852063
-Node: 25-7857074
-Node: 25-8859915
-Node: 25-9865314
-Node: 25-10867149
-Node: 25-11870092
-Node: 25-12875128
-Node: 25-13879210
-Node: 25-14881727
-Node: Chapter 26893379
-Node: 26-1894530
-Ref: 26-1-Footnote-1899715
-Ref: 26-1-Footnote-2899923
-Ref: 26-1-Footnote-3900170
-Ref: 26-1-Footnote-4900396
-Node: 26-2901250
-Ref: 26-2-Footnote-1907904
-Ref: 26-2-Footnote-2907965
-Ref: 26-2-Footnote-3908006
-Ref: 26-2-Footnote-4908337
-Node: 26-3908491
-Ref: 26-3-Footnote-1911856
-Node: 26-4912198
-Ref: 26-4-Footnote-1918336
-Node: 26-5918408
-Node: 26-6919545
-Node: 26-7924690
-Ref: 26-7-Footnote-1928527
-Node: 26-8928681
-Node: 26-9933078
-Ref: 26-9-Footnote-1941662
-Node: Chapter 27942019
-Node: 27-1942933
-Node: 27-2947728
-Node: 27-3952024
-Node: 27-4955007
-Node: 27-5961941
-Node: 27-6966760
-Node: 27-7970672
-Node: Chapter 28973505
-Node: 28-1974030
-Node: 28-2977627
-Node: 28-3982383
-Node: Chapter 29993878
-Node: 29-1994825
-Node: 29-2999257
-Node: 29-31007668
-Node: 29-41016460
-Node: 29-51019665
-Node: 29-61024004
-Node: 29-71030442
-Node: 29-81037027
-Node: 29-91038230
-Node: Chapter 301040524
-Node: 30-11042220
-Node: 30-21045695
-Node: 30-31051443
-Node: 30-41054151
-Node: 30-51057394
-Node: 30-61058975
-Node: 30-71061847
-Node: 30-81070909
-Node: Chapter 311071325
-Node: 31-11072855
-Node: 31-21083406
-Node: 31-31095108
-Node: 31-41101715
-Node: 31-51106185
-Node: Chapter 321108398
-Node: 32-11109591
-Node: 32-21114918
-Node: 32-31116701
-Node: 32-41135364
-Node: 32-51143573
+Ref: Chapter 6-Footnote-1197382
+Ref: Chapter 6-Footnote-2197625
+Node: 6-1198298
+Ref: 6-1-Footnote-1205002
+Ref: 6-1-Footnote-2205429
+Ref: 6-1-Footnote-3205881
+Ref: 6-1-Footnote-4206067
+Node: 6-2206466
+Node: 6-3209419
+Ref: 6-3-Footnote-1219901
+Ref: 6-3-Footnote-2220092
+Ref: 6-3-Footnote-3220269
+Ref: 6-3-Footnote-4220860
+Ref: 6-3-Footnote-5221482
+Ref: 6-3-Footnote-6221854
+Ref: 6-3-Footnote-7221937
+Node: 6-4222027
+Ref: 6-4-Footnote-1223542
+Node: 6-5223841
+Ref: 6-5-Footnote-1225928
+Node: 6-6226051
+Ref: 6-6-Footnote-1228457
+Ref: 6-6-Footnote-2228525
+Ref: 6-6-Footnote-3228899
+Node: 6-7229325
+Node: Chapter 7233365
+Node: 7-1237697
+Node: 7-2241228
+Node: 7-3242753
+Node: 7-4243996
+Node: 7-5246193
+Node: 7-6247866
+Node: 7-7252403
+Node: Chapter 8256362
+Node: 8-1258419
+Node: 8-2263237
+Node: 8-3266366
+Ref: 8-3-Footnote-1269451
+Node: 8-4269565
+Node: 8-5271567
+Node: 8-6275685
+Ref: 8-6-Footnote-1279431
+Ref: 8-6-Footnote-2279601
+Ref: 8-6-Footnote-3280081
+Node: 8-7280289
+Ref: 8-7-Footnote-1290116
+Ref: 8-7-Footnote-2290442
+Ref: 8-7-Footnote-3290571
+Node: 8-8291009
+Node: 8-9294520
+Node: Chapter 9295094
+Node: 9-1296903
+Node: 9-2299329
+Node: 9-3302481
+Node: 9-4305222
+Node: 9-5308581
+Node: 9-6310787
+Node: 9-7313955
+Node: Chapter 10317863
+Ref: Chapter 10-Footnote-1320924
+Node: 10-1321058
+Ref: 10-1-Footnote-1323396
+Ref: 10-1-Footnote-2323430
+Ref: 10-1-Footnote-3323979
+Ref: 10-1-Footnote-4324972
+Node: 10-2325244
+Ref: 10-2-Footnote-1331849
+Ref: 10-2-Footnote-2332104
+Ref: 10-2-Footnote-3332437
+Node: 10-3332999
+Ref: 10-3-Footnote-1336719
+Ref: 10-3-Footnote-2336876
+Node: 10-4337090
+Node: 10-5339210
+Node: 10-6339830
+Ref: 10-6-Footnote-1341342
+Node: 10-7341710
+Node: 10-8343592
+Ref: 10-8-Footnote-1345376
+Node: 10-9345679
+Node: Chapter 11348242
+Ref: Chapter 11-Footnote-1350706
+Node: 11-1350968
+Ref: 11-1-Footnote-1355444
+Ref: 11-1-Footnote-2355682
+Ref: 11-1-Footnote-3355821
+Node: 11-2356295
+Node: 11-3358607
+Node: 11-4360001
+Ref: 11-4-Footnote-1364263
+Ref: 11-4-Footnote-2364872
+Node: 11-5365100
+Ref: 11-5-Footnote-1367578
+Ref: 11-5-Footnote-2367662
+Node: 11-6368377
+Ref: 11-6-Footnote-1369842
+Node: 11-7370015
+Ref: 11-7-Footnote-1372618
+Node: 11-8372975
+Node: 11-9375463
+Node: 11-10376984
+Node: 11-11379457
+Ref: 11-11-Footnote-1383552
+Node: 11-12383753
+Ref: 11-12-Footnote-1385502
+Node: Chapter 12385856
+Node: 12-1387507
+Ref: 12-1-Footnote-1393385
+Ref: 12-1-Footnote-2393453
+Ref: 12-1-Footnote-3393511
+Ref: 12-1-Footnote-4393769
+Node: 12-2394175
+Node: 12-3398161
+Ref: 12-3-Footnote-1404965
+Ref: 12-3-Footnote-2405200
+Node: 12-4405416
+Ref: 12-4-Footnote-1410337
+Ref: 12-4-Footnote-2410614
+Ref: 12-4-Footnote-3410831
+Ref: 12-4-Footnote-4410919
+Node: 12-5411137
+Ref: 12-5-Footnote-1413884
+Ref: 12-5-Footnote-2414228
+Node: 12-6414654
+Ref: 12-6-Footnote-1417196
+Ref: 12-6-Footnote-2417372
+Node: 12-7417583
+Node: Chapter 13418138
+Node: 13-1419035
+Ref: 13-1-Footnote-1423381
+Ref: 13-1-Footnote-2423571
+Node: 13-2423874
+Ref: 13-2-Footnote-1427534
+Node: 13-3427675
+Ref: 13-3-Footnote-1437366
+Node: 13-4437676
+Ref: 13-4-Footnote-1440710
+Ref: 13-4-Footnote-2440940
+Node: Chapter 14441088
+Node: 14-1442229
+Node: 14-2446419
+Node: 14-3447218
+Node: 14-4448061
+Node: 14-5451896
+Node: 14-6454533
+Node: 14-7457039
+Node: 14-8461193
+Node: 14-9466549
+Node: 14-10468713
+Node: 14-11473894
+Node: Chapter 15478179
+Node: 15-1480164
+Node: 15-2480956
+Node: 15-3484943
+Node: 15-4492360
+Node: 15-5495988
+Node: Chapter 16497721
+Ref: Chapter 16-Footnote-1500216
+Ref: Chapter 16-Footnote-2500226
+Node: 16-1500236
+Ref: 16-1-Footnote-1504938
+Ref: 16-1-Footnote-2504948
+Node: 16-2504958
+Ref: 16-2-Footnote-1509161
+Node: 16-3509171
+Node: 16-4511107
+Ref: 16-4-Footnote-1516696
+Ref: 16-4-Footnote-2516706
+Ref: 16-4-Footnote-3516716
+Node: 16-5516726
+Ref: 16-5-Footnote-1520852
+Ref: 16-5-Footnote-2520862
+Node: 16-6520873
+Node: 16-7526400
+Node: 16-8530979
+Ref: 16-8-Footnote-1533699
+Node: 16-9533710
+Node: Chapter 17534008
+Node: 17-1535567
+Node: 17-2537412
+Node: 17-3540224
+Node: 17-4546117
+Node: 17-5553302
+Node: 17-6557771
+Node: 17-7559255
+Node: 17-8563608
+Node: 17-9571957
+Node: Chapter 18573129
+Node: 18-1577159
+Node: 18-2579097
+Node: 18-3582077
+Node: 18-4584794
+Node: 18-5589618
+Node: 18-6591616
+Node: 18-7594979
+Node: 18-8598187
+Node: 18-9603857
+Node: 18-10605820
+Node: Chapter 19606489
+Ref: Chapter 19-Footnote-1612151
+Ref: Chapter 19-Footnote-2612210
+Node: 19-1612261
+Node: 19-2613744
+Ref: 19-2-Footnote-1615688
+Ref: 19-2-Footnote-2615841
+Node: 19-3616056
+Node: 19-4621600
+Ref: 19-4-Footnote-1628757
+Node: 19-5628942
+Node: 19-6631851
+Node: Chapter 20636523
+Node: 20-1638440
+Node: 20-2639179
+Node: 20-3646218
+Node: 20-4653403
+Node: 20-5662246
+Node: 20-6667352
+Node: 20-7674291
+Node: Chapter 21677183
+Node: 21-1679383
+Node: 21-2683950
+Node: 21-3687342
+Node: 21-4689490
+Node: 21-5695028
+Node: 21-6696375
+Node: 21-7700416
+Node: 21-8704886
+Node: Chapter 22710461
+Node: 22-1712136
+Node: 22-2712987
+Node: 22-3714062
+Node: 22-4717079
+Node: 22-5720317
+Node: 22-6722396
+Node: 22-7723323
+Node: 22-8725111
+Node: 22-9727633
+Node: 22-10729418
+Node: 22-11732626
+Node: 22-12735785
+Node: 22-13739483
+Node: Chapter 23741363
+Node: 23-1743197
+Node: 23-2751178
+Node: 23-3755067
+Node: 23-4760125
+Node: 23-5768199
+Node: 23-6770303
+Node: 23-7773179
+Node: 23-8778031
+Node: 23-9780577
+Node: 23-10785743
+Node: Chapter 24787454
+Node: 24-1788886
+Node: 24-2790083
+Node: 24-3793569
+Node: 24-4799710
+Node: 24-5803346
+Node: 24-6805967
+Node: 24-7809659
+Node: 24-8816494
+Node: 24-9817959
+Node: 24-10823547
+Node: 24-11829628
+Node: 24-12834227
+Node: 24-13841987
+Node: Chapter 25844532
+Node: 25-1849713
+Node: 25-2852743
+Node: 25-3853616
+Node: 25-4857017
+Node: 25-5865632
+Node: 25-6869215
+Node: 25-7874226
+Node: 25-8877067
+Node: 25-9882466
+Node: 25-10884301
+Node: 25-11887244
+Node: 25-12892280
+Node: 25-13896362
+Node: 25-14898879
+Node: Chapter 26910598
+Node: 26-1911749
+Ref: 26-1-Footnote-1916939
+Ref: 26-1-Footnote-2917147
+Ref: 26-1-Footnote-3917394
+Ref: 26-1-Footnote-4917620
+Node: 26-2918407
+Ref: 26-2-Footnote-1925062
+Ref: 26-2-Footnote-2925123
+Ref: 26-2-Footnote-3925164
+Ref: 26-2-Footnote-4925495
+Node: 26-3925649
+Ref: 26-3-Footnote-1929015
+Node: 26-4929357
+Ref: 26-4-Footnote-1935495
+Node: 26-5935567
+Node: 26-6936704
+Node: 26-7941852
+Ref: 26-7-Footnote-1945692
+Node: 26-8945846
+Node: 26-9950243
+Ref: 26-9-Footnote-1958827
+Node: Chapter 27959184
+Node: 27-1960098
+Node: 27-2964893
+Node: 27-3969189
+Node: 27-4972172
+Node: 27-5979106
+Node: 27-6983925
+Node: 27-7987837
+Node: Chapter 28990670
+Node: 28-1991195
+Node: 28-2994792
+Node: 28-3999548
+Node: Chapter 291011043
+Node: 29-11011990
+Node: 29-21016422
+Node: 29-31024833
+Node: 29-41033625
+Node: 29-51036830
+Node: 29-61041169
+Node: 29-71047607
+Node: 29-81054192
+Node: 29-91055395
+Node: Chapter 301057689
+Node: 30-11059385
+Ref: 30-1-Footnote-11062941
+Ref: 30-1-Footnote-21063376
+Node: 30-21063515
+Ref: 30-2-Footnote-11069559
+Ref: 30-2-Footnote-21069793
+Node: 30-31070071
+Node: 30-41072991
+Node: 30-51076483
+Node: 30-61078084
+Ref: 30-6-Footnote-11081155
+Node: 30-71081698
+Ref: 30-7-Footnote-11091420
+Ref: 30-7-Footnote-21091584
+Node: 30-81092132
+Node: Chapter 311092548
+Node: 31-11094078
+Node: 31-21104629
+Node: 31-31116331
+Node: 31-41122938
+Node: 31-51127408
+Node: Chapter 321129621
+Node: 32-11130814
+Node: 32-21136141
+Node: 32-31137924
+Node: 32-41156587
+Node: 32-51164796
 
 End Tag Table

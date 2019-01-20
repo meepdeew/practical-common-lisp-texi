@@ -1,6 +1,177 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
 
+File: pcl.info,  Node: 9-3,  Next: 9-4,  Prev: 9-2,  Up: Chapter 9
+
+Fixing the Return Value
+=======================
+
+You can start with fixing test-+ so its return value indicates whether
+all the test cases passed.  Since check is responsible for generating
+the code that ultimately runs the test cases, you just need to change it
+to generate code that also keeps track of the results.
+
+   As a first step, you can make a small change to report-result so it
+returns the result of the test case it's reporting.
+
+   (defun report-result (result form) (format t "~:[FAIL~;pass~] ...
+~a~%" result form) result) Now that report-result returns the result of
+its test case, it might seem you could just change the PROGN to an AND
+to combine the results.  Unfortunately, AND doesn't do quite what you
+want in this case because of its short-circuiting behavior: as soon as
+one test case fails, AND will skip the rest.  On the other hand, if you
+had a construct that worked like AND without the short-circuiting, you
+could use it in the place of PROGN, and you'd be done.  Common Lisp
+doesn't provide such a construct, but that's no reason you can't use it:
+it's a trivial matter to write a macro to provide it yourself.
+
+   Leaving test cases aside for a moment, what you want is a macro-let's
+call it combine-results-that will let you say this:
+
+   (combine-results (foo) (bar) (baz)) and have it mean something like
+this:
+
+   (let ((result t)) (unless (foo) (setf result nil)) (unless (bar)
+(setf result nil)) (unless (baz) (setf result nil)) result) The only
+tricky bit to writing this macro is that you need to introduce a
+variable-result in the previous code-in the expansion.  As you saw in
+the previous chapter, using a literal name for variables in macro
+expansions can introduce a leak in your macro abstraction, so you'll
+need to create a unique name.  This is a job for with-gensyms.  You can
+define combine-results like this:
+
+   (defmacro combine-results (&body forms) (with-gensyms (result) '(let
+((,result t)) ,@(loop for f in forms collect '(unless ,f (setf ,result
+nil))) ,result))) Now you can fix check by simply changing the expansion
+to use combine-results instead of PROGN.
+
+   (defmacro check (&body forms) '(combine-results ,@(loop for f in
+forms collect '(report-result ,f ',f)))) With that version of check,
+test-+ should emit the results of its three test expressions and then
+return T to indicate that everything passed.4
+
+   CL-USER> (test-+) pass ...  (= (+ 1 2) 3) pass ...  (= (+ 1 2 3) 6)
+pass ...  (= (+ -1 -3) -4) T And if you change one of the test cases so
+it fails,5 the final return value changes to NIL.
+
+   CL-USER> (test-+) pass ...  (= (+ 1 2) 3) pass ...  (= (+ 1 2 3) 6)
+FAIL ...  (= (+ -1 -3) -5) NIL
+
+
+File: pcl.info,  Node: 9-4,  Next: 9-5,  Prev: 9-3,  Up: Chapter 9
+
+Better Result Reporting
+=======================
+
+As long as you have only one test function, the current result reporting
+is pretty clear.  If a particular test case fails, all you have to do is
+find the test case in the check form and figure out why it's failing.
+But if you write a lot of tests, you'll probably want to organize them
+somehow, rather than shoving them all into one function.  For instance,
+suppose you wanted to add some test cases for the * function.  You might
+write a new test function.
+
+   (defun test-* () (check (= (* 2 2) 4) (= (* 3 5) 15))) Now that you
+have two test functions, you'll probably want another function that runs
+all the tests.  That's easy enough.
+
+   (defun test-arithmetic () (combine-results (test-+) (test-*))) In
+this function you use combine-results instead of check since both test-+
+and test-* will take care of reporting their own results.  When you run
+test-arithmetic, you'll get the following results:
+
+   CL-USER> (test-arithmetic) pass ...  (= (+ 1 2) 3) pass ...  (= (+ 1
+2 3) 6) pass ...  (= (+ -1 -3) -4) pass ...  (= (* 2 2) 4) pass ...  (=
+(* 3 5) 15) T Now imagine that one of the test cases failed and you need
+to track down the problem.  With only five test cases and two test
+functions, it won't be too hard to find the code of the failing test
+case.  But suppose you had 500 test cases spread across 20 functions.
+It might be nice if the results told you what function each test case
+came from.
+
+   Since the code that prints the results is centralized in
+report-result, you need a way to pass information about what test
+function you're in to report-result.  You could add a parameter to
+report-result to pass this information, but check, which generates the
+calls to report-result, doesn't know what function it's being called
+from, which means you'd also have to change the way you call check,
+passing it an argument that it simply passes onto report-result.
+
+   This is exactly the kind of problem dynamic variables were designed
+to solve.  If you create a dynamic variable that each test function
+binds to the name of the function before calling check, then
+report-result can use it without check having to know anything about it.
+
+   Step one is to declare the variable at the top level.
+
+   (defvar *test-name* nil) Now you need to make another tiny change to
+report-result to include *test-name* in the FORMAT output.
+
+   (format t "~:[FAIL~;pass~] ...  ~a: ~a~%" result *test-name* form)
+With those changes, the test functions will still work but will produce
+the following output because *test-name* is never rebound:
+
+   CL-USER> (test-arithmetic) pass ...  NIL: (= (+ 1 2) 3) pass ...
+NIL: (= (+ 1 2 3) 6) pass ...  NIL: (= (+ -1 -3) -4) pass ...  NIL: (=
+(* 2 2) 4) pass ...  NIL: (= (* 3 5) 15) T For the name to be reported
+properly, you need to change the two test functions.
+
+   (defun test-+ () (let ((*test-name* 'test-+)) (check (= (+ 1 2) 3) (=
+(+ 1 2 3) 6) (= (+ -1 -3) -4))))
+
+   (defun test-* () (let ((*test-name* 'test-*)) (check (= (* 2 2) 4) (=
+(* 3 5) 15)))) Now the results are properly labeled.
+
+   CL-USER> (test-arithmetic) pass ...  TEST-+: (= (+ 1 2) 3) pass ...
+TEST-+: (= (+ 1 2 3) 6) pass ...  TEST-+: (= (+ -1 -3) -4) pass ...
+TEST-*: (= (* 2 2) 4) pass ...  TEST-*: (= (* 3 5) 15) T
+
+
+File: pcl.info,  Node: 9-5,  Next: 9-6,  Prev: 9-4,  Up: Chapter 9
+
+An Abstraction Emerges
+======================
+
+In fixing the test functions, you've introduced several new bits of
+duplication.  Not only does each function have to include the name of
+the function twice-once as the name in the DEFUN and once in the binding
+of *test-name*-but the same three-line code pattern is duplicated
+between the two functions.  You could remove the duplication simply on
+the grounds that duplication is bad.  But if you look more closely at
+the root cause of the duplication, you can learn an important lesson
+about how to use macros.
+
+   The reason both these functions start the same way is because they're
+both test functions.  The duplication arises because, at the moment,
+test function is only half an abstraction.  The abstraction exists in
+your mind, but in the code there's no way to express "this is a test
+function" other than to write code that follows a particular pattern.
+
+   Unfortunately, partial abstractions are a crummy tool for building
+software.  Because a half abstraction is expressed in code by a
+manifestation of the pattern, you're guaranteed to have massive code
+duplication with all the normal bad consequences that implies for
+maintainability.  More subtly, because the abstraction exists only in
+the minds of programmers, there's no mechanism to make sure different
+programmers (or even the same programmer working at different times)
+actually understand the abstraction the same way.  To make a complete
+abstraction, you need a way to express "this is a test function" and
+have all the code required by the pattern be generated for you.  In
+other words, you need a macro.
+
+   Because the pattern you're trying to capture is a DEFUN plus some
+boilerplate code, you need to write a macro that will expand into a
+DEFUN. You'll then use this macro, instead of a plain DEFUN to define
+test functions, so it makes sense to call it deftest.
+
+   (defmacro deftest (name parameters &body body) '(defun ,name
+,parameters (let ((*test-name* ',name)) ,@body))) With this macro you
+can rewrite test-+ as follows:
+
+   (deftest test-+ () (check (= (+ 1 2) 3) (= (+ 1 2 3) 6) (= (+ -1 -3)
+-4)))
+
+
 File: pcl.info,  Node: 9-6,  Next: 9-7,  Prev: 9-5,  Up: Chapter 9
 
 A Hierarchy of Tests
@@ -154,7 +325,7 @@ While functions, variables, macros, and 25 special operators provide the
 basic building blocks of the language itself, the building blocks of
 your programs will be the data structures you use.  As Fred Brooks
 observed in The Mythical Man-Month, "Representation is the essence of
-programming."1
+programming."  (1)
 
    Common Lisp provides built-in support for most of the data types
 typically found in modern languages: numbers (integer, floating point,
@@ -205,14 +376,19 @@ and their character counterparts.
 * 10-8::                 Strings
 * 10-9::                 String Comparisons
 
+   ---------- Footnotes ----------
+
+   (1) Fred Brooks, The Mythical Man-Month, 20th Anniversary Edition
+(Boston: Addison-Wesley, 1995), p.  103.  Emphasis in original.
+
 
 File: pcl.info,  Node: 10-1,  Next: 10-2,  Prev: Chapter 10,  Up: Chapter 10
 
 Numbers
 =======
 
-Math, as Barbie says, is hard.2 Common Lisp can't make the math part any
-easier, but it does tend to get in the way a lot less than other
+Math, as Barbie says, is hard.  (1) Common Lisp can't make the math part
+any easier, but it does tend to get in the way a lot less than other
 programming languages.  That's not surprising given its mathematical
 heritage.  Lisp was originally designed by a mathematician as a tool for
 studying mathematical functions.  And one of the main projects of the
@@ -228,18 +404,18 @@ FORTRAN in the high-performance numeric computing arena.
 behave more like true mathematical numbers than the approximations of
 numbers that are easy to implement in finite computer hardware.  For
 instance, integers in Common Lisp can be almost arbitrarily large rather
-than being limited by the size of a machine word.3 And dividing two
+than being limited by the size of a machine word.  (2) And dividing two
 integers results in an exact ratio, not a truncated value.  And since
 ratios are represented as pairs of arbitrarily sized integers, ratios
-can represent arbitrarily precise fractions.4
+can represent arbitrarily precise fractions.  (3)
 
    On the other hand, for high-performance numeric programming, you may
 be willing to trade the exactitude of rationals for the speed offered by
 using the hardware's underlying floating-point operations.  So, Common
 Lisp also offers several types of floating-point numbers, which are
 mapped by the implementation to the appropriate hardware-supported
-floating-point representations.5 Floats are also used to represent the
-results of a computation whose true mathematical value would be an
+floating-point representations.  (4) Floats are also used to represent
+the results of a computation whose true mathematical value would be an
 irrational number.
 
    Finally, Common Lisp supports complex numbers-the numbers that result
@@ -247,6 +423,40 @@ from doing things such as taking square roots and logarithms of negative
 numbers.  The Common Lisp standard even goes so far as to specify the
 principal values and branch cuts for irrational and transcendental
 functions on the complex domain.
+
+   ---------- Footnotes ----------
+
+   (1) Mattel's Teen Talk Barbie
+
+   (2) Obviously, the size of a number that can be represented on a
+computer with finite memory is still limited in practice; furthermore,
+the actual representation of bignums used in a particular Common Lisp
+implementation may place other limits on the size of number that can be
+represented.  But these limits are going to be well beyond
+"astronomically" large numbers.  For instance, the number of atoms in
+the universe is estimated to be less than 2^269; current Common Lisp
+implementations can easily handle numbers up to and beyond 2^262144.
+
+   (3) Folks interested in using Common Lisp for intensive numeric
+computation should note that a naive comparison of the performance of
+numeric code in Common Lisp and languages such as C or FORTRAN will
+probably show Common Lisp to be much slower.  This is because something
+as simple as (+ a b) in Common Lisp is doing a lot more than the
+seemingly equivalent a + b in one of those languages.  Because of Lisp's
+dynamic typing and support for things such as arbitrary precision
+rationals and complex numbers, a seemingly simple addition is doing a
+lot more than an addition of two numbers that are known to be
+represented by machine words.  However, you can use declarations to give
+Common Lisp information about the types of numbers you're using that
+will enable it to generate code that does only as much work as the code
+that would be generated by a C or FORTRAN compiler.  Tuning numeric code
+for this kind of performance is beyond the scope of this book, but it's
+certainly possible.
+
+   (4) While the standard doesn't require it, many Common Lisp
+implementations support the IEEE standard for floating-point arithmetic,
+IEEE Standard for Binary Floating-Point Arithmetic, ANSI/ IEEE Std
+754-1985 (Institute of Electrical and Electronics Engineers, 1985).
 
 
 File: pcl.info,  Node: 10-2,  Next: 10-3,  Prev: 10-1,  Up: Chapter 10
@@ -267,15 +477,21 @@ these to the same object.  When numbers are printed back out-say, at the
 REPL-they're printed in a canonical textual syntax that may be different
 from the syntax used to enter the number.  For example:
 
-   CL-USER> 10 10 CL-USER> 20/2 10 CL-USER> #xa 10 The syntax for
-integer values is an optional sign (+ or -) followed by one or more
-digits.  Ratios are written as an optional sign and a sequence of
-digits, representing the numerator, a slash (/), and another sequence of
-digits representing the denominator.  All rational numbers are
-"canonicalized" as they're read-that's why 10 and 20/2 are both read as
-the same number, as are 3/4 and 6/8.  Rationals are printed in "reduced"
-form-integer values are printed in integer syntax and ratios with the
-numerator and denominator reduced to lowest terms.
+     CL-USER> 10
+     10
+     CL-USER> 20/2
+     10
+     CL-USER> #xa
+     10
+
+   The syntax for integer values is an optional sign (+ or -) followed
+by one or more digits.  Ratios are written as an optional sign and a
+sequence of digits, representing the numerator, a slash (/), and another
+sequence of digits representing the denominator.  All rational numbers
+are "canonicalized" as they're read-that's why 10 and 20/2 are both read
+as the same number, as are 3/4 and 6/8.  Rationals are printed in
+"reduced" form-integer values are printed in integer syntax and ratios
+with the numerator and denominator reduced to lowest terms.
 
    It's also possible to write rationals in bases other than 10.  If
 preceded by #B or #b, a rational literal is read as a binary number with
@@ -287,25 +503,36 @@ beyond 9 are taken from the letters A-Z or a-z.  Note that these radix
 indicators apply to the whole rational-it's not possible to write a
 ratio with the numerator in one base and denominator in another.  Also,
 you can write integer values, but not ratios, as decimal digits
-terminated with a decimal point.6 Some examples of rationals, with their
-canonical, decimal representation are as follows:
+terminated with a decimal point.  (1) Some examples of rationals, with
+their canonical, decimal representation are as follows:
 
-   123 ==> 123 +123 ==> 123 -123 ==> -123 123.  ==> 123 2/3 ==> 2/3 -2/3
-==> -2/3 4/6 ==> 2/3 6/3 ==> 2 #b10101 ==> 21 #b1010/1011 ==> 10/11
-#o777 ==> 511 #xDADA ==> 56026 #36rABCDEFGHIJKLMNOPQRSTUVWXYZ ==>
-8337503854730415241050377135811259267835 You can also write
-floating-point numbers in a variety of ways.  Unlike rational numbers,
-the syntax used to notate a floating-point number can affect the actual
-type of number read.  Common Lisp defines four subtypes of
-floating-point number: short, single, double, and long.  Each subtype
-can use a different number of bits in its representation, which means
-each subtype can represent values spanning a different range and with
-different precision.  More bits gives a wider range and more precision.7
+     123                            ==> 123
+     +123                           ==> 123
+     -123                           ==> -123
+     123.                           ==> 123
+     2/3                            ==> 2/3
+     -2/3                           ==> -2/3
+     4/6                            ==> 2/3
+     6/3                            ==> 2
+     #b10101                        ==> 21
+     #b1010/1011                    ==> 10/11
+     #o777                          ==> 511
+     #xDADA                         ==> 56026
+     #36rABCDEFGHIJKLMNOPQRSTUVWXYZ ==> 8337503854730415241050377135811259267835
+
+   You can also write floating-point numbers in a variety of ways.
+Unlike rational numbers, the syntax used to notate a floating-point
+number can affect the actual type of number read.  Common Lisp defines
+four subtypes of floating-point number: short, single, double, and long.
+Each subtype can use a different number of bits in its representation,
+which means each subtype can represent values spanning a different range
+and with different precision.  More bits gives a wider range and more
+precision.  (2)
 
    The basic format for floating-point numbers is an optional sign
 followed by a nonempty sequence of decimal digits possibly with an
 embedded decimal point.  This sequence can be followed by an exponent
-marker for "computerized scientific notation."8 The exponent marker
+marker for "computerized scientific notation."  (3) The exponent marker
 consists of a single letter followed by an optional sign and a sequence
 of digits, which are interpreted as the power of ten by which the number
 before the exponent marker should be multiplied.  The letter does double
@@ -323,14 +550,23 @@ number are always treated as base 10 digits-the #B, #X, #O, and #R
 syntaxes work only with rationals.  The following are some example
 floating-point numbers along with their canonical representation:
 
-   1.0 ==> 1.0 1e0 ==> 1.0 1d0 ==> 1.0d0 123.0 ==> 123.0 123e0 ==> 123.0
-0.123 ==> 0.123 .123 ==> 0.123 123e-3 ==> 0.123 123E-3 ==> 0.123
-0.123e20 ==> 1.23e+19 123d23 ==> 1.23d+25 Finally, complex numbers are
-written in their own syntax, namely, #C or #c followed by a list of two
-real numbers representing the real and imaginary part of the complex
-number.  There are actually five kinds of complex numbers because the
-real and imaginary parts must either both be rational or both be the
-same kind of floating-point number.
+     1.0      ==> 1.0
+     1e0      ==> 1.0
+     1d0      ==> 1.0d0
+     123.0    ==> 123.0
+     123e0    ==> 123.0
+     0.123    ==> 0.123
+     .123     ==> 0.123
+     123e-3   ==> 0.123
+     123E-3   ==> 0.123
+     0.123e20 ==> 1.23e+19
+     123d23   ==> 1.23d+25
+
+   Finally, complex numbers are written in their own syntax, namely, #C
+or #c followed by a list of two real numbers representing the real and
+imaginary part of the complex number.  There are actually five kinds of
+complex numbers because the real and imaginary parts must either both be
+rational or both be the same kind of floating-point number.
 
    But you can write them however you want-if a complex is written with
 one rational and one floating-point part, the rational is converted to a
@@ -347,9 +583,37 @@ zero imaginary part is always a different object than the floating-point
 number representing the real component.  Here are some examples of
 numbers written the complex number syntax:
 
-   #c(2 1) ==> #c(2 1) #c(2/3 3/4) ==> #c(2/3 3/4) #c(2 1.0) ==> #c(2.0
-1.0) #c(2.0 1.0d0) ==> #c(2.0d0 1.0d0) #c(1/2 1.0) ==> #c(0.5 1.0) #c(3
-0) ==> 3 #c(3.0 0.0) ==> #c(3.0 0.0) #c(1/2 0) ==> 1/2 #c(-6/3 0) ==> -2
+     #c(2      1)    ==> #c(2 1)
+     #c(2/3  3/4)    ==> #c(2/3 3/4)
+     #c(2    1.0)    ==> #c(2.0 1.0)
+     #c(2.0  1.0d0)  ==> #c(2.0d0 1.0d0)
+     #c(1/2  1.0)    ==> #c(0.5 1.0)
+     #c(3      0)    ==> 3
+     #c(3.0  0.0)    ==> #c(3.0 0.0)
+     #c(1/2    0)    ==> 1/2
+     #c(-6/3   0)    ==> -2
+
+   ---------- Footnotes ----------
+
+   (1) It's also possible to change the default base the reader uses for
+numbers without a specific radix marker by changing the value of the
+global variable *READ-BASE*.  However, it's not clear that's the path to
+anything other than complete insanity.
+
+   (2) Since the purpose of floating-point numbers is to make efficient
+use of floating-point hardware, each Lisp implementation is allowed to
+map these four subtypes onto the native floating-point types as
+appropriate.  If the hardware supports fewer than four distinct
+representations, one or more of the types may be equivalent.
+
+   (3) "Computerized scientific notation" is in scare quotes because,
+while commonly used in computer languages since the days of FORTRAN,
+it's actually quite different from real scientific notation.  In
+particular, something like 1.0e4 means 10000.0, but in true scientific
+notation that would be written as 1.0 x 10^4.  And to further confuse
+matters, in true scientific notation the letter e stands for the base of
+the natural logarithm, so something like 1.0 x e^4, while superficially
+similar to 1.0e4, is a completely different value, approximately 54.6.
 
 
 File: pcl.info,  Node: 10-3,  Next: 10-4,  Prev: 10-2,  Up: Chapter 10
@@ -364,43 +628,61 @@ more than two arguments is equivalent to calling the same function on
 the first two arguments and then calling it again on the resulting value
 and the rest of the arguments.  For example, (+ 1 2 3) is equivalent to
 (+ (+ 1 2) 3).  With only one argument, + and * return the value; -
-returns its negation and / its reciprocal.9
+returns its negation and / its reciprocal.  (1)
 
-   (+ 1 2) ==> 3 (+ 1 2 3) ==> 6 (+ 10.0 3.0) ==> 13.0 (+ #c(1 2) #c(3
-4)) ==> #c(4 6) (- 5 4) ==> 1 (- 2) ==> -2 (- 10 3 5) ==> 2 (* 2 3) ==>
-6 (* 2 3 4) ==> 24 (/ 10 5) ==> 2 (/ 10 5 2) ==> 1 (/ 2 3) ==> 2/3 (/ 4)
-==> 1/4 If all the arguments are the same type of number (rational,
-floating point, or complex), the result will be the same type except in
-the case where the result of an operation on complex numbers with
-rational components yields a number with a zero imaginary part, in which
-case the result will be a rational.  However, floating-point and complex
-numbers are contagious-if all the arguments are reals but one or more
-are floating-point numbers, the other arguments are converted to the
-nearest floating-point value in a "largest" floating-point
-representation of the actual floating-point arguments.  Floating-point
-numbers in a "smaller" representation are also converted to the larger
-representation.  Similarly, if any of the arguments are complex, any
-real arguments are converted to the complex equivalents.
+     (+ 1 2)              ==> 3
+     (+ 1 2 3)            ==> 6
+     (+ 10.0 3.0)         ==> 13.0
+     (+ #c(1 2) #c(3 4))  ==> #c(4 6)
+     (- 5 4)              ==> 1
+     (- 2)                ==> -2
+     (- 10 3 5)           ==> 2
+     (* 2 3)              ==> 6
+     (* 2 3 4)            ==> 24
+     (/ 10 5)             ==> 2
+     (/ 10 5 2)           ==> 1
+     (/ 2 3)              ==> 2/3
+     (/ 4)                ==> 1/4
 
-   (+ 1 2.0) ==> 3.0 (/ 2 3.0) ==> 0.6666667 (+ #c(1 2) 3) ==> #c(4 2)
-(+ #c(1 2) 3/2) ==> #c(5/2 2) (+ #c(1 1) #c(2 -1)) ==> 3 Because /
-doesn't truncate, Common Lisp provides four flavors of truncating and
-rounding for converting a real number (rational or floating point) to an
-integer: FLOOR truncates toward negative infinity, returning the largest
-integer less than or equal to the argument.  CEILING truncates toward
-positive infinity, returning the smallest integer greater than or equal
-to the argument.  TRUNCATE truncates toward zero, making it equivalent
-to FLOOR for positive arguments and to CEILING for negative arguments.
-And ROUND rounds to the nearest integer.  If the argument is exactly
-halfway between two integers, it rounds to the nearest even integer.
+   If all the arguments are the same type of number (rational, floating
+point, or complex), the result will be the same type except in the case
+where the result of an operation on complex numbers with rational
+components yields a number with a zero imaginary part, in which case the
+result will be a rational.  However, floating-point and complex numbers
+are contagious-if all the arguments are reals but one or more are
+floating-point numbers, the other arguments are converted to the nearest
+floating-point value in a "largest" floating-point representation of the
+actual floating-point arguments.  Floating-point numbers in a "smaller"
+representation are also converted to the larger representation.
+Similarly, if any of the arguments are complex, any real arguments are
+converted to the complex equivalents.
+
+     (+ 1 2.0)             ==> 3.0
+     (/ 2 3.0)             ==> 0.6666667
+     (+ #c(1 2) 3)         ==> #c(4 2)
+     (+ #c(1 2) 3/2)       ==> #c(5/2 2)
+     (+ #c(1 1) #c(2 -1))  ==> 3
+
+   Because / doesn't truncate, Common Lisp provides four flavors of
+truncating and rounding for converting a real number (rational or
+floating point) to an integer: FLOOR truncates toward negative infinity,
+returning the largest integer less than or equal to the argument.
+CEILING truncates toward positive infinity, returning the smallest
+integer greater than or equal to the argument.  TRUNCATE truncates
+toward zero, making it equivalent to FLOOR for positive arguments and to
+CEILING for negative arguments.  And ROUND rounds to the nearest
+integer.  If the argument is exactly halfway between two integers, it
+rounds to the nearest even integer.
 
    Two related functions are MOD and REM, which return the modulus and
 remainder of a truncating division on real numbers.  These two functions
 are related to the FLOOR and TRUNCATE functions as follows:
 
-   (+ (* (floor (/ x y)) y) (mod x y)) === x (+ (* (truncate (/ x y)) y)
-(rem x y)) === x Thus, for positive quotients they're equivalent, but
-for negative quotients they produce different results.10
+     (+ (* (floor    (/ x y)) y) (mod x y)) === x
+     (+ (* (truncate (/ x y)) y) (rem x y)) === x
+
+   Thus, for positive quotients they're equivalent, but for negative
+quotients they produce different results.  (2)
 
    The functions 1+ and 1- provide a shorthand way to express adding and
 subtracting one from a number.  Note that these are different from the
@@ -408,9 +690,20 @@ macros INCF and DECF. 1+ and 1- are just functions that return a new
 value, but INCF and DECF modify a place.  The following equivalences
 show the relation between INCF/DECF, 1+/1-, and +/-:
 
-   (incf x) === (setf x (1+ x)) === (setf x (+ x 1)) (decf x) === (setf
-x (1- x)) === (setf x (- x 1)) (incf x 10) === (setf x (+ x 10)) (decf x
-10) === (setf x (- x 10))
+     (incf x)    === (setf x (1+ x)) === (setf x (+ x 1))
+     (decf x)    === (setf x (1- x)) === (setf x (- x 1))
+     (incf x 10) === (setf x (+ x 10))
+     (decf x 10) === (setf x (- x 10))
+
+   ---------- Footnotes ----------
+
+   (1) For mathematical consistency, + and * can also be called with no
+arguments, in which case they return the appropriate identity: 0 for +
+and 1 for *.
+
+   (2) Roughly speaking, MOD is equivalent to the % operator in Perl and
+Python, and REM is equivalent to the % in C and Java.  (Technically, the
+exact behavior of % in C wasn't specified until the C99 standard.)
 
 
 File: pcl.info,  Node: 10-4,  Next: 10-5,  Prev: 10-3,  Up: Chapter 10
@@ -427,29 +720,47 @@ predicate EQUALP, however, uses = to compare numbers.)  If it's called
 with more than two arguments, it returns true only if they all have the
 same value.  Thus:
 
-   (= 1 1) ==> T (= 10 20/2) ==> T (= 1 1.0 #c(1.0 0.0) #c(1 0)) ==> T
-The /= function, conversely, returns true only if all its arguments are
-different values.
+     (= 1 1)                        ==> T
+     (= 10 20/2)                    ==> T
+     (= 1 1.0 #c(1.0 0.0) #c(1 0))  ==> T
 
-   (/= 1 1) ==> NIL (/= 1 2) ==> T (/= 1 2 3) ==> T (/= 1 2 3 1) ==> NIL
-(/= 1 2 3 1.0) ==> NIL The functions <, >, <=, and >= order rationals
-and floating-point numbers (in other words, the real numbers.)  Like =
-and /=, these functions can be called with more than two arguments, in
-which case each argument is compared to the argument to its right.
+   The /= function, conversely, returns true only if all its arguments
+are different values.
 
-   (< 2 3) ==> T (> 2 3) ==> NIL (> 3 2) ==> T (< 2 3 4) ==> T (< 2 3 3)
-==> NIL (<= 2 3 3) ==> T (<= 2 3 3 4) ==> T (<= 2 3 4 3) ==> NIL To pick
-out the smallest or largest of several numbers, you can use the function
-MIN or MAX, which takes any number of real number arguments and returns
-the minimum or maximum value.
+     (/= 1 1)        ==> NIL
+     (/= 1 2)        ==> T
+     (/= 1 2 3)      ==> T
+     (/= 1 2 3 1)    ==> NIL
+     (/= 1 2 3 1.0)  ==> NIL
 
-   (max 10 11) ==> 11 (min -12 -10) ==> -12 (max -1 2 -3) ==> 2 Some
-other handy functions are ZEROP, MINUSP, and PLUSP, which test whether a
-single real number is equal to, less than, or greater than zero.  Two
-other predicates, EVENP and ODDP, test whether a single integer argument
-is even or odd.  The P suffix on the names of these functions is a
-standard naming convention for predicate functions, functions that test
-some condition and return a boolean.
+   The functions <, >, <=, and >= order rationals and floating-point
+numbers (in other words, the real numbers.)  Like = and /=, these
+functions can be called with more than two arguments, in which case each
+argument is compared to the argument to its right.
+
+     (< 2 3)       ==> T
+     (> 2 3)       ==> NIL
+     (> 3 2)       ==> T
+     (< 2 3 4)     ==> T
+     (< 2 3 3)     ==> NIL
+     (<= 2 3 3)    ==> T
+     (<= 2 3 3 4)  ==> T
+     (<= 2 3 4 3)  ==> NIL
+
+   To pick out the smallest or largest of several numbers, you can use
+the function MIN or MAX, which takes any number of real number arguments
+and returns the minimum or maximum value.
+
+     (max 10 11)    ==> 11
+     (min -12 -10)  ==> -12
+     (max -1 2 -3)  ==> 2
+
+   Some other handy functions are ZEROP, MINUSP, and PLUSP, which test
+whether a single real number is equal to, less than, or greater than
+zero.  Two other predicates, EVENP and ODDP, test whether a single
+integer argument is even or odd.  The P suffix on the names of these
+functions is a standard naming convention for predicate functions,
+functions that test some condition and return a boolean.
 
 
 File: pcl.info,  Node: 10-5,  Next: 10-6,  Prev: 10-4,  Up: Chapter 10
@@ -475,8 +786,8 @@ Characters
 Common Lisp characters are a distinct type of object from numbers.
 That's as it should be-characters are not numbers, and languages that
 treat them as if they are tend to run into problems when character
-encodings change, say, from 8-bit ASCII to 21-bit Unicode.11 Because the
-Common Lisp standard didn't mandate a particular representation for
+encodings change, say, from 8-bit ASCII to 21-bit Unicode.  (1) Because
+the Common Lisp standard didn't mandate a particular representation for
 characters, today several Lisp implementations use Unicode as their
 "native" character encoding despite Unicode being only a gleam in a
 standards body's eye at the time Common Lisp's own standardization was
@@ -494,6 +805,15 @@ write #\Space instead of #\ , though the latter is technically legal.
 Other semistandard names (that implementations must use if the character
 set has the appropriate characters) are Tab, Page, Rubout, Linefeed,
 Return, and Backspace.
+
+   ---------- Footnotes ----------
+
+   (1) Even Java, which was designed from the beginning to use Unicode
+characters on the theory that Unicode was the going to be the character
+encoding of the future, has run into trouble since Java characters are
+defined to be a 16-bit quantity and the Unicode 3.1 standard extended
+the range of the Unicode character set to require a 21-bit
+representation.  Ooops.
 
 
 File: pcl.info,  Node: 10-7,  Next: 10-8,  Prev: 10-6,  Up: Chapter 10
@@ -523,16 +843,17 @@ and GREATERP-OR-EQUALP. Like their numeric counterparts, all these
 functions can take one or more arguments.  Table 10-1 summarizes the
 relation between the numeric and character comparison functions.
 
-   Table 10-1.  Character Comparison Functions Numeric Analog
-Case-Sensitive	Case-Insensitive =	CHAR=	CHAR-EQUAL /=	CHAR/=
-CHAR-NOT-EQUAL <	CHAR<	CHAR-LESSP >	CHAR>	CHAR-GREATERP <=	CHAR<=
-CHAR-NOT-GREATERP >=	CHAR>=	CHAR-NOT-LESSP Other functions that deal
-with characters provide functions for, among other things, testing
-whether a given character is alphabetic or a digit character, testing
-the case of a character, obtaining a corresponding character in a
-different case, and translating between numeric values representing
-character codes and actual character objects.  Again, for complete
-details, see your favorite Common Lisp reference.
+   Table 10-1.  Character Comparison Functions
+
+ [image src="tables/10-1.png" ]
+
+   Other functions that deal with characters provide functions for,
+among other things, testing whether a given character is alphabetic or a
+digit character, testing the case of a character, obtaining a
+corresponding character in a different case, and translating between
+numeric values representing character codes and actual character
+objects.  Again, for complete details, see your favorite Common Lisp
+reference.
 
 
 File: pcl.info,  Node: 10-8,  Next: 10-9,  Prev: 10-7,  Up: Chapter 10
@@ -557,21 +878,34 @@ backslash always escapes the next character, whatever it is, though this
 isn't necessary for any character except for " and itself.  Table 10-2
 shows how various literal strings will be read by the Lisp reader.
 
-   Table 10-2.  Literal Strings Literal	Contents	Comment "foobar"	foobar
-Plain string.  "foo\"bar"	foo"bar	The backslash escapes quote.
-"foo\\bar"	foo\bar	The first backslash escapes second backslash.
-"\"foobar\""	"foobar"	The backslashes escape quotes.  "foo\bar"	foobar
-The backslash "escapes" b Note that the REPL will ordinarily print
-strings in readable form, adding the enclosing quotation marks and any
-necessary escaping backslashes, so if you want to see the actual
-contents of a string, you need to use function such as FORMAT designed
-to print human-readable output.  For example, here's what you see if you
-type a string containing an embedded quotation mark at the REPL:
+   Table 10-2.  Literal Strings
 
-   CL-USER> "foo\"bar" "foo\"bar" FORMAT, on the other hand, will show
-you the actual string contents:12
+ [image src="tables/10-2.png" ]
 
-   CL-USER> (format t "foo\"bar") foo"bar NIL
+   Note that the REPL will ordinarily print strings in readable form,
+adding the enclosing quotation marks and any necessary escaping
+backslashes, so if you want to see the actual contents of a string, you
+need to use function such as FORMAT designed to print human-readable
+output.  For example, here's what you see if you type a string
+containing an embedded quotation mark at the REPL:
+
+     CL-USER> "foo\"bar"
+     "foo\"bar"
+
+   FORMAT, on the other hand, will show you the actual string contents:
+(1)
+
+     CL-USER> (format t "foo\"bar")
+     foo"bar
+     NIL
+
+   ---------- Footnotes ----------
+
+   (1) Note, however, that not all literal strings can be printed by
+passing them as the second argument to FORMAT since certain sequences of
+characters have a special meaning to FORMAT. To safely print an
+arbitrary string-say, the value of a variable s-with FORMAT you should
+write (format t "~a" s).
 
 
 File: pcl.info,  Node: 10-9,  Next: Chapter 11,  Prev: 10-8,  Up: Chapter 10
@@ -583,20 +917,21 @@ You can compare strings using a set of functions that follow the same
 naming convention as the character comparison functions except with
 STRING as the prefix rather than CHAR (see Table 10-3).
 
-   Table 10-3.  String Comparison Functions Numeric Analog
-Case-Sensitive	Case-Insensitive =	STRING=	STRING-EQUAL /=	STRING/=
-STRING-NOT-EQUAL <	STRING<	STRING-LESSP >	STRING>	STRING-GREATERP <=
-STRING<=	STRING-NOT-GREATERP >=	STRING>=	STRING-NOT-LESSP However,
-unlike the character and number comparators, the string comparators can
-compare only two strings.  That's because they also take keyword
-arguments that allow you to restrict the comparison to a substring of
-either or both strings.  The arguments-:start1, :end1, :start2, and
-:end2-specify the starting (inclusive) and ending (exclusive) indices of
-substrings in the first and second string arguments.  Thus, the
-following:
+   Table 10-3.  String Comparison Functions
 
-   (string= "foobarbaz" "quuxbarfoo" :start1 3 :end1 6 :start2 4 :end2
-7) compares the substring "bar" in the two arguments and returns true.
+ [image src="tables/10-3.png" ]
+
+   However, unlike the character and number comparators, the string
+comparators can compare only two strings.  That's because they also take
+keyword arguments that allow you to restrict the comparison to a
+substring of either or both strings.  The arguments-:start1, :end1,
+:start2, and :end2-specify the starting (inclusive) and ending
+(exclusive) indices of substrings in the first and second string
+arguments.  Thus, the following:
+
+     (string= "foobarbaz" "quuxbarfoo" :start1 3 :end1 6 :start2 4 :end2 7)
+
+   compares the substring "bar" in the two arguments and returns true.
 The :end1 and :end2 arguments can be NIL (or the keyword argument
 omitted altogether) to indicate that the corresponding substring extends
 to the end of the string.
@@ -605,18 +940,23 @@ to the end of the string.
 all of them except STRING= and STRING-EQUAL-return the index in the
 first string where the mismatch was detected.
 
-   (string/= "lisp" "lissome") ==> 3 If the first string is a prefix of
-the second, the return value will be the length of the first string,
-that is, one greater than the largest valid index into the string.
+     (string/= "lisp" "lissome") ==> 3
 
-   (string< "lisp" "lisper") ==> 4 When comparing substrings, the
-resulting value is still an index into the string as a whole.  For
-instance, the following compares the substrings "bar" and "baz" but
-returns 5 because that's the index of the r in the first string:
+   If the first string is a prefix of the second, the return value will
+be the length of the first string, that is, one greater than the largest
+valid index into the string.
 
-   (string< "foobar" "abaz" :start1 3 :start2 1) ==> 5 ; N.B. not 2
-Other string functions allow you to convert the case of strings and trim
-characters from one or both ends of a string.  And, as I mentioned
+     (string< "lisp" "lisper") ==> 4
+
+   When comparing substrings, the resulting value is still an index into
+the string as a whole.  For instance, the following compares the
+substrings "bar" and "baz" but returns 5 because that's the index of the
+r in the first string:
+
+     (string< "foobar" "abaz" :start1 3 :start2 1) ==> 5   ; N.B. not 2
+
+   Other string functions allow you to convert the case of strings and
+trim characters from one or both ends of a string.  And, as I mentioned
 previously, since strings are really a kind of sequence, all the
 sequence functions I'll discuss in the next chapter can be used with
 strings.  For instance, you can discover the length of a string with the
@@ -654,11 +994,11 @@ as Lisp data, in many situations other data structures are more
 appropriate.
 
    To keep lists from stealing the show, in this chapter I'll focus on
-Common Lisp's other collection types: vectors and hash tables.1 However,
-vectors and lists share enough characteristics that Common Lisp treats
-them both as subtypes of a more general abstraction, the sequence.
-Thus, you can use many of the functions I'll discuss in this chapter
-with both vectors and lists.
+Common Lisp's other collection types: vectors and hash tables.  (1)
+However, vectors and lists share enough characteristics that Common Lisp
+treats them both as subtypes of a more general abstraction, the
+sequence.  Thus, you can use many of the functions I'll discuss in this
+chapter with both vectors and lists.
 
 * Menu:
 
@@ -675,6 +1015,13 @@ with both vectors and lists.
 * 11-11::                           Hash Tables
 * 11-12::                           Hash Table Iteration
 
+   ---------- Footnotes ----------
+
+   (1) Once you're familiar with all the data types Common Lisp offers,
+you'll also see that lists can be useful for prototyping data structures
+that will later be replaced with something more efficient once it
+becomes clear how exactly the data is to be used.
+
 
 File: pcl.info,  Node: 11-1,  Next: 11-2,  Prev: Chapter 11,  Up: Chapter 11
 
@@ -684,23 +1031,26 @@ Vectors
 Vectors are Common Lisp's basic integer-indexed collection, and they
 come in two flavors.  Fixed-size vectors are a lot like arrays in a
 language such as Java: a thin veneer over a chunk of contiguous memory
-that holds the vector's elements.2 Resizable vectors, on the other hand,
-are more like arrays in Perl or Ruby, lists in Python, or the ArrayList
-class in Java: they abstract the actual storage, allowing the vector to
-grow and shrink as elements are added and removed.
+that holds the vector's elements.  (1) Resizable vectors, on the other
+hand, are more like arrays in Perl or Ruby, lists in Python, or the
+ArrayList class in Java: they abstract the actual storage, allowing the
+vector to grow and shrink as elements are added and removed.
 
    You can make fixed-size vectors containing specific values with the
 function VECTOR, which takes any number of arguments and returns a
 freshly allocated fixed-size vector containing those arguments.
 
-   (vector) ==> #() (vector 1) ==> #(1) (vector 1 2) ==> #(1 2) The
-#(...)  syntax is the literal notation for vectors used by the Lisp
-printer and reader.  This syntax allows you to save and restore vectors
-by PRINTing them out and READing them back in.  You can use the #(...)
-syntax to include literal vectors in your code, but as the effects of
-modifying literal objects aren't defined, you should always use VECTOR
-or the more general function MAKE-ARRAY to create vectors you plan to
-modify.
+     (vector)     ==> #()
+     (vector 1)   ==> #(1)
+     (vector 1 2) ==> #(1 2)
+
+   The #(...)  syntax is the literal notation for vectors used by the
+Lisp printer and reader.  This syntax allows you to save and restore
+vectors by PRINTing them out and READing them back in.  You can use the
+#(...)  syntax to include literal vectors in your code, but as the
+effects of modifying literal objects aren't defined, you should always
+use VECTOR or the more general function MAKE-ARRAY to create vectors you
+plan to modify.
 
    MAKE-ARRAY is more general than VECTOR since you can use it to create
 arrays of any dimensionality as well as both fixed-size and resizable
@@ -710,13 +1060,14 @@ this list will contain one number, the size of the vector.  As a
 convenience, MAKE-ARRAY will also accept a plain number in the place of
 a one-item list.  With no other arguments, MAKE-ARRAY will create a
 vector with uninitialized elements that must be set before they can be
-accessed.3 To create a vector with the elements all set to a particular
-value, you can pass an :initial-element argument.  Thus, to make a
-five-element vector with its elements initialized to NIL, you can write
-the following:
+accessed.  (2) To create a vector with the elements all set to a
+particular value, you can pass an :initial-element argument.  Thus, to
+make a five-element vector with its elements initialized to NIL, you can
+write the following:
 
-   (make-array 5 :initial-element nil) ==> #(NIL NIL NIL NIL NIL)
-MAKE-ARRAY is also the function to use to make a resizable vector.  A
+     (make-array 5 :initial-element nil) ==> #(NIL NIL NIL NIL NIL)
+
+   MAKE-ARRAY is also the function to use to make a resizable vector.  A
 resizable vector is a slightly more complicated object than a fixed-size
 vector; in addition to keeping track of the memory used to hold the
 elements and the number of slots available, a resizable vector also
@@ -730,29 +1081,61 @@ to the vector.
 makes a vector with room for five elements; but it looks empty because
 the fill pointer is zero:
 
-   (make-array 5 :fill-pointer 0) ==> #() To add an element to the end
-of a resizable vector, you can use the function VECTOR-PUSH. It adds the
-element at the current value of the fill pointer and then increments the
-fill pointer by one, returning the index where the new element was
-added.  The function VECTOR-POP returns the most recently pushed item,
-decrementing the fill pointer in the process.
+     (make-array 5 :fill-pointer 0) ==> #()
 
-   (defparameter *x* (make-array 5 :fill-pointer 0))
+   To add an element to the end of a resizable vector, you can use the
+function VECTOR-PUSH. It adds the element at the current value of the
+fill pointer and then increments the fill pointer by one, returning the
+index where the new element was added.  The function VECTOR-POP returns
+the most recently pushed item, decrementing the fill pointer in the
+process.
 
-   (vector-push 'a *x*) ==> 0 *x* ==> #(A) (vector-push 'b *x*) ==> 1
-*x* ==> #(A B) (vector-push 'c *x*) ==> 2 *x* ==> #(A B C) (vector-pop
-*x*) ==> C *x* ==> #(A B) (vector-pop *x*) ==> B *x* ==> #(A)
-(vector-pop *x*) ==> A *x* ==> #() However, even a vector with a fill
-pointer isn't completely resizable.  The vector *x* can hold at most
-five elements.  To make an arbitrarily resizable vector, you need to
-pass MAKE-ARRAY another keyword argument: :adjustable.
+     (defparameter *x* (make-array 5 :fill-pointer 0))
 
-   (make-array 5 :fill-pointer 0 :adjustable t) ==> #() This call makes
-an adjustable vector whose underlying memory can be resized as needed.
-To add elements to an adjustable vector, you use VECTOR-PUSH-EXTEND,
-which works just like VECTOR-PUSH except it will automatically expand
-the array if you try to push an element onto a full vector-one whose
-fill pointer is equal to the size of the underlying storage.4
+     (vector-push 'a *x*) ==> 0
+     *x*                  ==> #(A)
+     (vector-push 'b *x*) ==> 1
+     *x*                  ==> #(A B)
+     (vector-push 'c *x*) ==> 2
+     *x*                  ==> #(A B C)
+     (vector-pop *x*)     ==> C
+     *x*                  ==> #(A B)
+     (vector-pop *x*)     ==> B
+     *x*                  ==> #(A)
+     (vector-pop *x*)     ==> A
+     *x*                  ==> #()
+
+   However, even a vector with a fill pointer isn't completely
+resizable.  The vector *x* can hold at most five elements.  To make an
+arbitrarily resizable vector, you need to pass MAKE-ARRAY another
+keyword argument: :adjustable.
+
+     (make-array 5 :fill-pointer 0 :adjustable t) ==> #()
+
+   This call makes an adjustable vector whose underlying memory can be
+resized as needed.  To add elements to an adjustable vector, you use
+VECTOR-PUSH-EXTEND, which works just like VECTOR-PUSH except it will
+automatically expand the array if you try to push an element onto a full
+vector-one whose fill pointer is equal to the size of the underlying
+storage.  (3)
+
+   ---------- Footnotes ----------
+
+   (1) Vectors are called vectors, not arrays as their analogs in other
+languages are, because Common Lisp supports true multidimensional
+arrays.  It's equally correct, though more cumbersome, to refer to them
+as one-dimensional arrays.
+
+   (2) Array elements "must" be set before they're accessed in the sense
+that the behavior is undefined; Lisp won't necessarily stop you.
+
+   (3) While frequently used together, the :fill-pointer and :adjustable
+arguments are independent-you can make an adjustable array without a
+fill pointer.  However, you can use VECTOR-PUSH and VECTOR-POP only with
+vectors that have a fill pointer and VECTOR-PUSH-EXTEND only with
+vectors that have a fill pointer and are adjustable.  You can also use
+the function ADJUST-ARRAY to modify adjustable arrays in a variety of
+ways beyond just extending the length of a vector.
 
 
 File: pcl.info,  Node: 11-2,  Next: 11-3,  Prev: 11-1,  Up: Chapter 11
@@ -789,8 +1172,9 @@ to quote the symbol to prevent it from being treated as a variable name.
 For example, to make an initially empty but resizable string, you can
 write this:
 
-   (make-array 5 :fill-pointer 0 :adjustable t :element-type 'character)
-"" Bit vectors-vectors whose elements are all zeros or ones-also get
+     (make-array 5 :fill-pointer 0 :adjustable t :element-type 'character)  ""
+
+   Bit vectors-vectors whose elements are all zeros or ones-also get
 some special treatment.  They have a special read/print syntax that
 looks like #*00001111 and a fairly large library of functions, which I
 won't discuss, for performing bit-twiddling operations such as "anding"
@@ -819,15 +1203,20 @@ corresponding element.  ELT will signal an error if the index is out of
 bounds.  Like LENGTH, ELT treats a vector with a fill pointer as having
 the length specified by the fill pointer.
 
-   (defparameter *x* (vector 1 2 3))
+     (defparameter *x* (vector 1 2 3))
 
-   (length *x*) ==> 3 (elt *x* 0) ==> 1 (elt *x* 1) ==> 2 (elt *x* 2)
-==> 3 (elt *x* 3) ==> error ELT is also a SETFable place, so you can set
-the value of a particular element like this:
+     (length *x*) ==> 3
+     (elt *x* 0)  ==> 1
+     (elt *x* 1)  ==> 2
+     (elt *x* 2)  ==> 3
+     (elt *x* 3)  ==> error
 
-   (setf (elt *x* 0) 10)
+   ELT is also a SETFable place, so you can set the value of a
+particular element like this:
 
-   *x* ==> #(10 2 3)
+     (setf (elt *x* 0) 10)
+
+     *x* ==> #(10 2 3)
 
 
 File: pcl.info,  Node: 11-4,  Next: 11-5,  Prev: 11-3,  Up: Chapter 11
@@ -843,23 +1232,25 @@ provides a large library of sequence functions.
 operations on sequences such as finding or filtering specific elements
 without writing explicit loops.  Table 11-1 summarizes them.
 
-   Table 11-1.Basic Sequence Functions Name	Required Arguments	Returns
-COUNT	Item and sequence	Number of times item appears in sequence FIND
-Item and sequence	Item or NIL POSITION	Item and sequence	Index into
-sequence or NIL REMOVE	Item and sequence	Sequence with instances of item
-removed SUBSTITUTE	New item, item, and sequence	Sequence with instances
-of item replaced with new item Here are some simple examples of how to
-use these functions:
+   Table 11-1.Basic Sequence Functions
 
-   (count 1 #(1 2 1 2 3 1 2 3 4)) ==> 3 (remove 1 #(1 2 1 2 3 1 2 3 4))
-==> #(2 2 3 2 3 4) (remove 1 '(1 2 1 2 3 1 2 3 4)) ==> (2 2 3 2 3 4)
-(remove #\a "foobarbaz") ==> "foobrbz" (substitute 10 1 #(1 2 1 2 3 1 2
-3 4)) ==> #(10 2 10 2 3 10 2 3 4) (substitute 10 1 '(1 2 1 2 3 1 2 3 4))
-==> (10 2 10 2 3 10 2 3 4) (substitute #\x #\b "foobarbaz") ==>
-"fooxarxaz" (find 1 #(1 2 1 2 3 1 2 3 4)) ==> 1 (find 10 #(1 2 1 2 3 1 2
-3 4)) ==> NIL (position 1 #(1 2 1 2 3 1 2 3 4)) ==> 0 Note how REMOVE
-and SUBSTITUTE always return a sequence of the same type as their
-sequence argument.
+ [image src="tables/11-1.png" ]
+
+   Here are some simple examples of how to use these functions:
+
+     (count 1 #(1 2 1 2 3 1 2 3 4))         ==> 3
+     (remove 1 #(1 2 1 2 3 1 2 3 4))        ==> #(2 2 3 2 3 4)
+     (remove 1 '(1 2 1 2 3 1 2 3 4))        ==> (2 2 3 2 3 4)
+     (remove #\a "foobarbaz")               ==> "foobrbz"
+     (substitute 10 1 #(1 2 1 2 3 1 2 3 4)) ==> #(10 2 10 2 3 10 2 3 4)
+     (substitute 10 1 '(1 2 1 2 3 1 2 3 4)) ==> (10 2 10 2 3 10 2 3 4)
+     (substitute #\x #\b "foobarbaz")       ==> "fooxarxaz"
+     (find 1 #(1 2 1 2 3 1 2 3 4))          ==> 1
+     (find 10 #(1 2 1 2 3 1 2 3 4))         ==> NIL
+     (position 1 #(1 2 1 2 3 1 2 3 4))      ==> 0
+
+   Note how REMOVE and SUBSTITUTE always return a sequence of the same
+type as their sequence argument.
 
    You can modify the behavior of these five functions in a variety of
 ways using keyword arguments.  For instance, these functions, by
@@ -867,56 +1258,85 @@ default, look for elements in the sequence that are the same object as
 the item argument.  You can change this in two ways: First, you can use
 the :test keyword to pass a function that accepts two arguments and
 returns a boolean.  If provided, it will be used to compare item to each
-element instead of the default object equality test, EQL.5 Second, with
-the :key keyword you can pass a one-argument function to be called on
-each element of the sequence to extract a key value, which will then be
-compared to the item in the place of the element itself.  Note, however,
-that functions such as FIND that return elements of the sequence
-continue to return the actual element, not just the extracted key.
+element instead of the default object equality test, EQL. (1) Second,
+with the :key keyword you can pass a one-argument function to be called
+on each element of the sequence to extract a key value, which will then
+be compared to the item in the place of the element itself.  Note,
+however, that functions such as FIND that return elements of the
+sequence continue to return the actual element, not just the extracted
+key.
 
-   (count "foo" #("foo" "bar" "baz") :test #'string=) ==> 1 (find 'c
-#((a 10) (b 20) (c 30) (d 40)) :key #'first) ==> (C 30) To limit the
-effects of these functions to a particular subsequence of the sequence
-argument, you can provide bounding indices with :start and :end
-arguments.  Passing NIL for :end or omitting it is the same as
-specifying the length of the sequence.6
+     (count "foo" #("foo" "bar" "baz") :test #'string=)    ==> 1
+     (find 'c #((a 10) (b 20) (c 30) (d 40)) :key #'first) ==> (C 30)
+
+   To limit the effects of these functions to a particular subsequence
+of the sequence argument, you can provide bounding indices with :start
+and :end arguments.  Passing NIL for :end or omitting it is the same as
+specifying the length of the sequence.  (2)
 
    If a non-NIL :from-end argument is provided, then the elements of the
 sequence will be examined in reverse order.  By itself :from-end can
 affect the results of only FIND and POSITION. For instance:
 
-   (find 'a #((a 10) (b 20) (a 30) (b 40)) :key #'first) ==> (A 10)
-(find 'a #((a 10) (b 20) (a 30) (b 40)) :key #'first :from-end t) ==> (A
-30) However, the :from-end argument can affect REMOVE and SUBSTITUTE in
+     (find 'a #((a 10) (b 20) (a 30) (b 40)) :key #'first)             ==> (A 10)
+     (find 'a #((a 10) (b 20) (a 30) (b 40)) :key #'first :from-end t) ==> (A 30)
+
+   However, the :from-end argument can affect REMOVE and SUBSTITUTE in
 conjunction with another keyword parameter, :count, that's used to
 specify how many elements to remove or substitute.  If you specify a
 :count lower than the number of matching elements, then it obviously
 matters which end you start from:
 
-   (remove #\a "foobarbaz" :count 1) ==> "foobrbaz" (remove #\a
-"foobarbaz" :count 1 :from-end t) ==> "foobarbz" And while :from-end
-can't change the results of the COUNT function, it does affect the order
-the elements are passed to any :test and :key functions, which could
-possibly have side effects.  For example:
+     (remove #\a "foobarbaz" :count 1)             ==> "foobrbaz"
+     (remove #\a "foobarbaz" :count 1 :from-end t) ==> "foobarbz"
 
-   CL-USER> (defparameter *v* #((a 10) (b 20) (a 30) (b 40))) *V*
-CL-USER> (defun verbose-first (x) (format t "Looking at ~s~%" x) (first
-x)) VERBOSE-FIRST CL-USER> (count 'a *v* :key #'verbose-first) Looking
-at (A 10) Looking at (B 20) Looking at (A 30) Looking at (B 40) 2
-CL-USER> (count 'a *v* :key #'verbose-first :from-end t) Looking at (B
-40) Looking at (A 30) Looking at (B 20) Looking at (A 10) 2 Table 11-2
-summarizes these arguments.
+   And while :from-end can't change the results of the COUNT function,
+it does affect the order the elements are passed to any :test and :key
+functions, which could possibly have side effects.  For example:
 
-   Table 11-2.  Standard Sequence Function Keyword Arguments Argument
-Meaning	Default :test	Two-argument function used to compare item (or
-value extracted by :key function) to element.	 EQL :key	One-argument
-function to extract key value from actual sequence element.  NIL means
-use element as is.	 NIL :start	Starting index (inclusive) of
-subsequence.	 0 :end	Ending index (exclusive) of subsequence.  NIL
-indicates end of sequence.	 NIL :from-end	If true, the sequence will be
-traversed in reverse order, from end to start.	 NIL :count	Number
-indicating the number of elements to remove or substitute or NIL to
-indicate all (REMOVE and SUBSTITUTE only).	 NIL
+     CL-USER> (defparameter *v* #((a 10) (b 20) (a 30) (b 40)))
+     *V*
+     CL-USER> (defun verbose-first (x) (format t "Looking at ~s~%" x) (first x))
+     VERBOSE-FIRST
+     CL-USER> (count 'a *v* :key #'verbose-first)
+     Looking at (A 10)
+     Looking at (B 20)
+     Looking at (A 30)
+     Looking at (B 40)
+     2
+     CL-USER> (count 'a *v* :key #'verbose-first :from-end t)
+     Looking at (B 40)
+     Looking at (A 30)
+     Looking at (B 20)
+     Looking at (A 10)
+     2
+
+   Table 11-2 summarizes these arguments.
+
+   Table 11-2.  Standard Sequence Function Keyword Arguments
+
+ [image src="tables/11-2.png" ]
+
+   ---------- Footnotes ----------
+
+   (1) Another parameter, :test-not parameter, specifies a two-argument
+predicate to be used like a :test argument except with the boolean
+result logically reversed.  This parameter is deprecated, however, in
+preference for using the COMPLEMENT function.  COMPLEMENT takes a
+function argu-ment and returns a function that takes the same number of
+arguments as the original and returns the logical complement of the
+original function.  Thus, you can, and should, write this:
+
+     (count x sequence :test (complement #'some-test))
+
+     rather than the following:
+
+   (count x sequence :test-not #'some-test)
+
+   (2) Note, however, that the effect of :start and :end on REMOVE and
+SUBSTITUTE is only to limit the elements they consider for removal or
+substitution; elements before :start and after :end will be passed
+through untouched.
 
 
 File: pcl.info,  Node: 11-5,  Next: 11-6,  Prev: 11-4,  Up: Chapter 11
@@ -934,42 +1354,63 @@ set of variants are named with an -IF-NOT suffix and count, find,
 remove, and substitute elements for which the function argument does not
 return true.
 
-   (count-if #'evenp #(1 2 3 4 5)) ==> 2
+     (count-if #'evenp #(1 2 3 4 5))         ==> 2
 
-   (count-if-not #'evenp #(1 2 3 4 5)) ==> 3
+     (count-if-not #'evenp #(1 2 3 4 5))     ==> 3
 
-   (position-if #'digit-char-p "abcd0001") ==> 4
+     (position-if #'digit-char-p "abcd0001") ==> 4
 
-   (remove-if-not #'(lambda (x) (char= (elt x 0) #\f)) #("foo" "bar"
-"baz" "foom")) ==> #("foo" "foom") According to the language standard,
-the -IF-NOT variants are deprecated.  However, that deprecation is
-generally considered to have itself been ill-advised.  If the standard
-is ever revised, it's more likely the deprecation will be removed than
-the -IF-NOT functions.  For one thing, the REMOVE-IF-NOT variant is
-probably used more often than REMOVE-IF. Despite its negative-sounding
-name, REMOVE-IF-NOT is actually the positive variant-it returns the
-elements that do satisfy the predicate.  7
+     (remove-if-not #'(lambda (x) (char= (elt x 0) #\f))
+       #("foo" "bar" "baz" "foom")) ==> #("foo" "foom")
+
+   According to the language standard, the -IF-NOT variants are
+deprecated.  However, that deprecation is generally considered to have
+itself been ill-advised.  If the standard is ever revised, it's more
+likely the deprecation will be removed than the -IF-NOT functions.  For
+one thing, the REMOVE-IF-NOT variant is probably used more often than
+REMOVE-IF. Despite its negative-sounding name, REMOVE-IF-NOT is actually
+the positive variant-it returns the elements that do satisfy the
+predicate.  (1)
 
    The -IF and -IF-NOT variants accept all the same keyword arguments as
 their vanilla counterparts except for :test, which isn't needed since
-the main argument is already a function.8 With a :key argument, the
+the main argument is already a function.  (2) With a :key argument, the
 value extracted by the :key function is passed to the function instead
 of the actual element.
 
-   (count-if #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first) ==>
-2
+     (count-if #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first)     ==> 2
 
-   (count-if-not #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first)
-==> 3
+     (count-if-not #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first) ==> 3
 
-   (remove-if-not #'alpha-char-p #("foo" "bar" "1baz") :key #'(lambda
-(x) (elt x 0))) ==> #("foo" "bar") The REMOVE family of functions also
-support a fourth variant, REMOVE-DUPLICATES, that has only one required
-argument, a sequence, from which it removes all but one instance of each
-duplicated element.  It takes the same keyword arguments as REMOVE,
-except for :count, since it always removes all duplicates.
+     (remove-if-not #'alpha-char-p
+       #("foo" "bar" "1baz") :key #'(lambda (x) (elt x 0))) ==> #("foo" "bar")
 
-   (remove-duplicates #(1 2 1 2 3 1 2 3 4)) ==> #(1 2 3 4)
+   The REMOVE family of functions also support a fourth variant,
+REMOVE-DUPLICATES, that has only one required argument, a sequence, from
+which it removes all but one instance of each duplicated element.  It
+takes the same keyword arguments as REMOVE, except for :count, since it
+always removes all duplicates.
+
+     (remove-duplicates #(1 2 1 2 3 1 2 3 4)) ==> #(1 2 3 4)
+
+   ---------- Footnotes ----------
+
+   (1) This same functionality goes by the name grep in Perl and filter
+in Python.
+
+   (2) The difference between the predicates passed as :test arguments
+and as the function arguments to the -IF and -IF-NOT functions is that
+the :test predicates are two-argument predicates used to compare the
+elements of the sequence to the specific item while the -IF and -IF-NOT
+predicates are one-argument functions that simply test the individual
+elements of the sequence.  If the vanilla variants didn't exist, you
+could implement them in terms of the -IF versions by embedding a
+specific item in the test function.
+
+     (count char string) ===
+       (count-if #'(lambda (c) (eql char c)) string)
+     (count char string :test #'CHAR-EQUAL) ===
+       (count-if #'(lambda (c) (char-equal char c)) string)
 
 
 File: pcl.info,  Node: 11-6,  Next: 11-7,  Prev: 11-5,  Up: Chapter 11
@@ -993,11 +1434,17 @@ single argument, CONCATENATE must be told explicitly what kind of
 sequence to produce in case the arguments are of different types.  Its
 first argument is a type descriptor, like the :element-type argument to
 MAKE-ARRAY. In this case, the type descriptors you'll most likely use
-are the symbols VECTOR, LIST, or STRING.9 For example:
+are the symbols VECTOR, LIST, or STRING. (1) For example:
 
-   (concatenate 'vector #(1 2 3) '(4 5 6)) ==> #(1 2 3 4 5 6)
-(concatenate 'list #(1 2 3) '(4 5 6)) ==> (1 2 3 4 5 6) (concatenate
-'string "abc" '(#\d #\e #\f)) ==> "abcdef"
+     (concatenate 'vector #(1 2 3) '(4 5 6))    ==> #(1 2 3 4 5 6)
+     (concatenate 'list #(1 2 3) '(4 5 6))      ==> (1 2 3 4 5 6)
+     (concatenate 'string "abc" '(#\d #\e #\f)) ==> "abcdef"
+
+   ---------- Footnotes ----------
+
+   (1) If you tell CONCATENATE to return a specialized vector, such as a
+string, all the elements of the argument sequences must be instances of
+the vector's element type.
 
 
 File: pcl.info,  Node: 11-7,  Next: 11-8,  Prev: 11-6,  Up: Chapter 11
@@ -1009,8 +1456,9 @@ The functions SORT and STABLE-SORT provide two ways of sorting a
 sequence.  They both take a sequence and a two-argument predicate and
 return a sorted version of the sequence.
 
-   (sort (vector "foo" "bar" "baz") #'string<) ==> #("bar" "baz" "foo")
-The difference is that STABLE-SORT is guaranteed to not reorder any
+     (sort (vector "foo" "bar" "baz") #'string<) ==> #("bar" "baz" "foo")
+
+   The difference is that STABLE-SORT is guaranteed to not reorder any
 elements considered equivalent by the predicate while SORT guarantees
 only that the result is sorted and may reorder equivalent elements.
 
@@ -1026,18 +1474,20 @@ instead.  I'll say more about destructive functions in the next chapter.
    Typically you won't care about the unsorted version of a sequence
 after you've sorted it, so it makes sense to allow SORT and STABLE-SORT
 to destroy the sequence in the course of sorting it.  But it does mean
-you need to remember to write the following:10
+you need to remember to write the following: (1)
 
-   (setf my-sequence (sort my-sequence #'string<)) rather than just
-this:
+     (setf my-sequence (sort my-sequence #'string<))
 
-   (sort my-sequence #'string<) Both these functions also take a keyword
-argument, :key, which, like the :key argument in other sequence
-functions, should be a function and will be used to extract the values
-to be passed to the sorting predicate in the place of the actual
-elements.  The extracted keys are used only to determine the ordering of
-elements; the sequence returned will contain the actual elements of the
-argument sequence.
+   rather than just this:
+
+     (sort my-sequence #'string<)
+
+   Both these functions also take a keyword argument, :key, which, like
+the :key argument in other sequence functions, should be a function and
+will be used to extract the values to be passed to the sorting predicate
+in the place of the actual elements.  The extracted keys are used only
+to determine the ordering of elements; the sequence returned will
+contain the actual elements of the argument sequence.
 
    The MERGE function takes two sequences and a predicate and returns a
 sequence produced by merging the two sequences, according to the
@@ -1048,8 +1498,17 @@ MERGE takes a :key argument.  Like CONCATENATE, and for the same reason,
 the first argument to MERGE must be a type descriptor specifying the
 type of sequence to produce.
 
-   (merge 'vector #(1 3 5) #(2 4 6) #'<) ==> #(1 2 3 4 5 6) (merge 'list
-#(1 3 5) #(2 4 6) #'<) ==> (1 2 3 4 5 6)
+     (merge 'vector #(1 3 5) #(2 4 6) #'<) ==> #(1 2 3 4 5 6)
+     (merge 'list #(1 3 5) #(2 4 6) #'<)   ==> (1 2 3 4 5 6)
+
+   ---------- Footnotes ----------
+
+   (1) When the sequence passed to the sorting functions is a vector,
+the "destruction" is actually guaranteed to entail permuting the
+elements in place, so you could get away without saving the returned
+value.  However, it's good style to always do something with the return
+value since the sorting functions can modify lists in much more
+arbitrary ways.
 
 
 File: pcl.info,  Node: 11-8,  Next: 11-9,  Prev: 11-7,  Up: Chapter 11
@@ -1062,47 +1521,55 @@ existing sequences.  The most basic of these is SUBSEQ, which extracts a
 subsequence starting at a particular index and continuing to a
 particular ending index or the end of the sequence.  For instance:
 
-   (subseq "foobarbaz" 3) ==> "barbaz" (subseq "foobarbaz" 3 6) ==>
-"bar" SUBSEQ is also SETFable, but it won't extend or shrink a sequence;
-if the new value and the subsequence to be replaced are different
-lengths, the shorter of the two determines how many characters are
-actually changed.
+     (subseq "foobarbaz" 3)   ==> "barbaz"
+     (subseq "foobarbaz" 3 6) ==> "bar"
 
-   (defparameter *x* (copy-seq "foobarbaz"))
+   SUBSEQ is also SETFable, but it won't extend or shrink a sequence; if
+the new value and the subsequence to be replaced are different lengths,
+the shorter of the two determines how many characters are actually
+changed.
 
-   (setf (subseq *x* 3 6) "xxx") ; subsequence and new value are same
-length *x* ==> "fooxxxbaz"
+     (defparameter *x* (copy-seq "foobarbaz"))
 
-   (setf (subseq *x* 3 6) "abcd") ; new value too long, extra character
-ignored.  *x* ==> "fooabcbaz"
+     (setf (subseq *x* 3 6) "xxx")  ; subsequence and new value are same length
+     *x* ==> "fooxxxbaz"
 
-   (setf (subseq *x* 3 6) "xx") ; new value too short, only two
-characters changed *x* ==> "fooxxcbaz" You can use the FILL function to
-set multiple elements of a sequence to a single value.  The required
-arguments are a sequence and the value with which to fill it.  By
-default every element of the sequence is set to the value; :start and
-:end keyword arguments can limit the effects to a given subsequence.
+     (setf (subseq *x* 3 6) "abcd") ; new value too long, extra character ignored.
+     *x* ==> "fooabcbaz"
+
+     (setf (subseq *x* 3 6) "xx")   ; new value too short, only two characters changed
+     *x* ==> "fooxxcbaz"
+
+   You can use the FILL function to set multiple elements of a sequence
+to a single value.  The required arguments are a sequence and the value
+with which to fill it.  By default every element of the sequence is set
+to the value; :start and :end keyword arguments can limit the effects to
+a given subsequence.
 
    If you need to find a subsequence within a sequence, the SEARCH
 function works like POSITION except the first argument is a sequence
 rather than a single item.
 
-   (position #\b "foobarbaz") ==> 3 (search "bar" "foobarbaz") ==> 3 On
-the other hand, to find where two sequences with a common prefix first
-diverge, you can use the MISMATCH function.  It takes two sequences and
-returns the index of the first pair of mismatched elements.
+     (position #\b "foobarbaz") ==> 3
+     (search "bar" "foobarbaz") ==> 3
 
-   (mismatch "foobarbaz" "foom") ==> 3 It returns NIL if the strings
-match.  MISMATCH also takes many of the standard keyword arguments: a
-:key argument for specifying a function to use to extract the values to
-be compared; a :test argument to specify the comparison function; and
-:start1, :end1, :start2, and :end2 arguments to specify subsequences
-within the two sequences.  And a :from-end argument of T specifies the
-sequences should be searched in reverse order, causing MISMATCH to
-return the index, in the first sequence, where whatever common suffix
-the two sequences share begins.
+   On the other hand, to find where two sequences with a common prefix
+first diverge, you can use the MISMATCH function.  It takes two
+sequences and returns the index of the first pair of mismatched
+elements.
 
-   (mismatch "foobar" "bar" :from-end t) ==> 3
+     (mismatch "foobarbaz" "foom") ==> 3
+
+   It returns NIL if the strings match.  MISMATCH also takes many of the
+standard keyword arguments: a :key argument for specifying a function to
+use to extract the values to be compared; a :test argument to specify
+the comparison function; and :start1, :end1, :start2, and :end2
+arguments to specify subsequences within the two sequences.  And a
+:from-end argument of T specifies the sequences should be searched in
+reverse order, causing MISMATCH to return the index, in the first
+sequence, where whatever common suffix the two sequences share begins.
+
+     (mismatch "foobar" "bar" :from-end t) ==> 3
 
 
 File: pcl.info,  Node: 11-9,  Next: 11-10,  Prev: 11-8,  Up: Chapter 11
@@ -1125,13 +1592,17 @@ predicate is satisfied or true if it never is.  And NOTEVERY returns
 true as soon as the predicate fails or false if the predicate is always
 satisfied.  Here are some examples of testing just one sequence:
 
-   (every #'evenp #(1 2 3 4 5)) ==> NIL (some #'evenp #(1 2 3 4 5)) ==>
-T (notany #'evenp #(1 2 3 4 5)) ==> NIL (notevery #'evenp #(1 2 3 4 5))
-==> T These calls compare elements of two sequences pairwise:
+     (every #'evenp #(1 2 3 4 5))    ==> NIL
+     (some #'evenp #(1 2 3 4 5))     ==> T
+     (notany #'evenp #(1 2 3 4 5))   ==> NIL
+     (notevery #'evenp #(1 2 3 4 5)) ==> T
 
-   (every #'> #(1 2 3 4) #(5 4 3 2)) ==> NIL (some #'> #(1 2 3 4) #(5 4
-3 2)) ==> T (notany #'> #(1 2 3 4) #(5 4 3 2)) ==> NIL (notevery #'> #(1
-2 3 4) #(5 4 3 2)) ==> T
+   These calls compare elements of two sequences pairwise:
+
+     (every #'> #(1 2 3 4) #(5 4 3 2))    ==> NIL
+     (some #'> #(1 2 3 4) #(5 4 3 2))     ==> T
+     (notany #'> #(1 2 3 4) #(5 4 3 2))   ==> NIL
+     (notevery #'> #(1 2 3 4) #(5 4 3 2)) ==> T
 
 
 File: pcl.info,  Node: 11-10,  Next: 11-11,  Prev: 11-9,  Up: Chapter 11
@@ -1146,21 +1617,23 @@ MAP returns a new sequence containing the result of applying the
 function to subsequent elements of the sequences.  Like CONCATENATE and
 MERGE, MAP needs to be told what kind of sequence to create.
 
-   (map 'vector #'* #(1 2 3 4 5) #(10 9 8 7 6)) ==> #(10 18 24 28 30)
-MAP-INTO is like MAP except instead of producing a new sequence of a
+     (map 'vector #'* #(1 2 3 4 5) #(10 9 8 7 6)) ==> #(10 18 24 28 30)
+
+   MAP-INTO is like MAP except instead of producing a new sequence of a
 given type, it places the results into a sequence passed as the first
 argument.  This sequence can be the same as one of the sequences
 providing values for the function.  For instance, to sum several
 vectors-a, b, and c-into one, you could write this:
 
-   (map-into a #'+ a b c) If the sequences are different lengths,
-MAP-INTO affects only as many elements as are present in the shortest
-sequence, including the sequence being mapped into.  However, if the
-sequence being mapped into is a vector with a fill pointer, the number
-of elements affected isn't limited by the fill pointer but rather by the
-actual size of the vector.  After a call to MAP-INTO, the fill pointer
-will be set to the number of elements mapped.  MAP-INTO won't, however,
-extend an adjustable vector.
+     (map-into a #'+ a b c)
+
+   If the sequences are different lengths, MAP-INTO affects only as many
+elements as are present in the shortest sequence, including the sequence
+being mapped into.  However, if the sequence being mapped into is a
+vector with a fill pointer, the number of elements affected isn't
+limited by the fill pointer but rather by the actual size of the vector.
+After a call to MAP-INTO, the fill pointer will be set to the number of
+elements mapped.  MAP-INTO won't, however, extend an adjustable vector.
 
    The last sequence function is REDUCE, which does another kind of
 mapping: it maps over a single sequence, applying a two-argument
@@ -1168,16 +1641,17 @@ function first to the first two elements of the sequence and then to the
 value returned by the function and subsequent elements of the sequence.
 Thus, the following expression sums the numbers from one to ten:
 
-   (reduce #'+ #(1 2 3 4 5 6 7 8 9 10)) ==> 55 REDUCE is a surprisingly
-useful function-whenever you need to distill a sequence down to a single
-value, chances are you can write it with REDUCE, and it will often be
-quite a concise way to express what you want.  For instance, to find the
-maximum value in a sequence of numbers, you can write (reduce #'max
-numbers).  REDUCE also takes a full complement of keyword arguments
-(:key, :from-end, :start, and :end) and one unique to REDUCE
-(:initial-value).  The latter specifies a value that's logically placed
-before the first element of the sequence (or after the last if you also
-specify a true :from-end argument).
+     (reduce #'+ #(1 2 3 4 5 6 7 8 9 10)) ==> 55
+
+   REDUCE is a surprisingly useful function-whenever you need to distill
+a sequence down to a single value, chances are you can write it with
+REDUCE, and it will often be quite a concise way to express what you
+want.  For instance, to find the maximum value in a sequence of numbers,
+you can write (reduce #'max numbers).  REDUCE also takes a full
+complement of keyword arguments (:key, :from-end, :start, and :end) and
+one unique to REDUCE (:initial-value).  The latter specifies a value
+that's logically placed before the first element of the sequence (or
+after the last if you also specify a true :from-end argument).
 
 
 File: pcl.info,  Node: 11-11,  Next: 11-12,  Prev: 11-10,  Up: Chapter 11
@@ -1213,25 +1687,26 @@ custom hash tables.
 
    The GETHASH function provides access to the elements of a hash table.
 It takes two arguments-a key and the hash table-and returns the value,
-if any, stored in the hash table under that key or NIL.11 For example:
+if any, stored in the hash table under that key or NIL. (1) For example:
 
-   (defparameter *h* (make-hash-table))
+     (defparameter *h* (make-hash-table))
 
-   (gethash 'foo *h*) ==> NIL
+     (gethash 'foo *h*) ==> NIL
 
-   (setf (gethash 'foo *h*) 'quux)
+     (setf (gethash 'foo *h*) 'quux)
 
-   (gethash 'foo *h*) ==> QUUX Since GETHASH returns NIL if the key
-isn't present in the table, there's no way to tell from the return value
-the difference between a key not being in a hash table at all and being
-in the table with the value NIL. GETHASH solves this problem with a
-feature I haven't discussed yet-multiple return values.  GETHASH
-actually returns two values; the primary value is the value stored under
-the given key or NIL. The secondary value is a boolean indicating
-whether the key is present in the hash table.  Because of the way
-multiple values work, the extra return value is silently discarded
-unless the caller explicitly handles it with a form that can "see"
-multiple values.
+     (gethash 'foo *h*) ==> QUUX
+
+   Since GETHASH returns NIL if the key isn't present in the table,
+there's no way to tell from the return value the difference between a
+key not being in a hash table at all and being in the table with the
+value NIL. GETHASH solves this problem with a feature I haven't
+discussed yet-multiple return values.  GETHASH actually returns two
+values; the primary value is the value stored under the given key or
+NIL. The secondary value is a boolean indicating whether the key is
+present in the hash table.  Because of the way multiple values work, the
+extra return value is silently discarded unless the caller explicitly
+handles it with a form that can "see" multiple values.
 
    I'll discuss multiple return values in greater detail in Chapter 20,
 but for now I'll give you a sneak preview of how to use the
@@ -1242,20 +1717,29 @@ filling them with the multiple values returned by a form.
    The following function shows how you might use MULTIPLE-VALUE-BIND;
 the variables it binds are value and present:
 
-   (defun show-value (key hash-table) (multiple-value-bind (value
-present) (gethash key hash-table) (if present (format nil "Value ~a
-actually present."  value) (format nil "Value ~a because key not found."
-value))))
+     (defun show-value (key hash-table)
+       (multiple-value-bind (value present) (gethash key hash-table)
+         (if present
+           (format nil "Value ~a actually present." value)
+           (format nil "Value ~a because key not found." value))))
 
-   (setf (gethash 'bar *h*) nil) ; provide an explicit value of NIL
+     (setf (gethash 'bar *h*) nil) ; provide an explicit value of NIL
 
-   (show-value 'foo *h*) ==> "Value QUUX actually present."  (show-value
-'bar *h*) ==> "Value NIL actually present."  (show-value 'baz *h*) ==>
-"Value NIL because key not found."  Since setting the value under a key
-to NIL leaves the key in the table, you'll need another function to
-completely remove a key/value pair.  REMHASH takes the same arguments as
-GETHASH and removes the specified entry.  You can also completely clear
-a hash table of all its key/value pairs with CLRHASH.
+     (show-value 'foo *h*) ==> "Value QUUX actually present."
+     (show-value 'bar *h*) ==> "Value NIL actually present."
+     (show-value 'baz *h*) ==> "Value NIL because key not found."
+
+   Since setting the value under a key to NIL leaves the key in the
+table, you'll need another function to completely remove a key/value
+pair.  REMHASH takes the same arguments as GETHASH and removes the
+specified entry.  You can also completely clear a hash table of all its
+key/value pairs with CLRHASH.
+
+   ---------- Footnotes ----------
+
+   (1) By an accident of history, the order of arguments to GETHASH is
+the opposite of ELT-ELT takes the collection first and then the index
+while GETHASH takes the key first and then the collection.
 
 
 File: pcl.info,  Node: 11-12,  Next: Chapter 12,  Prev: 11-11,  Up: Chapter 11
@@ -1270,26 +1754,38 @@ and invokes the function once for each key/value pair in the hash table.
 For instance, to print all the key/value pairs in a hash table, you
 could use MAPHASH like this:
 
-   (maphash #'(lambda (k v) (format t "~a => ~a~%" k v)) *h*) The
-consequences of adding or removing elements from a hash table while
-iterating over it aren't specified (and are likely to be bad) with two
-exceptions: you can use SETF with GETHASH to change the value of the
+     (maphash #'(lambda (k v) (format t "~a => ~a~%" k v)) *h*)
+
+   The consequences of adding or removing elements from a hash table
+while iterating over it aren't specified (and are likely to be bad) with
+two exceptions: you can use SETF with GETHASH to change the value of the
 current entry, and you can use REMHASH to remove the current entry.  For
 instance, to remove all the entries whose value is less than ten, you
 could write this:
 
-   (maphash #'(lambda (k v) (when (< v 10) (remhash k *h*))) *h*) The
-other way to iterate over a hash table is with the extended LOOP macro,
-which I'll discuss in Chapter 22.12 The LOOP equivalent of the first
-MAPHASH expression would look like this:
+     (maphash #'(lambda (k v) (when (< v 10) (remhash k *h*))) *h*)
 
-   (loop for k being the hash-keys in *h* using (hash-value v) do
-(format t "~a => ~a~%" k v)) I could say a lot more about the nonlist
-collections supported by Common Lisp.  For instance, I haven't discussed
-multidimensional arrays at all or the library of functions for
-manipulating bit arrays.  However, what I've covered in this chapter
-should suffice for most of your general-purpose programming needs.  Now
-it's finally time to look at Lisp's eponymous data structure: lists.
+   The other way to iterate over a hash table is with the extended LOOP
+macro, which I'll discuss in Chapter 22.  (1) The LOOP equivalent of the
+first MAPHASH expression would look like this:
+
+     (loop for k being the hash-keys in *h* using (hash-value v)
+       do (format t "~a => ~a~%" k v))
+
+   I could say a lot more about the nonlist collections supported by
+Common Lisp.  For instance, I haven't discussed multidimensional arrays
+at all or the library of functions for manipulating bit arrays.
+However, what I've covered in this chapter should suffice for most of
+your general-purpose programming needs.  Now it's finally time to look
+at Lisp's eponymous data structure: lists.
+
+   ---------- Footnotes ----------
+
+   (1) LOOP's hash table iteration is typically implemented on top of a
+more primitive form, WITH-HASH-TABLE-ITERATOR, that you don't need to
+worry about; it was added to the language specifically to support
+implementing things such as LOOP and is of little use unless you need to
+write completely new control constructs for iterating over hash tables.
 
 
 File: pcl.info,  Node: Chapter 12,  Next: Chapter 13,  Prev: Chapter 11,  Up: Top
@@ -1880,27 +2376,7 @@ detail.
 
    Table 12-1.  Other List Functions
 
-   Function	Description LAST	Returns the last cons cell in a list.  With
-an integer, argument returns the last n cons cells.  BUTLAST	Returns a
-copy of the list, excluding the last cons cell.  With an integer
-argument, excludes the last n cells.  NBUTLAST	The recycling version of
-BUTLAST; may modify and return the argument list but has no reliable
-side effects.  LDIFF	Returns a copy of a list up to a given cons cell.
-TAILP	Returns true if a given object is a cons cell that's part of the
-structure of a list.  LIST*	Builds a list to hold all but the last of
-its arguments and then makes the last argument the CDR of the last cell
-in the list.  In other words, a cross between LIST and APPEND. MAKE-LIST
-Builds an n item list.  The initial elements of the list are NIL or the
-value specified with the :initial-element keyword argument.  REVAPPEND
-Combination of REVERSE and APPEND; reverses first argument as with
-REVERSE and then appends the second argument.  NRECONC	Recycling version
-of REVAPPEND; reverses first argument as if by NREVERSE and then appends
-the second argument.  No reliable side effects.  CONSP	Predicate to test
-whether an object is a cons cell.  ATOM	Predicate to test whether an
-object is not a cons cell.  LISTP	Predicate to test whether an object is
-either a cons cell or NIL. NULL	Predicate to test whether an object is
-NIL. Functionally equivalent to NOT but stylistically preferable when
-testing for an empty list as opposed to boolean false.
+ [image src="tables/12-1.png" ]
 
    ---------- Footnotes ----------
 
@@ -5683,348 +6159,4 @@ iterations and that, with a colon modifier, each element of the list
 (either an actual list or the list constructed by the ~@{ directive)
 must itself be a list whose elements will then be used as arguments to
 the control string in the ~:{...~} directive.
-
-
-File: pcl.info,  Node: 18-9,  Next: 18-10,  Prev: 18-8,  Up: Chapter 18
-
-Hop, Skip, Jump
-===============
-
-A much simpler directive is the ~* directive, which allows you to jump
-around in the list of format arguments.  In its basic form, without
-modifiers, it simply skips the next argument, consuming it without
-emitting anything.  More often, however, it's used with a colon
-modifier, which causes it to move backward, allowing the same argument
-to be used a second time.  For instance, you can use ~:* to print a
-numeric argument once as a word and once in numerals like this:
-
-   (format nil "~r ~:*(~d)" 1) ==> "one (1)" Or you could implement a
-directive similar to ~:P for an irregular plural by combing ~:* with ~[.
-
-   (format nil "I saw ~r el~:*~[ves~;f~:;ves~]."  0) ==> "I saw zero
-elves."  (format nil "I saw ~r el~:*~[ves~;f~:;ves~]."  1) ==> "I saw
-one elf."  (format nil "I saw ~r el~:*~[ves~;f~:;ves~]."  2) ==> "I saw
-two elves."  In this control string, the ~R prints the format argument
-as a cardinal number.  Then the ~:* directive backs up so the number is
-also used as the argument to the ~[ directive, selecting between the
-clauses for when the number is zero, one, or anything else.7
-
-   Within an ~{ directive, ~* skips or backs up over the items in the
-list.  For instance, you could print only the keys of a plist like this:
-
-   (format nil "~{~s~*~^ ~}" '(:a 10 :b 20)) ==> ":A :B" The ~*
-directive can also be given a prefix parameter.  With no modifiers or
-with the colon modifier, this parameter specifies the number of
-arguments to move forward or backward and defaults to one.  With an
-at-sign modifier, the prefix parameter specifies an absolute, zero-based
-index of the argument to jump to, defaulting to zero.  The at-sign
-variant of ~* can be useful if you want to use different control strings
-to generate different messages for the same arguments and if different
-messages need to use the arguments in different orders.8
-
-
-File: pcl.info,  Node: 18-10,  Next: Chapter 19,  Prev: 18-9,  Up: Chapter 18
-
-And More . . .
-==============
-
-And there's more-I haven't mentioned the ~?  directive, which can take
-snippets of control strings from the format arguments or the ~/
-directive, which allows you to call an arbitrary function to handle the
-next format argument.  And then there are all the directives for
-generating tabular and pretty-printed output.  But the directives
-discussed in this chapter should be plenty for the time being.
-
-   In the next chapter, you'll move onto Common Lisp's condition system,
-the Common Lisp analog to other languages' exception and error handling
-systems.
-
-
-File: pcl.info,  Node: Chapter 19,  Next: Chapter 20,  Prev: Chapter 18,  Up: Top
-
-19. Beyond Exception Handling: Conditions and Restarts
-======================================================
-
-One of Lisp's great features is its condition system.  It serves a
-similar purpose to the exception handling systems in Java, Python, and
-C++ but is more flexible.  In fact, its flexibility extends beyond error
-handling-conditions are more general than exceptions in that a condition
-can represent any occurrence during a program's execution that may be of
-interest to code at different levels on the call stack.  For example, in
-the section "Other Uses for Conditions," you'll see that conditions can
-be used to emit warnings without disrupting execution of the code that
-emits the warning while allowing code higher on the call stack to
-control whether the warning message is printed.  For the time being,
-however, I'll focus on error handling.
-
-   The condition system is more flexible than exception systems because
-instead of providing a two-part division between the code that signals
-an error (1) and the code that handles it, (2) the condition system
-splits the responsibilities into three parts-signaling a condition,
-handling it, and restarting.  In this chapter, I'll describe how you
-could use conditions in part of a hypothetical application for analyzing
-log files.  You'll see how you could use the condition system to allow a
-low-level function to detect a problem while parsing a log file and
-signal an error, to allow mid-level code to provide several possible
-ways of recovering from such an error, and to allow code at the highest
-level of the application to define a policy for choosing which recovery
-strategy to use.
-
-   To start, I'll introduce some terminology: errors, as I'll use the
-term, are the consequences of Murphy's law.  If something can go wrong,
-it will: a file that your program needs to read will be missing, a disk
-that you need to write to will be full, the server you're talking to
-will crash, or the network will go down.  If any of these things happen,
-it may stop a piece of code from doing what you want.  But there's no
-bug; there's no place in the code that you can fix to make the
-nonexistent file exist or the disk not be full.  However, if the rest of
-the program is depending on the actions that were going to be taken,
-then you'd better deal with the error somehow or you will have
-introduced a bug.  So, errors aren't caused by bugs, but neglecting to
-handle an error is almost certainly a bug.
-
-   So, what does it mean to handle an error?  In a well-written program,
-each function is a black box hiding its inner workings.  Programs are
-then built out of layers of functions: high-level functions are built on
-top of the lower-level functions, and so on.  This hierarchy of
-functionality manifests itself at runtime in the form of the call stack:
-if high calls medium, which calls low, when the flow of control is in
-low, it's also still in medium and high, that is, they're still on the
-call stack.
-
-   Because each function is a black box, function boundaries are an
-excellent place to deal with errors.  Each function-low, for example-has
-a job to do.  Its direct caller-medium in this case-is counting on it to
-do its job.  However, an error that prevents it from doing its job puts
-all its callers at risk: medium called low because it needs the work
-done that low does; if that work doesn't get done, medium is in trouble.
-But this means that medium's caller, high, is also in trouble-and so on
-up the call stack to the very top of the program.  On the other hand,
-because each function is a black box, if any of the functions in the
-call stack can somehow do their job despite underlying errors, then none
-of the functions above it needs to know there was a problem-all those
-functions care about is that the function they called somehow did the
-work expected of it.
-
-   In most languages, errors are handled by returning from a failing
-function and giving the caller the choice of either recovering or
-failing itself.  Some languages use the normal function return
-mechanism, while languages with exceptions return control by throwing or
-raising an exception.  Exceptions are a vast improvement over using
-normal function returns, but both schemes suffer from a common flaw:
-while searching for a function that can recover, the stack unwinds,
-which means code that might recover has to do so without the context of
-what the lower-level code was trying to do when the error actually
-occurred.
-
-   Consider the hypothetical call chain of high, medium, low.  If low
-fails and medium can't recover, the ball is in high's court.  For high
-to handle the error, it must either do its job without any help from
-medium or somehow change things so calling medium will work and call it
-again.  The first option is theoretically clean but implies a lot of
-extra code-a whole extra implementation of whatever it was medium was
-supposed to do.  And the further the stack unwinds, the more work that
-needs to be redone.  The second option-patching things up and
-retrying-is tricky; for high to be able to change the state of the world
-so a second call into medium won't end up causing an error in low, it'd
-need an unseemly knowledge of the inner workings of both medium and low,
-contrary to the notion that each function is a black box.
-
-* Menu:
-
-* 19-1::             The Lisp Way
-* 19-2::             Conditions
-* 19-3::             Condition Handlers
-* 19-4::             Restarts
-* 19-5::             Providing Multiple Restarts
-* 19-6::             Other Uses for Conditions
-
-   ---------- Footnotes ----------
-
-   (1) Throws or raises an exception in Java/Python terms
-
-   (2) Catches the exception in Java/Python terms
-
-
-File: pcl.info,  Node: 19-1,  Next: 19-2,  Prev: Chapter 19,  Up: Chapter 19
-
-The Lisp Way
-============
-
-Common Lisp's error handling system gives you a way out of this
-conundrum by letting you separate the code that actually recovers from
-an error from the code that decides how to recover.  Thus, you can put
-recovery code in low-level functions without committing to actually
-using any particular recovery strategy, leaving that decision to code in
-high-level functions.
-
-   To get a sense of how this works, let's suppose you're writing an
-application that reads some sort of textual log file, such as a Web
-server's log.  Somewhere in your application you'll have a function to
-parse the individual log entries.  Let's assume you'll write a function,
-parse-log-entry, that will be passed a string containing the text of a
-single log entry and that is supposed to return a log-entry object
-representing the entry.  This function will be called from a function,
-parse-log-file, that reads a complete log file and returns a list of
-objects representing all the entries in the file.
-
-   To keep things simple, the parse-log-entry function will not be
-required to parse incorrectly formatted entries.  It will, however, be
-able to detect when its input is malformed.  But what should it do when
-it detects bad input?  In C you'd return a special value to indicate
-there was a problem.  In Java or Python you'd throw or raise an
-exception.  In Common Lisp, you signal a condition.
-
-
-File: pcl.info,  Node: 19-2,  Next: 19-3,  Prev: 19-1,  Up: Chapter 19
-
-Conditions
-==========
-
-A condition is an object whose class indicates the general nature of the
-condition and whose instance data carries information about the details
-of the particular circumstances that lead to the condition being
-signaled.  (1) In this hypothetical log analysis program, you might
-define a condition class, malformed-log-entry-error, that
-parse-log-entry will signal if it's given data it can't parse.
-
-   Condition classes are defined with the DEFINE-CONDITION macro, which
-works essentially the same as DEFCLASS except that the default
-superclass of classes defined with DEFINE-CONDITION is CONDITION rather
-than STANDARD-OBJECT. Slots are specified in the same way, and condition
-classes can singly and multiply inherit from other classes that descend
-from CONDITION. But for historical reasons, condition classes aren't
-required to be instances of STANDARD-OBJECT, so some of the functions
-you use with DEFCLASSed classes aren't required to work with conditions.
-In particular, a condition's slots can't be accessed using SLOT-VALUE;
-you must specify either a :reader option or an :accessor option for any
-slot whose value you intend to use.  Likewise, new condition objects are
-created with MAKE-CONDITION rather than MAKE-INSTANCE. MAKE-CONDITION
-initializes the slots of the new condition based on the :initargs it's
-passed, but there's no way to further customize a condition's
-initialization, equivalent to INITIALIZE-INSTANCE. (2)
-
-   When using the condition system for error handling, you should define
-your conditions as subclasses of ERROR, a subclass of CONDITION. Thus,
-you might define malformed-log-entry-error, with a slot to hold the
-argument that was passed to parse-log-entry, like this:
-
-     (define-condition malformed-log-entry-error (error)
-       ((text :initarg :text :reader text)))
-
-   ---------- Footnotes ----------
-
-   (1) In this respect, a condition is a lot like an exception in Java
-or Python except not all conditions represent an error or exceptional
-situation.
-
-   (2) In some Common Lisp implementations, conditions are defined as
-subclasses of STANDARD-OBJECT, in which case SLOT-VALUE, MAKE-INSTANCE,
-and INITIALIZE-INSTANCE will work, but it's not portable to rely on it.
-
-
-File: pcl.info,  Node: 19-3,  Next: 19-4,  Prev: 19-2,  Up: Chapter 19
-
-Condition Handlers
-==================
-
-In parse-log-entry you'll signal a malformed-log-entry-error if you
-can't parse the log entry.  You signal errors with the function ERROR,
-which calls the lower-level function SIGNAL and drops into the debugger
-if the condition isn't handled.  You can call ERROR two ways: you can
-pass it an already instantiated condition object, or you can pass it the
-name of the condition class and any initargs needed to construct a new
-condition, and it will instantiate the condition for you.  The former is
-occasionally useful for resignaling an existing condition object, but
-the latter is more concise.  Thus, you could write parse-log-entry like
-this, eliding the details of actually parsing a log entry:
-
-     (defun parse-log-entry (text)
-       (if (well-formed-log-entry-p text)
-         (make-instance 'log-entry ...)
-         (error 'malformed-log-entry-error :text text)))
-
-   What happens when the error is signaled depends on the code above
-parse-log-entry on the call stack.  To avoid landing in the debugger,
-you must establish a condition handler in one of the functions leading
-to the call to parse-log-entry.  When a condition is signaled, the
-signaling machinery looks through a list of active condition handlers,
-looking for a handler that can handle the condition being signaled based
-on the condition's class.  Each condition handler consists of a type
-specifier indicating what types of conditions it can handle and a
-function that takes a single argument, the condition.  At any given
-moment there can be many active condition handlers established at
-various levels of the call stack.  When a condition is signaled, the
-signaling machinery finds the most recently established handler whose
-type specifier is compatible with the condition being signaled and calls
-its function, passing it the condition object.
-
-   The handler function can then choose whether to handle the condition.
-The function can decline to handle the condition by simply returning
-normally, in which case control returns to the SIGNAL function, which
-will search for the next most recently established handler with a
-compatible type specifier.  To handle the condition, the function must
-transfer control out of SIGNAL via a nonlocal exit.  In the next
-section, you'll see how a handler can choose where to transfer control.
-However, many condition handlers simply want to unwind the stack to the
-place where they were established and then run some code.  The macro
-HANDLER-CASE establishes this kind of condition handler.  The basic form
-of a HANDLER-CASE is as follows:
-
-     (handler-case expression
-       error-clause*)
-
-   where each error-clause is of the following form:
-
-     (condition-type ([var]) code)
-
-   If the expression returns normally, then its value is returned by the
-HANDLER-CASE. The body of a HANDLER-CASE must be a single expression;
-you can use PROGN to combine several expressions into a single form.
-If, however, the expression signals a condition that's an instance of
-any of the condition-types specified in any error-clause, then the code
-in the appropriate error clause is executed and its value returned by
-the HANDLER-CASE. The var, if included, is the name of the variable that
-will hold the condition object when the handler code is executed.  If
-the code doesn't need to access the condition object, you can omit the
-variable name.
-
-   For instance, one way to handle the malformed-log-entry-error
-signaled by parse-log-entry in its caller, parse-log-file, would be to
-skip the malformed entry.  In the following function, the HANDLER-CASE
-expression will either return the value returned by parse-log-entry or
-return NIL if a malformed-log-entry-error is signaled.  (The it in the
-LOOP clause collect it is another LOOP keyword, which refers to the
-value of the most recently evaluated conditional test, in this case the
-value of entry.)
-
-     (defun parse-log-file (file)
-       (with-open-file (in file :direction :input)
-         (loop for text = (read-line in nil nil) while text
-            for entry = (handler-case (parse-log-entry text)
-                          (malformed-log-entry-error () nil))
-            when entry collect it)))
-
-   When parse-log-entry returns normally, its value will be assigned to
-entry and collected by the LOOP. But if parse-log-entry signals a
-malformed-log-entry-error, then the error clause will return NIL, which
-won't be collected.
-
-   This version of parse-log-file has one serious deficiency: it's doing
-too much.  As its name suggests, the job of parse-log-file is to parse
-the file and produce a list of log-entry objects; if it can't, it's not
-its place to decide what to do instead.  What if you want to use
-parse-log-file in an application that wants to tell the user that the
-log file is corrupted or one that wants to recover from malformed
-entries by fixing them up and re-parsing them?  Or maybe an application
-is fine with skipping them but only until a certain number of corrupted
-entries have been seen.
-
-   You could try to fix this problem by moving the HANDLER-CASE to a
-higher-level function.  However, then you'd have no way to implement the
-current policy of skipping individual entries-when the error was
-signaled, the stack would be unwound all the way to the higher-level
-function, abandoning the parsing of the log file altogether.  What you
-want is a way to provide the current recovery strategy without requiring
-that it always be used.
 
