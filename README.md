@@ -58,19 +58,19 @@ TODOs:
 - [ ] images
   - [X] @node 12-1 cons cell diagrams
   - [X] @node 12-2 cons cell diagrams
-  - [ ] @node 13-1 cons cell diagrams
-  - [ ] @node 13-3 cons cell diagrams
-  - [ ] @node 16-3 class hierarchy
-  - [ ] @node 19-4 more con cells
-  - [ ] @node 26-1 `Figure 26-1. Sample Web page`
-  - [ ] @node 26-2 `Figure 26-2. http://localhost:2001/hello.html`
-  - [ ] @node 26-3 `Figure 26-3. http://localhost:2001/random-number`
-  - [ ] @node 26-6 `Figure 26-4. http://localhost:2001/show-query-params?foo=bar&baz=10`
-  - [ ] @node 26-6 `Figure 26-5. http://localhost:2001/simple-form`
-  - [ ] @node 26-6 `Figure 26-6. Result of submitting the simple form`
-  - [ ] @node 26-7 `Figure 26-7. http://localhost:2001/show-cookies with no cookies`
-  - [ ] @node 26-7 `Figure 26-8. http://localhost:2001/set-cookie`
-  - [ ] @node 26-7 `Figure 26-9. http://localhost:2001/show-cookies after setting a cookie`
+  - [X] @node 13-1 cons cell diagrams
+  - [X] @node 13-3 cons cell diagrams
+  - [X] @node 16-3 class hierarchy
+  - [X] @node 19-4 more con cells
+  - [X] @node 26-1 `Figure 26-1. Sample Web page`
+  - [X] @node 26-2 `Figure 26-2. http://localhost:2001/hello.html`
+  - [X] @node 26-3 `Figure 26-3. http://localhost:2001/random-number`
+  - [X] @node 26-6 `Figure 26-4. http://localhost:2001/show-query-params?foo=bar&baz=10`
+  - [X] @node 26-6 `Figure 26-5. http://localhost:2001/simple-form`
+  - [X] @node 26-6 `Figure 26-6. Result of submitting the simple form`
+  - [X] @node 26-7 `Figure 26-7. http://localhost:2001/show-cookies with no cookies`
+  - [X] @node 26-7 `Figure 26-8. http://localhost:2001/set-cookie`
+  - [X] @node 26-7 `Figure 26-9. http://localhost:2001/show-cookies after setting a cookie`
 
 
 @emph for bold
@@ -87,4 +87,4 @@ for bar.
 green font!
 ‘Here's how you do it—and why’
 
-Build from the project root with $ makeinfo pcl.texi
+Build from the project root with `$ makeinfo pcl.texi`

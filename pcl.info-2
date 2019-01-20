@@ -2038,16 +2038,18 @@ references until reaching a NIL. The elements of the list are the
 objects referenced by the CARs of the cons cells in the list structure.
 If a cons cell in the list structure has a CAR that references another
 cons cell, the referenced cons cell is considered to be the head of a
-list that's an element of the outer list.1 Tree structure, on the other
-hand, is traversed by following both CAR and CDR references for as long
-as they point to other cons cells.  The values in a tree are thus the
-atomic-non-cons-cell-values referenced by either the CARs or the CDRs of
-the cons cells in the tree structure.
+list that's an element of the outer list.  (1) Tree structure, on the
+other hand, is traversed by following both CAR and CDR references for as
+long as they point to other cons cells.  The values in a tree are thus
+the atomic-non-cons-cell-values referenced by either the CARs or the
+CDRs of the cons cells in the tree structure.
 
    For instance, the following box-and-arrow diagram shows the cons
 cells that make up the list of lists: ((1 2) (3 4) (5 6)).  The list
 structure includes only the three cons cells inside the dashed box while
 the tree structure includes all the cons cells.
+
+ [image src="imgs/list-or-tree.png" ]
 
    To see the difference between a list function and a tree function,
 you can consider how the functions COPY-LIST and COPY-TREE will copy
@@ -2059,9 +2061,13 @@ the CARs of the original cons cells in the list structure.  Thus,
 COPY-LIST doesn't copy the sublists (1 2), (3 4), or (5 6), as shown in
 this diagram:
 
+ [image src="imgs/copy-list-list-or-tree.png" ]
+
    COPY-TREE, on the other hand, makes a new cons cell for each of the
 cons cells in the diagram and links them together in the same structure,
 as shown in this diagram:
+
+ [image src="imgs/copy-tree-list-or-tree.png" ]
 
    Where a cons cell in the original referenced an atomic value, the
 corresponding cons cell in the copy will reference the same value.
@@ -2081,19 +2087,33 @@ keyword arguments, and it returns a new tree with the same shape as the
 original tree but with all instances of the old item replaced with the
 new item.  For example:
 
-   CL-USER> (subst 10 1 '(1 2 (3 2 1) ((1 1) (2 2)))) (10 2 (3 2 10)
-((10 10) (2 2))) SUBST-IF is analogous to SUBSTITUTE-IF. Instead of an
-old item, it takes a one-argument function-the function is called with
-each atomic value in the tree, and whenever it returns true, the
-position in the new tree is filled with the new value.  SUBST-IF-NOT is
-the same except the values where the test returns NIL are replaced.
-NSUBST, NSUBST-IF, and NSUBST-IF-NOT are the recycling versions of the
-SUBST functions.  As with most other recycling functions, you should use
-these functions only as drop-in replacements for their nondestructive
-counterparts in situations where you know there's no danger of modifying
-a shared structure.  In particular, you must continue to save the return
-value of these functions since you have no guarantee that the result
-will be EQ to the original tree.2
+     CL-USER> (subst 10 1 '(1 2 (3 2 1) ((1 1) (2 2))))
+     (10 2 (3 2 10) ((10 10) (2 2)))
+
+   SUBST-IF is analogous to SUBSTITUTE-IF. Instead of an old item, it
+takes a one-argument function-the function is called with each atomic
+value in the tree, and whenever it returns true, the position in the new
+tree is filled with the new value.  SUBST-IF-NOT is the same except the
+values where the test returns NIL are replaced.  NSUBST, NSUBST-IF, and
+NSUBST-IF-NOT are the recycling versions of the SUBST functions.  As
+with most other recycling functions, you should use these functions only
+as drop-in replacements for their nondestructive counterparts in
+situations where you know there's no danger of modifying a shared
+structure.  In particular, you must continue to save the return value of
+these functions since you have no guarantee that the result will be EQ
+to the original tree.  (2)
+
+   ---------- Footnotes ----------
+
+   (1) It's possible to build a chain of cons cells where the CDR of the
+last cons cell isn't NIL but some other atom.  This is called a dotted
+list because the last cons is a dotted pair.
+
+   (2) It may seem that the NSUBST family of functions can and in fact
+does modify the tree in place.  However, there's one edge case: when the
+"tree" passed is, in fact, an atom, it can't be modified in place, so
+the result of NSUBST will be a different object than the argument:
+(nsubst 'x 'y 'y) X.
 
 
 File: pcl.info,  Node: 13-2,  Next: 13-3,  Prev: 13-1,  Up: Chapter 13
@@ -2128,10 +2148,22 @@ particular list, you need to assign the value returned by ADJOIN to the
 place where the list came from.  The modify macro PUSHNEW does this for
 you automatically.
 
-   CL-USER> (defparameter *set* ()) *SET* CL-USER> (adjoin 1 *set*) (1)
-CL-USER> *set* NIL CL-USER> (setf *set* (adjoin 1 *set*)) (1) CL-USER>
-(pushnew 2 *set*) (2 1) CL-USER> *set* (2 1) CL-USER> (pushnew 2 *set*)
-(2 1) You can test whether a given item is in a set with MEMBER and the
+     CL-USER> (defparameter *set* ())
+     *SET*
+     CL-USER> (adjoin 1 *set*)
+     (1)
+     CL-USER> *set*
+     NIL
+     CL-USER> (setf *set* (adjoin 1 *set*))
+     (1)
+     CL-USER> (pushnew 2 *set*)
+     (2 1)
+     CL-USER> *set*
+     (2 1)
+     CL-USER> (pushnew 2 *set*)
+     (2 1)
+
+   You can test whether a given item is in a set with MEMBER and the
 related functions MEMBER-IF and MEMBER-IF-NOT. These functions are
 similar to the sequence functions FIND, FIND-IF, and FIND-IF-NOT except
 they can be used only with lists.  And instead of returning the item
@@ -2146,7 +2178,7 @@ returns a new list representing the set resulting from performing the
 appropriate set-theoretic operation on the two lists: INTERSECTION
 returns a list containing all the elements found in both arguments.
 UNION returns a list containing one instance of each unique element from
-the two arguments.3 SET-DIFFERENCE returns a list containing all the
+the two arguments.  (1) SET-DIFFERENCE returns a list containing all the
 elements from the first argument that don't appear in the second
 argument.  And SET-EXCLUSIVE-OR returns a list containing those elements
 appearing in only one or the other of the two argument lists but not in
@@ -2158,8 +2190,15 @@ name is the same except with an N prefix.
 of the second-if every element in the first list is also present in the
 second list.  The order of the elements in the lists doesn't matter.
 
-   CL-USER> (subsetp '(3 2 1) '(1 2 3 4)) T CL-USER> (subsetp '(1 2 3 4)
-'(3 2 1)) NIL
+     CL-USER> (subsetp '(3 2 1) '(1 2 3 4))
+     T
+     CL-USER> (subsetp '(1 2 3 4) '(3 2 1))
+     NIL
+
+   ---------- Footnotes ----------
+
+   (1) UNION takes only one element from each list, but if either list
+contains duplicate elements, the result may also contain duplicates.
 
 
 File: pcl.info,  Node: 13-3,  Next: 13-4,  Prev: 13-2,  Up: Chapter 13
@@ -2189,63 +2228,87 @@ pair with the key in the cons cell's CAR and the value in the CDR. For
 instance, the following is a box-and-arrow diagram of an alist mapping
 the symbol A to the number 1, B to 2, and C to 3:
 
+ [image src="imgs/alist-abc-123.png" ]
+
    Unless the value in the CDR is a list, cons cells representing the
 key/value pairs will be dotted pairs in s-expression notation.  The
 alist diagramed in the previous figure, for instance, is printed like
 this:
 
-   ((A .  1) (B .  2) (C .  3)) The main lookup function for alists is
-ASSOC, which takes a key and an alist and returns the first cons cell
-whose CAR matches the key or NIL if no match is found.
+     ((A . 1) (B . 2) (C . 3))
 
-   CL-USER> (assoc 'a '((a .  1) (b .  2) (c .  3))) (A .  1) CL-USER>
-(assoc 'c '((a .  1) (b .  2) (c .  3))) (C .  3) CL-USER> (assoc 'd
-'((a .  1) (b .  2) (c .  3))) NIL To get the value corresponding to a
-given key, you simply pass the result of ASSOC to CDR.
+   The main lookup function for alists is ASSOC, which takes a key and
+an alist and returns the first cons cell whose CAR matches the key or
+NIL if no match is found.
 
-   CL-USER> (cdr (assoc 'a '((a .  1) (b .  2) (c .  3)))) 1 By default
-the key given is compared to the keys in the alist using EQL, but you
-can change that with the standard combination of :key and :test keyword
-arguments.  For instance, if you wanted to use string keys, you might
-write this:
+     CL-USER> (assoc 'a '((a . 1) (b . 2) (c . 3)))
+     (A . 1)
+     CL-USER> (assoc 'c '((a . 1) (b . 2) (c . 3)))
+     (C . 3)
+     CL-USER> (assoc 'd '((a . 1) (b . 2) (c . 3)))
+     NIL
 
-   CL-USER> (assoc "a" '(("a" .  1) ("b" .  2) ("c" .  3)) :test
-#'string=) ("a" .  1) Without specifying :test to be STRING=, that ASSOC
-would probably return NIL because two strings with the same contents
-aren't necessarily EQL.
+   To get the value corresponding to a given key, you simply pass the
+result of ASSOC to CDR.
 
-   CL-USER> (assoc "a" '(("a" .  1) ("b" .  2) ("c" .  3))) NIL Because
-ASSOC searches the list by scanning from the front of the list, one
-key/value pair in an alist can shadow other pairs with the same key
-later in the list.
+     CL-USER> (cdr (assoc 'a '((a . 1) (b . 2) (c . 3))))
+     1
 
-   CL-USER> (assoc 'a '((a .  10) (a .  1) (b .  2) (c .  3))) (A .  10)
-You can add a pair to the front of an alist with CONS like this:
+   By default the key given is compared to the keys in the alist using
+EQL, but you can change that with the standard combination of :key and
+:test keyword arguments.  For instance, if you wanted to use string
+keys, you might write this:
 
-   (cons (cons 'new-key 'new-value) alist) However, as a convenience,
-Common Lisp provides the function ACONS, which lets you write this:
+     CL-USER> (assoc "a" '(("a" . 1) ("b" . 2) ("c" . 3)) :test #'string=)
+     ("a" . 1)
 
-   (acons 'new-key 'new-value alist) Like CONS, ACONS is a function and
-thus can't modify the place holding the alist it's passed.  If you want
-to modify an alist, you need to write either this:
+   Without specifying :test to be STRING=, that ASSOC would probably
+return NIL because two strings with the same contents aren't necessarily
+EQL.
 
-   (setf alist (acons 'new-key 'new-value alist)) or this:
+     CL-USER> (assoc "a" '(("a" . 1) ("b" . 2) ("c" . 3)))
+     NIL
 
-   (push (cons 'new-key 'new-value) alist) Obviously, the time it takes
-to search an alist with ASSOC is a function of how deep in the list the
-matching pair is found.  In the worst case, determining that no pair
-matches requires ASSOC to scan every element of the alist.  However,
-since the basic mechanism for alists is so lightweight, for small tables
-an alist can outperform a hash table.  Also, alists give you more
-flexibility in how you do the lookup.  I already mentioned that ASSOC
-takes :key and :test keyword arguments.  When those don't suit your
-needs, you may be able to use the ASSOC-IF and ASSOC-IF-NOT functions,
-which return the first key/value pair whose CAR satisfies (or not, in
-the case of ASSOC-IF-NOT) the test function passed in the place of a
-specific item.  And three functions-RASSOC, RASSOC-IF, and
-RASSOC-IF-NOT-work just like the corresponding ASSOC functions except
-they use the value in the CDR of each element as the key, performing a
-reverse lookup.
+   Because ASSOC searches the list by scanning from the front of the
+list, one key/value pair in an alist can shadow other pairs with the
+same key later in the list.
+
+     CL-USER> (assoc 'a '((a . 10) (a . 1) (b . 2) (c . 3)))
+     (A . 10)
+
+   You can add a pair to the front of an alist with CONS like this:
+
+     (cons (cons 'new-key 'new-value) alist)
+
+   However, as a convenience, Common Lisp provides the function ACONS,
+which lets you write this:
+
+     (acons 'new-key 'new-value alist)
+
+   Like CONS, ACONS is a function and thus can't modify the place
+holding the alist it's passed.  If you want to modify an alist, you need
+to write either this:
+
+     (setf alist (acons 'new-key 'new-value alist))
+
+   or this:
+
+     (push (cons 'new-key 'new-value) alist)
+
+   Obviously, the time it takes to search an alist with ASSOC is a
+function of how deep in the list the matching pair is found.  In the
+worst case, determining that no pair matches requires ASSOC to scan
+every element of the alist.  However, since the basic mechanism for
+alists is so lightweight, for small tables an alist can outperform a
+hash table.  Also, alists give you more flexibility in how you do the
+lookup.  I already mentioned that ASSOC takes :key and :test keyword
+arguments.  When those don't suit your needs, you may be able to use the
+ASSOC-IF and ASSOC-IF-NOT functions, which return the first key/value
+pair whose CAR satisfies (or not, in the case of ASSOC-IF-NOT) the test
+function passed in the place of a specific item.  And three
+functions-RASSOC, RASSOC-IF, and RASSOC-IF-NOT-work just like the
+corresponding ASSOC functions except they use the value in the CDR of
+each element as the key, performing a reverse lookup.
 
    The function COPY-ALIST is similar to COPY-TREE except, instead of
 copying the whole tree structure, it copies only the cons cells that
@@ -2259,16 +2322,22 @@ values with the function PAIRLIS. The resulting alist may contain the
 pairs either in the same order as the original lists or in reverse
 order.  For example, you may get this result:
 
-   CL-USER> (pairlis '(a b c) '(1 2 3)) ((C .  3) (B .  2) (A .  1)) Or
-you could just as well get this:
+     CL-USER> (pairlis '(a b c) '(1 2 3))
+     ((C . 3) (B . 2) (A . 1))
 
-   CL-USER> (pairlis '(a b c) '(1 2 3)) ((A .  1) (B .  2) (C .  3)) The
-other kind of lookup table is the property list, or plist, which you
-used to represent the rows in the database in Chapter 3.  Structurally a
-plist is just a regular list with the keys and values as alternating
-values.  For instance, a plist mapping A, B, and C, to 1, 2, and 3 is
-simply the list (A 1 B 2 C 3).  In boxes-and-arrows form, it looks like
-this:
+   Or you could just as well get this:
+
+     CL-USER> (pairlis '(a b c) '(1 2 3))
+     ((A . 1) (B . 2) (C . 3))
+
+   The other kind of lookup table is the property list, or plist, which
+you used to represent the rows in the database in Chapter 3.
+Structurally a plist is just a regular list with the keys and values as
+alternating values.  For instance, a plist mapping A, B, and C, to 1, 2,
+and 3 is simply the list (A 1 B 2 C 3).  In boxes-and-arrows form, it
+looks like this:
+
+ [image src="imgs/plist-abc-123.png" ]
 
    However, plists are less flexible than alists.  In fact, plists
 support only one fundamental lookup operation, the function GETF, which
@@ -2291,16 +2360,31 @@ key.  SETF also treats GETF a bit specially in that the first argument
 to GETF is treated as the place to modify.  Thus, you can use SETF of
 GETF to add a new key/value pair to an existing plist.
 
-   CL-USER> (defparameter *plist* ()) *PLIST* CL-USER> *plist* NIL
-CL-USER> (setf (getf *plist* :a) 1) 1 CL-USER> *plist* (:A 1) CL-USER>
-(setf (getf *plist* :a) 2) 2 CL-USER> *plist* (:A 2) To remove a
-key/value pair from a plist, you use the macro REMF, which sets the
-place given as its first argument to a plist containing all the
-key/value pairs except the one specified.  It returns true if the given
-key was actually found.
+     CL-USER> (defparameter *plist* ())
+     *PLIST*
+     CL-USER> *plist*
+     NIL
+     CL-USER> (setf (getf *plist* :a) 1)
+     1
+     CL-USER> *plist*
+     (:A 1)
+     CL-USER> (setf (getf *plist* :a) 2)
+     2
+     CL-USER> *plist*
+     (:A 2)
 
-   CL-USER> (remf *plist* :a) T CL-USER> *plist* NIL Like GETF, REMF
-always uses EQ to compare the given key to the keys in the plist.
+   To remove a key/value pair from a plist, you use the macro REMF,
+which sets the place given as its first argument to a plist containing
+all the key/value pairs except the one specified.  It returns true if
+the given key was actually found.
+
+     CL-USER> (remf *plist* :a)
+     T
+     CL-USER> *plist*
+     NIL
+
+   Like GETF, REMF always uses EQ to compare the given key to the keys
+in the plist.
 
    Since plists are often used in situations where you want to extract
 several properties from the same plist, Common Lisp provides a function,
@@ -2314,30 +2398,44 @@ For instance, the following function efficiently processes-using the
 hypothetical function process-property-all the key/value pairs in a
 plist for a given list of keys:
 
-   (defun process-properties (plist keys) (loop while plist do
-(multiple-value-bind (key value tail) (get-properties plist keys) (when
-key (process-property key value)) (setf plist (cddr tail))))) The last
-special thing about plists is the relationship they have with symbols:
-every symbol object has an associated plist that can be used to store
-information about the symbol.  The plist can be obtained via the
-function SYMBOL-PLIST. However, you rarely care about the whole plist;
-more often you'll use the functions GET, which takes a symbol and a key
-and is shorthand for a GETF of the same key in the symbols SYMBOL-PLIST.
+     (defun process-properties (plist keys)
+       (loop while plist do
+            (multiple-value-bind (key value tail) (get-properties plist keys)
+              (when key (process-property key value))
+              (setf plist (cddr tail)))))
 
-   (get 'symbol 'key) === (getf (symbol-plist 'symbol) 'key) Like GETF,
-GET is SETFable, so you can attach arbitrary information to a symbol
-like this:
+   The last special thing about plists is the relationship they have
+with symbols: every symbol object has an associated plist that can be
+used to store information about the symbol.  The plist can be obtained
+via the function SYMBOL-PLIST. However, you rarely care about the whole
+plist; more often you'll use the functions GET, which takes a symbol and
+a key and is shorthand for a GETF of the same key in the symbols
+SYMBOL-PLIST.
 
-   (setf (get 'some-symbol 'my-key) "information") To remove a property
-from a symbol's plist, you can use either REMF of SYMBOL-PLIST or the
-convenience function REMPROP.4
+     (get 'symbol 'key) === (getf (symbol-plist 'symbol) 'key)
+   Like GETF, GET is SETFable, so you can attach arbitrary information
+to a symbol like this:
 
-   (remprop 'symbol 'key) === (remf (symbol-plist 'symbol key)) Being
-able to attach arbitrary information to names is quite handy when doing
-any kind of symbolic programming.  For instance, one of the macros
-you'll write in Chapter 24 will attach information to names that other
-instances of the same macros will extract and use when generating their
-expansions.
+     (setf (get 'some-symbol 'my-key) "information")
+
+   To remove a property from a symbol's plist, you can use either REMF
+of SYMBOL-PLIST or the convenience function REMPROP. (1)
+
+     (remprop 'symbol 'key) === (remf (symbol-plist 'symbol key))
+
+   Being able to attach arbitrary information to names is quite handy
+when doing any kind of symbolic programming.  For instance, one of the
+macros you'll write in Chapter 24 will attach information to names that
+other instances of the same macros will extract and use when generating
+their expansions.
+
+   ---------- Footnotes ----------
+
+   (1) It's also possible to directly SETF SYMBOL-PLIST. However, that's
+a bad idea, as different code may have added different properties to the
+symbol's plist for different reasons.  If one piece of code clobbers the
+symbol's whole plist, it may break other code that added its own
+properties to the plist.
 
 
 File: pcl.info,  Node: 13-4,  Next: Chapter 14,  Prev: 13-3,  Up: Chapter 13
@@ -2351,52 +2449,69 @@ macro provides a way to destructure arbitrary lists, similar to the way
 macro parameter lists can take apart their argument list.  The basic
 skeleton of a DESTRUCTURING-BIND is as follows:
 
-   (destructuring-bind (parameter*) list body-form*) The parameter list
-can include any of the types of parameters supported in macro parameter
-lists such as &optional, &rest, and &key parameters.5 And, as in macro
-parameter lists, any parameter can be replaced with a nested
-destructuring parameter list, which takes apart the list that would
-otherwise have been bound to the replaced parameter.  The list form is
-evaluated once and should return a list, which is then destructured and
-the appropriate values are bound to the variables in the parameter list.
-Then the body-forms are evaluated in order with those bindings in
-effect.  Some simple examples follow:
+     (destructuring-bind (parameter*) list
+       body-form*)
 
-   (destructuring-bind (x y z) (list 1 2 3) (list :x x :y y :z z)) ==>
-(:X 1 :Y 2 :Z 3)
+   The parameter list can include any of the types of parameters
+supported in macro parameter lists such as &optional, &rest, and &key
+parameters.  (1) And, as in macro parameter lists, any parameter can be
+replaced with a nested destructuring parameter list, which takes apart
+the list that would otherwise have been bound to the replaced parameter.
+The list form is evaluated once and should return a list, which is then
+destructured and the appropriate values are bound to the variables in
+the parameter list.  Then the body-forms are evaluated in order with
+those bindings in effect.  Some simple examples follow:
 
-   (destructuring-bind (x y z) (list 1 (list 2 20) 3) (list :x x :y y :z
-z)) ==> (:X 1 :Y (2 20) :Z 3)
+     (destructuring-bind (x y z) (list 1 2 3)
+       (list :x x :y y :z z)) ==> (:X 1 :Y 2 :Z 3)
 
-   (destructuring-bind (x (y1 y2) z) (list 1 (list 2 20) 3) (list :x x
-:y1 y1 :y2 y2 :z z)) ==> (:X 1 :Y1 2 :Y2 20 :Z 3)
+     (destructuring-bind (x y z) (list 1 (list 2 20) 3)
+       (list :x x :y y :z z)) ==> (:X 1 :Y (2 20) :Z 3)
 
-   (destructuring-bind (x (y1 &optional y2) z) (list 1 (list 2 20) 3)
-(list :x x :y1 y1 :y2 y2 :z z)) ==> (:X 1 :Y1 2 :Y2 20 :Z 3)
+     (destructuring-bind (x (y1 y2) z) (list 1 (list 2 20) 3)
+       (list :x x :y1 y1 :y2 y2 :z z)) ==> (:X 1 :Y1 2 :Y2 20 :Z 3)
 
-   (destructuring-bind (x (y1 &optional y2) z) (list 1 (list 2) 3) (list
-:x x :y1 y1 :y2 y2 :z z)) ==> (:X 1 :Y1 2 :Y2 NIL :Z 3)
+     (destructuring-bind (x (y1 &optional y2) z) (list 1 (list 2 20) 3)
+       (list :x x :y1 y1 :y2 y2 :z z)) ==> (:X 1 :Y1 2 :Y2 20 :Z 3)
 
-   (destructuring-bind (&key x y z) (list :x 1 :y 2 :z 3) (list :x x :y
-y :z z)) ==> (:X 1 :Y 2 :Z 3)
+     (destructuring-bind (x (y1 &optional y2) z) (list 1 (list 2) 3)
+       (list :x x :y1 y1 :y2 y2 :z z)) ==> (:X 1 :Y1 2 :Y2 NIL :Z 3)
 
-   (destructuring-bind (&key x y z) (list :z 1 :y 2 :x 3) (list :x x :y
-y :z z)) ==> (:X 3 :Y 2 :Z 1) One kind of parameter you can use with
-DESTRUCTURING-BIND and also in macro parameter lists, though I didn't
-mention it in Chapter 8, is a &whole parameter.  If specified, it must
-be the first parameter in a parameter list, and it's bound to the whole
-list form.6 After a &whole parameter, other parameters can appear as
-usual and will extract specific parts of the list just as they would if
-the &whole parameter weren't there.  An example of using &whole with
-DESTRUCTURING-BIND looks like this:
+     (destructuring-bind (&key x y z) (list :x 1 :y 2 :z 3)
+       (list :x x :y y :z z)) ==> (:X 1 :Y 2 :Z 3)
 
-   (destructuring-bind (&whole whole &key x y z) (list :z 1 :y 2 :x 3)
-(list :x x :y y :z z :whole whole)) ==> (:X 3 :Y 2 :Z 1 :WHOLE (:Z 1 :Y
-2 :X 3)) You'll use a &whole parameter in one of the macros that's part
-of the HTML generation library you'll develop in Chapter 31.  However, I
-have a few more topics to cover before you can get to that.  After two
-chapters on the rather Lispy topic of cons cells, you can now turn to
-the more prosaic matter of how to deal with files and filenames.
+     (destructuring-bind (&key x y z) (list :z 1 :y 2 :x 3)
+       (list :x x :y y :z z)) ==> (:X 3 :Y 2 :Z 1)
+
+   One kind of parameter you can use with DESTRUCTURING-BIND and also in
+macro parameter lists, though I didn't mention it in Chapter 8, is a
+&whole parameter.  If specified, it must be the first parameter in a
+parameter list, and it's bound to the whole list form.  (2) After a
+&whole parameter, other parameters can appear as usual and will extract
+specific parts of the list just as they would if the &whole parameter
+weren't there.  An example of using &whole with DESTRUCTURING-BIND looks
+like this:
+
+     (destructuring-bind (&whole whole &key x y z) (list :z 1 :y 2 :x 3)
+       (list :x x :y y :z z :whole whole))
+     ==> (:X 3 :Y 2 :Z 1 :WHOLE (:Z 1 :Y 2 :X 3))
+
+   You'll use a &whole parameter in one of the macros that's part of the
+HTML generation library you'll develop in Chapter 31.  However, I have a
+few more topics to cover before you can get to that.  After two chapters
+on the rather Lispy topic of cons cells, you can now turn to the more
+prosaic matter of how to deal with files and filenames.
+
+   ---------- Footnotes ----------
+
+   (1) Macro parameter lists do support one parameter type, &environment
+parameters, which DESTRUCTURING-BIND doesn't.  However, I didn't discuss
+that parameter type in Chapter 8, and you don't need to worry about it
+now either.
+
+   (2) When a &whole parameter is used in a macro parameter list, the
+form it's bound to is the whole macro form, including the name of the
+macro.
 
 
 File: pcl.info,  Node: Chapter 14,  Next: Chapter 15,  Prev: Chapter 13,  Up: Top
@@ -3488,8 +3603,8 @@ File: pcl.info,  Node: Chapter 16,  Next: Chapter 17,  Prev: Chapter 15,  Up: To
 ===========================================
 
 Because the invention of Lisp predated the rise of object-oriented
-programming by a couple decades,1 new Lispers are sometimes surprised to
-discover what a thoroughly object-oriented language Common Lisp is.
+programming by a couple decades, (1) new Lispers are sometimes surprised
+to discover what a thoroughly object-oriented language Common Lisp is.
 Common Lisp's immediate predecessors were developed at a time when
 object orientation was an exciting new idea and there were many
 experiments with ways to incorporate the ideas of object orientation,
@@ -3514,8 +3629,8 @@ the particularly powerful and general way Common Lisp manifests those
 ideas.  On the other hand, if your experience with object orientation
 has been largely with a single language, you may find Common Lisp's
 approach somewhat foreign; you should try to avoid assuming that there's
-only one way for a language to support object orientation.2 If you have
-little object-oriented programming experience, you should have no
+only one way for a language to support object orientation.  (2) If you
+have little object-oriented programming experience, you should have no
 trouble understanding the explanations here, though it may help to
 ignore the occasional comparisons to the way other languages do things.
 
@@ -3530,6 +3645,12 @@ ignore the occasional comparisons to the way other languages do things.
 * 16-7::   Other Method Combinations
 * 16-8::   Multimethods
 * 16-9::   To Be Continued . . .
+
+   ---------- Footnotes ----------
+
+   (1) 1
+
+   (2) 2
 
 
 File: pcl.info,  Node: 16-1,  Next: 16-2,  Prev: Chapter 16,  Up: Chapter 16
@@ -3557,9 +3678,9 @@ conceptual operation, such as drawing an object, can take many different
 concrete forms.
 
    Common Lisp, like most object-oriented languages today, is
-class-based; all objects are instances of a particular class.3 The class
-of an object determines its representation-built-in classes such as
-NUMBER and STRING have opaque representations accessible only via the
+class-based; all objects are instances of a particular class.  (1) The
+class of an object determines its representation-built-in classes such
+as NUMBER and STRING have opaque representations accessible only via the
 standard functions for manipulating those types, while instances of
 user-defined classes, as you'll see in the next chapter, consist of
 named parts called slots.
@@ -3570,7 +3691,7 @@ superclasses.  A class inherits part of its definition from its
 superclasses and instances of a class are also considered instances of
 the superclasses.  In Common Lisp, the hierarchy of classes has a single
 root, the class T, which is a direct or indirect superclass of every
-other class.  Thus, every datum in Common Lisp is an instance of T.4
+other class.  Thus, every datum in Common Lisp is an instance of T. (2)
 Common Lisp also supports multiple inheritance-a single class can have
 multiple direct superclasses.
 
@@ -3594,28 +3715,41 @@ particular object.  However, this wasn't entirely satisfactory, as it
 made method invocations different from normal function calls.
 Syntactically method invocations were written like this:
 
-   (send object 'foo) rather than like this:
+     (send object 'foo)
 
-   (foo object) More significantly, because methods weren't functions,
-they couldn't be passed as arguments to higher-order functions such as
-MAPCAR; if one wanted to call a method on all the elements of a list
-with MAPCAR, one had to write this:
+   rather than like this:
 
-   (mapcar #'(lambda (object) (send object 'foo)) objects) rather than
-this:
+     (foo object)
 
-   (mapcar #'foo objects) Eventually the folks working on Lisp object
-systems unified methods with functions by creating a new kind of
-function called a generic function.  In addition to solving the problems
-just described, generic functions opened up new possibilities for the
-object system, including many features that simply don't make sense in a
-message-passing object system.
+   More significantly, because methods weren't functions, they couldn't
+be passed as arguments to higher-order functions such as MAPCAR; if one
+wanted to call a method on all the elements of a list with MAPCAR, one
+had to write this:
+
+     (mapcar #'(lambda (object) (send object 'foo)) objects)
+
+   rather than this:
+
+     (mapcar #'foo objects)
+
+   Eventually the folks working on Lisp object systems unified methods
+with functions by creating a new kind of function called a generic
+function.  In addition to solving the problems just described, generic
+functions opened up new possibilities for the object system, including
+many features that simply don't make sense in a message-passing object
+system.
 
    Generic functions are the heart of Common Lisp's object system and
 the topic of the rest of this chapter.  While I can't talk about generic
 functions without some mention of classes, for now I'll focus on how to
 define and use generic functions.  In the next chapter I'll show you how
 to define your own classes.
+
+   ---------- Footnotes ----------
+
+   (1) 3
+
+   (2) 4
 
 
 File: pcl.info,  Node: 16-2,  Next: 16-3,  Prev: 16-1,  Up: Chapter 16
@@ -3628,21 +3762,23 @@ and a parameter list but no implementation.  Here, for example, is how
 you might define a generic function, draw, that will be used to draw
 different kinds of shapes on the screen:
 
-   (defgeneric draw (shape) (:documentation "Draw the given shape on the
-screen."))  I'll discuss the syntax of DEFGENERIC in the next section;
-for now just note that this definition doesn't contain any actual code.
+     (defgeneric draw (shape)
+       (:documentation "Draw the given shape on the screen."))
+
+   I'll discuss the syntax of DEFGENERIC in the next section; for now
+just note that this definition doesn't contain any actual code.
 
    A generic function is generic in the sense that it can-at least in
-theory-accept any objects as arguments.5 However, by itself a generic
-function can't actually do anything; if you just define a generic
-function, no matter what arguments you call it with, it will signal an
-error.  The actual implementation of a generic function is provided by
-methods.  Each method provides an implementation of the generic function
-for particular classes of arguments.  Perhaps the biggest difference
-between a generic function-based system and a message-passing system is
-that methods don't belong to classes; they belong to the generic
-function, which is responsible for determining what method or methods to
-run in response to a particular invocation.
+theory-accept any objects as arguments.  (1) However, by itself a
+generic function can't actually do anything; if you just define a
+generic function, no matter what arguments you call it with, it will
+signal an error.  The actual implementation of a generic function is
+provided by methods.  Each method provides an implementation of the
+generic function for particular classes of arguments.  Perhaps the
+biggest difference between a generic function-based system and a
+message-passing system is that methods don't belong to classes; they
+belong to the generic function, which is responsible for determining
+what method or methods to run in response to a particular invocation.
 
    Methods indicate what kinds of arguments they can handle by
 specializing the required parameters defined by the generic function.
@@ -3652,20 +3788,23 @@ the class circle while another method specializes shape for objects that
 are instances of the class triangle.  They would look like this, eliding
 the actual drawing code:
 
-   (defmethod draw ((shape circle)) ...)
+     (defmethod draw ((shape circle))
+       ...)
 
-   (defmethod draw ((shape triangle)) ...)  When a generic function is
-invoked, it compares the actual arguments it was passed with the
-specializers of each of its methods to find the applicable methods-those
-methods whose specializers are compatible with the actual arguments.  If
-you invoke draw, passing an instance of circle, the method that
-specialized shape on the class circle is applicable, while if you pass
-it a triangle, then the method that specializes shape on the class
-triangle applies.  In simple cases, only one method will be applicable,
-and it will handle the invocation.  In more complex cases, there may be
-multiple methods that apply; they're then combined, as I'll discuss in
-the section "Method Combination," into a single effective method that
-handles the invocation.
+     (defmethod draw ((shape triangle))
+       ...)
+
+   When a generic function is invoked, it compares the actual arguments
+it was passed with the specializers of each of its methods to find the
+applicable methods-those methods whose specializers are compatible with
+the actual arguments.  If you invoke draw, passing an instance of
+circle, the method that specialized shape on the class circle is
+applicable, while if you pass it a triangle, then the method that
+specializes shape on the class triangle applies.  In simple cases, only
+one method will be applicable, and it will handle the invocation.  In
+more complex cases, there may be multiple methods that apply; they're
+then combined, as I'll discuss in the section "Method Combination," into
+a single effective method that handles the invocation.
 
    You can specialize a parameter in two ways-usually you'll specify a
 class that the argument must be an instance of.  Because instances of a
@@ -3693,6 +3832,10 @@ code.  I'll discuss those topics in a moment.  But first you need to
 look at the basics of the two macros used to define the generic
 functions DEFGENERIC and DEFMETHOD.
 
+   ---------- Footnotes ----------
+
+   (1) 5
+
 
 File: pcl.info,  Node: 16-3,  Next: 16-4,  Prev: 16-2,  Up: Chapter 16
 
@@ -3713,6 +3856,8 @@ exist: for starters, assume there's a class bank-account and that it has
 two subclasses, checking-account and savings-account.  The class
 hierarchy looks like this:
 
+ [image src="imgs/account-hierarchy.png" ]
+
    The first generic function will be withdraw, which decreases the
 account balance by a specified amount.  If the balance is less than the
 amount, it should signal an error and leave the balance unchanged.  You
@@ -3728,9 +3873,10 @@ function.  Because a generic function is purely abstract, it's important
 to be clear to both users and implementers what it's for.  Thus, you
 might define withdraw like this:
 
-   (defgeneric withdraw (account amount) (:documentation "Withdraw the
-specified amount from the account.  Signal an error if the current
-balance is less than amount."))
+     (defgeneric withdraw (account amount)
+       (:documentation "Withdraw the specified amount from the account.
+
+   Signal an error if the current balance is less than amount."))
 
 
 File: pcl.info,  Node: 16-4,  Next: 16-5,  Prev: 16-3,  Up: Chapter 16
@@ -3739,14 +3885,14 @@ DEFMETHOD
 =========
 
 Now you're ready to use DEFMETHOD to define methods that implement
-withdraw.6
+withdraw.  (1)
 
    A method's parameter list must be congruent with its generic
 function's.  In this case, that means all methods defined on withdraw
 must have exactly two required parameters.  More generally, methods must
 have the same number of required and optional parameters and must be
 capable of accepting any arguments corresponding to any &rest or &key
-parameters specified by the generic function.7
+parameters specified by the generic function.  (2)
 
    Since the basics of withdrawing are the same for all accounts, you
 can define a method that specializes the account parameter on the
@@ -3757,16 +3903,19 @@ to signal an error, which I'll discuss in greater detail in Chapter 19.
 Using those two functions, you can define a basic withdraw method that
 looks like this:
 
-   (defmethod withdraw ((account bank-account) amount) (when (< (balance
-account) amount) (error "Account overdrawn."))  (decf (balance account)
-amount)) As this code suggests, the form of DEFMETHOD is even more like
-that of DEFUN than DEFGENERIC's is.  The only difference is that the
-required parameters can be specialized by replacing the parameter name
-with a two-element list.  The first element is the name of the
-parameter, and the second element is the specializer, either the name of
-a class or an EQL specializer, the form of which I'll discuss in a
-moment.  The parameter name can be anything-it doesn't have to match the
-name used in the generic function, though it often will.
+     (defmethod withdraw ((account bank-account) amount)
+       (when (< (balance account) amount)
+         (error "Account overdrawn."))
+       (decf (balance account) amount))
+
+   As this code suggests, the form of DEFMETHOD is even more like that
+of DEFUN than DEFGENERIC's is.  The only difference is that the required
+parameters can be specialized by replacing the parameter name with a
+two-element list.  The first element is the name of the parameter, and
+the second element is the specializer, either the name of a class or an
+EQL specializer, the form of which I'll discuss in a moment.  The
+parameter name can be anything-it doesn't have to match the name used in
+the generic function, though it often will.
 
    This method will apply whenever the first argument to withdraw is an
 instance of bank-account.  The second parameter, amount, is implicitly
@@ -3792,16 +3941,20 @@ specializes on checking-account to handle the transfer and then lets the
 method specialized on bank-account take control.  Such a method might
 look like this:
 
-   (defmethod withdraw ((account checking-account) amount) (let
-((overdraft (- amount (balance account)))) (when (plusp overdraft)
-(withdraw (overdraft-account account) overdraft) (incf (balance account)
-overdraft))) (call-next-method)) The function CALL-NEXT-METHOD is part
-of the generic function machinery used to combine applicable methods.
-It indicates that control should be passed from this method to the
-method specialized on bank-account.8 When it's called with no arguments,
-as it is here, the next method is invoked with whatever arguments were
-originally passed to the generic function.  It can also be called with
-arguments, which will then be passed onto the next method.
+     (defmethod withdraw ((account checking-account) amount)
+       (let ((overdraft (- amount (balance account))))
+         (when (plusp overdraft)
+           (withdraw (overdraft-account account) overdraft)
+           (incf (balance account) overdraft)))
+       (call-next-method))
+
+   The function CALL-NEXT-METHOD is part of the generic function
+machinery used to combine applicable methods.  It indicates that control
+should be passed from this method to the method specialized on
+bank-account.  (3) When it's called with no arguments, as it is here,
+the next method is invoked with whatever arguments were originally
+passed to the generic function.  It can also be called with arguments,
+which will then be passed onto the next method.
 
    You aren't required to invoke CALL-NEXT-METHOD in every method.
 However, if you don't, the new method is then responsible for completely
@@ -3811,26 +3964,38 @@ actually keep track of its own balance but instead delegated withdrawals
 to another account, you might write a method like this (assuming a
 function, proxied-account, that returns the proxied account):
 
-   (defmethod withdraw ((proxy proxy-account) amount) (withdraw
-(proxied-account proxy) amount)) Finally, DEFMETHOD also allows you to
-create methods specialized on a particular object with an EQL
-specializer.  For example, suppose the banking app is going to be
-deployed in a particularly corrupt bank.  Suppose the variable
-*account-of-bank-president* holds a reference to a particular bank
-account that belongs-as the name suggests-to the bank's president.
-Further suppose the variable *bank* represents the bank as a whole, and
-the function embezzle steals money from the bank.  The bank president
-might ask you to "fix" withdraw to handle his account specially.
+     (defmethod withdraw ((proxy proxy-account) amount)
+       (withdraw (proxied-account proxy) amount))
 
-   (defmethod withdraw ((account (eql *account-of-bank-president*))
-amount) (let ((overdraft (- amount (balance account)))) (when (plusp
-overdraft) (incf (balance account) (embezzle *bank* overdraft)))
-(call-next-method))) Note, however, that the form in the EQL specializer
-that provides the object to specialize on-*account-of-bank-president* in
-this case-is evaluated once, when the DEFMETHOD is evaluated.  This
-method will be specialized on the value of *account-of-bank-president*
-at the time the method is defined; changing the variable later won't
-change the method.
+   Finally, DEFMETHOD also allows you to create methods specialized on a
+particular object with an EQL specializer.  For example, suppose the
+banking app is going to be deployed in a particularly corrupt bank.
+Suppose the variable *account-of-bank-president* holds a reference to a
+particular bank account that belongs-as the name suggests-to the bank's
+president.  Further suppose the variable *bank* represents the bank as a
+whole, and the function embezzle steals money from the bank.  The bank
+president might ask you to "fix" withdraw to handle his account
+specially.
+
+     (defmethod withdraw ((account (eql *account-of-bank-president*)) amount)
+       (let ((overdraft (- amount (balance account))))
+         (when (plusp overdraft)
+           (incf (balance account) (embezzle *bank* overdraft)))
+       (call-next-method)))
+
+   Note, however, that the form in the EQL specializer that provides the
+object to specialize on-*account-of-bank-president* in this case-is
+evaluated once, when the DEFMETHOD is evaluated.  This method will be
+specialized on the value of *account-of-bank-president* at the time the
+method is defined; changing the variable later won't change the method.
+
+   ---------- Footnotes ----------
+
+   (1) 6
+
+   (2) 7
+
+   (3) 8
 
 
 File: pcl.info,  Node: 16-5,  Next: 16-6,  Prev: 16-4,  Up: Chapter 16
@@ -3857,7 +4022,7 @@ the generic function builds a list of applicable methods based on the
 actual arguments it was passed.  Second, the list of applicable methods
 is sorted according to the specificity of their parameter specializers.
 Finally, methods are taken in order from the sorted list and their code
-combined to produce the effective method.9
+combined to produce the effective method.  (1)
 
    To find applicable methods, the generic function compares the actual
 arguments with the corresponding parameter specializers in each of its
@@ -3879,7 +4044,7 @@ multimethods; I'll discuss them in the section "Multimethods."
    After the applicable methods have been found, the generic function
 machinery needs to sort them before it can combine them into an
 effective method.  To order two applicable methods, the generic function
-compares their parameter specializers from left to right,10 and the
+compares their parameter specializers from left to right, (2) and the
 first specializer that's different between the two methods determines
 their ordering, with the method with the more specific specializer
 coming first.
@@ -3908,6 +4073,12 @@ if more than one method has an EQL specializer for a particular
 parameter, they must all have the same EQL specializer.  The comparison
 of those methods will thus be decided based on other parameters.
 
+   ---------- Footnotes ----------
+
+   (1) 9
+
+   (2) 10
+
 
 File: pcl.info,  Node: 16-6,  Next: 16-7,  Prev: 16-5,  Up: Chapter 16
 
@@ -3934,24 +4105,28 @@ between the name of the method and the parameter list.  For instance, a
 :before method on withdraw that specializes the account parameter on the
 class bank-account would start like this:
 
-   (defmethod withdraw :before ((account bank-account) amount) ...)
-Each kind of auxiliary method is combined into the effective method in a
-different way.  All the applicable :before methods-not just the most
-specific-are run as part of the effective method.  They run, as their
-name suggests, before the most specific primary method and are run in
-most-specific-first order.  Thus, :before methods can be used to do any
-preparation needed to ensure that the primary method can run.  For
+     (defmethod withdraw :before ((account bank-account) amount) ...)
+
+   Each kind of auxiliary method is combined into the effective method
+in a different way.  All the applicable :before methods-not just the
+most specific-are run as part of the effective method.  They run, as
+their name suggests, before the most specific primary method and are run
+in most-specific-first order.  Thus, :before methods can be used to do
+any preparation needed to ensure that the primary method can run.  For
 instance, you could've used a :before method specialized on
 checking-account to implement the overdraft protection on checking
 accounts like this:
 
-   (defmethod withdraw :before ((account checking-account) amount) (let
-((overdraft (- amount (balance account)))) (when (plusp overdraft)
-(withdraw (overdraft-account account) overdraft) (incf (balance account)
-overdraft)))) This :before method has three advantages over a primary
-method.  One is that it makes it immediately obvious how the method
-changes the overall behavior of the withdraw function-it's not going to
-interfere with the main behavior or change the result returned.
+     (defmethod withdraw :before ((account checking-account) amount)
+       (let ((overdraft (- amount (balance account))))
+         (when (plusp overdraft)
+           (withdraw (overdraft-account account) overdraft)
+           (incf (balance account) overdraft))))
+
+   This :before method has three advantages over a primary method.  One
+is that it makes it immediately obvious how the method changes the
+overall behavior of the withdraw function-it's not going to interfere
+with the main behavior or change the result returned.
 
    The next advantage is that a primary method specialized on a class
 more specific than checking-account won't interfere with this :before
@@ -4047,26 +4222,30 @@ combination you want to use.  For example, to define a generic function,
 priority, that returns the sum of values returned by individual methods
 using the + method combination, you might write this:
 
-   (defgeneric priority (job) (:documentation "Return the priority at
-which the job should be run.")  (:method-combination +)) By default all
-these method combinations combine the primary methods in
-most-specific-first order.  However, you can reverse the order by
+     (defgeneric priority (job)
+       (:documentation "Return the priority at which the job should be run.")
+       (:method-combination +))
+
+   By default all these method combinations combine the primary methods
+in most-specific-first order.  However, you can reverse the order by
 including the keyword :most-specific-last after the name of the method
 combination in the DEFGENERIC form.  The order probably doesn't matter
 if you're using the + combination unless the methods have side effects,
 but for demonstration purposes you can change priority to use
 most-specific-last order like this:
 
-   (defgeneric priority (job) (:documentation "Return the priority at
-which the job should be run.")  (:method-combination +
-:most-specific-last)) The primary methods on a generic function that
-uses one of these combinations must be qualified with the name of the
-method combination.  Thus, a primary method defined on priority might
-look like this:
+     (defgeneric priority (job)
+       (:documentation "Return the priority at which the job should be run.")
+       (:method-combination + :most-specific-last))
 
-   (defmethod priority + ((job express-job)) 10) This makes it obvious
-when you see a method definition that it's part of a particular kind of
-generic function.
+   The primary methods on a generic function that uses one of these
+combinations must be qualified with the name of the method combination.
+Thus, a primary method defined on priority might look like this:
+
+     (defmethod priority + ((job express-job)) 10)
+
+   This makes it obvious when you see a method definition that it's part
+of a particular kind of generic function.
 
    All the simple built-in method combinations also support :around
 methods that work like :around methods in the standard method
@@ -4114,24 +4293,28 @@ of stick you use to hit it?  Both, of course.  To model this situation
 in Common Lisp, you simply define a generic function beat that takes two
 arguments.
 
-   (defgeneric beat (drum stick) (:documentation "Produce a sound by
-hitting the given drum with the given stick."))  Then you can define
-various multimethods to implement beat for the combinations you care
-about.  For example:
+     (defgeneric beat (drum stick)
+       (:documentation
+        "Produce a sound by hitting the given drum with the given stick."))
 
-   (defmethod beat ((drum snare-drum) (stick wooden-drumstick)) ...)
-(defmethod beat ((drum snare-drum) (stick brush)) ...)  (defmethod beat
-((drum snare-drum) (stick soft-mallet)) ...)  (defmethod beat ((drum
-tom-tom) (stick wooden-drumstick)) ...)  (defmethod beat ((drum tom-tom)
-(stick brush)) ...)  (defmethod beat ((drum tom-tom) (stick
-soft-mallet)) ...)  Multimethods don't help with the combinatorial
-explosion-if you need to model five kinds of drums and six kinds of
-sticks, and every combination makes a different sound, there's no way
-around it; you need thirty different methods to implement all the
-combinations, with or without multimethods.  What multimethods do save
-you from is having to write a bunch of dispatching code by letting you
-use the same built-in polymorphic dispatching that's so useful when
-dealing with methods specialized on a single parameter.11
+   Then you can define various multimethods to implement beat for the
+combinations you care about.  For example:
+
+     (defmethod beat ((drum snare-drum) (stick wooden-drumstick)) ...)
+     (defmethod beat ((drum snare-drum) (stick brush)) ...)
+     (defmethod beat ((drum snare-drum) (stick soft-mallet)) ...)
+     (defmethod beat ((drum tom-tom) (stick wooden-drumstick)) ...)
+     (defmethod beat ((drum tom-tom) (stick brush)) ...)
+     (defmethod beat ((drum tom-tom) (stick soft-mallet)) ...)
+
+   Multimethods don't help with the combinatorial explosion-if you need
+to model five kinds of drums and six kinds of sticks, and every
+combination makes a different sound, there's no way around it; you need
+thirty different methods to implement all the combinations, with or
+without multimethods.  What multimethods do save you from is having to
+write a bunch of dispatching code by letting you use the same built-in
+polymorphic dispatching that's so useful when dealing with methods
+specialized on a single parameter.  (1)
 
    Multimethods also save you from having to tightly couple one set of
 classes with the other.  In the drum/stick example, nothing requires the
@@ -4140,6 +4323,10 @@ drumstick, and nothing requires the drumstick classes to know anything
 about the various classes of drum.  The multimethods connect the
 otherwise independent classes to describe their joint behavior without
 requiring any cooperation from the classes themselves.
+
+   ---------- Footnotes ----------
+
+   (1) 11
 
 
 File: pcl.info,  Node: 16-9,  Next: Chapter 17,  Prev: 16-8,  Up: Chapter 16
@@ -5572,11 +5759,11 @@ however, I'll focus on error handling.
 
    The condition system is more flexible than exception systems because
 instead of providing a two-part division between the code that signals
-an error1 and the code that handles it,2 the condition system splits the
-responsibilities into three parts-signaling a condition, handling it,
-and restarting.  In this chapter, I'll describe how you could use
-conditions in part of a hypothetical application for analyzing log
-files.  You'll see how you could use the condition system to allow a
+an error (1) and the code that handles it, (2) the condition system
+splits the responsibilities into three parts-signaling a condition,
+handling it, and restarting.  In this chapter, I'll describe how you
+could use conditions in part of a hypothetical application for analyzing
+log files.  You'll see how you could use the condition system to allow a
 low-level function to detect a problem while parsing a log file and
 signal an error, to allow mid-level code to provide several possible
 ways of recovering from such an error, and to allow code at the highest
@@ -5652,6 +5839,12 @@ contrary to the notion that each function is a black box.
 * 19-5::             Providing Multiple Restarts
 * 19-6::             Other Uses for Conditions
 
+   ---------- Footnotes ----------
+
+   (1) Throws or raises an exception in Java/Python terms
+
+   (2) Catches the exception in Java/Python terms
+
 
 File: pcl.info,  Node: 19-1,  Next: 19-2,  Prev: Chapter 19,  Up: Chapter 19
 
@@ -5691,9 +5884,9 @@ Conditions
 A condition is an object whose class indicates the general nature of the
 condition and whose instance data carries information about the details
 of the particular circumstances that lead to the condition being
-signaled.3 In this hypothetical log analysis program, you might define a
-condition class, malformed-log-entry-error, that parse-log-entry will
-signal if it's given data it can't parse.
+signaled.  (1) In this hypothetical log analysis program, you might
+define a condition class, malformed-log-entry-error, that
+parse-log-entry will signal if it's given data it can't parse.
 
    Condition classes are defined with the DEFINE-CONDITION macro, which
 works essentially the same as DEFCLASS except that the default
@@ -5709,15 +5902,25 @@ slot whose value you intend to use.  Likewise, new condition objects are
 created with MAKE-CONDITION rather than MAKE-INSTANCE. MAKE-CONDITION
 initializes the slots of the new condition based on the :initargs it's
 passed, but there's no way to further customize a condition's
-initialization, equivalent to INITIALIZE-INSTANCE.4
+initialization, equivalent to INITIALIZE-INSTANCE. (2)
 
    When using the condition system for error handling, you should define
 your conditions as subclasses of ERROR, a subclass of CONDITION. Thus,
 you might define malformed-log-entry-error, with a slot to hold the
 argument that was passed to parse-log-entry, like this:
 
-   (define-condition malformed-log-entry-error (error) ((text :initarg
-:text :reader text)))
+     (define-condition malformed-log-entry-error (error)
+       ((text :initarg :text :reader text)))
+
+   ---------- Footnotes ----------
+
+   (1) In this respect, a condition is a lot like an exception in Java
+or Python except not all conditions represent an error or exceptional
+situation.
+
+   (2) In some Common Lisp implementations, conditions are defined as
+subclasses of STANDARD-OBJECT, in which case SLOT-VALUE, MAKE-INSTANCE,
+and INITIALIZE-INSTANCE will work, but it's not portable to rely on it.
 
 
 File: pcl.info,  Node: 19-3,  Next: 19-4,  Prev: 19-2,  Up: Chapter 19
@@ -5736,19 +5939,22 @@ occasionally useful for resignaling an existing condition object, but
 the latter is more concise.  Thus, you could write parse-log-entry like
 this, eliding the details of actually parsing a log entry:
 
-   (defun parse-log-entry (text) (if (well-formed-log-entry-p text)
-(make-instance 'log-entry ...)  (error 'malformed-log-entry-error :text
-text))) What happens when the error is signaled depends on the code
-above parse-log-entry on the call stack.  To avoid landing in the
-debugger, you must establish a condition handler in one of the functions
-leading to the call to parse-log-entry.  When a condition is signaled,
-the signaling machinery looks through a list of active condition
-handlers, looking for a handler that can handle the condition being
-signaled based on the condition's class.  Each condition handler
-consists of a type specifier indicating what types of conditions it can
-handle and a function that takes a single argument, the condition.  At
-any given moment there can be many active condition handlers established
-at various levels of the call stack.  When a condition is signaled, the
+     (defun parse-log-entry (text)
+       (if (well-formed-log-entry-p text)
+         (make-instance 'log-entry ...)
+         (error 'malformed-log-entry-error :text text)))
+
+   What happens when the error is signaled depends on the code above
+parse-log-entry on the call stack.  To avoid landing in the debugger,
+you must establish a condition handler in one of the functions leading
+to the call to parse-log-entry.  When a condition is signaled, the
+signaling machinery looks through a list of active condition handlers,
+looking for a handler that can handle the condition being signaled based
+on the condition's class.  Each condition handler consists of a type
+specifier indicating what types of conditions it can handle and a
+function that takes a single argument, the condition.  At any given
+moment there can be many active condition handlers established at
+various levels of the call stack.  When a condition is signaled, the
 signaling machinery finds the most recently established handler whose
 type specifier is compatible with the condition being signaled and calls
 its function, passing it the condition object.
@@ -5765,19 +5971,23 @@ place where they were established and then run some code.  The macro
 HANDLER-CASE establishes this kind of condition handler.  The basic form
 of a HANDLER-CASE is as follows:
 
-   (handler-case expression error-clause*) where each error-clause is of
-the following form:
+     (handler-case expression
+       error-clause*)
 
-   (condition-type ([var]) code) If the expression returns normally,
-then its value is returned by the HANDLER-CASE. The body of a
-HANDLER-CASE must be a single expression; you can use PROGN to combine
-several expressions into a single form.  If, however, the expression
-signals a condition that's an instance of any of the condition-types
-specified in any error-clause, then the code in the appropriate error
-clause is executed and its value returned by the HANDLER-CASE. The var,
-if included, is the name of the variable that will hold the condition
-object when the handler code is executed.  If the code doesn't need to
-access the condition object, you can omit the variable name.
+   where each error-clause is of the following form:
+
+     (condition-type ([var]) code)
+
+   If the expression returns normally, then its value is returned by the
+HANDLER-CASE. The body of a HANDLER-CASE must be a single expression;
+you can use PROGN to combine several expressions into a single form.
+If, however, the expression signals a condition that's an instance of
+any of the condition-types specified in any error-clause, then the code
+in the appropriate error clause is executed and its value returned by
+the HANDLER-CASE. The var, if included, is the name of the variable that
+will hold the condition object when the handler code is executed.  If
+the code doesn't need to access the condition object, you can omit the
+variable name.
 
    For instance, one way to handle the malformed-log-entry-error
 signaled by parse-log-entry in its caller, parse-log-file, would be to
@@ -5788,13 +5998,17 @@ LOOP clause collect it is another LOOP keyword, which refers to the
 value of the most recently evaluated conditional test, in this case the
 value of entry.)
 
-   (defun parse-log-file (file) (with-open-file (in file :direction
-:input) (loop for text = (read-line in nil nil) while text for entry =
-(handler-case (parse-log-entry text) (malformed-log-entry-error () nil))
-when entry collect it))) When parse-log-entry returns normally, its
-value will be assigned to entry and collected by the LOOP. But if
-parse-log-entry signals a malformed-log-entry-error, then the error
-clause will return NIL, which won't be collected.
+     (defun parse-log-file (file)
+       (with-open-file (in file :direction :input)
+         (loop for text = (read-line in nil nil) while text
+            for entry = (handler-case (parse-log-entry text)
+                          (malformed-log-entry-error () nil))
+            when entry collect it)))
+
+   When parse-log-entry returns normally, its value will be assigned to
+entry and collected by the LOOP. But if parse-log-entry signals a
+malformed-log-entry-error, then the error clause will return NIL, which
+won't be collected.
 
    This version of parse-log-file has one serious deficiency: it's doing
 too much.  As its name suggests, the job of parse-log-file is to parse
