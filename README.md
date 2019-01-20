@@ -56,8 +56,8 @@ TODOs:
 - [ ] footnotes
 - [ ] inline text formatting
 - [ ] images
-  - [ ] @node 12-1 cons cell diagrams
-  - [ ] @node 12-2 cons cell diagrams
+  - [X] @node 12-1 cons cell diagrams
+  - [X] @node 12-2 cons cell diagrams
   - [ ] @node 13-1 cons cell diagrams
   - [ ] @node 13-3 cons cell diagrams
   - [ ] @node 16-3 class hierarchy

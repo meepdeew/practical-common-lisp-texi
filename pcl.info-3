@@ -1,6 +1,128 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
 
+File: pcl.info,  Node: 19-4,  Next: 19-5,  Prev: 19-3,  Up: Chapter 19
+
+Restarts
+========
+
+The condition system lets you do this by splitting the error handling
+code into two parts.  You place code that actually recovers from errors
+into restarts, and condition handlers can then handle a condition by
+invoking an appropriate restart.  You can place restart code in mid- or
+low-level functions, such as parse-log-file or parse-log-entry, while
+moving the condition handlers into the upper levels of the application.
+
+   To change parse-log-file so it establishes a restart instead of a
+condition handler, you can change the HANDLER-CASE to a RESTART-CASE.
+The form of RESTART-CASE is quite similar to a HANDLER-CASE except the
+names of restarts are just names, not necessarily the names of condition
+types.  In general, a restart name should describe the action the
+restart takes.  In parse-log-file, you can call the restart
+skip-log-entry since that's what it does.  The new version will look
+like this:
+
+   (defun parse-log-file (file) (with-open-file (in file :direction
+:input) (loop for text = (read-line in nil nil) while text for entry =
+(restart-case (parse-log-entry text) (skip-log-entry () nil)) when entry
+collect it))) If you invoke this version of parse-log-file on a log file
+containing corrupted entries, it won't handle the error directly; you'll
+end up in the debugger.  However, there among the various restarts
+presented by the debugger will be one called skip-log-entry, which, if
+you choose it, will cause parse-log-file to continue on its way as
+before.  To avoid ending up in the debugger, you can establish a
+condition handler that invokes the skip-log-entry restart automatically.
+
+   The advantage of establishing a restart rather than having
+parse-log-file handle the error directly is it makes parse-log-file
+usable in more situations.  The higher-level code that invokes
+parse-log-file doesn't have to invoke the skip-log-entry restart.  It
+can choose to handle the error at a higher level.  Or, as I'll show in
+the next section, you can add restarts to parse-log-entry to provide
+other recovery strategies, and then condition handlers can choose which
+strategy they want to use.
+
+   But before I can talk about that, you need to see how to set up a
+condition handler that will invoke the skip-log-entry restart.  You can
+set up the handler anywhere in the chain of calls leading to
+parse-log-file.  This may be quite high up in your application, not
+necessarily in parse-log-file's direct caller.  For instance, suppose
+the main entry point to your application is a function, log-analyzer,
+that finds a bunch of logs and analyzes them with the function
+analyze-log, which eventually leads to a call to parse-log-file.
+Without any error handling, it might look like this:
+
+   (defun log-analyzer () (dolist (log (find-all-logs)) (analyze-log
+log))) The job of analyze-log is to call, directly or indirectly,
+parse-log-file and then do something with the list of log entries
+returned.  An extremely simple version might look like this:
+
+   (defun analyze-log (log) (dolist (entry (parse-log-file log))
+(analyze-entry entry))) where the function analyze-entry is presumably
+responsible for extracting whatever information you care about from each
+log entry and stashing it away somewhere.
+
+   Thus, the path from the top-level function, log-analyzer, to
+parse-log-entry, which actually signals an error, is as follows:
+
+   Assuming you always want to skip malformed log entries, you could
+change this function to establish a condition handler that invokes the
+skip-log-entry restart for you.  However, you can't use HANDLER-CASE to
+establish the condition handler because then the stack would be unwound
+to the function where the HANDLER-CASE appears.  Instead, you need to
+use the lower-level macro HANDLER-BIND. The basic form of HANDLER-BIND
+is as follows:
+
+   (handler-bind (binding*) form*) where each binding is a list of a
+condition type and a handler function of one argument.  After the
+handler bindings, the body of the HANDLER-BIND can contain any number of
+forms.  Unlike the handler code in HANDLER-CASE, the handler code must
+be a function object, and it must accept a single argument.  A more
+important difference between HANDLER-BIND and HANDLER-CASE is that the
+handler function bound by HANDLER-BIND will be run without unwinding the
+stack-the flow of control will still be in the call to parse-log-entry
+when this function is called.  The call to INVOKE-RESTART will find and
+invoke the most recently bound restart with the given name.  So you can
+add a handler to log-analyzer that will invoke the skip-log-entry
+restart established in parse-log-file like this:5
+
+   (defun log-analyzer () (handler-bind ((malformed-log-entry-error
+#'(lambda (c) (invoke-restart 'skip-log-entry)))) (dolist (log
+(find-all-logs)) (analyze-log log)))) In this HANDLER-BIND, the handler
+function is an anonymous function that invokes the restart
+skip-log-entry.  You could also define a named function that does the
+same thing and bind it instead.  In fact, a common practice when
+defining a restart is to define a function, with the same name and
+taking a single argument, the condition, that invokes the eponymous
+restart.  Such functions are called restart functions.  You could define
+a restart function for skip-log-entry like this:
+
+   (defun skip-log-entry (c) (invoke-restart 'skip-log-entry)) Then you
+could change the definition of log-analyzer to this:
+
+   (defun log-analyzer () (handler-bind ((malformed-log-entry-error
+#'skip-log-entry)) (dolist (log (find-all-logs)) (analyze-log log)))) As
+written, the skip-log-entry restart function assumes that a
+skip-log-entry restart has been established.  If a
+malformed-log-entry-error is ever signaled by code called from
+log-analyzer without a skip-log-entry having been established, the call
+to INVOKE-RESTART will signal a CONTROL-ERROR when it fails to find the
+skip-log-entry restart.  If you want to allow for the possibility that a
+malformed-log-entry-error might be signaled from code that doesn't have
+a skip-log-entry restart established, you could change the
+skip-log-entry function to this:
+
+   (defun skip-log-entry (c) (let ((restart (find-restart
+'skip-log-entry))) (when restart (invoke-restart restart))))
+FIND-RESTART looks for a restart with a given name and returns an object
+representing the restart if the restart is found and NIL if not.  You
+can invoke the restart by passing the restart object to INVOKE-RESTART.
+Thus, when skip-log-entry is bound with HANDLER-BIND, it will handle the
+condition by invoking the skip-log-entry restart if one is available and
+otherwise will return normally, giving other condition handlers, bound
+higher on the stack, a chance to handle the condition.
+
+
 File: pcl.info,  Node: 19-5,  Next: 19-6,  Prev: 19-4,  Up: Chapter 19
 
 Providing Multiple Restarts
@@ -5646,63 +5768,4 @@ starts with /.  This path is then translated to a filename by replacing
 the prefix, /, with the destination, /tmp/html/.  Thus, the URL
 http://localhost:2001/hello.html will still be translated into a request
 for the file /tmp/html/hello.html.
-
-
-File: pcl.info,  Node: 26-3,  Next: 26-4,  Prev: 26-2,  Up: Chapter 26
-
-Generating Dynamic Content with AllegroServe
-============================================
-
-Publishing entities that generate dynamic content is nearly as simple as
-publishing static content.  The functions publish and publish-prefix are
-the dynamic analogs of publish-file and publish-directory.  The basic
-idea of these two functions is that you publish a function that will be
-called to generate the response to a request for either a specific URL
-or any URL with a given prefix.  The function will be called with two
-arguments: an object representing the request and the published entity.
-Most of time you don't need to do anything with the entity object except
-to pass it along to a couple macros I'll discuss in a moment.  On the
-other hand, you'll use the request object to obtain information
-submitted by the browser-query parameters included in the URL or data
-posted using an HTML form.
-
-   For a trivial example of using a function to generate dynamic
-content, let's write a function that generates a page with a different
-random number each time it's requested.
-
-   (defun random-number (request entity) (with-http-response (request
-entity :content-type "text/html") (with-http-body (request entity)
-(format (request-reply-stream request) "<html>~ 
-<head><title>Random</title></head>~  <body>~  <p>Random number: ~d</p>~ 
-</body>~  </html>~  " (random 1000))))) The macros with-http-response
-and with-http-body are part of AllegroServe.  The former starts the
-process of generating an HTTP response and can be used, as here, to
-specify things such as the type of content that will be returned.  It
-also handles various parts of HTTP such as dealing with
-If-Modified-Since requests.  The with-http-body actually sends the HTTP
-response headers and then executes its body, which should contain code
-that generates the content of the reply.  Within with-http-response but
-before the with-http-body, you can add or change HTTP headers to be sent
-in the reply.  The function request-reply-stream is also part of
-AllegroServe and returns the stream to which you should write output
-intended to be sent to the browser.
-
-   As this function shows, you can just use FORMAT to print HTML to the
-stream returned by request-reply-stream.  In the next section, I'll show
-you more convenient ways to programmatically generate HTML.9
-
-   Now you're ready to publish this function.
-
-   WEB> (publish :path "/random-number" :function 'random-number)
-#<COMPUTED-ENTITY  #x7262bab2> As it does in the publish-file function,
-the :path argument specifies the path part of the URL that will result
-in this function being invoked.  The :function argument specifies either
-the name or an actual function object.  Using the name of a function, as
-shown here, allows you to redefine the function later without
-republishing and have AllegroServe use the new function definition.
-After evaluating the call to publish, you can point your browser at
-http:// localhost:2001/random-number to get a page with a random number
-on it, as shown in Figure 26-3.
-
-   Figure 26-3.  http://localhost:2001/random-number
 

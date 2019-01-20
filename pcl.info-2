@@ -1334,44 +1334,53 @@ File: pcl.info,  Node: 12-1,  Next: 12-2,  Prev: Chapter 12,  Up: Chapter 12
 "There Is No List"
 ==================
 
-Spoon Boy: Do not try and bend the list.  That's impossible.  Instead .
-.  .  only try to realize the truth.  Neo: What truth?  Spoon Boy: There
-is no list.  Neo: There is no list?  Spoon Boy: Then you'll see that it
-is not the list that bends; it is only yourself.1 The key to
-understanding lists is to understand that they're largely an illusion
-built on top of objects that are instances of a more primitive data
-type.  Those simpler objects are pairs of values called cons cells,
-after the function CONS used to create them.
+     Spoon Boy: Do not try and bend the list.  That's impossible.
+     Instead .  .  .  only try to realize the truth.  Neo: What truth?
+     Spoon Boy: There is no list.  Neo: There is no list?  Spoon Boy:
+     Then you'll see that it is not the list that bends; it is only
+     yourself.  (1)
+   The key to understanding lists is to understand that they're largely
+an illusion built on top of objects that are instances of a more
+primitive data type.  Those simpler objects are pairs of values called
+cons cells, after the function CONS used to create them.
 
    CONS takes two arguments and returns a new cons cell containing the
-two values.2 These values can be references to any kind of object.
+two values.  (2) These values can be references to any kind of object.
 Unless the second value is NIL or another cons cell, a cons is printed
 as the two values in parentheses separated by a dot, a so-called dotted
 pair.
 
-   (cons 1 2) ==> (1 .  2) The two values in a cons cell are called the
-CAR and the CDR after the names of the functions used to access them.
-At the dawn of time, these names were mnemonic, at least to the folks
-implementing the first Lisp on an IBM 704.  But even then they were just
-lifted from the assembly mnemonics used to implement the operations.
-However, it's not all bad that these names are somewhat meaningless-when
-considering individual cons cells, it's best to think of them simply as
-an arbitrary pair of values without any particular semantics.  Thus:
+     (cons 1 2) ==> (1 . 2)
 
-   (car (cons 1 2)) ==> 1 (cdr (cons 1 2)) ==> 2 Both CAR and CDR are
-also SETFable places-given an existing cons cell, it's possible to
-assign a new value to either of its values.3
+   The two values in a cons cell are called the CAR and the CDR after
+the names of the functions used to access them.  At the dawn of time,
+these names were mnemonic, at least to the folks implementing the first
+Lisp on an IBM 704.  But even then they were just lifted from the
+assembly mnemonics used to implement the operations.  However, it's not
+all bad that these names are somewhat meaningless-when considering
+individual cons cells, it's best to think of them simply as an arbitrary
+pair of values without any particular semantics.  Thus:
 
-   (defparameter *cons* (cons 1 2)) *cons* ==> (1 .  2) (setf (car
-*cons*) 10) ==> 10 *cons* ==> (10 .  2) (setf (cdr *cons*) 20) ==> 20
-*cons* ==> (10 .  20) Because the values in a cons cell can be
-references to any kind of object, you can build larger structures out of
-cons cells by linking them together.  Lists are built by linking
-together cons cells in a chain.  The elements of the list are held in
-the CARs of the cons cells while the links to subsequent cons cells are
-held in the CDRs.  The last cell in the chain has a CDR of NIL, which-as
-I mentioned in Chapter 4-represents the empty list as well as the
-boolean value false.
+     (car (cons 1 2)) ==> 1
+     (cdr (cons 1 2)) ==> 2
+
+   Both CAR and CDR are also SETFable places-given an existing cons
+cell, it's possible to assign a new value to either of its values.  (3)
+
+     (defparameter *cons* (cons 1 2))
+     *cons*                 ==> (1 . 2)
+     (setf (car *cons*) 10) ==> 10
+     *cons*                 ==> (10 . 2)
+     (setf (cdr *cons*) 20) ==> 20
+     *cons*                 ==> (10 . 20)
+
+   Because the values in a cons cell can be references to any kind of
+object, you can build larger structures out of cons cells by linking
+them together.  Lists are built by linking together cons cells in a
+chain.  The elements of the list are held in the CARs of the cons cells
+while the links to subsequent cons cells are held in the CDRs.  The last
+cell in the chain has a CDR of NIL, which-as I mentioned in Chapter
+4-represents the empty list as well as the boolean value false.
 
    This arrangement is by no means unique to Lisp; it's called a singly
 linked list.  However, few languages outside the Lisp family provide
@@ -1384,17 +1393,24 @@ list, that is, another cons cell or NIL, containing the remaining
 elements.  The Lisp printer understands this convention and prints such
 chains of cons cells as parenthesized lists rather than as dotted pairs.
 
-   (cons 1 nil) ==> (1) (cons 1 (cons 2 nil)) ==> (1 2) (cons 1 (cons 2
-(cons 3 nil))) ==> (1 2 3) When talking about structures built out of
-cons cells, a few diagrams can be a big help.  Box-and-arrow diagrams
-represent cons cells as a pair of boxes like this:
+     (cons 1 nil)                   ==> (1)
+     (cons 1 (cons 2 nil))          ==> (1 2)
+     (cons 1 (cons 2 (cons 3 nil))) ==> (1 2 3)
+
+   When talking about structures built out of cons cells, a few diagrams
+can be a big help.  Box-and-arrow diagrams represent cons cells as a
+pair of boxes like this:
+
+ [image src="imgs/one-cons-cell.png" ]
 
    The box on the left represents the CAR, and the box on the right is
 the CDR. The values stored in a particular cons cell are either drawn in
 the appropriate box or represented by an arrow from the box to a
-representation of the referenced value.4 For instance, the list (1 2 3),
-which consists of three cons cells linked together by their CDRs, would
-be diagrammed like this:
+representation of the referenced value.  (4) For instance, the list (1 2
+3), which consists of three cons cells linked together by their CDRs,
+would be diagrammed like this:
+
+ [image src="imgs/list-1-2-3.png" ]
 
    However, most of the time you work with lists you won't have to deal
 with individual cons cells-the functions that create and manipulate
@@ -1403,19 +1419,28 @@ a cons cells under the covers for you and links them together; the
 following LIST expressions are equivalent to the previous CONS
 expressions:
 
-   (list 1) ==> (1) (list 1 2) ==> (1 2) (list 1 2 3) ==> (1 2 3)
-Similarly, when you're thinking in terms of lists, you don't have to use
-the meaningless names CAR and CDR; FIRST and REST are synonyms for CAR
-and CDR that you should use when you're dealing with cons cells as
+     (list 1)     ==> (1)
+     (list 1 2)   ==> (1 2)
+     (list 1 2 3) ==> (1 2 3)
+
+   Similarly, when you're thinking in terms of lists, you don't have to
+use the meaningless names CAR and CDR; FIRST and REST are synonyms for
+CAR and CDR that you should use when you're dealing with cons cells as
 lists.
 
-   (defparameter *list* (list 1 2 3 4)) (first *list*) ==> 1 (rest
-*list*) ==> (2 3 4) (first (rest *list*)) ==> 2 Because cons cells can
-hold any kind of values, so can lists.  And a single list can hold
-objects of different types.
+     (defparameter *list* (list 1 2 3 4))
+     (first *list*)        ==> 1
+     (rest *list*)         ==> (2 3 4)
+     (first (rest *list*)) ==> 2
 
-   (list "foo" (list 1 2) 10) ==> ("foo" (1 2) 10) The structure of that
-list would look like this:
+   Because cons cells can hold any kind of values, so can lists.  And a
+single list can hold objects of different types.
+
+     (list "foo" (list 1 2) 10) ==> ("foo" (1 2) 10)
+
+   The structure of that list would look like this:
+
+ [image src="imgs/mixed-list.png" ]
 
    Because lists can have other lists as elements, you can also use them
 to represent trees of arbitrary depth and complexity.  As such, they
@@ -1432,6 +1457,24 @@ manipulating lists.  In the sections "List-Manipulation Functions" and
 "Mapping," you'll look at some of the more important of these functions.
 However, they will be easier to understand in the context of a few ideas
 borrowed from functional programming.
+
+   ---------- Footnotes ----------
+
+   (1) Adapted from The Matrix (http://us.imdb.com/Quotes?0133093)
+
+   (2) CONS was originally short for the verb construct.
+
+   (3) When the place given to SETF is a CAR or CDR, it expands into a
+call to the function RPLACA or RPLACD; some old-school Lispers-the same
+ones who still use SETQ-will still use RPLACA and RPLACD directly, but
+modern style is to use SETF of CAR or CDR.
+
+   (4) Typically, simple objects such as numbers are drawn within the
+appropriate box, and more complex objects will be drawn outside the box
+with an arrow from the box indicating the reference.  This actually
+corresponds well with how many Common Lisp implementations work-although
+all objects are conceptually stored by reference, certain simple
+immutable objects can be stored directly in a cons cell.
 
 
 File: pcl.info,  Node: 12-2,  Next: 12-3,  Prev: 12-1,  Up: Chapter 12
@@ -1481,18 +1524,22 @@ take a concrete example, the function APPEND takes any number of list
 arguments and returns a new list containing the elements of all its
 arguments.  For instance:
 
-   (append (list 1 2) (list 3 4)) ==> (1 2 3 4) From a functional point
-of view, APPEND's job is to return the list (1 2 3 4) without modifying
-any of the cons cells in the lists (1 2) and (3 4).  One obvious way to
-achieve that goal is to create a completely new list consisting of four
-new cons cells.  However, that's more work than is necessary.  Instead,
-APPEND actually makes only two new cons cells to hold the values 1 and
-2, linking them together and pointing the CDR of the second cons cell at
-the head of the last argument, the list (3 4).  It then returns the cons
-cell containing the 1.  None of the original cons cells has been
-modified, and the result is indeed the list (1 2 3 4).  The only wrinkle
-is that the list returned by APPEND shares some cons cells with the list
-(3 4).  The resulting structure looks like this:
+     (append (list 1 2) (list 3 4)) ==> (1 2 3 4)
+
+   From a functional point of view, APPEND's job is to return the list
+(1 2 3 4) without modifying any of the cons cells in the lists (1 2) and
+(3 4).  One obvious way to achieve that goal is to create a completely
+new list consisting of four new cons cells.  However, that's more work
+than is necessary.  Instead, APPEND actually makes only two new cons
+cells to hold the values 1 and 2, linking them together and pointing the
+CDR of the second cons cell at the head of the last argument, the list
+(3 4).  It then returns the cons cell containing the 1.  None of the
+original cons cells has been modified, and the result is indeed the list
+(1 2 3 4).  The only wrinkle is that the list returned by APPEND shares
+some cons cells with the list (3 4).  The resulting structure looks like
+this:
+
+ [image src="imgs/after-append.png" ]
 
    In general, APPEND must copy all but its last argument, but it can
 always return a result that shares structure with the last argument.
@@ -1519,7 +1566,7 @@ changing an object's state "destroys" it since it no longer represents
 the same value.  However, using the same term to describe all
 state-modifying operations leads to a certain amount of confusion since
 there are two very different kinds of destructive operations,
-for-side-effect operations and recycling operations.5
+for-side-effect operations and recycling operations.  (1)
 
    For-side-effect operations are those used specifically for their side
 effects.  All uses of SETF are destructive in this sense, as are
@@ -1533,20 +1580,27 @@ structure-sharing results, then you need to be careful not to
 inadvertently modify the shared structure.  For instance, consider these
 three definitions:
 
-   (defparameter *list-1* (list 1 2)) (defparameter *list-2* (list 3 4))
-(defparameter *list-3* (append *list-1* *list-2*)) After evaluating
-these forms, you have three lists, but *list-3* and *list-2* share
-structure just like the lists in the previous diagram.
+     (defparameter *list-1* (list 1 2))
+     (defparameter *list-2* (list 3 4))
+     (defparameter *list-3* (append *list-1* *list-2*))
 
-   *list-1* ==> (1 2) *list-2* ==> (3 4) *list-3* ==> (1 2 3 4) Now
-consider what happens when you modify *list-2*.
+   After evaluating these forms, you have three lists, but *list-3* and
+*list-2* share structure just like the lists in the previous diagram.
 
-   (setf (first *list-2*) 0) ==> 0 *list-2* ==> (0 4) ; as expected
-*list-3* ==> (1 2 0 4) ; maybe not what you wanted The change to
-*list-2* also changes *list-3* because of the shared structure: the
-first cons cell in *list-2* is also the third cons cell in *list-3*.
-SETFing the FIRST of *list-2* changes the value in the CAR of that cons
-cell, affecting both lists.
+     *list-1*                  ==> (1 2)
+     *list-2*                  ==> (3 4)
+     *list-3*                  ==> (1 2 3 4)
+
+   Now consider what happens when you modify *list-2*.
+
+     (setf (first *list-2*) 0) ==> 0
+     *list-2*                  ==> (0 4)     ; as expected
+     *list-3*                  ==> (1 2 0 4) ; maybe not what you wanted
+
+   The change to *list-2* also changes *list-3* because of the shared
+structure: the first cons cell in *list-2* is also the third cons cell
+in *list-3*.  SETFing the FIRST of *list-2* changes the value in the CAR
+of that cons cell, affecting both lists.
 
    On the other hand, the other kind of destructive operations,
 recycling operations, are intended to be used in functional code.  They
@@ -1566,13 +1620,14 @@ doesn't modify its argument, it must allocate a new cons cell for each
 element in the list being reversed.  But suppose you write something
 like this:
 
-   (setf *list* (reverse *list*)) By assigning the result of REVERSE
-back to *list*, you've removed the reference to the original value of
-*list*.  Assuming the cons cells in the original list aren't referenced
-anywhere else, they're now eligible to be garbage collected.  However,
-in many Lisp implementations it'd be more efficient to immediately reuse
-the existing cons cells rather than allocating new ones and letting the
-old ones become garbage.
+     (setf *list* (reverse *list*))
+
+   By assigning the result of REVERSE back to *list*, you've removed the
+reference to the original value of *list*.  Assuming the cons cells in
+the original list aren't referenced anywhere else, they're now eligible
+to be garbage collected.  However, in many Lisp implementations it'd be
+more efficient to immediately reuse the existing cons cells rather than
+allocating new ones and letting the old ones become garbage.
 
    NREVERSE allows you to do exactly that.  The N stands for
 non-consing, meaning it doesn't need to allocate any new cons cells.
@@ -1611,21 +1666,34 @@ passed, NCONC sets the CDR of the list's last cons cell to point to the
 first cons cell of the next nonempty list.  It then returns the first
 list, which is now the head of the spliced-together result.  Thus:
 
-   (defparameter *x* (list 1 2 3))
+     (defparameter *x* (list 1 2 3))
 
-   (nconc *x* (list 4 5 6)) ==> (1 2 3 4 5 6)
+     (nconc *x* (list 4 5 6)) ==> (1 2 3 4 5 6)
 
-   *x* ==> (1 2 3 4 5 6) NSUBSTITUTE and variants can be relied on to
-walk down the list structure of the list argument and to SETF the CARs
-of any cons cells holding the old value to the new value and to
-otherwise leave the list intact.  It then returns the original list,
-which now has the same value as would've been computed by SUBSTITUTE. 6
+     *x* ==> (1 2 3 4 5 6)
+
+   NSUBSTITUTE and variants can be relied on to walk down the list
+structure of the list argument and to SETF the CARs of any cons cells
+holding the old value to the new value and to otherwise leave the list
+intact.  It then returns the original list, which now has the same value
+as would've been computed by SUBSTITUTE. (2)
 
    The key thing to remember about NCONC and NSUBSTITUTE is that they're
 the exceptions to the rule that you can't rely on the side effects of
 recycling functions.  It's perfectly acceptable-and arguably good
 style-to ignore the reliability of their side effects and use them, like
 any other recycling function, only for the value they return.
+
+   ---------- Footnotes ----------
+
+   (1) The phrase for-side-effect is used in the language standard, but
+recycling is my own invention; most Lisp literature simply uses the term
+destructive for both kinds of operations, leading to the confusion I'm
+trying to dispel.
+
+   (2) The string functions NSTRING-CAPITALIZE, NSTRING-DOWNCASE, and
+NSTRING-UPCASE are similar-they return the same results as their N-less
+counterparts but are specified to modify their string argument in place.
 
 
 File: pcl.info,  Node: 12-4,  Next: 12-5,  Prev: 12-3,  Up: Chapter 12
@@ -1652,7 +1720,7 @@ from where.
 ways.  By far the most common recycling idiom is to build up a list to
 be returned from a function by "consing" onto the front of a list,
 usually by PUSHing elements onto a list stored in a local variable and
-then returning the result of NREVERSEing it.7
+then returning the result of NREVERSEing it.  (1)
 
    This is an efficient way to build a list because each PUSH has to
 create only one cons cell and modify a local variable and the NREVERSE
@@ -1660,38 +1728,50 @@ just has to zip down the list reassigning the CDRs.  Because the list is
 created entirely within the function, there's no danger any code outside
 the function has a reference to any of its cons cells.  Here's a
 function that uses this idiom to build a list of the first n numbers,
-starting at zero:8
+starting at zero: (2)
 
-   (defun upto (max) (let ((result nil)) (dotimes (i max) (push i
-result)) (nreverse result)))
+     (defun upto (max)
+       (let ((result nil))
+         (dotimes (i max)
+           (push i result))
+         (nreverse result)))
 
-   (upto 10) ==> (0 1 2 3 4 5 6 7 8 9) The next most common recycling
-idiom9 is to immediately reassign the value returned by the recycling
-function back to the place containing the potentially recycled value.
-For instance, you'll often see expressions like the following, using
-DELETE, the recycling version of REMOVE:
+     (upto 10) ==> (0 1 2 3 4 5 6 7 8 9)
 
-   (setf foo (delete nil foo)) This sets the value of foo to its old
-value except with all the NILs removed.  However, even this idiom must
-be used with some care-if foo shares structure with lists referenced
-elsewhere, using DELETE instead of REMOVE can destroy the structure of
-those other lists.  For example, consider the two lists *list-2* and
-*list-3* from earlier that share their last two cons cells.
+   The next most common recycling idiom (3) is to immediately reassign
+the value returned by the recycling function back to the place
+containing the potentially recycled value.  For instance, you'll often
+see expressions like the following, using DELETE, the recycling version
+of REMOVE:
 
-   *list-2* ==> (0 4) *list-3* ==> (1 2 0 4) You can delete 4 from
-*list-3* like this:
+     (setf foo (delete nil foo))
 
-   (setf *list-3* (delete 4 *list-3*)) ==> (1 2 0) However, DELETE will
-likely perform the necessary deletion by setting the CDR of the third
-cons cell to NIL, disconnecting the fourth cons cell, the one holding
-the 4, from the list.  Because the third cons cell of *list-3* is also
-the first cons cell in *list-2*, the following modifies *list-2* as
-well:
+   This sets the value of foo to its old value except with all the NILs
+removed.  However, even this idiom must be used with some care-if foo
+shares structure with lists referenced elsewhere, using DELETE instead
+of REMOVE can destroy the structure of those other lists.  For example,
+consider the two lists *list-2* and *list-3* from earlier that share
+their last two cons cells.
 
-   *list-2* ==> (0) If you had used REMOVE instead of DELETE, it
-would've built a list containing the values 1, 2, and 0, creating new
-cons cells as necessary rather than modifying any of the cons cells in
-*list-3*.  In that case, *list-2* wouldn't have been affected.
+     *list-2* ==> (0 4)
+     *list-3* ==> (1 2 0 4)
+
+   You can delete 4 from *list-3* like this:
+
+     (setf *list-3* (delete 4 *list-3*)) ==> (1 2 0)
+
+   However, DELETE will likely perform the necessary deletion by setting
+the CDR of the third cons cell to NIL, disconnecting the fourth cons
+cell, the one holding the 4, from the list.  Because the third cons cell
+of *list-3* is also the first cons cell in *list-2*, the following
+modifies *list-2* as well:
+
+     *list-2* ==> (0)
+
+   If you had used REMOVE instead of DELETE, it would've built a list
+containing the values 1, 2, and 0, creating new cons cells as necessary
+rather than modifying any of the cons cells in *list-3*.  In that case,
+*list-2* wouldn't have been affected.
 
    The PUSH/NREVERSE and SETF/DELETE idioms probably account for 80
 percent of the uses of recycling functions.  Other uses are possible but
@@ -1709,15 +1789,39 @@ aren't referenced from anywhere else.
 
    One last gotcha to watch out for is that the sorting functions SORT,
 STABLE-SORT, and MERGE mentioned in Chapter 11 are also recycling
-functions when applied to lists.10 However, these functions don't have
-nondestructive counterparts, so if you need to sort a list without
+functions when applied to lists.  (4) However, these functions don't
+have nondestructive counterparts, so if you need to sort a list without
 destroying it, you need to pass the sorting function a copy made with
 COPY-LIST. In either case you need to be sure to save the result of the
 sorting function because the original argument is likely to be in
 tatters.  For instance:
 
-   CL-USER> (defparameter *list* (list 4 3 2 1)) *LIST* CL-USER> (sort
-*list* #'<) (1 2 3 4) ; looks good CL-USER> *list* (4) ; whoops!
+     CL-USER> (defparameter *list* (list 4 3 2 1))
+     *LIST*
+     CL-USER> (sort *list* #'<)
+     (1 2 3 4)                      ; looks good
+     CL-USER> *list*
+     (4)                            ; whoops!
+
+   ---------- Footnotes ----------
+
+   (1) For example, in an examination of all uses of recycling functions
+in the Common Lisp Open Code Collection (CLOCC), a diverse set of
+libraries written by various authors, instances of the PUSH/NREVERSE
+idiom accounted for nearly half of all uses of recycling functions.
+
+   (2) There are, of course, other ways to do this same thing.  The
+extended LOOP macro, for instance, makes it particularly easy and likely
+generates code that's even more efficient than the PUSH/ NREVERSE
+version.
+
+   (3) This idiom accounts for 30 percent of uses of recycling in the
+CLOCC code base.
+
+   (4) SORT and STABLE-SORT can be used as for-side-effect operations on
+vectors, but since they still return the sorted vector, you should
+ignore that fact and use them for return values for the sake of
+consistency.
 
 
 File: pcl.info,  Node: 12-5,  Next: 12-6,  Prev: 12-4,  Up: Chapter 12
@@ -1741,27 +1845,32 @@ a list and returns the result of calling CDR n times.  (Thus, (nthcdr 0
 equivalent to REST.) Note, however, that none of these functions is any
 more efficient, in terms of work done by the computer, than the
 equivalent combinations of FIRSTs and RESTs-there's no way to get to the
-nth element of a list without following n CDR references.11
+nth element of a list without following n CDR references.  (1)
 
    The 28 composite CAR/CDR functions are another family of functions
 you may see used from time to time.  Each function is named by placing a
 sequence of up to four As and Ds between a C and R, with each A
 representing a call to CAR and each D a call to CDR. Thus:
 
-   (caar list) === (car (car list)) (cadr list) === (car (cdr list))
-(cadadr list) === (car (cdr (car (cdr list)))) Note, however, that many
-of these functions make sense only when applied to lists that contain
-other lists.  For instance, CAAR extracts the CAR of the CAR of the list
-it's given; thus, the list it's passed must contain another list as its
-first element.  In other words, these are really functions on trees
-rather than lists:
+     (caar list) === (car (car list))
+     (cadr list) === (car (cdr list))
+     (cadadr list) === (car (cdr (car (cdr list))))
 
-   (caar (list 1 2 3)) ==> error (caar (list (list 1 2) 3)) ==> 1 (cadr
-(list (list 1 2) (list 3 4))) ==> (3 4) (caadr (list (list 1 2) (list 3
-4))) ==> 3 These functions aren't used as often now as in the old days.
-And even the most die-hard old-school Lisp hackers tend to avoid the
-longer combinations.  However, they're used quite a bit in older Lisp
-code, so it's worth at least understanding how they work.12
+   Note, however, that many of these functions make sense only when
+applied to lists that contain other lists.  For instance, CAAR extracts
+the CAR of the CAR of the list it's given; thus, the list it's passed
+must contain another list as its first element.  In other words, these
+are really functions on trees rather than lists:
+
+     (caar (list 1 2 3))                  ==> error
+     (caar (list (list 1 2) 3))           ==> 1
+     (cadr (list (list 1 2) (list 3 4)))  ==> (3 4)
+     (caadr (list (list 1 2) (list 3 4))) ==> 3
+
+   These functions aren't used as often now as in the old days.  And
+even the most die-hard old-school Lisp hackers tend to avoid the longer
+combinations.  However, they're used quite a bit in older Lisp code, so
+it's worth at least understanding how they work.  (2)
 
    The FIRST-TENTH and CAR, CADR, and so on, functions can also be used
 as SETFable places if you're using lists nonfunctionally.
@@ -1769,28 +1878,51 @@ as SETFable places if you're using lists nonfunctionally.
    Table 12-1 summarizes some other list functions that I won't cover in
 detail.
 
-   Table 12-1.  Other List Functions Function	Description LAST	Returns
-the last cons cell in a list.  With an integer, argument returns the
-last n cons cells.  BUTLAST	Returns a copy of the list, excluding the
-last cons cell.  With an integer argument, excludes the last n cells.
-NBUTLAST	The recycling version of BUTLAST; may modify and return the
-argument list but has no reliable side effects.  LDIFF	Returns a copy of
-a list up to a given cons cell.  TAILP	Returns true if a given object is
-a cons cell that's part of the structure of a list.  LIST*	Builds a list
-to hold all but the last of its arguments and then makes the last
-argument the CDR of the last cell in the list.  In other words, a cross
-between LIST and APPEND. MAKE-LIST	Builds an n item list.  The initial
-elements of the list are NIL or the value specified with the
-:initial-element keyword argument.  REVAPPEND	Combination of REVERSE and
-APPEND; reverses first argument as with REVERSE and then appends the
-second argument.  NRECONC	Recycling version of REVAPPEND; reverses first
-argument as if by NREVERSE and then appends the second argument.  No
-reliable side effects.  CONSP	Predicate to test whether an object is a
-cons cell.  ATOM	Predicate to test whether an object is not a cons cell.
-LISTP	Predicate to test whether an object is either a cons cell or NIL.
-NULL	Predicate to test whether an object is NIL. Functionally equivalent
-to NOT but stylistically preferable when testing for an empty list as
-opposed to boolean false.
+   Table 12-1.  Other List Functions
+
+   Function	Description LAST	Returns the last cons cell in a list.  With
+an integer, argument returns the last n cons cells.  BUTLAST	Returns a
+copy of the list, excluding the last cons cell.  With an integer
+argument, excludes the last n cells.  NBUTLAST	The recycling version of
+BUTLAST; may modify and return the argument list but has no reliable
+side effects.  LDIFF	Returns a copy of a list up to a given cons cell.
+TAILP	Returns true if a given object is a cons cell that's part of the
+structure of a list.  LIST*	Builds a list to hold all but the last of
+its arguments and then makes the last argument the CDR of the last cell
+in the list.  In other words, a cross between LIST and APPEND. MAKE-LIST
+Builds an n item list.  The initial elements of the list are NIL or the
+value specified with the :initial-element keyword argument.  REVAPPEND
+Combination of REVERSE and APPEND; reverses first argument as with
+REVERSE and then appends the second argument.  NRECONC	Recycling version
+of REVAPPEND; reverses first argument as if by NREVERSE and then appends
+the second argument.  No reliable side effects.  CONSP	Predicate to test
+whether an object is a cons cell.  ATOM	Predicate to test whether an
+object is not a cons cell.  LISTP	Predicate to test whether an object is
+either a cons cell or NIL. NULL	Predicate to test whether an object is
+NIL. Functionally equivalent to NOT but stylistically preferable when
+testing for an empty list as opposed to boolean false.
+
+   ---------- Footnotes ----------
+
+   (1) NTH is roughly equivalent to the sequence function ELT but works
+only with lists.  Also, confusingly, NTH takes the index as the first
+argument, the opposite of ELT. Another difference is that ELT will
+signal an error if you try to access an element at an index greater than
+or equal to the length of the list, but NTH will return NIL.
+
+   (2) In particular, they used to be used to extract the various parts
+of expressions passed to macros before the invention of destructuring
+parameter lists.  For example, you could take apart the following
+expression:
+
+     (when (> x 10) (print x))
+
+   Like this:
+
+     ;; the condition
+     (cadr '(when (> x 10) (print x))) ==> (> X 10)
+     ;; the body, as a list
+     (cddr '(when (> x 10) (print x))) ==> ((PRINT X))
 
 
 File: pcl.info,  Node: 12-6,  Next: 12-7,  Prev: 12-5,  Up: Chapter 12
@@ -1817,27 +1949,40 @@ elements of the list arguments, taking one element from each list per
 application of the function.  The results of each function call are
 collected into a new list.  For example:
 
-   (mapcar #'(lambda (x) (* 2 x)) (list 1 2 3)) ==> (2 4 6) (mapcar #'+
-(list 1 2 3) (list 10 20 30)) ==> (11 22 33) MAPLIST is just like MAPCAR
-except instead of passing the elements of the list to the function, it
-passes the actual cons cells.13 Thus, the function has access not only
-to the value of each element of the list (via the CAR of the cons cell)
-but also to the rest of the list (via the CDR).
+     (mapcar #'(lambda (x) (* 2 x)) (list 1 2 3)) ==> (2 4 6)
+     (mapcar #'+ (list 1 2 3) (list 10 20 30)) ==> (11 22 33)
+
+   MAPLIST is just like MAPCAR except instead of passing the elements of
+the list to the function, it passes the actual cons cells.  (1) Thus,
+the function has access not only to the value of each element of the
+list (via the CAR of the cons cell) but also to the rest of the list
+(via the CDR).
 
    MAPCAN and MAPCON work like MAPCAR and MAPLIST except for the way
 they build up their result.  While MAPCAR and MAPLIST build a completely
 new list to hold the results of the function calls, MAPCAN and MAPCON
 build their result by splicing together the results-which must be
 lists-as if by NCONC. Thus, each function invocation can provide any
-number of elements to be included in the result.14 MAPCAN, like MAPCAR,
-passes the elements of the list to the mapped function while MAPCON,
-like MAPLIST, passes the cons cells.
+number of elements to be included in the result.  (2) MAPCAN, like
+MAPCAR, passes the elements of the list to the mapped function while
+MAPCON, like MAPLIST, passes the cons cells.
 
    Finally, the functions MAPC and MAPL are control constructs disguised
 as functions-they simply return their first list argument, so they're
 useful only when the side effects of the mapped function do something
 interesting.  MAPC is the cousin of MAPCAR and MAPCAN while MAPL is in
 the MAPLIST/MAPCON family.
+
+   ---------- Footnotes ----------
+
+   (1) Thus, MAPLIST is the more primitive of the two functions-if you
+had only MAPLIST, you could build MAPCAR on top of it, but you couldn't
+build MAPLIST on top of MAPCAR.
+
+   (2) In Lisp dialects that didn't have filtering functions like
+REMOVE, the idiomatic way to filter a list was with MAPCAN.
+
+     (mapcan #'(lambda (x) (if (= x 10) nil (list x)))  list) === (remove 10 list)
 
 
 File: pcl.info,  Node: 12-7,  Next: Chapter 13,  Prev: 12-6,  Up: Chapter 12
@@ -5668,126 +5813,4 @@ signaled, the stack would be unwound all the way to the higher-level
 function, abandoning the parsing of the log file altogether.  What you
 want is a way to provide the current recovery strategy without requiring
 that it always be used.
-
-
-File: pcl.info,  Node: 19-4,  Next: 19-5,  Prev: 19-3,  Up: Chapter 19
-
-Restarts
-========
-
-The condition system lets you do this by splitting the error handling
-code into two parts.  You place code that actually recovers from errors
-into restarts, and condition handlers can then handle a condition by
-invoking an appropriate restart.  You can place restart code in mid- or
-low-level functions, such as parse-log-file or parse-log-entry, while
-moving the condition handlers into the upper levels of the application.
-
-   To change parse-log-file so it establishes a restart instead of a
-condition handler, you can change the HANDLER-CASE to a RESTART-CASE.
-The form of RESTART-CASE is quite similar to a HANDLER-CASE except the
-names of restarts are just names, not necessarily the names of condition
-types.  In general, a restart name should describe the action the
-restart takes.  In parse-log-file, you can call the restart
-skip-log-entry since that's what it does.  The new version will look
-like this:
-
-   (defun parse-log-file (file) (with-open-file (in file :direction
-:input) (loop for text = (read-line in nil nil) while text for entry =
-(restart-case (parse-log-entry text) (skip-log-entry () nil)) when entry
-collect it))) If you invoke this version of parse-log-file on a log file
-containing corrupted entries, it won't handle the error directly; you'll
-end up in the debugger.  However, there among the various restarts
-presented by the debugger will be one called skip-log-entry, which, if
-you choose it, will cause parse-log-file to continue on its way as
-before.  To avoid ending up in the debugger, you can establish a
-condition handler that invokes the skip-log-entry restart automatically.
-
-   The advantage of establishing a restart rather than having
-parse-log-file handle the error directly is it makes parse-log-file
-usable in more situations.  The higher-level code that invokes
-parse-log-file doesn't have to invoke the skip-log-entry restart.  It
-can choose to handle the error at a higher level.  Or, as I'll show in
-the next section, you can add restarts to parse-log-entry to provide
-other recovery strategies, and then condition handlers can choose which
-strategy they want to use.
-
-   But before I can talk about that, you need to see how to set up a
-condition handler that will invoke the skip-log-entry restart.  You can
-set up the handler anywhere in the chain of calls leading to
-parse-log-file.  This may be quite high up in your application, not
-necessarily in parse-log-file's direct caller.  For instance, suppose
-the main entry point to your application is a function, log-analyzer,
-that finds a bunch of logs and analyzes them with the function
-analyze-log, which eventually leads to a call to parse-log-file.
-Without any error handling, it might look like this:
-
-   (defun log-analyzer () (dolist (log (find-all-logs)) (analyze-log
-log))) The job of analyze-log is to call, directly or indirectly,
-parse-log-file and then do something with the list of log entries
-returned.  An extremely simple version might look like this:
-
-   (defun analyze-log (log) (dolist (entry (parse-log-file log))
-(analyze-entry entry))) where the function analyze-entry is presumably
-responsible for extracting whatever information you care about from each
-log entry and stashing it away somewhere.
-
-   Thus, the path from the top-level function, log-analyzer, to
-parse-log-entry, which actually signals an error, is as follows:
-
-   Assuming you always want to skip malformed log entries, you could
-change this function to establish a condition handler that invokes the
-skip-log-entry restart for you.  However, you can't use HANDLER-CASE to
-establish the condition handler because then the stack would be unwound
-to the function where the HANDLER-CASE appears.  Instead, you need to
-use the lower-level macro HANDLER-BIND. The basic form of HANDLER-BIND
-is as follows:
-
-   (handler-bind (binding*) form*) where each binding is a list of a
-condition type and a handler function of one argument.  After the
-handler bindings, the body of the HANDLER-BIND can contain any number of
-forms.  Unlike the handler code in HANDLER-CASE, the handler code must
-be a function object, and it must accept a single argument.  A more
-important difference between HANDLER-BIND and HANDLER-CASE is that the
-handler function bound by HANDLER-BIND will be run without unwinding the
-stack-the flow of control will still be in the call to parse-log-entry
-when this function is called.  The call to INVOKE-RESTART will find and
-invoke the most recently bound restart with the given name.  So you can
-add a handler to log-analyzer that will invoke the skip-log-entry
-restart established in parse-log-file like this:5
-
-   (defun log-analyzer () (handler-bind ((malformed-log-entry-error
-#'(lambda (c) (invoke-restart 'skip-log-entry)))) (dolist (log
-(find-all-logs)) (analyze-log log)))) In this HANDLER-BIND, the handler
-function is an anonymous function that invokes the restart
-skip-log-entry.  You could also define a named function that does the
-same thing and bind it instead.  In fact, a common practice when
-defining a restart is to define a function, with the same name and
-taking a single argument, the condition, that invokes the eponymous
-restart.  Such functions are called restart functions.  You could define
-a restart function for skip-log-entry like this:
-
-   (defun skip-log-entry (c) (invoke-restart 'skip-log-entry)) Then you
-could change the definition of log-analyzer to this:
-
-   (defun log-analyzer () (handler-bind ((malformed-log-entry-error
-#'skip-log-entry)) (dolist (log (find-all-logs)) (analyze-log log)))) As
-written, the skip-log-entry restart function assumes that a
-skip-log-entry restart has been established.  If a
-malformed-log-entry-error is ever signaled by code called from
-log-analyzer without a skip-log-entry having been established, the call
-to INVOKE-RESTART will signal a CONTROL-ERROR when it fails to find the
-skip-log-entry restart.  If you want to allow for the possibility that a
-malformed-log-entry-error might be signaled from code that doesn't have
-a skip-log-entry restart established, you could change the
-skip-log-entry function to this:
-
-   (defun skip-log-entry (c) (let ((restart (find-restart
-'skip-log-entry))) (when restart (invoke-restart restart))))
-FIND-RESTART looks for a restart with a given name and returns an object
-representing the restart if the restart is found and NIL if not.  You
-can invoke the restart by passing the restart object to INVOKE-RESTART.
-Thus, when skip-log-entry is bound with HANDLER-BIND, it will handle the
-condition by invoking the skip-log-entry restart if one is available and
-otherwise will return normally, giving other condition handlers, bound
-higher on the stack, a chance to handle the condition.
 

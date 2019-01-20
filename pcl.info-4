@@ -1,6 +1,65 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
 
+File: pcl.info,  Node: 26-3,  Next: 26-4,  Prev: 26-2,  Up: Chapter 26
+
+Generating Dynamic Content with AllegroServe
+============================================
+
+Publishing entities that generate dynamic content is nearly as simple as
+publishing static content.  The functions publish and publish-prefix are
+the dynamic analogs of publish-file and publish-directory.  The basic
+idea of these two functions is that you publish a function that will be
+called to generate the response to a request for either a specific URL
+or any URL with a given prefix.  The function will be called with two
+arguments: an object representing the request and the published entity.
+Most of time you don't need to do anything with the entity object except
+to pass it along to a couple macros I'll discuss in a moment.  On the
+other hand, you'll use the request object to obtain information
+submitted by the browser-query parameters included in the URL or data
+posted using an HTML form.
+
+   For a trivial example of using a function to generate dynamic
+content, let's write a function that generates a page with a different
+random number each time it's requested.
+
+   (defun random-number (request entity) (with-http-response (request
+entity :content-type "text/html") (with-http-body (request entity)
+(format (request-reply-stream request) "<html>~ 
+<head><title>Random</title></head>~  <body>~  <p>Random number: ~d</p>~ 
+</body>~  </html>~  " (random 1000))))) The macros with-http-response
+and with-http-body are part of AllegroServe.  The former starts the
+process of generating an HTTP response and can be used, as here, to
+specify things such as the type of content that will be returned.  It
+also handles various parts of HTTP such as dealing with
+If-Modified-Since requests.  The with-http-body actually sends the HTTP
+response headers and then executes its body, which should contain code
+that generates the content of the reply.  Within with-http-response but
+before the with-http-body, you can add or change HTTP headers to be sent
+in the reply.  The function request-reply-stream is also part of
+AllegroServe and returns the stream to which you should write output
+intended to be sent to the browser.
+
+   As this function shows, you can just use FORMAT to print HTML to the
+stream returned by request-reply-stream.  In the next section, I'll show
+you more convenient ways to programmatically generate HTML.9
+
+   Now you're ready to publish this function.
+
+   WEB> (publish :path "/random-number" :function 'random-number)
+#<COMPUTED-ENTITY  #x7262bab2> As it does in the publish-file function,
+the :path argument specifies the path part of the URL that will result
+in this function being invoked.  The :function argument specifies either
+the name or an actual function object.  Using the name of a function, as
+shown here, allows you to redefine the function later without
+republishing and have AllegroServe use the new function definition.
+After evaluating the call to publish, you can point your browser at
+http:// localhost:2001/random-number to get a page with a random number
+on it, as shown in Figure 26-3.
+
+   Figure 26-3.  http://localhost:2001/random-number
+
+
 File: pcl.info,  Node: 26-4,  Next: 26-5,  Prev: 26-3,  Up: Chapter 26
 
 Generating HTML
