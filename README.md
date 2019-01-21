@@ -1,12 +1,14 @@
 # Practical Common Lisp in Info Format
 
-[Practical Common Lisp](http://gigamonkeys.com/book/) - a great, free Common Lisp resource - typeset for [GNU Texinfo](https://www.gnu.org/software/texinfo/), Emacs' interactive documentation system. For when you've read enough in your browser to know that you don't want to read it in your browser.
+[Practical Common Lisp](http://gigamonkeys.com/book/) - a great, free Common Lisp resource - typeset for [GNU Texinfo](https://www.gnu.org/software/texinfo/), Emacs' interactive documentation system.
+
+For when you've read enough in your browser to know that you don't want to read it in your browser.
 
 To view in info-reader mode, open `pcl.info` with `C-u C-h i` (just as you would visit a file with `C-x C-f`).
 
 ![How It Looks](./imgs/pcl-info-screenshot.png)
 
-Build from the project root with `$ makeinfo pcl.texi`
+Build from the project root with `$ makeinfo --no-split pcl.texi -o pcl.info`
 
 TODOs:
 - [ ] mid-section asides
@@ -75,7 +77,7 @@ TODOs:
   - [X] @node 26-7 `Figure 26-7. http://localhost:2001/show-cookies with no cookies`
   - [X] @node 26-7 `Figure 26-8. http://localhost:2001/set-cookie`
   - [X] @node 26-7 `Figure 26-9. http://localhost:2001/show-cookies after setting a cookie`
-- [ ] Code blocks and footnotes
+- [X] Code blocks and footnotes
   - [X] Chapter 01
   - [X] Chapter 02
   - [X] Chapter 03
@@ -95,30 +97,21 @@ TODOs:
   - [X] Chapter 17
   - [X] Chapter 18
   - [X] Chapter 19
-  - [ ] Chapter 20
-  - [ ] Chapter 21
+  - [X] Chapter 20
+  - [X] Chapter 21
   - [X] Chapter 22
-  - [ ] Chapter 23
+  - [X] Chapter 23
   - [X] Chapter 24
-  - [ ] Chapter 25
+  - [X] Chapter 25
   - [X] Chapter 26
-  - [ ] Chapter 27
+  - [X] Chapter 27
   - [X] Chapter 28
-  - [ ] Chapter 29
+  - [X] Chapter 29
   - [X] Chapter 30
-  - [ ] Chapter 31
+  - [X] Chapter 31
   - [X] Chapter 32
 
 
 @emph for bold
-
-@itemize @bullet
-@item
-Some text for foo.
-
-@item
-Some text
-for bar.
-@end itemize
 
 ‘Here's how you make green font!’

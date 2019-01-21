@@ -1,10 +1,13 @@
 @node    Chapter 23, Chapter 24, Chapter 22, Top
 @section 23. Practical: A Spam Filter
 
-In 2002 Paul Graham, having some time on his hands after selling Viaweb to Yahoo, wrote the essay "A Plan for Spam"1 that launched a minor revolution in spam-filtering technology. Prior to Graham's article, most spam filters were written in terms of handcrafted rules: if a message has XXX in the subject, it's probably a spam; if a message has a more than three or more words in a row in ALL CAPITAL LETTERS, it's probably a spam. Graham spent several months trying to write such a rule-based filter before realizing it was fundamentally a soul-sucking task.
+In 2002 Paul Graham, having some time on his hands after selling Viaweb to Yahoo, wrote the essay "A Plan for Spam" @footnote{Available at http://www.paulgraham.com/spam.html and also in Hackers & Painters: Big Ideas from the Computer Age (O'Reilly, 2004)} that launched a minor revolution in spam-filtering technology. Prior to Graham's article, most spam filters were written in terms of handcrafted rules: if a message has XXX in the subject, it's probably a spam; if a message has a more than three or more words in a row in ALL CAPITAL LETTERS, it's probably a spam. Graham spent several months trying to write such a rule-based filter before realizing it was fundamentally a soul-sucking task.
 
+@quotation
 To recognize individual spam features you have to try to get into the mind of the spammer, and frankly I want to spend as little time inside the minds of spammers as possible.
-To avoid having to think like a spammer, Graham decided to try distinguishing spam from nonspam, a.k.a. ham, based on statistics gathered about which words occur in which kinds of e-mails. The filter would keep track of how often specific words appear in both spam and ham messages and then use the frequencies associated with the words in a new message to compute a probability that it was either spam or ham. He called his approach Bayesian filtering after the statistical technique that he used to combine the individual word frequencies into an overall probability.2
+@end quotation
+
+To avoid having to think like a spammer, Graham decided to try distinguishing spam from nonspam, a.k.a. ham, based on statistics gathered about which words occur in which kinds of e-mails. The filter would keep track of how often specific words appear in both spam and ham messages and then use the frequencies associated with the words in a new message to compute a probability that it was either spam or ham. He called his approach Bayesian filtering after the statistical technique that he used to combine the individual word frequencies into an overall probability. @footnote{There has since been some disagreement over whether the technique Graham described was actually "Bayesian." However, the name has stuck and is well on its way to becoming a synonym for "statistical" when talking about spam filters.}
 
 @menu
 * 23-1::       The Heart of a Spam Filter
@@ -26,26 +29,39 @@ In this chapter, you'll implement the core of a spam-filtering engine. You won't
 
 This application is going to be large enough that it's worth defining a new package to avoid name conflicts. For instance, in the source code you can download from this book's Web site, I use the package name COM.GIGAMONKEYS.SPAM, defining a package that uses both the standard COMMON-LISP package and the COM.GIGAMONKEYS.PATHNAMES package from Chapter 15, like this:
 
+@example
 (defpackage :com.gigamonkeys.spam
   (:use :common-lisp :com.gigamonkeys.pathnames))
+@end example
+
 Any file containing code for this application should start with this line:
 
+@example
 (in-package :com.gigamonkeys.spam)
-You can use the same package name or replace com.gigamonkeys with some domain you control.3
+@end example
+
+You can use the same package name or replace com.gigamonkeys with some domain you control. @footnote{It would, however, be poor form to distribute a version of this application using a package starting with com.gigamonkeys since you don't control that domain.}
 
 You can also type this same form at the REPL to switch to this package to test the functions you write. In SLIME this will change the prompt from CL-USER> to SPAM> like this:
 
+@example
 CL-USER> (in-package :com.gigamonkeys.spam)
 #<The COM.GIGAMONKEYS.SPAM package>
 SPAM>
+@end example
+
 Once you have a package defined, you can start on the actual code. The main function you'll need to implement has a simple job--take the text of a message as an argument and classify the message as spam, ham, or unsure. You can easily implement this basic function by defining it in terms of other functions that you'll write in a moment.
 
+@example
 (defun classify (text)
   (classification (score (extract-features text))))
+@end example
+
 Reading from the inside out, the first step in classifying a message is to extract features to pass to the score function. In score you'll compute a value that can then be translated into one of three classifications--spam, ham, or unsure--by the function classification. Of the three functions, classification is the simplest. You can assume score will return a value near 1 if the message is a spam, near 0 if it's a ham, and near .5 if it's unclear.
 
 Thus, you can implement classification like this:
 
+@example
 (defparameter *max-ham-score* .4)
 (defparameter *min-spam-score* .6)
 
@@ -54,8 +70,11 @@ Thus, you can implement classification like this:
     ((<= score *max-ham-score*) 'ham)
     ((>= score *min-spam-score*) 'spam)
     (t 'unsure)))
+@end example
+
 The extract-features function is almost as straightforward, though it requires a bit more code. For the moment, the features you'll extract will be the words appearing in the text. For each word, you need to keep track of the number of times it has been seen in a spam and the number of times it has been seen in a ham. A convenient way to keep those pieces of data together with the word itself is to define a class, word-feature, with three slots.
 
+@example
 (defclass word-feature ()
   ((word
     :initarg :word
@@ -72,92 +91,150 @@ The extract-features function is almost as straightforward, though it requires a
     :accessor ham-count
     :initform 0
     :documentation "Number of hams we have seen this feature in.")))
+@end example
+
 You'll keep the database of features in a hash table so you can easily find the object representing a given feature. You can define a special variable, *feature-database*, to hold a reference to this hash table.
 
+@example
 (defvar *feature-database* (make-hash-table :test #'equal))
+@end example
+
 You should use DEFVAR rather than DEFPARAMETER because you don't want *feature-database* to be reset if you happen to reload the file containing this definition during development--you might have data stored in *feature-database* that you don't want to lose. Of course, that means if you do want to clear out the feature database, you can't just reevaluate the DEFVAR form. So you should define a function clear-database.
 
+@example
 (defun clear-database ()
   (setf *feature-database* (make-hash-table :test #'equal)))
+@end example
+
 To find the features present in a given message, the code will need to extract the individual words and then look up the corresponding word-feature object in *feature-database*. If *feature-database* contains no such feature, it'll need to create a new word-feature to represent the word. You can encapsulate that bit of logic in a function, intern-feature, that takes a word and returns the appropriate feature, creating it if necessary.
 
+@example
 (defun intern-feature (word)
   (or (gethash word *feature-database*)
       (setf (gethash word *feature-database*)
             (make-instance 'word-feature :word word))))
-You can extract the individual words from the message text using a regular expression. For example, using the Common Lisp Portable Perl-Compatible Regular Expression (CL-PPCRE) library written by Edi Weitz, you can write extract-words like this:4
+@end example
 
+You can extract the individual words from the message text using a regular expression. For example, using the Common Lisp Portable Perl-Compatible Regular Expression (CL-PPCRE) library written by Edi Weitz, you can write extract-words like this: @footnote{A version of CL-PPCRE is included with the book's source code available from the book's Web site. Or you can download it from Weitz's site at http://www.weitz.de/cl-ppcre/.}
+
+@example
 (defun extract-words (text)
   (delete-duplicates
    (cl-ppcre:all-matches-as-strings "[a-zA-Z]@{3,@}" text)
    :test #'string=))
+@end example
+
 Now all that remains to implement extract-features is to put extract-features and intern-feature together. Since extract-words returns a list of strings and you want a list with each string translated to the corresponding word-feature, this is a perfect time to use MAPCAR.
 
+@example
 (defun extract-features (text)
   (mapcar #'intern-feature (extract-words text)))
+@end example
+
 You can test these functions at the REPL like this:
 
+@example
 SPAM> (extract-words "foo bar baz")
 ("foo" "bar" "baz")
+@end example
+
 And you can make sure the DELETE-DUPLICATES is working like this:
 
+@example
 SPAM> (extract-words "foo bar baz foo bar")
 ("baz" "foo" "bar")
+@end example
+
 You can also test extract-features.
 
+@example
 SPAM> (extract-features "foo bar baz foo bar")
 (#<WORD-FEATURE @ #x71ef28da> #<WORD-FEATURE @ #x71e3809a>
  #<WORD-FEATURE @ #x71ef28aa>)
-However, as you can see, the default method for printing arbitrary objects isn't very informative. As you work on this program, it'll be useful to be able to print word-feature objects in a less opaque way. Luckily, as I mentioned in Chapter 17, the printing of all objects is implemented in terms of a generic function PRINT-OBJECT, so to change the way word-feature objects are printed, you just need to define a method on PRINT-OBJECT that specializes on word-feature. To make implementing such methods easier, Common Lisp provides the macro PRINT-UNREADABLE-OBJECT.5
+@end example
+
+However, as you can see, the default method for printing arbitrary objects isn't very informative. As you work on this program, it'll be useful to be able to print word-feature objects in a less opaque way. Luckily, as I mentioned in Chapter 17, the printing of all objects is implemented in terms of a generic function PRINT-OBJECT, so to change the way word-feature objects are printed, you just need to define a method on PRINT-OBJECT that specializes on word-feature. To make implementing such methods easier, Common Lisp provides the macro PRINT-UNREADABLE-OBJECT. @footnote{The main reason to use PRINT-UNREADABLE-OBJECT is that it takes care of signaling the appropriate error if someone tries to print your object readably, such as with the ~S FORMAT directive.}
 
 The basic form of PRINT-UNREADABLE-OBJECT is as follows:
 
+@example
 (print-unreadable-object (object stream-variable &key type identity)
   body-form*)
-The object argument is an expression that evaluates to the object to be printed. Within the body of PRINT-UNREADABLE-OBJECT, stream-variable is bound to a stream to which you can print anything you want. Whatever you print to that stream will be output by PRINT-UNREADABLE-OBJECT and enclosed in the standard syntax for unreadable objects, #<>.6
+@end example
+
+The object argument is an expression that evaluates to the object to be printed. Within the body of PRINT-UNREADABLE-OBJECT, stream-variable is bound to a stream to which you can print anything you want. Whatever you print to that stream will be output by PRINT-UNREADABLE-OBJECT and enclosed in the standard syntax for unreadable objects, #<>. @footnote{PRINT-UNREADABLE-OBJECT also signals an error if it's used when the printer control variable *PRINT-READABLY* is true. Thus, a PRINT-OBJECT method consisting solely of a PRINT-UNREADABLE-OBJECT form will correctly implement the PRINT-OBJECT contract with regard to *PRINT-READABLY*.}
 
 PRINT-UNREADABLE-OBJECT also lets you include the type of the object and an indication of the object's identity via the keyword parameters type and identity. If they're non-NIL, the output will start with the name of the object's class and end with an indication of the object's identity similar to what's printed by the default PRINT-OBJECT method for STANDARD-OBJECTs. For word-feature, you probably want to define a PRINT-OBJECT method that includes the type but not the identity along with the values of the word, ham-count, and spam-count slots. Such a method would look like this:
 
+@example
 (defmethod print-object ((object word-feature) stream)
   (print-unreadable-object (object stream :type t)
     (with-slots (word ham-count spam-count) object
       (format stream "~s :hams ~d :spams ~d" word ham-count spam-count))))
+@end example
+
 Now when you test extract-features at the REPL, you can see more clearly what features are being extracted.
 
+@example
 SPAM> (extract-features "foo bar baz foo bar")
 (#<WORD-FEATURE "baz" :hams 0 :spams 0>
  #<WORD-FEATURE "foo" :hams 0 :spams 0>
  #<WORD-FEATURE "bar" :hams 0 :spams 0>)
+@end example
+
 
 @node	23-2, 23-3, 23-1, Chapter 23
 @section Training the Filter
 
 Now that you have a way to keep track of individual features, you're almost ready to implement score. But first you need to write the code you'll use to train the spam filter so score will have some data to use. You'll define a function, train, that takes some text and a symbol indicating what kind of message it is--ham or spam--and that increments either the ham count or the spam count of all the features present in the text as well as a global count of hams or spams processed. Again, you can take a top-down approach and implement it in terms of other functions that don't yet exist.
 
+@example
 (defun train (text type)
   (dolist (feature (extract-features text))
     (increment-count feature type))
   (increment-total-count type))
-You've already written extract-features, so next up is increment-count, which takes a word-feature and a message type and increments the appropriate slot of the feature. Since there's no reason to think that the logic of incrementing these counts is going to change for different kinds of objects, you can write this as a regular function.7 Because you defined both ham-count and spam-count with an :accessor option, you can use INCF and the accessor functions created by DEFCLASS to increment the appropriate slot.
+@end example
 
+You've already written extract-features, so next up is increment-count, which takes a word-feature and a message type and increments the appropriate slot of the feature. Since there's no reason to think that the logic of incrementing these counts is going to change for different kinds of objects, you can write this as a regular function. @footnote{If you decide later that you do need to have different versions of increment-feature for different classes, you can redefine increment-count as a generic function and this function as a method specialized on word-feature.} Because you defined both ham-count and spam-count with an :accessor option, you can use INCF and the accessor functions created by DEFCLASS to increment the appropriate slot.
+
+@example
 (defun increment-count (feature type)
   (ecase type
     (ham (incf (ham-count feature)))
     (spam (incf (spam-count feature)))))
+@end example
+
 The ECASE construct is a variant of CASE, both of which are similar to case statements in Algol-derived languages (renamed switch in C and its progeny). They both evaluate their first argument--the key form--and then find the clause whose first element--the key--is the same value according to EQL. In this case, that means the variable type is evaluated, yielding whatever value was passed as the second argument to increment-count.
 
 The keys aren't evaluated. In other words, the value of type will be compared to the literal objects read by the Lisp reader as part of the ECASE form. In this function, that means the keys are the symbols ham and spam, not the values of any variables named ham and spam. So, if increment-count is called like this:
 
+@example
 (increment-count some-feature 'ham)
+@end example
+
 the value of type will be the symbol ham, and the first branch of the ECASE will be evaluated and the feature's ham count incremented. On the other hand, if it's called like this:
 
+@example
 (increment-count some-feature 'spam)
-then the second branch will run, incrementing the spam count. Note that the symbols ham and spam are quoted when calling increment-count since otherwise they'd be evaluated as the names of variables. But they're not quoted when they appear in ECASE since ECASE doesn't evaluate the keys.8
+@end example
+
+then the second branch will run, incrementing the spam count. Note that the symbols ham and spam are quoted when calling increment-count since otherwise they'd be evaluated as the names of variables. But they're not quoted when they appear in ECASE since ECASE doesn't evaluate the keys. @footnote{
+Technically, the key in each clause of a CASE or ECASE is interpreted as a list designator, an object that designates a list of objects. A single nonlist object, treated as a list designator, designates a list containing just that one object, while a list designates itself. Thus, each clause can have multiple keys; CASE and ECASE will select the clause whose list of keys contains the value of the key form. For example, if you wanted to make good a synonym for ham and bad a synonym for spam, you could write increment-count like this:
+
+@example
+(defun increment-count (feature type)
+  (ecase type
+    ((ham good) (incf (ham-count feature)))
+    ((spam bad) (incf (spam-count feature)))))
+@end example
+
+}
 
 The E in ECASE stands for "exhaustive" or "error," meaning ECASE should signal an error if the key value is anything other than one of the keys listed. The regular CASE is looser, returning NIL if no matching clause is found.
 
 To implement increment-total-count, you need to decide where to store the counts; for the moment, two more special variables, *total-spams* and *total-hams*, will do fine.
 
+@example
 (defvar *total-spams* 0)
 (defvar *total-hams* 0)
 
@@ -165,18 +242,23 @@ To implement increment-total-count, you need to decide where to store the counts
   (ecase type
     (ham (incf *total-hams*))
     (spam (incf *total-spams*))))
+@end example
+
 You should use DEFVAR to define these two variables for the same reason you used it with *feature-database*--they'll hold data built up while you run the program that you don't necessarily want to throw away just because you happen to reload your code during development. But you'll want to reset those variables if you ever reset *feature-database*, so you should add a few lines to clear-database as shown here:
 
+@example
 (defun clear-database ()
   (setf
    *feature-database* (make-hash-table :test #'equal)
    *total-spams* 0
    *total-hams* 0))
+@end example
+
 
 @node	23-3, 23-4, 23-2, Chapter 23
 @section Per-Word Statistics
 
-The heart of a statistical spam filter is, of course, the functions that compute statistics-based probabilities. The mathematical nuances9 of why exactly these computations work are beyond the scope of this book--interested readers may want to refer to several papers by Gary Robinson.10 I'll focus rather on how they're implemented.
+The heart of a statistical spam filter is, of course, the functions that compute statistics-based probabilities. The mathematical nuances @footnote{Speaking of mathematical nuances, hard-core statisticians may be offended by the sometimes loose use of the word probability in this chapter. However, since even the pros, who are divided between the Bayesians and the frequentists, can't agree on what a probability is, I'm not going to worry about it. This is a book about programming, not statistics.} of why exactly these computations work are beyond the scope of this book--interested readers may want to refer to several papers by Gary Robinson. @footnote{Robinson's articles that directly informed this chapter are "A Statistical Approach to the Spam Problem" (published in the Linux Journal and available at http://www.linuxjournal.com/ article.php?sid=6467 and in a shorter form on Robinson's blog at http://radio.weblogs.com/ 0101454/stories/2002/09/16/spamDetection.html) and "Why Chi? Motivations for the Use of Fisher's Inverse Chi-Square Procedure in Spam Classification" (available at http://garyrob.blogs.com/ whychi93.pdf). Another article that may be useful is "Handling Redundancy in Email Token Probabilities" (available at http://garyrob.blogs.com//handlingtokenredundancy94.pdf). The archived mailing lists of the SpamBayes project (http://spambayes.sourceforge.net/) also contain a lot of useful information about different algorithms and approaches to testing spam filters.} I'll focus rather on how they're implemented.
 
 The starting point for the statistical computations is the set of measured values--the frequencies stored in *feature-database*, *total-spams*, and *total-hams*. Assuming that the set of messages trained on is statistically representative, you can treat the observed frequencies as probabilities of the same features showing up in hams and spams in future messages.
 
@@ -184,24 +266,31 @@ The basic plan is to classify a message by extracting the features it contains, 
 
 The first statistical function you need is one that computes the basic probability that a message containing a given feature is a spam. By one point of view, the probability that a given message containing the feature is a spam is the ratio of spam messages containing the feature to all messages containing the feature. Thus, you could compute it this way:
 
+@example
 (defun spam-probability (feature)
   (with-slots (spam-count ham-count) feature
     (/ spam-count (+ spam-count ham-count))))
+@end example
+
 The problem with the value computed by this function is that it's strongly affected by the overall probability that any message will be a spam or a ham. For instance, suppose you get nine times as much ham as spam in general. A completely neutral feature will then appear in one spam for every nine hams, giving you a spam probability of 1/10 according to this function.
 
 But you're more interested in the probability that a given feature will appear in a spam message, independent of the overall probability of getting a spam or ham. Thus, you need to divide the spam count by the total number of spams trained on and the ham count by the total number of hams. To avoid division-by-zero errors, if either of *total-spams* or *total-hams* is zero, you should treat the corresponding frequency as zero. (Obviously, if the total number of either spams or hams is zero, then the corresponding per-feature count will also be zero, so you can treat the resulting frequency as zero without ill effect.)
 
+@example
 (defun spam-probability (feature)
   (with-slots (spam-count ham-count) feature
     (let ((spam-frequency (/ spam-count (max 1 *total-spams*)))
           (ham-frequency (/ ham-count (max 1 *total-hams*))))
       (/ spam-frequency (+ spam-frequency ham-frequency)))))
+@end example
+
 This version suffers from another problem--it doesn't take into account the number of messages analyzed to arrive at the per-word probabilities. Suppose you've trained on 2,000 messages, half spam and half ham. Now consider two features that have appeared only in spams. One has appeared in all 1,000 spams, while the other appeared only once. According to the current definition of spam-probability, the appearance of either feature predicts that a message is spam with equal probability, namely, 1.
 
 However, it's still quite possible that the feature that has appeared only once is actually a neutral feature--it's obviously rare in either spams or hams, appearing only once in 2,000 messages. If you trained on another 2,000 messages, it might very well appear one more time, this time in a ham, making it suddenly a neutral feature with a spam probability of .5.
 
 So it seems you might like to compute a probability that somehow factors in the number of data points that go into each feature's probability. In his papers, Robinson suggested a function based on the Bayesian notion of incorporating observed data into prior knowledge or assumptions. Basically, you calculate a new probability by starting with an assumed prior probability and a weight to give that assumed probability before adding new information. Robinson's function is this:
 
+@example
 (defun bayesian-spam-probability (feature &optional
                                   (assumed-probability 1/2)
                                   (weight 1))
@@ -210,6 +299,8 @@ So it seems you might like to compute a probability that somehow factors in the 
     (/ (+ (* weight assumed-probability)
           (* data-points basic-probability))
        (+ weight data-points))))
+@end example
+
 Robinson suggests values of 1/2 for assumed-probability and 1 for weight. Using those values, a feature that has appeared in one spam and no hams has a bayesian-spam-probability of 0.75, a feature that has appeared in 10 spams and no hams has a bayesian-spam-probability of approximately 0.955, and one that has matched in 1,000 spams and no hams has a spam probability of approximately 0.9995.
 
 @node	23-4, 23-5, 23-3, Chapter 23
@@ -217,7 +308,7 @@ Robinson suggests values of 1/2 for assumed-probability and 1 for weight. Using 
 
 Now that you can compute the bayesian-spam-probability of each individual feature you find in a message, the last step in implementing the score function is to find a way to combine a bunch of individual probabilities into a single value between 0 and 1.
 
-If the individual feature probabilities were independent, then it'd be mathematically sound to multiply them together to get a combined probability. But it's unlikely they actually are independent--certain features are likely to appear together, while others never do.11
+If the individual feature probabilities were independent, then it'd be mathematically sound to multiply them together to get a combined probability. But it's unlikely they actually are independent--certain features are likely to appear together, while others never do. @footnote{Techniques that combine nonindependent probabilities as though they were, in fact, independent, are called naive Bayesian. Graham's original proposal was essentially a naive Bayesian classifier with some "empirically derived" constant factors thrown in.}
 
 Robinson proposed using a method for combining probabilities invented by the statistician R. A. Fisher. Without going into the details of exactly why his technique works, it's this: First you combine the probabilities by multiplying them together. This gives you a number nearer to 0 the more low probabilities there were in the original set. Then take the log of that number and multiply by -2. Fisher showed in 1950 that if the individual probabilities were independent and drawn from a uniform distribution between 0 and 1, then the resulting value would be on a chi-square distribution. This value and twice the number of probabilities can be fed into an inverse chi-square function, and it'll return the probability that reflects the likelihood of obtaining a value that large or larger by combining the same number of randomly selected probabilities. When the inverse chi-square function returns a low probability, it means there was a disproportionate number of low probabilities (either a lot of relatively low probabilities or a few very low probabilities) in the individual probabilities.
 
@@ -229,6 +320,7 @@ To get a final score, you need to combine those two measures into a single numbe
 
 The score function that implements this scheme looks like this:
 
+@example
 (defun score (features)
   (let ((spam-probs ()) (ham-probs ()) (number-of-probs 0))
     (dolist (feature features)
@@ -240,34 +332,49 @@ The score function that implements this scheme looks like this:
     (let ((h (- 1 (fisher spam-probs number-of-probs)))
           (s (- 1 (fisher ham-probs number-of-probs))))
       (/ (+ (- 1 h) s) 2.0d0))))
+@end example
+
 You take a list of features and loop over them, building up two lists of probabilities, one listing the probabilities that a message containing each feature is a spam and the other that a message containing each feature is a ham. As an optimization, you can also count the number of probabilities while looping over them and pass the count to fisher to avoid having to count them again in fisher itself. The value returned by fisher will be low if the individual probabilities contained too many low probabilities to have come from random text. Thus, a low fisher score for the spam probabilities means there were many hammy features; subtracting that score from 1 gives you a probability that the message is a ham. Conversely, subtracting the fisher score for the ham probabilities gives you the probability that the message was a spam. Combining those two probabilities gives you an overall spamminess score between 0 and 1.
 
 Within the loop, you can use the function untrained-p to skip features extracted from the message that were never seen during training. These features will have spam counts and ham counts of zero. The untrained-p function is trivial.
 
+@example
 (defun untrained-p (feature)
   (with-slots (spam-count ham-count) feature
     (and (zerop spam-count) (zerop ham-count))))
+@end example
+
 The only other new function is fisher itself. Assuming you already had an inverse-chi-square function, fisher is conceptually simple.
 
+@example
 (defun fisher (probs number-of-probs)
   "The Fisher computation described by Robinson."
   (inverse-chi-square
    (* -2 (log (reduce #'* probs)))
    (* 2 number-of-probs)))
+@end example
+
 Unfortunately, there's a small problem with this straightforward implementation. While using REDUCE is a concise and idiomatic way of multiplying a list of numbers, in this particular application there's a danger the product will be too small a number to be represented as a floating-point number. In that case, the result will underflow to zero. And if the product of the probabilities underflows, all bets are off because taking the LOG of zero will either signal an error or, in some implementation, result in a special negative-infinity value, which will render all subsequent calculations essentially meaningless. This is particularly unfortunate in this function because the Fisher method is most sensitive when the input probabilities are low--near zero--and therefore in the most danger of causing the multiplication to underflow.
 
 Luckily, you can use a bit of high-school math to avoid this problem. Recall that the log of a product is the same as the sum of the logs of the factors. So instead of multiplying all the probabilities and then taking the log, you can sum the logs of each probability. And since REDUCE takes a :key keyword parameter, you can use it to perform the whole calculation. Instead of this:
 
+@example
 (log (reduce #'* probs))
+@end example
+
 write this:
 
+@example
 (reduce #'+ probs :key #'log)
+@end example
+
 
 @node	23-5, 23-6, 23-4, Chapter 23
 @section Inverse Chi Square
 
 The implementation of inverse-chi-square in this section is a fairly straightforward translation of a version written in Python by Robinson. The exact mathematical meaning of this function is beyond the scope of this book, but you can get an intuitive sense of what it does by thinking about how the values you pass to fisher will affect the result: the more low probabilities you pass to fisher, the smaller the product of the probabilities will be. The log of a small product will be a negative number with a large absolute value, which is then multiplied by -2, making it an even larger positive number. Thus, the more low probabilities were passed to fisher, the larger the value it'll pass to inverse-chi-square. Of course, the number of probabilities involved also affects the value passed to inverse-chi-square. Since probabilities are, by definition, less than or equal to 1, the more probabilities that go into a product, the smaller it'll be and the larger the value passed to inverse-chi-square. Thus, inverse-chi-square should return a low probability when the Fisher combined value is abnormally large for the number of probabilities that went into it. The following function does exactly that:
 
+@example
 (defun inverse-chi-square (value degrees-of-freedom)
   (assert (evenp degrees-of-freedom))
   (min
@@ -276,6 +383,8 @@ The implementation of inverse-chi-square in this section is a fairly straightfor
       for prob = (exp (- m)) then (* prob (/ m i))
       summing prob)
    1.0))
+@end example
+
 Recall from Chapter 10 that EXP raises e to the argument given. Thus, the larger value is, the smaller the initial value of prob will be. But that initial value will then be adjusted upward slightly for each degree of freedom as long as m is greater than the number of degrees of freedom. Since the value returned by inverse-chi-square is supposed to be another probability, it's important to clamp the value returned with MIN since rounding errors in the multiplication and exponentiation may cause the LOOP to return a sum just a shade over 1.
 
 @node	23-6, 23-7, 23-5, Chapter 23
@@ -283,18 +392,28 @@ Recall from Chapter 10 that EXP raises e to the argument given. Thus, the larger
 
 Since you wrote classify and train to take a string argument, you can test them easily at the REPL. If you haven't yet, you should switch to the package in which you've been writing this code by evaluating an IN-PACKAGE form at the REPL or using the SLIME shortcut change-package. To use the SLIME shortcut, type a comma at the REPL and then type the name at the prompt. Pressing Tab while typing the package name will autocomplete based on the packages your Lisp knows about. Now you can invoke any of the functions that are part of the spam application. You should first make sure the database is empty.
 
+@example
 SPAM> (clear-database)
+@end example
+
 Now you can train the filter with some text.
 
+@example
 SPAM> (train "Make money fast" 'spam)
+@end example
+
 And then see what the classifier thinks.
 
+@example
 SPAM> (classify "Make money fast")
 SPAM
 SPAM> (classify "Want to go to the movies?")
 UNSURE
+@end example
+
 While ultimately all you care about is the classification, it'd be nice to be able to see the raw score too. The easiest way to get both values without disturbing any other code is to change classification to return multiple values.
 
+@example
 (defun classification (score)
   (values
    (cond
@@ -302,26 +421,37 @@ While ultimately all you care about is the classification, it'd be nice to be ab
      ((>= score *min-spam-score*) 'spam)
      (t 'unsure))
    score))
+@end example
+
 You can make this change and then recompile just this one function. Because classify returns whatever classification returns, it'll also now return two values. But since the primary return value is the same, callers of either function who expect only one value won't be affected. Now when you test classify, you can see exactly what score went into the classification.
 
+@example
 SPAM> (classify "Make money fast")
 SPAM
 0.863677101854273D0
 SPAM> (classify "Want to go to the movies?")
 UNSURE
 0.5D0
+@end example
+
 And now you can see what happens if you train the filter with some more ham text.
 
+@example
 SPAM> (train "Do you have any money for the movies?" 'ham)
 1
 SPAM> (classify "Make money fast")
 SPAM
 0.7685351219857626D0
+@end example
+
 It's still spam but a bit less certain since money was seen in ham text.
 
+@example
 SPAM> (classify "Want to go to the movies?")
 HAM
 0.17482223132078922D0
+@end example
+
 And now this is clearly recognizable ham thanks to the presence of the word movies, now a hammy feature.
 
 However, you don't really want to train the filter by hand. What you'd really like is an easy way to point it at a bunch of files and train it on them. And if you want to test how well the filter actually works, you'd like to then use it to classify another set of files of known types and see how it does. So the last bit of code you'll write in this chapter will be a test harness that tests the filter on a corpus of messages of known types, using a certain fraction for training and then measuring how accurate the filter is when classifying the remainder.
@@ -329,28 +459,41 @@ However, you don't really want to train the filter by hand. What you'd really li
 @node	23-7, 23-8, 23-6, Chapter 23
 @section Testing the Filter
 
-To test the filter, you need a corpus of messages of known types. You can use messages lying around in your inbox, or you can grab one of the corpora available on the Web. For instance, the SpamAssassin corpus12 contains several thousand messages hand classified as spam, easy ham, and hard ham. To make it easy to use whatever files you have, you can define a test rig that's driven off an array of file/type pairs. You can define a function that takes a filename and a type and adds it to the corpus like this:
+To test the filter, you need a corpus of messages of known types. You can use messages lying around in your inbox, or you can grab one of the corpora available on the Web. For instance, the SpamAssassin corpus @footnote{Several spam corpora including the SpamAssassin corpus are linked to from http://nexp.cs.pdx.edu/~psam/cgi-bin/view/PSAM/CorpusSets.} contains several thousand messages hand classified as spam, easy ham, and hard ham. To make it easy to use whatever files you have, you can define a test rig that's driven off an array of file/type pairs. You can define a function that takes a filename and a type and adds it to the corpus like this:
 
+@example
 (defun add-file-to-corpus (filename type corpus)
   (vector-push-extend (list filename type) corpus))
+@end example
+
 The value of corpus should be an adjustable vector with a fill pointer. For instance, you can make a new corpus like this:
 
+@example
 (defparameter *corpus* (make-array 1000 :adjustable t :fill-pointer 0))
+@end example
+
 If you have the hams and spams already segregated into separate directories, you might want to add all the files in a directory as the same type. This function, which uses the list-directory function from Chapter 15, will do the trick:
 
+@example
 (defun add-directory-to-corpus (dir type corpus)
   (dolist (filename (list-directory dir))
     (add-file-to-corpus filename type corpus)))
+@end example
+
 For instance, suppose you have a directory mail containing two subdirectories, spam and ham, each containing messages of the indicated type; you can add all the files in those two directories to *corpus* like this:
 
+@example
 SPAM> (add-directory-to-corpus "mail/spam/" 'spam *corpus*)
 NIL
 SPAM> (add-directory-to-corpus "mail/ham/" 'ham *corpus*)
 NIL
+@end example
+
 Now you need a function to test the classifier. The basic strategy will be to select a random chunk of the corpus to train on and then test the corpus by classifying the remainder of the corpus, comparing the classification returned by the classify function to the known classification. The main thing you want to know is how accurate the classifier is--what percentage of the messages are classified correctly? But you'll probably also be interested in what messages were misclassified and in what direction--were there more false positives or more false negatives? To make it easy to perform different analyses of the classifier's behavior, you should define the testing functions to build a list of raw results, which you can then analyze however you like.
 
 The main testing function might look like this:
 
+@example
 (defun test-classifier (corpus testing-fraction)
   (clear-database)
   (let* ((shuffled (shuffle-vector corpus))
@@ -358,18 +501,24 @@ The main testing function might look like this:
          (train-on (floor (* size (- 1 testing-fraction)))))
     (train-from-corpus shuffled :start 0 :end train-on)
     (test-from-corpus shuffled :start train-on)))
-This function starts by clearing out the feature database.13 Then it shuffles the corpus, using a function you'll implement in a moment, and figures out, based on the testing-fraction parameter, how many messages it'll train on and how many it'll reserve for testing. The two helper functions train-from-corpus and test-from-corpus will both take :start and :end keyword parameters, allowing them to operate on a subsequence of the given corpus.
+@end example
+
+This function starts by clearing out the feature database. @footnote{If you wanted to conduct a test without disturbing the existing database, you could bind *feature-database*, *total-spams*, and *total-hams* with a LET, but then you'd have no way of looking at the database after the fact--unless you returned the values you used within the function.} Then it shuffles the corpus, using a function you'll implement in a moment, and figures out, based on the testing-fraction parameter, how many messages it'll train on and how many it'll reserve for testing. The two helper functions train-from-corpus and test-from-corpus will both take :start and :end keyword parameters, allowing them to operate on a subsequence of the given corpus.
 
 The train-from-corpus function is quite simple--simply loop over the appropriate part of the corpus, use DESTRUCTURING-BIND to extract the filename and type from the list found in each element, and then pass the text of the named file and the type to train. Since some mail messages, such as those with attachments, are quite large, you should limit the number of characters it'll take from the message. It'll obtain the text with a function start-of-file, which you'll implement in a moment, that takes a filename and a maximum number of characters to return. train-from-corpus looks like this:
 
+@example
 (defparameter *max-chars* (* 10 1024))
 
 (defun train-from-corpus (corpus &key (start 0) end)
   (loop for idx from start below (or end (length corpus)) do
         (destructuring-bind (file type) (aref corpus idx)
           (train (start-of-file file *max-chars*) type))))
+@end example
+
 The test-from-corpus function is similar except you want to return a list containing the results of each classification so you can analyze them after the fact. Thus, you should capture both the classification and score returned by classify and then collect a list of the filename, the actual type, the type returned by classify, and the score. To make the results more human readable, you can include keywords in the list to indicate which values are which.
 
+@example
 (defun test-from-corpus (corpus &key (start 0) end)
   (loop for idx from start below (or end (length corpus)) collect
         (destructuring-bind (file type) (aref corpus idx)
@@ -380,28 +529,37 @@ The test-from-corpus function is similar except you want to return a list contai
              :type type
              :classification classification
              :score score)))))
+@end example
+
 
 @node	23-8, 23-9, 23-7, Chapter 23
 @section A Couple of Utility Functions
 
 To finish the implementation of test-classifier, you need to write the two utility functions that don't really have anything particularly to do with spam filtering, shuffle-vector and start-of-file.
 
-An easy and efficient way to implement shuffle-vector is using the Fisher-Yates algorithm.14 You can start by implementing a function, nshuffle-vector, that shuffles a vector in place. This name follows the same naming convention of other destructive functions such as NCONC and NREVERSE. It looks like this:
+An easy and efficient way to implement shuffle-vector is using the Fisher-Yates algorithm. @footnote{This algorithm is named for the same Fisher who invented the method used for combining probabilities and for Frank Yates, his coauthor of the book Statistical Tables for Biological, Agricultural and Medical Research (Oliver & Boyd, 1938) in which, according to Knuth, they provided the first published description of the algorithm.} You can start by implementing a function, nshuffle-vector, that shuffles a vector in place. This name follows the same naming convention of other destructive functions such as NCONC and NREVERSE. It looks like this:
 
+@example
 (defun nshuffle-vector (vector)
   (loop for idx downfrom (1- (length vector)) to 1
         for other = (random (1+ idx))
         do (unless (= idx other)
              (rotatef (aref vector idx) (aref vector other))))
   vector)
+@end example
+
 The nondestructive version simply makes a copy of the original vector and passes it to the destructive version.
 
+@example
 (defun shuffle-vector (vector)
   (nshuffle-vector (copy-seq vector)))
+@end example
+
 The other utility function, start-of-file, is almost as straightforward with just one wrinkle. The most efficient way to read the contents of a file into memory is to create an array of the appropriate size and use READ-SEQUENCE to fill it in. So it might seem you could make a character array that's either the size of the file or the maximum number of characters you want to read, whichever is smaller. Unfortunately, as I mentioned in Chapter 14, the function FILE-LENGTH isn't entirely well defined when dealing with character streams since the number of characters encoded in a file can depend on both the character encoding used and the particular text in the file. In the worst case, the only way to get an accurate measure of the number of characters in a file is to actually read the whole file. Thus, it's ambiguous what FILE-LENGTH should do when passed a character stream; in most implementations, FILE-LENGTH always returns the number of octets in the file, which may be greater than the number of characters that can be read from the file.
 
 However, READ-SEQUENCE returns the number of characters actually read. So, you can attempt to read the number of characters reported by FILE-LENGTH and return a substring if the actual number of characters read was smaller.
 
+@example
 (defun start-of-file (file max-chars)
   (with-open-file (in file)
     (let* ((length (min (file-length in) max-chars))
@@ -410,12 +568,15 @@ However, READ-SEQUENCE returns the number of characters actually read. So, you c
       (if (< read length)
         (subseq text 0 read)
         text))))
+@end example
+
 
 @node	23-9, 23-10, 23-8, Chapter 23
 @section Analyzing the Results
 
 Now you're ready to write some code to analyze the results generated by test-classifier. Recall that test-classifier returns the list returned by test-from-corpus in which each element is a plist representing the result of classifying one file. This plist contains the name of the file, the actual type of the file, the classification, and the score returned by classify. The first bit of analytical code you should write is a function that returns a symbol indicating whether a given result was correct, a false positive, a false negative, a missed ham, or a missed spam. You can use DESTRUCTURING-BIND to pull out the :type and :classification elements of an individual result list (using &allow-other-keys to tell DESTRUCTURING-BIND to ignore any other key/value pairs it sees) and then use nested ECASE to translate the different pairings into a single symbol.
 
+@example
 (defun result-type (result)
   (destructuring-bind (&key type classification &allow-other-keys) result
     (ecase type
@@ -429,8 +590,11 @@ Now you're ready to write some code to analyze the results generated by test-cla
          (ham 'false-negative)
          (spam 'correct)
          (unsure 'missed-spam))))))
+@end example
+
 You can test out this function at the REPL.
 
+@example
 SPAM> (result-type '(:FILE #p"foo" :type ham :classification ham :score 0))
 CORRECT
 SPAM> (result-type '(:FILE #p"foo" :type spam :classification spam :score 0))
@@ -443,8 +607,11 @@ SPAM> (result-type '(:FILE #p"foo" :type ham :classification unsure :score 0))
 MISSED-HAM
 SPAM> (result-type '(:FILE #p"foo" :type spam :classification unsure :score 0))
 MISSED-SPAM
+@end example
+
 Having this function makes it easy to slice and dice the results of test-classifier in a variety of ways. For instance, you can start by defining predicate functions for each type of result.
 
+@example
 (defun false-positive-p (result)
   (eql (result-type result) 'false-positive))
 
@@ -459,8 +626,11 @@ Having this function makes it easy to slice and dice the results of test-classif
 
 (defun correct-p (result)
   (eql (result-type result) 'correct))
+@end example
+
 With those functions, you can easily use the list and sequence manipulation functions I discussed in Chapter 11 to extract and count particular kinds of results.
 
+@example
 SPAM> (count-if #'false-positive-p *results*)
 6
 SPAM> (remove-if-not #'false-positive-p *results*)
@@ -470,8 +640,11 @@ SPAM> (remove-if-not #'false-positive-p *results*)
  (:FILE #p"ham/7785" :TYPE HAM :CLASSIFICATION SPAM :SCORE 0.9542788587998488d0)
  (:FILE #p"ham/1728" :TYPE HAM :CLASSIFICATION SPAM :SCORE 0.684339162891261d0)
  (:FILE #p"ham/10581" :TYPE HAM :CLASSIFICATION SPAM :SCORE 0.9999924537959615d0))
+@end example
+
 You can also use the symbols returned by result-type as keys into a hash table or an alist. For instance, you can write a function to print a summary of the counts and percentages of each type of result using an alist that maps each type plus the extra symbol total to a count.
 
+@example
 (defun analyze-results (results)
   (let* ((keys '(total correct false-positive
                  false-negative missed-ham missed-spam))
@@ -483,8 +656,11 @@ You can also use the symbols returned by result-type as keys into a hash table o
           for (label . count) in counts
           do (format t "~&~@@(~a~):~20t~5d~,5t: ~6,2f%~%"
                      label count (* 100 (/ count total))))))
+@end example
+
 This function will give output like this when passed a list of results generated by test-classifier:
 
+@example
 SPAM> (analyze-results *results*)
 Total:               3761 : 100.00%
 Correct:             3689 :  98.09%
@@ -493,8 +669,11 @@ False-negative:         9 :   0.24%
 Missed-ham:            19 :   0.51%
 Missed-spam:           40 :   1.06%
 NIL
+@end example
+
 And as a last bit of analysis you might want to look at why an individual message was classified the way it was. The following functions will show you:
 
+@example
 (defun explain-classification (file)
   (let* ((text (start-of-file file *max-chars*))
          (features (extract-features text))
@@ -517,6 +696,8 @@ And as a last bit of analysis you might want to look at why an individual messag
 
 (defun sorted-interesting (features)
   (sort (remove-if #'untrained-p features) #'< :key #'bayesian-spam-probability))
+@end example
+
 
 @node	23-10, Chapter 24, 23-9, Chapter 23
 @section What's Next
