@@ -1,10 +1,10 @@
-# practical-common-lisp-texi
+# Practical Common Lisp in Info Format
 
-[Practical Common Lisp](http://gigamonkeys.com/book/) typeset for [GNU Texinfo](https://www.gnu.org/software/texinfo/), Emacs' interactive documentation system. For when you've read enough in your browser to know that you don't want to read it in your browser.
+[Practical Common Lisp](http://gigamonkeys.com/book/) - a great, free Common Lisp resource - typeset for [GNU Texinfo](https://www.gnu.org/software/texinfo/), Emacs' interactive documentation system. For when you've read enough in your browser to know that you don't want to read it in your browser.
 
 To view in info-reader mode, open `pcl.info` with `C-u C-h i` (just as you would visit a file with `C-x C-f`).
 
-![How It Looks](./pcl-info-screenshot.png)
+![How It Looks](./imgs/pcl-info-screenshot.png)
 
 Build from the project root with `$ makeinfo pcl.texi`
 
@@ -56,6 +56,9 @@ TODOs:
   - [X] Table 30-1.
     `FOO Output for Self-Evaluating Objects`
 - [ ] inline text formatting (bold and italicized)
+  - [ ] ...
+- [ ] inline inter-chapter links
+  - [ ] ...
 - [X] images
   - [X] @node 12-1 cons cell diagrams
   - [X] @node 12-2 cons cell diagrams
@@ -76,35 +79,35 @@ TODOs:
   - [X] Chapter 01
   - [X] Chapter 02
   - [X] Chapter 03
-  - [ ] Chapter 04
-  - [ ] Chapter 05
+  - [X] Chapter 04
+  - [X] Chapter 05
   - [X] Chapter 06
-  - [ ] Chapter 07
+  - [X] Chapter 07
   - [X] Chapter 08
-  - [ ] Chapter 09
+  - [X] Chapter 09
   - [X] Chapter 10
   - [X] Chapter 11
   - [X] Chapter 12
   - [X] Chapter 13
-  - [ ] Chapter 14
-  - [ ] Chapter 15
+  - [X] Chapter 14
+  - [X] Chapter 15
   - [X] Chapter 16
-  - [ ] Chapter 17
-  - [ ] Chapter 18
+  - [X] Chapter 17
+  - [X] Chapter 18
   - [X] Chapter 19
   - [ ] Chapter 20
   - [ ] Chapter 21
-  - [ ] Chapter 22
+  - [X] Chapter 22
   - [ ] Chapter 23
-  - [ ] Chapter 24
+  - [X] Chapter 24
   - [ ] Chapter 25
   - [X] Chapter 26
   - [ ] Chapter 27
-  - [ ] Chapter 28
+  - [X] Chapter 28
   - [ ] Chapter 29
   - [X] Chapter 30
   - [ ] Chapter 31
-  - [ ] Chapter 32
+  - [X] Chapter 32
 
 
 @emph for bold
@@ -118,5 +121,4 @@ Some text
 for bar.
 @end itemize
 
-green font!
-‘Here's how you do it—and why’
+‘Here's how you make green font!’
