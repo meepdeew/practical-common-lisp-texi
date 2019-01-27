@@ -52,6 +52,7 @@ Unofficial Texinfo Format (C) Peter Seibel
 
 * 1-1::              Why Lisp?
 * 1-2::              Where It Began
+* 1-2-1::            But I learned Lisp Once, And IT Wasn't Like what you're describing
 * 1-3::              Who This Book Is For
 
 2. Lather, Rinse, Repeat: A Tour of the REPL
@@ -129,6 +130,7 @@ Unofficial Texinfo Format (C) Peter Seibel
 * 8-6::                  Generating the Expansion
 * 8-7::                  Plugging the Leaks
 * 8-8::                  Macro-Writing Macros
+* 8-8-1::                Another classic macro-writing MACRO: ONCE-ONLY
 * 8-9::                  Beyond Simple Macros
 
 9. Practical: Building a Unit Test Framework
@@ -193,6 +195,7 @@ Unofficial Texinfo Format (C) Peter Seibel
 * 14-4::      File Output
 * 14-5::      Closing Files
 * 14-6::      Filenames
+* 14-6-1::    How We Got Here
 * 14-7::      How Pathnames Represent Filenames
 * 14-8::      Constructing New Pathnames
 * 14-9::      Two Representations of Directory Names
@@ -203,6 +206,7 @@ Unofficial Texinfo Format (C) Peter Seibel
 
 * 15-1::       The API
 * 15-2::       *FEATURES* and Read-Time Conditionalization
+* 15-2-1::     Packaging the Library
 * 15-3::       Listing a Directory
 * 15-4::       Testing a File's Existence
 * 15-5::       Walking a Directory Tree
@@ -217,11 +221,13 @@ Unofficial Texinfo Format (C) Peter Seibel
 * 16-6::   The Standard Method Combination
 * 16-7::   Other Method Combinations
 * 16-8::   Multimethods
+* 16-8-1:: Multimethods vs. Method Overloading
 * 16-9::   To Be Continued . . .
 
 17. Object Reorientation: Classes
 
 * 17-1::   DEFCLASS
+* 17-1-1:: What Are "User-Defined Classes"?
 * 17-2::   Slot Specifiers
 * 17-3::   Object Initialization
 * 17-4::   Accessor Functions
@@ -249,9 +255,11 @@ Unofficial Texinfo Format (C) Peter Seibel
 * 19-1::             The Lisp Way
 * 19-2::             Conditions
 * 19-3::             Condition Handlers
+* 19-3-1::           JAVA-STYLE EXCEPTON HANDLING
 * 19-4::             Restarts
 * 19-5::             Providing Multiple Restarts
 * 19-6::             Other Uses for Conditions
+* 19-6-1::           Writing Robust Software
 
 20. The Special Operators
 
@@ -351,6 +359,7 @@ Unofficial Texinfo Format (C) Peter Seibel
 27. Practical: An MP3 Database
 
 * 27-1::       The Database
+* 27-1-1::     The Package
 * 27-2::       Defining a Schema
 * 27-3::       Inserting Values
 * 27-4::       Querying the Database
@@ -362,11 +371,13 @@ Unofficial Texinfo Format (C) Peter Seibel
 
 * 28-1::       The Shoutcast Protocol
 * 28-2::       Song Sources
+* 28-2-1::     The Package
 * 28-3::       Implementing Shoutcast
 
 29. Practical: An MP3 Browser
 
 * 29-1::       Playlists
+* 29-1-1::     The Package
 * 29-2::       Playlists As Song Sources
 * 29-3::       Manipulating the Playlist
 * 29-4::       Query Parameter Types
@@ -381,9 +392,11 @@ Unofficial Texinfo Format (C) Peter Seibel
 * 30-1::       Designing a Domain-Specific Language
 * 30-2::       The FOO Language
 * 30-3::       Character Escaping
+* 30-3-1::     The Package
 * 30-4::       Indenting Printer
 * 30-5::       HTML Processor Interface
 * 30-6::       The Pretty Printer Backend
+* 30-6-1::     Using Conditions to Have Your Cake and Eat It Too
 * 30-7::       The Basic Evaluation Rule
 * 30-8::       What's Next?
 
@@ -1032,6 +1045,10 @@ that it's slow, or that you have to use recursion for everything, ask
 them what dialect of Lisp they're talking about and whether people were
 wearing bell-bottoms when they learned it.  (3)
 
+* Menu:
+
+* 1-2-1::            But I learned Lisp Once, And IT Wasn't Like what you're describing
+
    ---------- Footnotes ----------
 
    (1) Lisp 1.5 Programmer's Manual (M.I.T. Press, 1962)
@@ -1057,6 +1074,63 @@ downwardly compatible subset of Common Lisp.  Perhaps even more telling
 is the growth of the Common-Lisp.net Web site, which hosts open-source
 Common Lisp projects, and the number of local Lisp user groups that have
 sprung up in the past couple of years.
+
+
+File: pcl.info,  Node: 1-2-1,  Next: 1-2,  Prev: 1-2,  Up: 1-2
+
+But I learned Lisp Once, And IT Wasn't Like what you're describing
+==================================================================
+
+If you've used Lisp in the past, you may have ideas about what "Lisp" is
+that have little to do with Common Lisp.  While Common Lisp supplanted
+most of the dialects it's descended from, it isn't the only remaining
+Lisp dialect, and depending on where and when you were exposed to Lisp,
+you may very well have learned one of these other dialects.
+
+   Other than Common Lisp, the one general-purpose Lisp dialect that
+still has an active user community is Scheme.  Common Lisp borrowed a
+few important features from Scheme but never intended to replace it.
+
+   Originally designed at M.I.T., where it was quickly put to use as a
+teaching language for undergraduate computer science courses, Scheme has
+always been aimed at a different language niche than Common Lisp.  In
+particular, Scheme's designers have focused on keeping the core language
+as small and as simple as possible.  This has obvious benefits for a
+teaching language and also for programming language researchers who like
+to be able to formally prove things about languages.
+
+   It also has the benefit of making it relatively easy to understand
+the whole language as specified in the standard.  But, it does so at the
+cost of omitting many useful features that are standardized in Common
+Lisp.  Individual Scheme implementations may provide these features in
+implementation-specific ways, but their omission from the standard makes
+it harder to write portable Scheme code than to write portable Common
+Lisp code.
+
+   Scheme also emphasizes a functional programming style and the use of
+recursion much more than Common Lisp does.  If you studied Lisp in
+college and came away with the impression that it was only an academic
+language with no real-world application, chances are you learned Scheme.
+This isn't to say that's a particularly fair characterization of Scheme,
+but it's even less applicable to Common Lisp, which was expressly
+designed to be a real-world engineering language rather than a
+theoretically "pure" language.
+
+   If you've learned Scheme, you should also be aware that a number of
+subtle differences between Scheme and Common Lisp may trip you up.
+These differences are also the basis for several perennial religious
+wars between the hotheads in the Common Lisp and Scheme communities.
+I'll try to point out some of the more important differences as we go
+along.
+
+   Two other Lisp dialects still in widespread use are Elisp, the
+extension language for the Emacs editor, and Autolisp, the extension
+language for Autodesk's AutoCAD computer-aided design tool.  Although
+it's possible more lines of Elisp and Autolisp have been written than of
+any other dialect of Lisp, neither can be used outside their host
+application, and both are quite old-fashioned Lisps compared to either
+Scheme or Common Lisp.  If you've used one of these dialects, prepare to
+hop in the Lisp time machine and jump forward several decades.
 
 
 File: pcl.info,  Node: 1-3,  Next: Chapter 2,  Prev: 1-2,  Up: Chapter 1
@@ -6833,6 +6907,39 @@ with-gensyms runs generating the do-primes expansion, but with-gensyms
 itself isn't needed to compile a do-primes form since it has already
 been expanded, back when do-primes was compiled.
 
+* Menu:
+
+* 8-8-1::       Another classic macro-writing MACRO: ONCE-ONLY
+
+
+File: pcl.info,  Node: 8-8-1,  Next: 8-8,  Prev: 8-8,  Up: 8-8
+
+Another classic macro-writing MACRO: ONCE-ONLY
+==============================================
+
+Another classic macro-writing macro is once-only, which is used to
+generate code that evaluates certain macro arguments once only and in a
+particular order.  Using once-only, you could write do-primes almost as
+simply as the original leaky version, like this:
+
+     (defmacro do-primes ((var start end) &body body)
+       (once-only (start end)
+         `(do ((,var (next-prime ,start) (next-prime (1+ ,var))))
+              ((> ,var ,end))
+            ,@body)))
+
+   However, the implementation of once-only is a bit too involved for a
+blow-by-blow explanation, as it relies on multiple levels of backquoting
+and unquoting.  If you really want to sharpen your macro chops, you can
+try to figure out how it works.  It looks like this:
+
+     (defmacro once-only ((&rest names) &body body)
+       (let ((gensyms (loop for n in names collect (gensym))))
+         `(let (,@(loop for g in gensyms collect `(,g (gensym))))
+           `(let (,,@(loop for g in gensyms for n in names collect ``(,,g ,,n)))
+             ,(let (,@(loop for n in names for g in gensyms collect `(,n ,g)))
+                ,@body)))))
+
 
 File: pcl.info,  Node: 8-9,  Next: Chapter 9,  Prev: 8-8,  Up: Chapter 8
 
@@ -8158,9 +8265,9 @@ types that collect multiple values into a single object.  Every language
 slices up the collection problem a little bit differently, but the basic
 collection types usually boil down to an integer-indexed array type and
 a table type that can be used to map more or less arbitrary keys to
-values.  The former are variously called arrays, lists, or tuples; the
-latter go by the names hash tables, associative arrays, maps, and
-dictionaries.
+values.  The former are variously called ‘arrays’, ‘lists’, or
+‘tuples’; the latter go by the names ‘hash tables’,
+‘associative arrays’, ‘maps’, and ‘dictionaries’.
 
    Lisp is, of course, famous for its list data structure, and most Lisp
 books, following the ontogeny-recapitulates-phylogeny principle of
@@ -8218,7 +8325,7 @@ ArrayList class in Java: they abstract the actual storage, allowing the
 vector to grow and shrink as elements are added and removed.
 
    You can make fixed-size vectors containing specific values with the
-function VECTOR, which takes any number of arguments and returns a
+function ‘VECTOR‘, which takes any number of arguments and returns a
 freshly allocated fixed-size vector containing those arguments.
 
      (vector)     ==> #()
@@ -10554,6 +10661,10 @@ all the places in the previous section where you used a string to
 represent a filename, you could also have passed a pathname object or a
 stream.
 
+* Menu:
+
+* 14-6-1::       How We Got Here
+
    ---------- Footnotes ----------
 
    (1) Another reason the pathname system is considered somewhat baroque
@@ -10568,6 +10679,40 @@ translation" that translates logical pathnames matching certain
 wildcards to pathnames representing files in the file system, so-called
 physical pathnames.  They have their uses in certain situations, but you
 can get pretty far without worrying about them.
+
+
+File: pcl.info,  Node: 14-6-1,  Next: 14-6,  Prev: 14-6,  Up: 14-6
+
+How We Got Here
+===============
+
+The historical diversity of file systems in existence during the 70s and
+80s can be easy to forget.  Kent Pitman, one of the principal technical
+editors of the Common Lisp standard, described the situation once in
+comp.lang.lisp (Message-ID: sfwzo74np6w.fsf@world.std.com) thusly:
+
+     The dominant file systems at the time the design [of Common Lisp]
+     was done were TOPS-10, TENEX, TOPS-20, VAX VMS, AT&T Unix, MIT
+     Multics, MIT ITS, not to mention a bunch of mainframe [OSs].  Some
+     were uppercase only, some mixed, some were case-sensitive but case-
+     translating (like CL). Some had dirs as files, some not.  Some had
+     quote chars for funny file chars, some not.  Some had wildcards,
+     some didn't.  Some had :up in relative pathnames, some didn't.
+     Some had namable root dirs, some didn't.  There were file systems
+     with no directories, file systems with non-hierarchical
+     directories, file systems with no file types, file systems with no
+     versions, file systems with no devices, and so on.
+
+   If you look at the pathname abstraction from the point of view of any
+single file system, it seems baroque.  However, if you take even two
+such similar file systems as Windows and Unix, you can already begin to
+see differences the pathname system can help abstract away-Windows
+filenames contain a drive letter, for instance, while Unix filenames
+don't.  The other advantage of having the pathname abstraction designed
+to handle the wide variety of file systems that existed in the past is
+that it's more likely to be able to handle file systems that may exist
+in the future.  If, say, versioning file systems come back into vogue,
+Common Lisp will be ready.
 
 
 File: pcl.info,  Node: 14-7,  Next: 14-8,  Prev: 14-6,  Up: Chapter 14
@@ -11226,6 +11371,10 @@ expressions, it doesn't bother interning symbols, so the skipped
 expressions can safely contain symbols from packages that may not exist
 in other implementations.
 
+* Menu:
+
+* 15-2-1::       Packaging the Library
+
    ---------- Footnotes ----------
 
    (1) One slightly annoying consequence of the way read-time
@@ -11235,6 +11384,48 @@ implementation to foo by adding another expression guarded with #+, you
 need to remember to also add the same feature to the or feature
 expression after the #- or the ERROR form will be evaluated after your
 new code runs.
+
+
+File: pcl.info,  Node: 15-2-1,  Next: 15-2,  Prev: 15-2,  Up: 15-2
+
+Packaging the Library
+=====================
+
+Speaking of packages, if you download the complete code for this
+library, you'll see that it's defined in a new package,
+com.gigamonkeys.pathnames.  I'll discuss the details of defining and
+using packages in Chapter 21.  For now you should note that some
+implementations provide their own packages that contain functions with
+some of the same names as the ones you'll define in this chapter and
+make those names available in the CL-USER package.  Thus, if you try to
+define the functions from this library while in the CL-USER package, you
+may get errors or warnings about clobbering existing definitions.  To
+avoid this possibility, you can create a file called packages.lisp with
+the following contents:
+
+     (in-package :cl-user)
+
+     (defpackage :com.gigamonkeys.pathnames
+       (:use :common-lisp)
+       (:export
+        :list-directory
+        :file-exists-p
+        :directory-pathname-p
+        :file-pathname-p
+        :pathname-as-directory
+        :pathname-as-file
+        :walk-directory
+        :directory-p
+        :file-p))
+
+   and LOAD it.  Then at the REPL or at the top of the file where you
+type the definitions from this chapter, type the following expression:
+
+     (in-package :com.gigamonkeys.pathnames)
+
+   In addition to avoiding name conflicts with symbols already available
+in CL-USER, packaging the library this way also makes it easier to use
+in other code, as you'll see in several future chapters.
 
 
 File: pcl.info,  Node: 15-3,  Next: 15-4,  Prev: 15-2,  Up: Chapter 15
@@ -12237,6 +12428,10 @@ of the implementations of a given generic function that applies when the
 generic function is invoked with arguments that match all the method's
 specialized parameters.
 
+* Menu:
+
+* 16-8-1::       Multimethods vs. Method Overloading
+
    Multimethods are perfect for all those situations where, in a
 message-passing language, you struggle to decide to which class a
 certain behavior ought to belong.  Is the sound a drum makes when it's
@@ -12279,6 +12474,57 @@ requiring any cooperation from the classes themselves.
    ---------- Footnotes ----------
 
    (1) 11
+
+
+File: pcl.info,  Node: 16-8-1,  Next: 16-8,  Prev: 16-8,  Up: 16-8
+
+Multimethods vs. Method Overloading
+===================================
+
+Programmers used to statically typed message-passing languages such as
+Java and C++ may think multimethods sound similar to a feature of those
+languages called method overloading.  However, these two language
+features are actually quite different since overloaded methods are
+chosen at compile time, based on the compile-time type of the arguments,
+not at runtime.  To see how this works, consider the following two Java
+classes:
+
+     public class A {
+       public void foo(A a) { System.out.println("A/A"); }
+       public void foo(B b) { System.out.println("A/B"); }
+     }
+     public class B extends A {
+       public void foo(A a) { System.out.println("B/A"); }
+       public void foo(B b) { System.out.println("B/B"); }
+     }
+
+   Now consider what happens when you run the main method from this
+class.
+
+     public class Main {
+       public static void main(String[] argv) {
+         A obj = argv[0].equals("A") ? new A() : new B();
+         obj.foo(obj);
+       }
+     }
+
+   When you tell Main to instantiate an A, it prints "A/A" as you'd
+probably expect.
+
+     bash$ java com.gigamonkeys.Main A
+     A/A
+
+   However, if you tell Main to instantiate a B, then the true type of
+obj is taken into account for only half the dispatching.
+
+     bash$ java com.gigamonkeys.Main B
+     B/A
+
+   If overloaded methods worked like Common Lisp's multimethods, then
+that would print "B/B" instead.  It is possible to implement multiple
+dispatch by hand in message-passing languages, but this runs against the
+grain of the message-passing model since the code in a multiply
+dispatched method doesn't belong to any one class.
 
 
 File: pcl.info,  Node: 16-9,  Next: Chapter 17,  Prev: 16-8,  Up: Chapter 16
@@ -12356,6 +12602,10 @@ simple.
      (defclass name (direct-superclass-name*)
        (slot-specifier*))
 
+* Menu:
+
+* 17-1-1::       What Are "User-Defined Classes"?
+
    As with functions and variables, you can use any symbol as the name
 of a new class.  (2) Class names are in a separate namespace from both
 functions and variables, so you can have a class, function, and variable
@@ -12392,6 +12642,34 @@ member variables, or attributes.
 you can use any symbol as a class name-you can't use names defined by
 the language standard.  You'll see in Chapter 21 how to avoid such name
 conflicts.
+
+
+File: pcl.info,  Node: 17-1-1,  Next: 17-1,  Prev: 17-1,  Up: 17-1
+
+What Are "User-Defined Classes"?
+================================
+
+The term user-defined classes isn't a term from the language
+standard-technically what I'm talking about when I say user-defined
+classes are classes that subclass STANDARD-OBJECT and whose metaclass is
+STANDARD-CLASS. But since I'm not going to talk about the ways you can
+define classes that don't subclass STANDARD-OBJECT and whose metaclass
+isn't STANDARD-CLASS, you don't really have to worry about that.
+User-defined isn't a perfect term for these classes since the
+implementation may define certain classes the same way.  However, to
+call them standard classes would be even more confusing since the
+built-in classes, such as INTEGER and STRING, are just as standard, if
+not more so, because they're defined by the language standard but they
+don't extend STANDARD-OBJECT. To further complicate matters, it's also
+possible for users to define new classes that don't subclass
+STANDARD-OBJECT. In particular, the macro DEFSTRUCT also defines new
+classes.  But that's largely for backward compatibility-DEFSTRUCT
+predated CLOS and was retrofitted to define classes when CLOS was
+integrated into the language.  But the classes it creates are fairly
+limited compared to DEFCLASSed classes.  So in this chapter I'll be
+discussing only classes defined with DEFCLASS that use the default
+metaclass of STANDARD-CLASS, and I'll refer to them as user-defined for
+lack of a better term.
 
 
 File: pcl.info,  Node: 17-2,  Next: 17-3,  Prev: 17-1,  Up: Chapter 17
@@ -14325,6 +14603,10 @@ entry and collected by the LOOP. But if parse-log-entry signals a
 malformed-log-entry-error, then the error clause will return NIL, which
 won't be collected.
 
+* Menu:
+
+* 19-3-1::       JAVA-STYLE EXCEPTON HANDLING
+
    This version of parse-log-file has one serious deficiency: it's doing
 too much.  As its name suggests, the job of parse-log-file is to parse
 the file and produce a list of log-entry objects; if it can't, it's not
@@ -14342,6 +14624,38 @@ signaled, the stack would be unwound all the way to the higher-level
 function, abandoning the parsing of the log file altogether.  What you
 want is a way to provide the current recovery strategy without requiring
 that it always be used.
+
+
+File: pcl.info,  Node: 19-3-1,  Next: 19-3,  Prev: 19-3,  Up: 19-3
+
+JAVA-STYLE EXCEPTON HANDLING
+============================
+
+HANDLER-CASE is the nearest analog in Common Lisp to Java- or
+Python-style exception handling.  Where you might write this in Java:
+
+     try {
+       doStuff();
+       doMoreStuff();
+     } catch (SomeException se) {
+       recover(se);
+     }
+
+   or this in Python:
+
+     try:
+       doStuff()
+       doMoreStuff()
+     except SomeException, se:
+       recover(se)
+
+   in Common Lisp you'd write this:
+
+     (handler-case
+         (progn
+           (do-stuff)
+           (do-more-stuff))
+       (some-exception (se) (recover se)))
 
 
 File: pcl.info,  Node: 19-4,  Next: 19-5,  Prev: 19-3,  Up: Chapter 19
@@ -14634,9 +14948,34 @@ that kind of software, you'll find the Common Lisp condition system is
 an excellent tool for writing robust code and one that fits quite nicely
 into Common Lisp's incremental development style.
 
+* Menu:
+
+* 19-6-1::       Writing Robust Software
+
    In the next chapter I'll give a quick overview of some of the 25
 special operators you haven't had a chance to use yet, at least not
 directly.
+
+
+File: pcl.info,  Node: 19-6-1,  Next: 19-6,  Prev: 19-6,  Up: 19-6
+
+Writing Robust Software
+=======================
+
+For information on writing robust software, you could do worse than to
+start by finding a copy of Software Reliability (John Wiley & Sons,
+1976) by Glenford J. Meyers.  Bertrand Meyer's writings on Design By
+Contract also provide a useful way of thinking about software
+correctness.  For instance, see Chapters 11 and 12 of his
+Object-Oriented Software Construction (Prentice Hall, 1997).  Keep in
+mind, however, that Bertrand Meyer is the inventor of Eiffel, a
+statically typed bondage and discipline language in the Algol/Ada
+school.  While he has a lot of smart things to say about object
+orientation and software reliability, there's a fairly wide gap between
+his view of programming and The Lisp Way.  Finally, for an excellent
+overview of the larger issues surrounding building fault-tolerant
+systems, see Chapter 3 of the classic Transaction Processing: Concepts
+and Techniques (Morgan Kaufmann, 1993) by Jim Gray and Andreas Reuter.
 
 
 File: pcl.info,  Node: Chapter 20,  Next: Chapter 21,  Prev: Chapter 19,  Up: Top
@@ -22726,6 +23065,10 @@ efficiently implemented with vectors.
 simple wrapper around MAKE-ARRAY that builds an empty, adjustable,vector
 with a fill pointer.
 
+* Menu:
+
+* 27-1-1::       The Package
+
      (defparameter *default-table-size* 100)
 
      (defun make-rows (&optional (size *default-table-size*))
@@ -22805,6 +23148,51 @@ value into the table and, as you'll see, once at the beginning of each
 query.  Since a query can involve invoking the equality-predicate once
 per row in the table, the amortized cost of interning the values will
 quickly approach zero.
+
+
+File: pcl.info,  Node: 27-1-1,  Next: 27-1,  Prev: 27-1,  Up: 27-1
+
+The Package
+===========
+
+The package for the code you'll develop in this chapter looks like this:
+
+     (defpackage :com.gigamonkeys.mp3-database
+       (:use :common-lisp
+             :com.gigamonkeys.pathnames
+             :com.gigamonkeys.macro-utilities
+             :com.gigamonkeys.id3v2)
+       (:export  :*default-table-size*
+                 :*mp3-schema*
+                 :*mp3s*
+                 :column
+                 :column-value
+                 :delete-all-rows
+                 :delete-rows
+                 :do-rows
+                 :extract-schema
+                 :in
+                 :insert-row
+                 :load-database
+                 :make-column
+                 :make-schema
+                 :map-rows
+                 :matching
+                 :not-nullable
+                 :nth-row
+                 :random-selection
+                 :schema
+                 :select
+                 :shuffle-table
+                 :sort-rows
+                 :table
+                 :table-size
+                 :with-column-values))
+
+   The :use section gives you access to the functions and macros whose
+names are exported from the packages defined in Chapter 15, 8, and 25
+and the :export section exports the API this library will provide, which
+you'll use in Chapter 29.
 
 
 File: pcl.info,  Node: 27-2,  Next: 27-3,  Prev: 27-1,  Up: Chapter 27
@@ -23612,6 +24000,10 @@ songs to play.  You can write a simple implementation of this interface
 now and then a more complex one as part of the Web application you'll
 build in Chapter 29.
 
+* Menu:
+
+* 28-2-1::       The Package
+
    The idea behind the interface is that the Shoutcast server will find
 a source of songs based on an ID extracted from the AllegroServe request
 object.  It can then do three things with the song source it's given.
@@ -23723,6 +24115,28 @@ manipulated from two threads-the AllegroServe thread running the
 Shoutcast server and the REPL thread.  But you can live with the race
 condition for now.  I'll discuss how to use locking to make code thread
 safe in the next chapter.
+
+
+File: pcl.info,  Node: 28-2-1,  Next: 28-2,  Prev: 28-2,  Up: 28-2
+
+The Package
+===========
+
+The package for the code you'll develop in this chapter looks like this:
+
+     (defpackage :com.gigamonkeys.shoutcast
+       (:use :common-lisp
+             :net.aserve
+             :com.gigamonkeys.id3v2)
+       (:export :song
+                :file
+                :title
+                :id3-size
+                :find-song-source
+                :current-song
+                :still-current-p
+                :maybe-move-to-next-song
+                :*song-source-type*))
 
 
 File: pcl.info,  Node: 28-3,  Next: Chapter 29,  Prev: 28-2,  Up: Chapter 28
@@ -24089,6 +24503,10 @@ initialize songs-table, is simply this:
      (defun make-playlist-table ()
        (make-instance 'table :schema *mp3-schema*))
 
+* Menu:
+
+* 29-1-1::       The Package
+
    By storing the list of songs as a table, you can use the database
 functions from Chapter 27 to manipulate the playlist: you can add to the
 playlist with insert-row, delete songs with delete-rows, and reorder the
@@ -24138,6 +24556,36 @@ lock:
 lock given and then executes the body forms, releasing the lock
 afterward.  By default, with-process-lock allows recursive locks,
 meaning the same thread can safely acquire the same lock multiple times.
+
+
+File: pcl.info,  Node: 29-1-1,  Next: 29-1,  Prev: 29-1,  Up: 29-1
+
+The Package
+===========
+
+You can define the package for the code in this chapter with the
+following DEFPACKAGE:
+
+     (defpackage :com.gigamonkeys.mp3-browser
+       (:use :common-lisp
+             :net.aserve
+             :com.gigamonkeys.html
+             :com.gigamonkeys.shoutcast
+             :com.gigamonkeys.url-function
+             :com.gigamonkeys.mp3-database
+             :com.gigamonkeys.id3v2)
+       (:import-from :acl-socket
+                     :ipaddr-to-dotted
+                     :remote-host)
+       (:import-from :multiprocessing
+                     :make-process-lock
+                     :with-process-lock)
+       (:export :start-mp3-browser))
+
+   Because this is a high-level application, it uses a lot of
+lower-level packages.  It also imports three symbols from the ACL-SOCKET
+package and two more from MULTIPROCESSING since it just needs those five
+and not the other 139 symbols those two packages export.
 
 
 File: pcl.info,  Node: 29-2,  Next: 29-3,  Prev: 29-1,  Up: Chapter 29
@@ -25429,6 +25877,10 @@ an ampersand, followed by a sharp sign, followed by the numeric code as
 a base 10 integer, and followed by a semicolon.  These numeric escapes
 are sometimes used to embed non-ASCII characters in HTML.
 
+* Menu:
+
+* 30-3-1::       The Package
+
    The following function accepts a single character and returns a
 string containing a character reference entity for that character:
 
@@ -25479,6 +25931,29 @@ value of *element-escapes*, but when generating attributes, it will, as
 you'll see, be rebound to the value of *attribute-escapes*.
 
      (defvar *escapes* *element-escapes*)
+
+
+File: pcl.info,  Node: 30-3-1,  Next: 30-3,  Prev: 30-3,  Up: 30-3
+
+The Package
+===========
+
+Since FOO is a low-level library, the package you develop it in doesn't
+rely on much external code-just the usual dependency on names from the
+COMMON-LISP package and, almost as usual, on the names of the
+macro-writing macros from COM.GIGAMONKEYS.MACRO-UTILITIES. On the other
+hand, the package needs to export all the names needed by code that uses
+FOO. Here's the DEFPACKAGE from the source that you can download from
+the book's Web site:
+
+     (defpackage :com.gigamonkeys.html
+       (:use :common-lisp :com.gigamonkeys.macro-utilities)
+       (:export :with-html-output
+                :in-html-style
+                :define-html-macro
+                :html
+                :emit-html
+                :&attributes))
 
 
 File: pcl.info,  Node: 30-4,  Next: 30-5,  Prev: 30-3,  Up: Chapter 30
@@ -25670,6 +26145,10 @@ functions always signal an error.
      (defmethod embed-code ((pp html-pretty-printer) code)
        (error "Can't embed code when interpreting. Code: ~s" code))
 
+* Menu:
+
+* 30-6-1::       Using Conditions to Have Your Cake and Eat It Too
+
    ---------- Footnotes ----------
 
    (1) Another, more purely object-oriented, approach would be to define
@@ -25680,6 +26159,126 @@ after defining all the no-op methods, you'd end up with more code, and
 then you'd have the hassle of making sure you created an instance of the
 right class at the right time.  But in general, using polymorphism to
 replace conditionals is a good strategy.
+
+
+File: pcl.info,  Node: 30-6-1,  Next: 30-6,  Prev: 30-6,  Up: 30-6
+
+Using Conditions to Have Your Cake and Eat It Too
+=================================================
+
+An alternate approach would be to use EVAL to evaluate Lisp expressions
+in the interpreter.  The problem with this approach is that EVAL has no
+access to the lexical environment.  Thus, there's no way to make
+something like this work:
+
+     (let ((x 10)) (emit-html '(:p x)))
+
+   when x is a lexical variable.  The symbol x that's passed to
+emit-html at runtime has no particular connection to the lexical
+variable named with the same symbol.  The Lisp compiler arranges for
+references to x in the code to refer to the variable, but after the code
+is compiled, there's no longer necessarily any association between the
+name x and that variable.  This is the main reason that when you think
+EVAL is the solution to your problem, you're probably wrong.
+
+   However, if x was a dynamic variable, declared with DEFVAR or
+DEFPARAMETER (and likely named *x* instead of x), EVAL could get at its
+value.  Thus, it might be useful to allow the FOO interpreter to use
+EVAL in some situations.  But it's a bad idea to always use EVAL. You
+can get the best of both worlds by combining the idea of using EVAL with
+the condition system.
+
+   First define some error classes that you can signal when embed-value
+and embed-code are called in the interpreter.
+
+     (define-condition embedded-lisp-in-interpreter (error)
+       ((form :initarg :form :reader form)))
+
+     (define-condition value-in-interpreter (embedded-lisp-in-interpreter) ()
+       (:report
+        (lambda (c s)
+          (format s "Can't embed values when interpreting. Value: ~s" (form c)))))
+
+     (define-condition code-in-interpreter (embedded-lisp-in-interpreter) ()
+       (:report
+        (lambda (c s)
+          (format s "Can't embed code when interpreting. Code: ~s" (form c)))))
+
+   Now you can implement embed-value and embed-code to signal those
+errors and provide a restart that'll evaluate the form with EVAL.
+
+     (defmethod embed-value ((pp html-pretty-printer) value)
+       (restart-case (error 'value-in-interpreter :form value)
+         (evaluate ()
+           :report (lambda (s) (format s "EVAL ~s in null lexical environment." value))
+           (raw-string pp (escape (princ-to-string (eval value)) *escapes*) t))))
+
+     (defmethod embed-code ((pp html-pretty-printer) code)
+       (restart-case (error 'code-in-interpreter :form code)
+         (evaluate ()
+           :report (lambda (s) (format s "EVAL ~s in null lexical environment." code))
+           (eval code))))
+
+   Now you can do something like this:
+
+     HTML> (defvar *x* 10)
+     *X*
+     HTML> (emit-html '(:p *x*))
+
+   and you'll get dropped into the debugger with this message:
+
+     Can't embed values when interpreting. Value: *X*
+        [Condition of type VALUE-IN-INTERPRETER]
+
+     Restarts:
+       0: [EVALUATE] EVAL *X* in null lexical environment.
+       1: [ABORT] Abort handling SLIME request.
+       2: [ABORT] Abort entirely from this process.
+
+   If you invoke the evaluate restart, embed-value will EVAL *x*, get
+the value 10, and generate this HTML:
+
+     <p>10</p>
+
+   Then, as a convenience, you can provide restart functions-functions
+that invoke the evaluate restart-in certain situations.  The evaluate
+restart function unconditionally invokes the restart, while
+eval-dynamic-variables and eval-code invoke it only if the form in the
+condition is a dynamic variable or potential code.
+
+     (defun evaluate (&optional condition)
+       (declare (ignore condition))
+       (invoke-restart 'evaluate))
+
+     (defun eval-dynamic-variables (&optional condition)
+       (when (and (symbolp (form condition)) (boundp (form condition)))
+         (evaluate)))
+
+     (defun eval-code (&optional condition)
+       (when (consp (form condition))
+         (evaluate)))
+
+   Now you can use HANDLER-BIND to set up a handler to automatically
+invoke the evaluate restart for you.
+
+     HTML> (handler-bind ((value-in-interpreter #'evaluate)) (emit-html '(:p *x*)))
+     <p>10</p>
+     T
+
+   Finally, you can define a macro to provide a nicer syntax for binding
+handlers for the two kinds of errors.
+
+     (defmacro with-dynamic-evaluation ((&key values code) &body body)
+       `(handler-bind (
+            ,@(if values `((value-in-interpreter #'evaluate)))
+            ,@(if code `((code-in-interpreter #'evaluate))))
+          ,@body))
+
+   With this macro defined, you can write this:
+
+     HTML> (with-dynamic-evaluation (:values t) (emit-html '(:p *x*)))
+     <p>10</p>
+     T
 
 
 File: pcl.info,  Node: 30-7,  Next: 30-8,  Prev: 30-6,  Up: Chapter 30
@@ -27758,633 +28357,646 @@ features are the way they are.
 
 Tag Table:
 Node: Top67
-Node: Preface13430
-Node: Letter14542
-Node: Blurbs16413
-Node: Chapter 127573
-Node: 1-133276
-Ref: 1-1-Footnote-138578
-Ref: 1-1-Footnote-238650
-Ref: 1-1-Footnote-338927
-Ref: 1-1-Footnote-440074
-Ref: 1-1-Footnote-541080
-Ref: 1-1-Footnote-641885
-Node: 1-242044
-Ref: 1-2-Footnote-147496
-Ref: 1-2-Footnote-247554
-Ref: 1-2-Footnote-347813
-Node: 1-348889
-Node: Chapter 251214
-Ref: Chapter 2-Footnote-152807
-Ref: Chapter 2-Footnote-252856
-Node: 2-154009
-Ref: 2-1-Footnote-158123
-Ref: 2-1-Footnote-258962
-Ref: 2-1-Footnote-358993
-Ref: 2-1-Footnote-459017
-Node: 2-259276
-Node: 2-362823
-Node: 2-464798
-Node: 2-566443
-Ref: 2-5-Footnote-171036
-Ref: 2-5-Footnote-271500
-Ref: 2-5-Footnote-371584
-Ref: 2-5-Footnote-471833
-Node: 2-671917
-Ref: 2-6-Footnote-181274
-Ref: 2-6-Footnote-281399
-Ref: 2-6-Footnote-381477
-Ref: 2-6-Footnote-482021
-Node: Chapter 382070
-Ref: Chapter 3-Footnote-184774
-Node: 3-184984
-Node: 3-288206
-Ref: 3-2-Footnote-189946
-Node: 3-390300
-Ref: 3-3-Footnote-193886
-Node: 3-494156
-Node: 3-598796
-Ref: 3-5-Footnote-1103054
-Node: 3-6103321
-Ref: 3-6-Footnote-1114292
-Ref: 3-6-Footnote-2114458
-Ref: 3-6-Footnote-3114664
-Node: 3-7115075
-Ref: 3-7-Footnote-1118062
-Ref: 3-7-Footnote-2118390
-Node: 3-8118722
-Ref: 3-8-Footnote-1130071
-Ref: 3-8-Footnote-2130479
-Ref: 3-8-Footnote-3130949
-Node: 3-9131183
-Node: Chapter 4132430
-Node: 4-1133247
-Ref: 4-1-Footnote-1135039
-Node: 4-2135106
-Ref: 4-2-Footnote-1138941
-Ref: 4-2-Footnote-2139496
-Ref: 4-2-Footnote-3139753
-Node: 4-3139910
-Ref: 4-3-Footnote-1147339
-Ref: 4-3-Footnote-2147426
-Ref: 4-3-Footnote-3147660
-Ref: 4-3-Footnote-4147922
-Node: 4-4148015
-Ref: 4-4-Footnote-1151485
-Ref: 4-4-Footnote-2151736
-Ref: 4-4-Footnote-3151878
-Ref: 4-4-Footnote-4152022
-Node: 4-5152490
-Node: 4-6153769
-Ref: 4-6-Footnote-1156991
-Ref: 4-6-Footnote-2157116
-Ref: 4-6-Footnote-3157392
-Node: 4-7157778
-Ref: 4-7-Footnote-1160382
-Node: 4-8161569
-Ref: 4-8-Footnote-1167572
-Ref: 4-8-Footnote-2168102
-Node: 4-9168616
-Node: Chapter 5173219
-Ref: Chapter 5-Footnote-1175116
-Node: 5-1175833
-Ref: 5-1-Footnote-1178637
-Ref: 5-1-Footnote-2178947
-Ref: 5-1-Footnote-3179109
-Node: 5-2179618
-Node: 5-3180999
-Ref: 5-3-Footnote-1185257
-Node: 5-4185846
-Ref: 5-4-Footnote-1188045
-Node: 5-5188132
-Node: 5-6191891
-Ref: 5-6-Footnote-1195363
-Node: 5-7195931
-Ref: 5-7-Footnote-1198021
-Node: 5-8198310
-Ref: 5-8-Footnote-1204187
-Ref: 5-8-Footnote-2204515
-Ref: 5-8-Footnote-3204628
-Ref: 5-8-Footnote-4205120
-Node: 5-9205289
-Ref: 5-9-Footnote-1207852
-Node: Chapter 6209495
-Ref: Chapter 6-Footnote-1211066
-Ref: Chapter 6-Footnote-2211309
-Node: 6-1211982
-Ref: 6-1-Footnote-1218686
-Ref: 6-1-Footnote-2219113
-Ref: 6-1-Footnote-3219565
-Ref: 6-1-Footnote-4219751
-Node: 6-2220150
-Node: 6-3223103
-Ref: 6-3-Footnote-1233585
-Ref: 6-3-Footnote-2233776
-Ref: 6-3-Footnote-3233953
-Ref: 6-3-Footnote-4234544
-Ref: 6-3-Footnote-5235166
-Ref: 6-3-Footnote-6235538
-Ref: 6-3-Footnote-7235621
-Node: 6-4235711
-Ref: 6-4-Footnote-1237226
-Node: 6-5237525
-Ref: 6-5-Footnote-1239612
-Node: 6-6239735
-Ref: 6-6-Footnote-1242141
-Ref: 6-6-Footnote-2242209
-Ref: 6-6-Footnote-3242583
-Node: 6-7243009
-Node: Chapter 7247049
-Ref: Chapter 7-Footnote-1251425
-Ref: Chapter 7-Footnote-2251823
-Node: 7-1252132
-Ref: 7-1-Footnote-1255838
-Node: 7-2256098
-Node: 7-3257745
-Node: 7-4259026
-Ref: 7-4-Footnote-1261263
-Node: 7-5261404
-Ref: 7-5-Footnote-1263245
-Node: 7-6264336
-Ref: 7-6-Footnote-1269090
-Ref: 7-6-Footnote-2269274
-Node: 7-7269430
-Ref: 7-7-Footnote-1273570
-Node: Chapter 8274107
-Node: 8-1276164
-Node: 8-2280982
-Node: 8-3284111
-Ref: 8-3-Footnote-1287196
-Node: 8-4287310
-Node: 8-5289312
-Node: 8-6293430
-Ref: 8-6-Footnote-1297176
-Ref: 8-6-Footnote-2297346
-Ref: 8-6-Footnote-3297826
-Node: 8-7298034
-Ref: 8-7-Footnote-1307861
-Ref: 8-7-Footnote-2308187
-Ref: 8-7-Footnote-3308316
-Node: 8-8308754
-Node: 8-9312265
-Node: Chapter 9312839
-Ref: Chapter 9-Footnote-1314707
-Ref: Chapter 9-Footnote-2315131
-Node: 9-1315440
-Ref: 9-1-Footnote-1318005
-Node: 9-2318089
-Node: 9-3321370
-Ref: 9-3-Footnote-1324341
-Ref: 9-3-Footnote-2324733
-Node: 9-4324827
-Node: 9-5328445
-Node: 9-6330720
-Ref: 9-6-Footnote-1334051
-Ref: 9-6-Footnote-2334172
-Node: 9-7334475
-Node: Chapter 10338529
-Ref: Chapter 10-Footnote-1341590
-Node: 10-1341724
-Ref: 10-1-Footnote-1344062
-Ref: 10-1-Footnote-2344096
-Ref: 10-1-Footnote-3344645
-Ref: 10-1-Footnote-4345638
-Node: 10-2345910
-Ref: 10-2-Footnote-1352515
-Ref: 10-2-Footnote-2352770
-Ref: 10-2-Footnote-3353103
-Node: 10-3353665
-Ref: 10-3-Footnote-1357385
-Ref: 10-3-Footnote-2357542
-Node: 10-4357756
-Node: 10-5359876
-Node: 10-6360496
-Ref: 10-6-Footnote-1362008
-Node: 10-7362376
-Node: 10-8364258
-Ref: 10-8-Footnote-1366042
-Node: 10-9366345
-Node: Chapter 11368908
-Ref: Chapter 11-Footnote-1371372
-Node: 11-1371634
-Ref: 11-1-Footnote-1376110
-Ref: 11-1-Footnote-2376348
-Ref: 11-1-Footnote-3376487
-Node: 11-2376961
-Node: 11-3379273
-Node: 11-4380667
-Ref: 11-4-Footnote-1384929
-Ref: 11-4-Footnote-2385538
-Node: 11-5385766
-Ref: 11-5-Footnote-1388244
-Ref: 11-5-Footnote-2388328
-Node: 11-6389043
-Ref: 11-6-Footnote-1390508
-Node: 11-7390681
-Ref: 11-7-Footnote-1393284
-Node: 11-8393641
-Node: 11-9396129
-Node: 11-10397650
-Node: 11-11400123
-Ref: 11-11-Footnote-1404218
-Node: 11-12404419
-Ref: 11-12-Footnote-1406168
-Node: Chapter 12406522
-Node: 12-1408173
-Ref: 12-1-Footnote-1414051
-Ref: 12-1-Footnote-2414119
-Ref: 12-1-Footnote-3414177
-Ref: 12-1-Footnote-4414435
-Node: 12-2414841
-Node: 12-3418827
-Ref: 12-3-Footnote-1425631
-Ref: 12-3-Footnote-2425866
-Node: 12-4426082
-Ref: 12-4-Footnote-1431003
-Ref: 12-4-Footnote-2431280
-Ref: 12-4-Footnote-3431497
-Ref: 12-4-Footnote-4431585
-Node: 12-5431803
-Ref: 12-5-Footnote-1434550
-Ref: 12-5-Footnote-2434894
-Node: 12-6435320
-Ref: 12-6-Footnote-1437862
-Ref: 12-6-Footnote-2438038
-Node: 12-7438249
-Node: Chapter 13438804
-Node: 13-1439701
-Ref: 13-1-Footnote-1444047
-Ref: 13-1-Footnote-2444237
-Node: 13-2444540
-Ref: 13-2-Footnote-1448200
-Node: 13-3448341
-Ref: 13-3-Footnote-1458032
-Node: 13-4458342
-Ref: 13-4-Footnote-1461376
-Ref: 13-4-Footnote-2461606
-Node: Chapter 14461754
-Node: 14-1462895
-Ref: 14-1-Footnote-1467315
-Node: 14-2467568
-Ref: 14-2-Footnote-1468414
-Ref: 14-2-Footnote-2468750
-Ref: 14-2-Footnote-3469051
-Node: 14-3469350
-Node: 14-4470193
-Node: 14-5474034
-Ref: 14-5-Footnote-1476768
-Node: 14-6477279
-Ref: 14-6-Footnote-1479825
-Node: 14-7480637
-Ref: 14-7-Footnote-1484892
-Ref: 14-7-Footnote-2485374
-Node: 14-8485484
-Ref: 14-8-Footnote-1491000
-Ref: 14-8-Footnote-2491114
-Node: 14-9491702
-Node: 14-10493897
-Ref: 14-10-Footnote-1499156
-Ref: 14-10-Footnote-2499208
-Ref: 14-10-Footnote-3499602
-Node: 14-11500387
-Ref: 14-11-Footnote-1504791
-Ref: 14-11-Footnote-2504881
-Node: Chapter 15505745
-Node: 15-1507730
-Node: 15-2508522
-Ref: 15-2-Footnote-1512629
-Node: 15-3513042
-Ref: 15-3-Footnote-1520937
-Ref: 15-3-Footnote-2521090
-Node: 15-4521283
-Ref: 15-4-Footnote-1525229
-Node: 15-5525594
-Node: Chapter 16527459
-Ref: Chapter 16-Footnote-1529954
-Ref: Chapter 16-Footnote-2529964
-Node: 16-1529974
-Ref: 16-1-Footnote-1534676
-Ref: 16-1-Footnote-2534686
-Node: 16-2534696
-Ref: 16-2-Footnote-1538899
-Node: 16-3538909
-Node: 16-4540845
-Ref: 16-4-Footnote-1546434
-Ref: 16-4-Footnote-2546444
-Ref: 16-4-Footnote-3546454
-Node: 16-5546464
-Ref: 16-5-Footnote-1550590
-Ref: 16-5-Footnote-2550600
-Node: 16-6550611
-Node: 16-7556138
-Node: 16-8560717
-Ref: 16-8-Footnote-1563437
-Node: 16-9563448
-Node: Chapter 17563746
-Ref: Chapter 17-Footnote-1565344
-Node: 17-1565750
-Ref: 17-1-Footnote-1567657
-Ref: 17-1-Footnote-2567764
-Node: 17-2567990
-Ref: 17-2-Footnote-1570911
-Node: 17-3571061
-Ref: 17-3-Footnote-1577586
-Ref: 17-3-Footnote-2577928
-Ref: 17-3-Footnote-3578083
-Node: 17-4578635
-Ref: 17-4-Footnote-1586193
-Ref: 17-4-Footnote-2586798
-Node: 17-5587060
-Ref: 17-5-Footnote-1591767
-Node: 17-6592187
-Ref: 17-6-Footnote-1593710
-Node: 17-7594209
-Node: 17-8598600
-Ref: 17-8-Footnote-1607028
-Node: 17-9607334
-Node: Chapter 18608506
-Ref: Chapter 18-Footnote-1612609
-Ref: Chapter 18-Footnote-2613283
-Node: 18-1613604
-Ref: 18-1-Footnote-1615582
-Node: 18-2615895
-Node: 18-3619016
-Node: 18-4621766
-Ref: 18-4-Footnote-1626743
-Node: 18-5626897
-Ref: 18-5-Footnote-1628976
-Ref: 18-5-Footnote-2629209
-Node: 18-6629424
-Node: 18-7632898
-Node: 18-8636255
-Node: 18-9641957
-Ref: 18-9-Footnote-1643985
-Ref: 18-9-Footnote-2644404
-Node: 18-10644644
-Node: Chapter 19645313
-Ref: Chapter 19-Footnote-1650975
-Ref: Chapter 19-Footnote-2651034
-Node: 19-1651085
-Node: 19-2652568
-Ref: 19-2-Footnote-1654512
-Ref: 19-2-Footnote-2654665
-Node: 19-3654880
-Node: 19-4660424
-Ref: 19-4-Footnote-1667581
-Node: 19-5667766
-Node: 19-6670675
-Node: Chapter 20675347
-Node: 20-1677264
-Ref: 20-1-Footnote-1678043
-Node: 20-2678304
-Ref: 20-2-Footnote-1685700
-Ref: 20-2-Footnote-2685942
-Ref: 20-2-Footnote-3686253
-Node: 20-3687153
-Ref: 20-3-Footnote-1694891
-Ref: 20-3-Footnote-2695542
-Node: 20-4696039
-Ref: 20-4-Footnote-1705332
-Ref: 20-4-Footnote-2705751
-Ref: 20-4-Footnote-3705998
-Ref: 20-4-Footnote-4706093
-Node: 20-5706266
-Ref: 20-5-Footnote-1711551
-Node: 20-6712308
-Ref: 20-6-Footnote-1719318
-Ref: 20-6-Footnote-2719870
-Ref: 20-6-Footnote-3720259
-Node: 20-7720649
-Ref: 20-7-Footnote-1723607
-Node: Chapter 21723735
-Ref: Chapter 21-Footnote-1725975
-Node: 21-1726334
-Node: 21-2730921
-Node: 21-3734313
-Ref: 21-3-Footnote-1736580
-Ref: 21-3-Footnote-2736809
-Node: 21-4737803
-Ref: 21-4-Footnote-1743522
-Ref: 21-4-Footnote-2743761
-Ref: 21-4-Footnote-3744199
-Ref: 21-4-Footnote-4744640
-Ref: 21-4-Footnote-5745167
-Ref: 21-4-Footnote-6745600
-Ref: 21-4-Footnote-7745875
-Node: 21-5746031
-Node: 21-6747444
-Ref: 21-6-Footnote-1751649
-Node: 21-7751976
-Ref: 21-7-Footnote-1756485
-Node: 21-8756663
-Ref: 21-8-Footnote-1762377
-Node: Chapter 22762641
-Node: 22-1764316
-Ref: 22-1-Footnote-1765253
-Node: 22-2765651
-Ref: 22-2-Footnote-1766833
-Node: 22-3767115
-Node: 22-4770190
-Ref: 22-4-Footnote-1773522
-Ref: 22-4-Footnote-2774095
-Node: 22-5774202
-Node: 22-6776399
-Node: 22-7777332
-Node: 22-8779216
-Ref: 22-8-Footnote-1781842
-Ref: 22-8-Footnote-2782475
-Node: 22-9783096
-Ref: 22-9-Footnote-1784981
-Node: 22-10785080
-Node: 22-11788725
-Ref: 22-11-Footnote-1792088
-Ref: 22-11-Footnote-2792216
-Ref: 22-11-Footnote-3792459
-Node: 22-12792613
-Node: 22-13796347
-Ref: 22-13-Footnote-1798345
-Ref: 22-13-Footnote-2798530
-Node: Chapter 23798861
-Ref: Chapter 23-Footnote-1800754
-Ref: Chapter 23-Footnote-2800892
-Node: 23-1801133
-Ref: 23-1-Footnote-1809598
-Ref: 23-1-Footnote-2809765
-Ref: 23-1-Footnote-3809947
-Ref: 23-1-Footnote-4810145
-Node: 23-2810437
-Ref: 23-2-Footnote-1814513
-Ref: 23-2-Footnote-2814743
-Node: 23-3815457
-Ref: 23-3-Footnote-1820765
-Ref: 23-3-Footnote-2821128
-Node: 23-4821975
-Ref: 23-4-Footnote-1830276
-Node: 23-5830539
-Node: 23-6832711
-Node: 23-7835746
-Ref: 23-7-Footnote-1840955
-Ref: 23-7-Footnote-2841096
-Node: 23-8841387
-Ref: 23-8-Footnote-1844135
-Node: 23-9844475
-Node: 23-10850362
-Node: Chapter 24852073
-Node: 24-1853505
-Ref: 24-1-Footnote-1854746
-Ref: 24-1-Footnote-2855159
-Node: 24-2855940
-Ref: 24-2-Footnote-1859608
-Ref: 24-2-Footnote-2860484
-Ref: 24-2-Footnote-3860798
-Node: 24-3861847
-Ref: 24-3-Footnote-1868104
-Ref: 24-3-Footnote-2868350
-Node: 24-4868817
-Node: 24-5872699
-Node: 24-6875478
-Node: 24-7879616
-Ref: 24-7-Footnote-1886868
-Ref: 24-7-Footnote-2887214
-Node: 24-8887460
-Node: 24-9889115
-Node: 24-10894925
-Node: 24-11901338
-Node: 24-12906472
-Ref: 24-12-Footnote-1914853
-Node: 24-13915353
-Ref: 24-13-Footnote-1918012
-Node: Chapter 25918751
-Ref: Chapter 25-Footnote-1923972
-Node: 25-1924328
-Ref: 25-1-Footnote-1927398
-Node: 25-2928038
-Node: 25-3929069
-Ref: 25-3-Footnote-1932730
-Node: 25-4933052
-Ref: 25-4-Footnote-1942438
-Node: 25-5942569
-Ref: 25-5-Footnote-1946532
-Node: 25-6946693
-Node: 25-7952098
-Ref: 25-7-Footnote-1955122
-Node: 25-8955311
-Ref: 25-8-Footnote-1961230
-Node: 25-9961483
-Ref: 25-9-Footnote-1963499
-Node: 25-10964219
-Node: 25-11967297
-Node: 25-12972519
-Node: 25-13976947
-Node: 25-14979764
-Ref: 25-14-Footnote-1992082
-Node: Chapter 26992550
-Node: 26-1993701
-Ref: 26-1-Footnote-1998891
-Ref: 26-1-Footnote-2999099
-Ref: 26-1-Footnote-3999346
-Ref: 26-1-Footnote-4999572
-Node: 26-21000359
-Ref: 26-2-Footnote-11007014
-Ref: 26-2-Footnote-21007075
-Ref: 26-2-Footnote-31007116
-Ref: 26-2-Footnote-41007447
-Node: 26-31007601
-Ref: 26-3-Footnote-11010967
-Node: 26-41011309
-Ref: 26-4-Footnote-11017447
-Node: 26-51017519
-Node: 26-61018656
-Node: 26-71023804
-Ref: 26-7-Footnote-11027644
-Node: 26-81027798
-Node: 26-91032195
-Ref: 26-9-Footnote-11040779
-Node: Chapter 271041136
-Node: 27-11042050
-Ref: 27-1-Footnote-11047066
-Node: 27-21047516
-Ref: 27-2-Footnote-11052235
-Node: 27-31052760
-Ref: 27-3-Footnote-11056099
-Node: 27-41056643
-Node: 27-51064056
-Ref: 27-5-Footnote-11069200
-Node: 27-61070070
-Ref: 27-6-Footnote-11074190
-Node: 27-71074557
-Node: Chapter 281077713
-Ref: Chapter 28-Footnote-11078277
-Node: 28-11078697
-Ref: 28-1-Footnote-11082333
-Node: 28-21082524
-Ref: 28-2-Footnote-11087606
-Node: 28-31087908
-Ref: 28-3-Footnote-11101045
-Ref: 28-3-Footnote-21101378
-Ref: 28-3-Footnote-31101717
-Ref: 28-3-Footnote-41102058
-Ref: 28-3-Footnote-51102627
-Ref: 28-3-Footnote-61103113
-Node: Chapter 291103356
-Node: 29-11104303
-Node: 29-21108916
-Ref: 29-2-Footnote-11117941
-Ref: 29-2-Footnote-21118730
-Ref: 29-2-Footnote-31119224
-Node: 29-31119829
-Node: 29-41129225
-Ref: 29-4-Footnote-11132574
-Node: 29-51132944
-Node: 29-61137569
-Ref: 29-6-Footnote-11144688
-Node: 29-71145758
-Node: 29-81153457
-Node: 29-91154805
-Node: Chapter 301157156
-Node: 30-11158852
-Ref: 30-1-Footnote-11162408
-Ref: 30-1-Footnote-21162843
-Node: 30-21162982
-Ref: 30-2-Footnote-11169026
-Ref: 30-2-Footnote-21169260
-Node: 30-31169538
-Node: 30-41172458
-Node: 30-51175950
-Node: 30-61177551
-Ref: 30-6-Footnote-11180622
-Node: 30-71181165
-Ref: 30-7-Footnote-11190887
-Ref: 30-7-Footnote-21191051
-Node: 30-81191599
-Node: Chapter 311192015
-Node: 31-11193545
-Node: 31-21205102
-Ref: 31-2-Footnote-11217319
-Ref: 31-2-Footnote-21217602
-Node: 31-31217901
-Ref: 31-3-Footnote-11225174
-Node: 31-41225297
-Ref: 31-4-Footnote-11229944
-Node: 31-51230415
-Node: Chapter 321232628
-Node: 32-11233821
-Ref: 32-1-Footnote-11239187
-Node: 32-21239678
-Ref: 32-2-Footnote-11241504
-Ref: 32-2-Footnote-21241632
-Node: 32-31241939
-Ref: 32-3-Footnote-11260654
-Ref: 32-3-Footnote-21261096
-Ref: 32-3-Footnote-31261784
-Ref: 32-3-Footnote-41262102
-Node: 32-41262426
-Ref: 32-4-Footnote-11270682
-Ref: 32-4-Footnote-21271259
-Ref: 32-4-Footnote-31271539
-Ref: 32-4-Footnote-41271650
-Node: 32-51271954
-Ref: 32-5-Footnote-11277923
-Ref: 32-5-Footnote-21278160
+Node: Preface14016
+Node: Letter15128
+Node: Blurbs16999
+Node: Chapter 128159
+Node: 1-133862
+Ref: 1-1-Footnote-139164
+Ref: 1-1-Footnote-239236
+Ref: 1-1-Footnote-339513
+Ref: 1-1-Footnote-440660
+Ref: 1-1-Footnote-541666
+Ref: 1-1-Footnote-642471
+Node: 1-242630
+Ref: 1-2-Footnote-148180
+Ref: 1-2-Footnote-248238
+Ref: 1-2-Footnote-348497
+Node: 1-2-149573
+Node: 1-352675
+Node: Chapter 255000
+Ref: Chapter 2-Footnote-156593
+Ref: Chapter 2-Footnote-256642
+Node: 2-157795
+Ref: 2-1-Footnote-161909
+Ref: 2-1-Footnote-262748
+Ref: 2-1-Footnote-362779
+Ref: 2-1-Footnote-462803
+Node: 2-263062
+Node: 2-366609
+Node: 2-468584
+Node: 2-570229
+Ref: 2-5-Footnote-174822
+Ref: 2-5-Footnote-275286
+Ref: 2-5-Footnote-375370
+Ref: 2-5-Footnote-475619
+Node: 2-675703
+Ref: 2-6-Footnote-185060
+Ref: 2-6-Footnote-285185
+Ref: 2-6-Footnote-385263
+Ref: 2-6-Footnote-485807
+Node: Chapter 385856
+Ref: Chapter 3-Footnote-188560
+Node: 3-188770
+Node: 3-291992
+Ref: 3-2-Footnote-193732
+Node: 3-394086
+Ref: 3-3-Footnote-197672
+Node: 3-497942
+Node: 3-5102582
+Ref: 3-5-Footnote-1106840
+Node: 3-6107107
+Ref: 3-6-Footnote-1118078
+Ref: 3-6-Footnote-2118244
+Ref: 3-6-Footnote-3118450
+Node: 3-7118861
+Ref: 3-7-Footnote-1121848
+Ref: 3-7-Footnote-2122176
+Node: 3-8122508
+Ref: 3-8-Footnote-1133857
+Ref: 3-8-Footnote-2134265
+Ref: 3-8-Footnote-3134735
+Node: 3-9134969
+Node: Chapter 4136216
+Node: 4-1137033
+Ref: 4-1-Footnote-1138825
+Node: 4-2138892
+Ref: 4-2-Footnote-1142727
+Ref: 4-2-Footnote-2143282
+Ref: 4-2-Footnote-3143539
+Node: 4-3143696
+Ref: 4-3-Footnote-1151125
+Ref: 4-3-Footnote-2151212
+Ref: 4-3-Footnote-3151446
+Ref: 4-3-Footnote-4151708
+Node: 4-4151801
+Ref: 4-4-Footnote-1155271
+Ref: 4-4-Footnote-2155522
+Ref: 4-4-Footnote-3155664
+Ref: 4-4-Footnote-4155808
+Node: 4-5156276
+Node: 4-6157555
+Ref: 4-6-Footnote-1160777
+Ref: 4-6-Footnote-2160902
+Ref: 4-6-Footnote-3161178
+Node: 4-7161564
+Ref: 4-7-Footnote-1164168
+Node: 4-8165355
+Ref: 4-8-Footnote-1171358
+Ref: 4-8-Footnote-2171888
+Node: 4-9172402
+Node: Chapter 5177005
+Ref: Chapter 5-Footnote-1178902
+Node: 5-1179619
+Ref: 5-1-Footnote-1182423
+Ref: 5-1-Footnote-2182733
+Ref: 5-1-Footnote-3182895
+Node: 5-2183404
+Node: 5-3184785
+Ref: 5-3-Footnote-1189043
+Node: 5-4189632
+Ref: 5-4-Footnote-1191831
+Node: 5-5191918
+Node: 5-6195677
+Ref: 5-6-Footnote-1199149
+Node: 5-7199717
+Ref: 5-7-Footnote-1201807
+Node: 5-8202096
+Ref: 5-8-Footnote-1207973
+Ref: 5-8-Footnote-2208301
+Ref: 5-8-Footnote-3208414
+Ref: 5-8-Footnote-4208906
+Node: 5-9209075
+Ref: 5-9-Footnote-1211638
+Node: Chapter 6213281
+Ref: Chapter 6-Footnote-1214852
+Ref: Chapter 6-Footnote-2215095
+Node: 6-1215768
+Ref: 6-1-Footnote-1222472
+Ref: 6-1-Footnote-2222899
+Ref: 6-1-Footnote-3223351
+Ref: 6-1-Footnote-4223537
+Node: 6-2223936
+Node: 6-3226889
+Ref: 6-3-Footnote-1237371
+Ref: 6-3-Footnote-2237562
+Ref: 6-3-Footnote-3237739
+Ref: 6-3-Footnote-4238330
+Ref: 6-3-Footnote-5238952
+Ref: 6-3-Footnote-6239324
+Ref: 6-3-Footnote-7239407
+Node: 6-4239497
+Ref: 6-4-Footnote-1241012
+Node: 6-5241311
+Ref: 6-5-Footnote-1243398
+Node: 6-6243521
+Ref: 6-6-Footnote-1245927
+Ref: 6-6-Footnote-2245995
+Ref: 6-6-Footnote-3246369
+Node: 6-7246795
+Node: Chapter 7250835
+Ref: Chapter 7-Footnote-1255211
+Ref: Chapter 7-Footnote-2255609
+Node: 7-1255918
+Ref: 7-1-Footnote-1259624
+Node: 7-2259884
+Node: 7-3261531
+Node: 7-4262812
+Ref: 7-4-Footnote-1265049
+Node: 7-5265190
+Ref: 7-5-Footnote-1267031
+Node: 7-6268122
+Ref: 7-6-Footnote-1272876
+Ref: 7-6-Footnote-2273060
+Node: 7-7273216
+Ref: 7-7-Footnote-1277356
+Node: Chapter 8277893
+Node: 8-1279950
+Node: 8-2284768
+Node: 8-3287897
+Ref: 8-3-Footnote-1290982
+Node: 8-4291096
+Node: 8-5293098
+Node: 8-6297216
+Ref: 8-6-Footnote-1300962
+Ref: 8-6-Footnote-2301132
+Ref: 8-6-Footnote-3301612
+Node: 8-7301820
+Ref: 8-7-Footnote-1311647
+Ref: 8-7-Footnote-2311973
+Ref: 8-7-Footnote-3312102
+Node: 8-8312540
+Node: 8-8-1316124
+Node: 8-9317390
+Node: Chapter 9317964
+Ref: Chapter 9-Footnote-1319832
+Ref: Chapter 9-Footnote-2320256
+Node: 9-1320565
+Ref: 9-1-Footnote-1323130
+Node: 9-2323214
+Node: 9-3326495
+Ref: 9-3-Footnote-1329466
+Ref: 9-3-Footnote-2329858
+Node: 9-4329952
+Node: 9-5333570
+Node: 9-6335845
+Ref: 9-6-Footnote-1339176
+Ref: 9-6-Footnote-2339297
+Node: 9-7339600
+Node: Chapter 10343654
+Ref: Chapter 10-Footnote-1346715
+Node: 10-1346849
+Ref: 10-1-Footnote-1349187
+Ref: 10-1-Footnote-2349221
+Ref: 10-1-Footnote-3349770
+Ref: 10-1-Footnote-4350763
+Node: 10-2351035
+Ref: 10-2-Footnote-1357640
+Ref: 10-2-Footnote-2357895
+Ref: 10-2-Footnote-3358228
+Node: 10-3358790
+Ref: 10-3-Footnote-1362510
+Ref: 10-3-Footnote-2362667
+Node: 10-4362881
+Node: 10-5365001
+Node: 10-6365621
+Ref: 10-6-Footnote-1367133
+Node: 10-7367501
+Node: 10-8369383
+Ref: 10-8-Footnote-1371167
+Node: 10-9371470
+Node: Chapter 11374033
+Ref: Chapter 11-Footnote-1376539
+Node: 11-1376801
+Ref: 11-1-Footnote-1381283
+Ref: 11-1-Footnote-2381521
+Ref: 11-1-Footnote-3381660
+Node: 11-2382134
+Node: 11-3384446
+Node: 11-4385840
+Ref: 11-4-Footnote-1390102
+Ref: 11-4-Footnote-2390711
+Node: 11-5390939
+Ref: 11-5-Footnote-1393417
+Ref: 11-5-Footnote-2393501
+Node: 11-6394216
+Ref: 11-6-Footnote-1395681
+Node: 11-7395854
+Ref: 11-7-Footnote-1398457
+Node: 11-8398814
+Node: 11-9401302
+Node: 11-10402823
+Node: 11-11405296
+Ref: 11-11-Footnote-1409391
+Node: 11-12409592
+Ref: 11-12-Footnote-1411341
+Node: Chapter 12411695
+Node: 12-1413346
+Ref: 12-1-Footnote-1419224
+Ref: 12-1-Footnote-2419292
+Ref: 12-1-Footnote-3419350
+Ref: 12-1-Footnote-4419608
+Node: 12-2420014
+Node: 12-3424000
+Ref: 12-3-Footnote-1430804
+Ref: 12-3-Footnote-2431039
+Node: 12-4431255
+Ref: 12-4-Footnote-1436176
+Ref: 12-4-Footnote-2436453
+Ref: 12-4-Footnote-3436670
+Ref: 12-4-Footnote-4436758
+Node: 12-5436976
+Ref: 12-5-Footnote-1439723
+Ref: 12-5-Footnote-2440067
+Node: 12-6440493
+Ref: 12-6-Footnote-1443035
+Ref: 12-6-Footnote-2443211
+Node: 12-7443422
+Node: Chapter 13443977
+Node: 13-1444874
+Ref: 13-1-Footnote-1449220
+Ref: 13-1-Footnote-2449410
+Node: 13-2449713
+Ref: 13-2-Footnote-1453373
+Node: 13-3453514
+Ref: 13-3-Footnote-1463205
+Node: 13-4463515
+Ref: 13-4-Footnote-1466549
+Ref: 13-4-Footnote-2466779
+Node: Chapter 14466927
+Node: 14-1468068
+Ref: 14-1-Footnote-1472488
+Node: 14-2472741
+Ref: 14-2-Footnote-1473587
+Ref: 14-2-Footnote-2473923
+Ref: 14-2-Footnote-3474224
+Node: 14-3474523
+Node: 14-4475366
+Node: 14-5479207
+Ref: 14-5-Footnote-1481941
+Node: 14-6482452
+Ref: 14-6-Footnote-1485041
+Node: 14-6-1485853
+Node: 14-7487656
+Ref: 14-7-Footnote-1491911
+Ref: 14-7-Footnote-2492393
+Node: 14-8492503
+Ref: 14-8-Footnote-1498019
+Ref: 14-8-Footnote-2498133
+Node: 14-9498721
+Node: 14-10500916
+Ref: 14-10-Footnote-1506175
+Ref: 14-10-Footnote-2506227
+Ref: 14-10-Footnote-3506621
+Node: 14-11507406
+Ref: 14-11-Footnote-1511810
+Ref: 14-11-Footnote-2511900
+Node: Chapter 15512764
+Node: 15-1514749
+Node: 15-2515541
+Ref: 15-2-Footnote-1519697
+Node: 15-2-1520110
+Node: 15-3521660
+Ref: 15-3-Footnote-1529555
+Ref: 15-3-Footnote-2529708
+Node: 15-4529901
+Ref: 15-4-Footnote-1533847
+Node: 15-5534212
+Node: Chapter 16536077
+Ref: Chapter 16-Footnote-1538572
+Ref: Chapter 16-Footnote-2538582
+Node: 16-1538592
+Ref: 16-1-Footnote-1543294
+Ref: 16-1-Footnote-2543304
+Node: 16-2543314
+Ref: 16-2-Footnote-1547517
+Node: 16-3547527
+Node: 16-4549463
+Ref: 16-4-Footnote-1555052
+Ref: 16-4-Footnote-2555062
+Ref: 16-4-Footnote-3555072
+Node: 16-5555082
+Ref: 16-5-Footnote-1559208
+Ref: 16-5-Footnote-2559218
+Node: 16-6559229
+Node: 16-7564756
+Node: 16-8569335
+Ref: 16-8-Footnote-1572118
+Node: 16-8-1572129
+Node: 16-9573897
+Node: Chapter 17574195
+Ref: Chapter 17-Footnote-1575793
+Node: 17-1576199
+Ref: 17-1-Footnote-1578166
+Ref: 17-1-Footnote-2578273
+Node: 17-1-1578499
+Node: 17-2580017
+Ref: 17-2-Footnote-1582938
+Node: 17-3583088
+Ref: 17-3-Footnote-1589613
+Ref: 17-3-Footnote-2589955
+Ref: 17-3-Footnote-3590110
+Node: 17-4590662
+Ref: 17-4-Footnote-1598220
+Ref: 17-4-Footnote-2598825
+Node: 17-5599087
+Ref: 17-5-Footnote-1603794
+Node: 17-6604214
+Ref: 17-6-Footnote-1605737
+Node: 17-7606236
+Node: 17-8610627
+Ref: 17-8-Footnote-1619055
+Node: 17-9619361
+Node: Chapter 18620533
+Ref: Chapter 18-Footnote-1624636
+Ref: Chapter 18-Footnote-2625310
+Node: 18-1625631
+Ref: 18-1-Footnote-1627609
+Node: 18-2627922
+Node: 18-3631043
+Node: 18-4633793
+Ref: 18-4-Footnote-1638770
+Node: 18-5638924
+Ref: 18-5-Footnote-1641003
+Ref: 18-5-Footnote-2641236
+Node: 18-6641451
+Node: 18-7644925
+Node: 18-8648282
+Node: 18-9653984
+Ref: 18-9-Footnote-1656012
+Ref: 18-9-Footnote-2656431
+Node: 18-10656671
+Node: Chapter 19657340
+Ref: Chapter 19-Footnote-1663002
+Ref: Chapter 19-Footnote-2663061
+Node: 19-1663112
+Node: 19-2664595
+Ref: 19-2-Footnote-1666539
+Ref: 19-2-Footnote-2666692
+Node: 19-3666907
+Node: 19-3-1672507
+Node: 19-4673170
+Ref: 19-4-Footnote-1680327
+Node: 19-5680512
+Node: 19-6683421
+Node: 19-6-1688144
+Node: Chapter 20689205
+Node: 20-1691122
+Ref: 20-1-Footnote-1691901
+Node: 20-2692162
+Ref: 20-2-Footnote-1699558
+Ref: 20-2-Footnote-2699800
+Ref: 20-2-Footnote-3700111
+Node: 20-3701011
+Ref: 20-3-Footnote-1708749
+Ref: 20-3-Footnote-2709400
+Node: 20-4709897
+Ref: 20-4-Footnote-1719190
+Ref: 20-4-Footnote-2719609
+Ref: 20-4-Footnote-3719856
+Ref: 20-4-Footnote-4719951
+Node: 20-5720124
+Ref: 20-5-Footnote-1725409
+Node: 20-6726166
+Ref: 20-6-Footnote-1733176
+Ref: 20-6-Footnote-2733728
+Ref: 20-6-Footnote-3734117
+Node: 20-7734507
+Ref: 20-7-Footnote-1737465
+Node: Chapter 21737593
+Ref: Chapter 21-Footnote-1739833
+Node: 21-1740192
+Node: 21-2744779
+Node: 21-3748171
+Ref: 21-3-Footnote-1750438
+Ref: 21-3-Footnote-2750667
+Node: 21-4751661
+Ref: 21-4-Footnote-1757380
+Ref: 21-4-Footnote-2757619
+Ref: 21-4-Footnote-3758057
+Ref: 21-4-Footnote-4758498
+Ref: 21-4-Footnote-5759025
+Ref: 21-4-Footnote-6759458
+Ref: 21-4-Footnote-7759733
+Node: 21-5759889
+Node: 21-6761302
+Ref: 21-6-Footnote-1765507
+Node: 21-7765834
+Ref: 21-7-Footnote-1770343
+Node: 21-8770521
+Ref: 21-8-Footnote-1776235
+Node: Chapter 22776499
+Node: 22-1778174
+Ref: 22-1-Footnote-1779111
+Node: 22-2779509
+Ref: 22-2-Footnote-1780691
+Node: 22-3780973
+Node: 22-4784048
+Ref: 22-4-Footnote-1787380
+Ref: 22-4-Footnote-2787953
+Node: 22-5788060
+Node: 22-6790257
+Node: 22-7791190
+Node: 22-8793074
+Ref: 22-8-Footnote-1795700
+Ref: 22-8-Footnote-2796333
+Node: 22-9796954
+Ref: 22-9-Footnote-1798839
+Node: 22-10798938
+Node: 22-11802583
+Ref: 22-11-Footnote-1805946
+Ref: 22-11-Footnote-2806074
+Ref: 22-11-Footnote-3806317
+Node: 22-12806471
+Node: 22-13810205
+Ref: 22-13-Footnote-1812203
+Ref: 22-13-Footnote-2812388
+Node: Chapter 23812719
+Ref: Chapter 23-Footnote-1814612
+Ref: Chapter 23-Footnote-2814750
+Node: 23-1814991
+Ref: 23-1-Footnote-1823456
+Ref: 23-1-Footnote-2823623
+Ref: 23-1-Footnote-3823805
+Ref: 23-1-Footnote-4824003
+Node: 23-2824295
+Ref: 23-2-Footnote-1828371
+Ref: 23-2-Footnote-2828601
+Node: 23-3829315
+Ref: 23-3-Footnote-1834623
+Ref: 23-3-Footnote-2834986
+Node: 23-4835833
+Ref: 23-4-Footnote-1844134
+Node: 23-5844397
+Node: 23-6846569
+Node: 23-7849604
+Ref: 23-7-Footnote-1854813
+Ref: 23-7-Footnote-2854954
+Node: 23-8855245
+Ref: 23-8-Footnote-1857993
+Node: 23-9858333
+Node: 23-10864220
+Node: Chapter 24865931
+Node: 24-1867363
+Ref: 24-1-Footnote-1868604
+Ref: 24-1-Footnote-2869017
+Node: 24-2869798
+Ref: 24-2-Footnote-1873466
+Ref: 24-2-Footnote-2874342
+Ref: 24-2-Footnote-3874656
+Node: 24-3875705
+Ref: 24-3-Footnote-1881962
+Ref: 24-3-Footnote-2882208
+Node: 24-4882675
+Node: 24-5886557
+Node: 24-6889336
+Node: 24-7893474
+Ref: 24-7-Footnote-1900726
+Ref: 24-7-Footnote-2901072
+Node: 24-8901318
+Node: 24-9902973
+Node: 24-10908783
+Node: 24-11915196
+Node: 24-12920330
+Ref: 24-12-Footnote-1928711
+Node: 24-13929211
+Ref: 24-13-Footnote-1931870
+Node: Chapter 25932609
+Ref: Chapter 25-Footnote-1937830
+Node: 25-1938186
+Ref: 25-1-Footnote-1941256
+Node: 25-2941896
+Node: 25-3942927
+Ref: 25-3-Footnote-1946588
+Node: 25-4946910
+Ref: 25-4-Footnote-1956296
+Node: 25-5956427
+Ref: 25-5-Footnote-1960390
+Node: 25-6960551
+Node: 25-7965956
+Ref: 25-7-Footnote-1968980
+Node: 25-8969169
+Ref: 25-8-Footnote-1975088
+Node: 25-9975341
+Ref: 25-9-Footnote-1977357
+Node: 25-10978077
+Node: 25-11981155
+Node: 25-12986377
+Node: 25-13990805
+Node: 25-14993622
+Ref: 25-14-Footnote-11005940
+Node: Chapter 261006408
+Node: 26-11007559
+Ref: 26-1-Footnote-11012749
+Ref: 26-1-Footnote-21012957
+Ref: 26-1-Footnote-31013204
+Ref: 26-1-Footnote-41013430
+Node: 26-21014217
+Ref: 26-2-Footnote-11020872
+Ref: 26-2-Footnote-21020933
+Ref: 26-2-Footnote-31020974
+Ref: 26-2-Footnote-41021305
+Node: 26-31021459
+Ref: 26-3-Footnote-11024825
+Node: 26-41025167
+Ref: 26-4-Footnote-11031305
+Node: 26-51031377
+Node: 26-61032514
+Node: 26-71037662
+Ref: 26-7-Footnote-11041502
+Node: 26-81041656
+Node: 26-91046053
+Ref: 26-9-Footnote-11054637
+Node: Chapter 271054994
+Node: 27-11055908
+Ref: 27-1-Footnote-11060963
+Node: 27-1-11061413
+Node: 27-21062784
+Ref: 27-2-Footnote-11067503
+Node: 27-31068028
+Ref: 27-3-Footnote-11071367
+Node: 27-41071911
+Node: 27-51079324
+Ref: 27-5-Footnote-11084468
+Node: 27-61085338
+Ref: 27-6-Footnote-11089458
+Node: 27-71089825
+Node: Chapter 281092981
+Ref: Chapter 28-Footnote-11093545
+Node: 28-11093965
+Ref: 28-1-Footnote-11097601
+Node: 28-21097792
+Ref: 28-2-Footnote-11102913
+Node: 28-2-11103215
+Node: 28-31103786
+Ref: 28-3-Footnote-11116923
+Ref: 28-3-Footnote-21117256
+Ref: 28-3-Footnote-31117595
+Ref: 28-3-Footnote-41117936
+Ref: 28-3-Footnote-51118505
+Ref: 28-3-Footnote-61118991
+Node: Chapter 291119234
+Node: 29-11120181
+Node: 29-1-11124833
+Node: 29-21125841
+Ref: 29-2-Footnote-11134866
+Ref: 29-2-Footnote-21135655
+Ref: 29-2-Footnote-31136149
+Node: 29-31136754
+Node: 29-41146150
+Ref: 29-4-Footnote-11149499
+Node: 29-51149869
+Node: 29-61154494
+Ref: 29-6-Footnote-11161613
+Node: 29-71162683
+Node: 29-81170382
+Node: 29-91171730
+Node: Chapter 301174081
+Node: 30-11175777
+Ref: 30-1-Footnote-11179333
+Ref: 30-1-Footnote-21179768
+Node: 30-21179907
+Ref: 30-2-Footnote-11185951
+Ref: 30-2-Footnote-21186185
+Node: 30-31186463
+Node: 30-3-11189422
+Node: 30-41190239
+Node: 30-51193731
+Node: 30-61195332
+Ref: 30-6-Footnote-11198480
+Node: 30-6-11199023
+Node: 30-71203629
+Ref: 30-7-Footnote-11213351
+Ref: 30-7-Footnote-21213515
+Node: 30-81214063
+Node: Chapter 311214479
+Node: 31-11216009
+Node: 31-21227566
+Ref: 31-2-Footnote-11239783
+Ref: 31-2-Footnote-21240066
+Node: 31-31240365
+Ref: 31-3-Footnote-11247638
+Node: 31-41247761
+Ref: 31-4-Footnote-11252408
+Node: 31-51252879
+Node: Chapter 321255092
+Node: 32-11256285
+Ref: 32-1-Footnote-11261651
+Node: 32-21262142
+Ref: 32-2-Footnote-11263968
+Ref: 32-2-Footnote-21264096
+Node: 32-31264403
+Ref: 32-3-Footnote-11283118
+Ref: 32-3-Footnote-21283560
+Ref: 32-3-Footnote-31284248
+Ref: 32-3-Footnote-41284566
+Node: 32-41284890
+Ref: 32-4-Footnote-11293146
+Ref: 32-4-Footnote-21293723
+Ref: 32-4-Footnote-31294003
+Ref: 32-4-Footnote-41294114
+Node: 32-51294418
+Ref: 32-5-Footnote-11300387
+Ref: 32-5-Footnote-21300624
 
 End Tag Table

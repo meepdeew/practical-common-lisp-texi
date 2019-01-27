@@ -31,6 +31,10 @@ The three facets of the class as a data type are its name, its relation to other
   (slot-specifier*))
 @end example
 
+@menu
+* 17-1-1::       What Are "User-Defined Classes"?
+@end menu
+
 As with functions and variables, you can use any symbol as the name of a new class. @footnote{As when naming functions and variables, it's not quite true that you can use any symbol as a class name--you can't use names defined by the language standard. You'll see in Chapter 21 how to avoid such name conflicts.} Class names are in a separate namespace from both functions and variables, so you can have a class, function, and variable all with the same name. You'll use the class name as the argument to MAKE-INSTANCE, the function that creates new instances of user-defined classes.
 
 The direct-superclass-names specify the classes of which the new class is a subclass. If no superclasses are listed, the new class will directly subclass STANDARD-OBJECT. Any classes listed must be other user-defined classes, which ensures that each new class is ultimately descended from STANDARD-OBJECT. STANDARD-OBJECT in turn subclasses T, so all user-defined classes are part of the single class hierarchy that also contains all the built-in classes.
@@ -46,6 +50,13 @@ Eliding the slot specifiers for a moment, the DEFCLASS forms of some of the clas
 @end example
 
 I'll discuss in the section "Multiple Inheritance" what it means to list more than one direct superclass in direct-superclass-names.
+
+@node 17-1-1, 17-1, 17-1, 17-1
+@section What Are "User-Defined Classes"?
+
+The term user-defined classes isn't a term from the language standard--technically what I'm talking about when I say user-defined classes are classes that subclass STANDARD-OBJECT and whose metaclass is STANDARD-CLASS. But since I'm not going to talk about the ways you can define classes that don't subclass STANDARD-OBJECT and whose metaclass isn't STANDARD-CLASS, you don't really have to worry about that. User-defined isn't a perfect term for these classes since the implementation may define certain classes the same way. However, to call them standard classes would be even more confusing since the built-in classes, such as INTEGER and STRING, are just as standard, if not more so, because they're defined by the language standard but they don't extend STANDARD-OBJECT. To further complicate matters, it's also possible for users to define new classes that don't subclass STANDARD-OBJECT. In particular, the macro DEFSTRUCT also defines new classes. But that's largely for backward compatibility--DEFSTRUCT predated CLOS and was retrofitted to define classes when CLOS was integrated into the language. But the classes it creates are fairly limited compared to DEFCLASSed classes. So in this chapter I'll be discussing only classes defined with DEFCLASS that use the default metaclass of STANDARD-CLASS, and I'll refer to them as user-defined for lack of a better term.
+
+
 
 @node	17-2, 17-3, 17-1, Chapter 17
 @section Slot Specifiers

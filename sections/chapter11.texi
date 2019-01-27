@@ -1,7 +1,7 @@
 @node    Chapter 11, Chapter 12, Chapter 10, Top
 @section 11. Collections
 
-Like most programming languages, Common Lisp provides standard data types that collect multiple values into a single object. Every language slices up the collection problem a little bit differently, but the basic collection types usually boil down to an integer-indexed array type and a table type that can be used to map more or less arbitrary keys to values. The former are variously called arrays, lists, or tuples; the latter go by the names hash tables, associative arrays, maps, and dictionaries.
+Like most programming languages, Common Lisp provides standard data types that collect multiple values into a single object. Every language slices up the collection problem a little bit differently, but the basic collection types usually boil down to an integer-indexed array type and a table type that can be used to map more or less arbitrary keys to values. The former are variously called ‘arrays’, ‘lists’, or ‘tuples’; the latter go by the names ‘hash tables’, ‘associative arrays’, ‘maps’, and ‘dictionaries’.
 
 Lisp is, of course, famous for its list data structure, and most Lisp books, following the ontogeny-recapitulates-phylogeny principle of language instruction, start their discussion of Lisp's collections with lists. However, that approach often leads readers to the mistaken conclusion that lists are Lisp's only collection type. To make matters worse, because Lisp's lists are such a flexible data structure, it is possible to use them for many of the things arrays and hash tables are used for in other languages. But it's a mistake to focus too much on lists; while they're a crucial data structure for representing Lisp code as Lisp data, in many situations other data structures are more appropriate.
 
@@ -27,7 +27,7 @@ To keep lists from stealing the show, in this chapter I'll focus on Common Lisp'
 
 Vectors are Common Lisp's basic integer-indexed collection, and they come in two flavors. Fixed-size vectors are a lot like arrays in a language such as Java: a thin veneer over a chunk of contiguous memory that holds the vector's elements. @footnote{Vectors are called vectors, not arrays as their analogs in other languages are, because Common Lisp supports true multidimensional arrays. It's equally correct, though more cumbersome, to refer to them as one-dimensional arrays.} Resizable vectors, on the other hand, are more like arrays in Perl or Ruby, lists in Python, or the ArrayList class in Java: they abstract the actual storage, allowing the vector to grow and shrink as elements are added and removed.
 
-You can make fixed-size vectors containing specific values with the function VECTOR, which takes any number of arguments and returns a freshly allocated fixed-size vector containing those arguments.
+You can make fixed-size vectors containing specific values with the function ‘VECTOR‘, which takes any number of arguments and returns a freshly allocated fixed-size vector containing those arguments.
 
 @example
 (vector)     ==> #()

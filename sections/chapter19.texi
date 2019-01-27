@@ -90,9 +90,47 @@ For instance, one way to handle the malformed-log-entry-error signaled by parse-
 
 When parse-log-entry returns normally, its value will be assigned to entry and collected by the LOOP. But if parse-log-entry signals a malformed-log-entry-error, then the error clause will return NIL, which won't be collected.
 
+@menu
+* 19-3-1::       JAVA-STYLE EXCEPTON HANDLING
+@end menu
+
 This version of parse-log-file has one serious deficiency: it's doing too much. As its name suggests, the job of parse-log-file is to parse the file and produce a list of log-entry objects; if it can't, it's not its place to decide what to do instead. What if you want to use parse-log-file in an application that wants to tell the user that the log file is corrupted or one that wants to recover from malformed entries by fixing them up and re-parsing them? Or maybe an application is fine with skipping them but only until a certain number of corrupted entries have been seen.
 
 You could try to fix this problem by moving the HANDLER-CASE to a higher-level function. However, then you'd have no way to implement the current policy of skipping individual entries--when the error was signaled, the stack would be unwound all the way to the higher-level function, abandoning the parsing of the log file altogether. What you want is a way to provide the current recovery strategy without requiring that it always be used.
+
+@node 19-3-1, 19-3, 19-3, 19-3
+@section JAVA-STYLE EXCEPTON HANDLING
+
+HANDLER-CASE is the nearest analog in Common Lisp to Java- or Python-style exception handling. Where you might write this in Java:
+
+@example
+try @{
+  doStuff();
+  doMoreStuff();
+@} catch (SomeException se) @{
+  recover(se);
+@}
+@end example
+
+or this in Python:
+
+@example
+try:
+  doStuff()
+  doMoreStuff()
+except SomeException, se:
+  recover(se)
+@end example
+
+in Common Lisp you'd write this:
+
+@example
+(handler-case
+    (progn
+      (do-stuff)
+      (do-more-stuff))
+  (some-exception (se) (recover se)))
+@end example
 
 @node	19-4, 19-5, 19-3, Chapter 19
 @section Restarts
@@ -230,4 +268,13 @@ You can also build your own protocols on SIGNAL--whenever low-level code needs t
 
 You'll use the condition system in future practical chapters, both for regular error handling and, in Chapter 25, to help in handling a tricky corner case of parsing ID3 files. Unfortunately, it's the fate of error handling to always get short shrift in programming texts--proper error handling, or lack thereof, is often the biggest difference between illustrative code and hardened, production-quality code. The trick to writing the latter has more to do with adopting a particularly rigorous way of thinking about software than with the details of any particular programming language constructs. That said, if your goal is to write that kind of software, you'll find the Common Lisp condition system is an excellent tool for writing robust code and one that fits quite nicely into Common Lisp's incremental development style.
 
+@menu
+* 19-6-1::       Writing Robust Software
+@end menu
+
 In the next chapter I'll give a quick overview of some of the 25 special operators you haven't had a chance to use yet, at least not directly.
+
+@node 19-6-1, 19-6, 19-6, 19-6
+@section Writing Robust Software
+
+For information on writing robust software, you could do worse than to start by finding a copy of Software Reliability (John Wiley & Sons, 1976) by Glenford J. Meyers. Bertrand Meyer's writings on Design By Contract also provide a useful way of thinking about software correctness. For instance, see Chapters 11 and 12 of his Object-Oriented Software Construction (Prentice Hall, 1997). Keep in mind, however, that Bertrand Meyer is the inventor of Eiffel, a statically typed bondage and discipline language in the Algol/Ada school. While he has a lot of smart things to say about object orientation and software reliability, there's a fairly wide gap between his view of programming and The Lisp Way. Finally, for an excellent overview of the larger issues surrounding building fault-tolerant systems, see Chapter 3 of the classic Transaction Processing: Concepts and Techniques (Morgan Kaufmann, 1993) by Jim Gray and Andreas Reuter.

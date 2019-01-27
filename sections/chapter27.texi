@@ -30,6 +30,11 @@ As in Chapter 3, you can represent the individual rows with plists, but this tim
 
 The function make-rows used to initialize the rows slot can be a simple wrapper around MAKE-ARRAY that builds an empty, adjustable,vector with a fill pointer.
 
+@menu
+* 27-1-1::       The Package
+@end menu
+
+
 @example
 (defparameter *default-table-size* 100)
 
@@ -71,6 +76,47 @@ The default-value and value-normalizer slots are used when inserting rows into t
 Thus, the value-normalizer's responsibility is primarily to return a value that can be safely and correctly passed to the equality-predicate and comparator functions. If the value-normalizer can't figure out an appropriate value to return, it can signal an error.
 
 The other reason to normalize values before you store them in the database is to save both memory and CPU cycles. For instance, if you have a column that's going to contain string values but the number of distinct strings that will be stored in the column is small--for instance, the genre column in the MP3 database--you can save space and speed by using the value-normalizer to intern the strings (translate all STRING= values to a single string object). Thus, you'll need only as many strings as there are distinct values, regardless of how many rows are in the table, and you can use EQL to compare column values rather than the slower STRING=. @footnote{The general theory behind interning objects is that if you're going to compare a particular value many times, it's worth it to pay the cost of interning it. The value-normalizer runs once when you insert a value into the table and, as you'll see, once at the beginning of each query. Since a query can involve invoking the equality-predicate once per row in the table, the amortized cost of interning the values will quickly approach zero.}
+
+@node 27-1-1, 27-1, 27-1, 27-1
+@section The Package
+
+The package for the code you'll develop in this chapter looks like this:
+
+@example
+(defpackage :com.gigamonkeys.mp3-database
+  (:use :common-lisp
+        :com.gigamonkeys.pathnames
+        :com.gigamonkeys.macro-utilities
+        :com.gigamonkeys.id3v2)
+  (:export  :*default-table-size*
+            :*mp3-schema*
+            :*mp3s*
+            :column
+            :column-value
+            :delete-all-rows
+            :delete-rows
+            :do-rows
+            :extract-schema
+            :in
+            :insert-row
+            :load-database
+            :make-column
+            :make-schema
+            :map-rows
+            :matching
+            :not-nullable
+            :nth-row
+            :random-selection
+            :schema
+            :select
+            :shuffle-table
+            :sort-rows
+            :table
+            :table-size
+            :with-column-values))
+@end example
+
+The :use section gives you access to the functions and macros whose names are exported from the packages defined in Chapter 15, 8, and 25 and the :export section exports the API this library will provide, which you'll use in Chapter 29.
 
 @node	27-2, 27-3, 27-1, Chapter 27
 @section Defining a Schema

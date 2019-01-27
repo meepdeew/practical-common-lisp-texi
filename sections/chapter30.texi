@@ -145,6 +145,11 @@ Now that you have the basic language specified, you can think about how you're a
 
 The first bit of the foundation you'll need to lay is the code that knows how to escape characters with a special meaning in HTML. There are three such characters, and they must not appear in the text of an element or in an attribute value; they are <, >, and &. In element text or attribute values, these characters must be replaced with the character reference entities &lt;, &gt;, and &amp;. Similarly, in attribute values, the quotation marks used to delimit the value must be escaped, ' with &apos; and " with &quot;. Additionally, any character can be represented by a numeric character reference entity consisting of an ampersand, followed by a sharp sign, followed by the numeric code as a base 10 integer, and followed by a semicolon. These numeric escapes are sometimes used to embed non-ASCII characters in HTML.
 
+@menu
+* 30-3-1::       The Package
+@end menu
+
+
 The following function accepts a single character and returns a string containing a character reference entity for that character:
 
 @example
@@ -193,6 +198,22 @@ Finally, you'll need a variable, *escapes*, that will be bound to the set of cha
 
 @example
 (defvar *escapes* *element-escapes*)
+@end example
+
+@node 30-3-1, 30-3, 30-3, 30-3
+@section The Package
+
+Since FOO is a low-level library, the package you develop it in doesn't rely on much external code--just the usual dependency on names from the COMMON-LISP package and, almost as usual, on the names of the macro-writing macros from COM.GIGAMONKEYS.MACRO-UTILITIES. On the other hand, the package needs to export all the names needed by code that uses FOO. Here's the DEFPACKAGE from the source that you can download from the book's Web site:
+
+@example
+(defpackage :com.gigamonkeys.html
+  (:use :common-lisp :com.gigamonkeys.macro-utilities)
+  (:export :with-html-output
+           :in-html-style
+           :define-html-macro
+           :html
+           :emit-html
+           :&attributes))
 @end example
 
 @node	30-4, 30-5, 30-3, Chapter 30
@@ -332,6 +353,129 @@ Finally, the functions embed-value and embed-code are used only by the FOO compi
 (defmethod embed-code ((pp html-pretty-printer) code)
   (error "Can't embed code when interpreting. Code: ~s" code))
 @end example
+
+
+@menu
+* 30-6-1::       Using Conditions to Have Your Cake and Eat It Too
+@end menu
+
+
+@node 30-6-1, 30-6, 30-6, 30-6
+@section Using Conditions to Have Your Cake and Eat It Too
+
+An alternate approach would be to use EVAL to evaluate Lisp expressions in the interpreter. The problem with this approach is that EVAL has no access to the lexical environment. Thus, there's no way to make something like this work:
+
+@example
+(let ((x 10)) (emit-html '(:p x)))
+@end example
+
+when x is a lexical variable. The symbol x that's passed to emit-html at runtime has no particular connection to the lexical variable named with the same symbol. The Lisp compiler arranges for references to x in the code to refer to the variable, but after the code is compiled, there's no longer necessarily any association between the name x and that variable. This is the main reason that when you think EVAL is the solution to your problem, you're probably wrong.
+
+However, if x was a dynamic variable, declared with DEFVAR or DEFPARAMETER (and likely named *x* instead of x), EVAL could get at its value. Thus, it might be useful to allow the FOO interpreter to use EVAL in some situations. But it's a bad idea to always use EVAL. You can get the best of both worlds by combining the idea of using EVAL with the condition system.
+
+First define some error classes that you can signal when embed-value and embed-code are called in the interpreter.
+
+@example
+(define-condition embedded-lisp-in-interpreter (error)
+  ((form :initarg :form :reader form)))
+
+(define-condition value-in-interpreter (embedded-lisp-in-interpreter) ()
+  (:report
+   (lambda (c s)
+     (format s "Can't embed values when interpreting. Value: ~s" (form c)))))
+
+(define-condition code-in-interpreter (embedded-lisp-in-interpreter) ()
+  (:report
+   (lambda (c s)
+     (format s "Can't embed code when interpreting. Code: ~s" (form c)))))
+@end example
+
+Now you can implement embed-value and embed-code to signal those errors and provide a restart that'll evaluate the form with EVAL.
+
+@example
+(defmethod embed-value ((pp html-pretty-printer) value)
+  (restart-case (error 'value-in-interpreter :form value)
+    (evaluate ()
+      :report (lambda (s) (format s "EVAL ~s in null lexical environment." value))
+      (raw-string pp (escape (princ-to-string (eval value)) *escapes*) t))))
+
+(defmethod embed-code ((pp html-pretty-printer) code)
+  (restart-case (error 'code-in-interpreter :form code)
+    (evaluate ()
+      :report (lambda (s) (format s "EVAL ~s in null lexical environment." code))
+      (eval code))))
+@end example
+
+Now you can do something like this:
+
+@example
+HTML> (defvar *x* 10)
+*X*
+HTML> (emit-html '(:p *x*))
+@end example
+
+and you'll get dropped into the debugger with this message:
+
+@example
+Can't embed values when interpreting. Value: *X*
+   [Condition of type VALUE-IN-INTERPRETER]
+@end example
+
+@example
+Restarts:
+  0: [EVALUATE] EVAL *X* in null lexical environment.
+  1: [ABORT] Abort handling SLIME request.
+  2: [ABORT] Abort entirely from this process.
+@end example
+
+If you invoke the evaluate restart, embed-value will EVAL *x*, get the value 10, and generate this HTML:
+
+@example
+<p>10</p>
+@end example
+
+Then, as a convenience, you can provide restart functions--functions that invoke the evaluate restart--in certain situations. The evaluate restart function unconditionally invokes the restart, while eval-dynamic-variables and eval-code invoke it only if the form in the condition is a dynamic variable or potential code.
+
+@example
+(defun evaluate (&optional condition)
+  (declare (ignore condition))
+  (invoke-restart 'evaluate))
+
+(defun eval-dynamic-variables (&optional condition)
+  (when (and (symbolp (form condition)) (boundp (form condition)))
+    (evaluate)))
+
+(defun eval-code (&optional condition)
+  (when (consp (form condition))
+    (evaluate)))
+@end example
+
+Now you can use HANDLER-BIND to set up a handler to automatically invoke the evaluate restart for you.
+
+@example
+HTML> (handler-bind ((value-in-interpreter #'evaluate)) (emit-html '(:p *x*)))
+<p>10</p>
+T
+@end example
+
+Finally, you can define a macro to provide a nicer syntax for binding handlers for the two kinds of errors.
+
+@example
+(defmacro with-dynamic-evaluation ((&key values code) &body body)
+  `(handler-bind (
+       ,@@(if values `((value-in-interpreter #'evaluate)))
+       ,@@(if code `((code-in-interpreter #'evaluate))))
+     ,@@body))
+@end example
+
+With this macro defined, you can write this:
+
+@example
+HTML> (with-dynamic-evaluation (:values t) (emit-html '(:p *x*)))
+<p>10</p>
+T
+@end example
+
 
 @node	30-7, 30-8, 30-6, Chapter 30
 @section The Basic Evaluation Rule

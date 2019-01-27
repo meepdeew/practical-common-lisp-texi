@@ -67,6 +67,44 @@ while in an implementation other than one of the ones specifically conditionaliz
 
 Because the conditionalization happens in the reader, the compiler doesn't even see expressions that are skipped. @footnote{One slightly annoying consequence of the way read-time conditionalization works is that there's no easy way to write a fall-through case. For example, if you add support for another implementation to foo by adding another expression guarded with #+, you need to remember to also add the same feature to the or feature expression after the #- or the ERROR form will be evaluated after your new code runs.} This means you pay no runtime cost for having different versions for different implementations. Also, when the reader skips conditionalized expressions, it doesn't bother interning symbols, so the skipped expressions can safely contain symbols from packages that may not exist in other implementations.
 
+@menu
+* 15-2-1::       Packaging the Library
+@end menu
+
+
+@node 15-2-1, 15-2, 15-2, 15-2
+@section     Packaging the Library
+@comment node-name,  next,   previous,    up
+
+Speaking of packages, if you download the complete code for this library, you'll see that it's defined in a new package, com.gigamonkeys.pathnames. I'll discuss the details of defining and using packages in Chapter 21. For now you should note that some implementations provide their own packages that contain functions with some of the same names as the ones you'll define in this chapter and make those names available in the CL-USER package. Thus, if you try to define the functions from this library while in the CL-USER package, you may get errors or warnings about clobbering existing definitions. To avoid this possibility, you can create a file called packages.lisp with the following contents:
+
+@example
+(in-package :cl-user)
+@end example
+
+@example
+(defpackage :com.gigamonkeys.pathnames
+  (:use :common-lisp)
+  (:export
+   :list-directory
+   :file-exists-p
+   :directory-pathname-p
+   :file-pathname-p
+   :pathname-as-directory
+   :pathname-as-file
+   :walk-directory
+   :directory-p
+   :file-p))
+@end example
+
+and LOAD it. Then at the REPL or at the top of the file where you type the definitions from this chapter, type the following expression:
+
+@example
+(in-package :com.gigamonkeys.pathnames)
+@end example
+
+In addition to avoiding name conflicts with symbols already available in CL-USER, packaging the library this way also makes it easier to use in other code, as you'll see in several future chapters.
+
 @node	15-3, 15-4, 15-2, Chapter 15
 @section Listing a Directory
 

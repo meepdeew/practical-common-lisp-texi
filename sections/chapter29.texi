@@ -44,6 +44,11 @@ The heart of the playlist is the songs-table slot, which will hold a table objec
   (make-instance 'table :schema *mp3-schema*))
 @end example
 
+@menu
+* 29-1-1::       The Package
+@end menu
+
+
 By storing the list of songs as a table, you can use the database functions from Chapter 27 to manipulate the playlist: you can add to the playlist with insert-row, delete songs with delete-rows, and reorder the playlist with sort-rows and shuffle-table.
 
 The current-song and current-idx slots keep track of which song is playing: current-song is an actual song object, while current-idx is the index into the songs-table of the row representing the current song. You'll see in the section "Manipulating the Playlist" how to make sure current-song is updated whenever current-idx changes.
@@ -63,6 +68,31 @@ Finally, the lock slot holds a process lock created with the function make-proce
 @end example
 
 The with-process-lock macro acquires exclusive access to the process lock given and then executes the body forms, releasing the lock afterward. By default, with-process-lock allows recursive locks, meaning the same thread can safely acquire the same lock multiple times.
+
+@node 29-1-1, 29-1 , 29-1 , 29-1
+@section The Package
+
+You can define the package for the code in this chapter with the following DEFPACKAGE:
+
+@example
+(defpackage :com.gigamonkeys.mp3-browser
+  (:use :common-lisp
+        :net.aserve
+        :com.gigamonkeys.html
+        :com.gigamonkeys.shoutcast
+        :com.gigamonkeys.url-function
+        :com.gigamonkeys.mp3-database
+        :com.gigamonkeys.id3v2)
+  (:import-from :acl-socket
+                :ipaddr-to-dotted
+                :remote-host)
+  (:import-from :multiprocessing
+                :make-process-lock
+                :with-process-lock)
+  (:export :start-mp3-browser))
+@end example
+
+Because this is a high-level application, it uses a lot of lower-level packages. It also imports three symbols from the ACL-SOCKET package and two more from MULTIPROCESSING since it just needs those five and not the other 139 symbols those two packages export.
 
 @node	29-2, 29-3, 29-1, Chapter 29
 @section Playlists As Song Sources

@@ -33,6 +33,11 @@ Thus, the smallest legal metadata chunk is a single byte, zero, indicating zero 
 
 Because a Shoutcast server has to keep streaming songs to the client for as long as it's connected, you need to provide your server with a source of songs to draw on. In the Web-based application, each connected client will have a playlist that can be manipulated via the Web interface. But in the interest of avoiding excessive coupling, you should define an interface that the Shoutcast server can use to obtain songs to play. You can write a simple implementation of this interface now and then a more complex one as part of the Web application you'll build in Chapter 29.
 
+@menu
+* 28-2-1::       The Package
+@end menu
+
+
 The idea behind the interface is that the Shoutcast server will find a source of songs based on an ID extracted from the AllegroServe request object. It can then do three things with the song source it's given.
 
 @itemize @bullet
@@ -127,6 +132,28 @@ And for testing purposes you should provide a way to add songs to this queue.
      :title (format nil "~a by ~a from ~a" (song id3) (artist id3) (album id3))
      :id3-size (size id3))))
 @end example
+
+@node 28-2-1, 28-2, 28-2, 28-2
+@section The Package
+
+The package for the code you'll develop in this chapter looks like this:
+
+@example
+(defpackage :com.gigamonkeys.shoutcast
+  (:use :common-lisp
+        :net.aserve
+        :com.gigamonkeys.id3v2)
+  (:export :song
+           :file
+           :title
+           :id3-size
+           :find-song-source
+           :current-song
+           :still-current-p
+           :maybe-move-to-next-song
+           :*song-source-type*))
+@end example
+
 
 
 @node	28-3, Chapter 29, 28-2, Chapter 28

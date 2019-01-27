@@ -268,6 +268,11 @@ That said, probably 99 percent of the time, the standard method combination will
 
 Methods that explicitly specialize more than one of the generic function's required parameters are called multimethods. Multimethods are where generic functions and message passing really part ways. Multimethods don't fit into message-passing languages because they don't belong to a particular class; instead, each multimethod defines a part of the implementations of a given generic function that applies when the generic function is invoked with arguments that match all the method's specialized parameters.
 
+@menu
+* 16-8-1::       Multimethods vs. Method Overloading
+@end menu
+
+
 Multimethods are perfect for all those situations where, in a message-passing language, you struggle to decide to which class a certain behavior ought to belong. Is the sound a drum makes when it's hit with a drumstick a function of what kind of drum it is or what kind of stick you use to hit it? Both, of course. To model this situation in Common Lisp, you simply define a generic function beat that takes two arguments.
 
 @example
@@ -290,6 +295,49 @@ Then you can define various multimethods to implement beat for the combinations 
 Multimethods don't help with the combinatorial explosion--if you need to model five kinds of drums and six kinds of sticks, and every combination makes a different sound, there's no way around it; you need thirty different methods to implement all the combinations, with or without multimethods. What multimethods do save you from is having to write a bunch of dispatching code by letting you use the same built-in polymorphic dispatching that's so useful when dealing with methods specialized on a single parameter. @footnote{11}
 
 Multimethods also save you from having to tightly couple one set of classes with the other. In the drum/stick example, nothing requires the implementation of the drum classes to know about the various classes of drumstick, and nothing requires the drumstick classes to know anything about the various classes of drum. The multimethods connect the otherwise independent classes to describe their joint behavior without requiring any cooperation from the classes themselves.
+
+@node 16-8-1, 16-8, 16-8, 16-8
+@section Multimethods vs. Method Overloading
+
+Programmers used to statically typed message-passing languages such as Java and C++ may think multimethods sound similar to a feature of those languages called method overloading. However, these two language features are actually quite different since overloaded methods are chosen at compile time, based on the compile-time type of the arguments, not at runtime. To see how this works, consider the following two Java classes:
+
+@example
+public class A @{
+  public void foo(A a) @{ System.out.println("A/A"); @}
+  public void foo(B b) @{ System.out.println("A/B"); @}
+@}
+public class B extends A @{
+  public void foo(A a) @{ System.out.println("B/A"); @}
+  public void foo(B b) @{ System.out.println("B/B"); @}
+@}
+@end example
+
+Now consider what happens when you run the main method from this class.
+
+@example
+public class Main @{
+  public static void main(String[] argv) @{
+    A obj = argv[0].equals("A") ? new A() : new B();
+    obj.foo(obj);
+  @}
+@}
+@end example
+
+When you tell Main to instantiate an A, it prints "A/A" as you'd probably expect.
+
+@example
+bash$ java com.gigamonkeys.Main A
+A/A
+@end example
+
+However, if you tell Main to instantiate a B, then the true type of obj is taken into account for only half the dispatching.
+
+@example
+bash$ java com.gigamonkeys.Main B
+B/A
+@end example
+
+If overloaded methods worked like Common Lisp's multimethods, then that would print "B/B" instead. It is possible to implement multiple dispatch by hand in message-passing languages, but this runs against the grain of the message-passing model since the code in a multiply dispatched method doesn't belong to any one class.
 
 @node	16-9, Chapter 17, 16-8, Chapter 16
 @section To Be Continued . . .
