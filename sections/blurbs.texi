@@ -21,7 +21,7 @@
 --------------------------------------------------------------------------------------------
 
 
-“Peter Seibel's Practical Common Lisp is just what the title implies: an excellent introduction to Common Lisp for someone who wants to dive in and start using the language for real work. The book is very well written and is fun to read—at least for those of us whose idea of fun extends to learning new programming languages.
+“Peter Seibel's ‘Practical Common Lisp’ is just what the title implies: an excellent introduction to Common Lisp for someone who wants to dive in and start using the language for real work. The book is very well written and is fun to read—at least for those of us whose idea of fun extends to learning new programming languages.
 
 Rather than spending a lot of time on abstract discussion of Lisp's place in the universe of programming lnaguages, Seibel dives right in, guiding the reader through a series of programming examples of increasing complexity. This approach places the most emphasis on those parts of Common Lisp that skilled programmers use the most, without getting bogged down in the odd corners of Common Lisp that even the experts must look up in the manual. The result of Seibel's example-driven approach is to give the reader an excellent appreciation of the power of Common Lisp in building complex, evolving software systems with a minimum of effort.
 
@@ -57,13 +57,13 @@ If you're new to Lisp and want to dive right in don't hesitate to buy this book.
 --------------------------------------------------------------------------------------------
 
 
-“Practical Common Lisp is an excellent book that covers the breadth of the Common Lisp language and also demonstrates the unique features of Common Lisp with real-world applications that the reader can run and extend. This book not only shows what Common Lisp is but also why every programmer should be familiar with Lisp.” - ‘John Foderaro, Senior Scientist, Franz Inc.’
+“‘Practical Common Lisp’ is an excellent book that covers the breadth of the Common Lisp language and also demonstrates the unique features of Common Lisp with real-world applications that the reader can run and extend. This book not only shows what Common Lisp is but also why every programmer should be familiar with Lisp.” - ‘John Foderaro, Senior Scientist, Franz Inc.’
 
 
 --------------------------------------------------------------------------------------------
 
 
-“The Maxima Project frequently gets queries from potential new contributors who would like to learn Common Lisp. I am pleased to finally have a book that I can recommend to them without reservation. Peter Seibel's clear, direct style allows the reader to quickly appreciate the power of Common Lisp. His many included examples, which focus on contemporary programming problems, demonstrate that Lisp is much more than an academic programming language. Practical Common Lisp is a welcome addition to the literature.” — ‘James Amundson, Maxima Project Leader’
+“The Maxima Project frequently gets queries from potential new contributors who would like to learn Common Lisp. I am pleased to finally have a book that I can recommend to them without reservation. Peter Seibel's clear, direct style allows the reader to quickly appreciate the power of Common Lisp. His many included examples, which focus on contemporary programming problems, demonstrate that Lisp is much more than an academic programming language. ‘Practical Common Lisp’ is a welcome addition to the literature.” — ‘James Amundson, Maxima Project Leader’
 
 
 --------------------------------------------------------------------------------------------
@@ -75,7 +75,7 @@ If you're new to Lisp and want to dive right in don't hesitate to buy this book.
 --------------------------------------------------------------------------------------------
 
 
-“One of the most important parts of learning a programming language is learning its proper programming style. This is hard to teach, but it can be painlessly absorbed from Practical Common Lisp. Just reading the practical examples made me a better programmer in any language.” - ‘Peter Scott, Lisp programmer’
+“One of the most important parts of learning a programming language is learning its proper programming style. This is hard to teach, but it can be painlessly absorbed from ‘Practical Common Lisp’. Just reading the practical examples made me a better programmer in any language.” - ‘Peter Scott, Lisp programmer’
 
 
 --------------------------------------------------------------------------------------------
@@ -89,19 +89,19 @@ In most chapters, the reading of the chapter feels just like the experience of w
 --------------------------------------------------------------------------------------------
 
 
-“While learning Lisp, one is often refered to the CL HyperSpec if they do not know what a particular function does, however, I found that I often did not 'get it' just reading the HyperSpec. When I had a problem of this manner, I turned to Practical Common Lisp every single time—it is by far the most readable source on the subject that shows you how to program, not just tell you.” — ‘Philip Haddad, Lisp Programmer’
+“While learning Lisp, one is often refered to the CL HyperSpec if they do not know what a particular function does, however, I found that I often did not 'get it' just reading the HyperSpec. When I had a problem of this manner, I turned to ‘Practical Common Lisp’ every single time—it is by far the most readable source on the subject that shows you how to program, not just tell you.” — ‘Philip Haddad, Lisp Programmer’
 
 
 --------------------------------------------------------------------------------------------
 
 
-“With the IT world evolving at an ever increasing pace, professionals need the most powerful tools available. This is why Common Lisp—the most powerful, flexible, and stable programming language ever—is seeing such a rise in popularity. Practical Common Lisp is the long-awaited book that will help you harness the power of Common Lisp to tackle today's complex real world problems.” — ‘Marc Battyani, author of CL-PDF, CL-TYPESETTING, and mod_lisp.’
+“With the IT world evolving at an ever increasing pace, professionals need the most powerful tools available. This is why Common Lisp—the most powerful, flexible, and stable programming language ever—is seeing such a rise in popularity. ‘Practical Common Lisp’ is the long-awaited book that will help you harness the power of Common Lisp to tackle today's complex real world problems.” — ‘Marc Battyani, author of CL-PDF, CL-TYPESETTING, and mod_lisp.’
 
 
 --------------------------------------------------------------------------------------------
 
 
-“Please don't assume Common Lisp is only useful for Databases, Unit Test Frameworks, Spam Filters, ID3 Parsers, Web Programming, Shoutcast Servers, HTML Generation Interpreters, and HTML Generation Compilers just because these are the only things happened to be implemented in the book Practical Common Lisp. — ‘Tobias C. Rittweiler, Lisp Programmer’
+“Please don't assume Common Lisp is only useful for Databases, Unit Test Frameworks, Spam Filters, ID3 Parsers, Web Programming, Shoutcast Servers, HTML Generation Interpreters, and HTML Generation Compilers just because these are the only things happened to be implemented in the book ‘Practical Common Lisp’. — ‘Tobias C. Rittweiler, Lisp Programmer’
 
 
 --------------------------------------------------------------------------------------------

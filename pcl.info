@@ -1,16 +1,33 @@
 This is pcl.info, produced by makeinfo version 5.2 from pcl.texi.
 
 
-File: pcl.info,  Node: Top,  Next: Preface,  Prev: (dir),  Up: (dir)
+File: pcl.info,  Node: Top,  Next: Letter,  Prev: (dir),  Up: (dir)
 
 Practical Common Lisp
 =====================
 
 Unofficial Texinfo Format (C) Peter Seibel
 
+     “that book is dead sexy” — ‘Xach on #lisp’
+     (*Note Blurbs::.)
+
+This page, and the pages it links to, contain text of the Common Lisp
+book Practical Common Lisp published by Apress
+(https://www.apress.com/us/book/9781590592397).  These pages now contain
+the final text as it appears in the book.  If you find errors in these
+pages, please send email to <book@gigamonkeys.com>.  These pages will
+remain online in perpetuity -— I hope they will serve as a useful
+introduction to Common Lisp for folks who are curious about Lisp but
+maybe not yet curious enough to shell out big bucks for a dead-tree book
+and a good Common Lisp tutorial for folks who want to get down to real
+coding right away.  However, don't let that stop you from buying the
+printed version available from Apress at your favorite local or online
+bookseller.  For the complete bookstore browsing experience, you can
+read the letter to the reader (*Note Letter::.)  that appears on the
+back cover of the treeware edition of the book.
+
 * Menu:
 
-* Preface::     Preface
 * Letter::      Letter to the Reader
 * Blurbs::      Blurbs
 * Chapter 1::   Introduction: Why Lisp?
@@ -419,58 +436,34 @@ Unofficial Texinfo Format (C) Peter Seibel
 
 
 
-File: pcl.info,  Node: Preface,  Next: Letter,  Prev: Top,  Up: Top
-
-Preface
-*******
-
-     “that book is dead sexy” — ‘Xach on #lisp’
-     (*Note Blurbs::.)
-
-   This page, and the pages it links to, contain text of the Common Lisp
-book Practical Common Lisp published by Apress
-(https://www.apress.com/us/book/9781590592397).  These pages now contain
-the final text as it appears in the book.  If you find errors in these
-pages, please send email to <book@gigamonkeys.com>.  These pages will
-remain online in perpetuity -— I hope they will serve as a useful
-introduction to Common Lisp for folks who are curious about Lisp but
-maybe not yet curious enough to shell out big bucks for a dead-tree book
-and a good Common Lisp tutorial for folks who want to get down to real
-coding right away.  However, don't let that stop you from buying the
-printed version available from Apress at your favorite local or online
-bookseller.  For the complete bookstore browsing experience, you can
-read the letter to the reader (*Note Letter::.)  that appears on the
-back cover of the treeware edition of the book.
-
-
-File: pcl.info,  Node: Letter,  Next: Blurbs,  Prev: Preface,  Up: Top
+File: pcl.info,  Node: Letter,  Next: Blurbs,  Prev: Top,  Up: Top
 
 Letter to the Reader
 ********************
 
 Dear Reader,
 
-   Practical Common Lisp ...  isn't that an oxymoron?  If you're like
+‘Practical Common Lisp’ ...  isn't that an oxymoron?  If you're like
 most programmers, you probably know something about Lisp -— from a
 comp sci course in college or from learning enough Elisp to customize
 Emacs a bit.  Or maybe you just know someone who won't shut up about
 Lisp, the greatest language ever.  But you probably never figured you'd
-see practical and Lisp in the same book title.
+see ‘practical’ and ‘Lisp’ in the same book title.
 
-   Yet, you're reading this; you must want to know more.  Maybe you
-believe learning Lisp will make you a better programmer in any language.
-Or maybe you just want to know what those Lisp fanatics are yammering
-about all the time.  Or maybe you have learned some Lisp but haven't
-quite made the leap to using it to write interesting software.
+Yet, you're reading this; you must want to know more.  Maybe you believe
+learning Lisp will make you a better programmer in any language.  Or
+maybe you just want to know what those Lisp fanatics are yammering about
+all the time.  Or maybe you have learned some Lisp but haven't quite
+made the leap to using it to write interesting software.
 
-   If any of those is true, this book is for you.  Using Common Lisp, an
+If any of those is true, this book is for you.  Using Common Lisp, an
 ANSI standardized, industrial-strength dialect of Lisp, I show you how
 to write software that goes well beyond silly academic exercises or
 trivial editor customizations.  And I show you how Lisp -— even with
 many of its features adopted by other languages—still has a few tricks
 up its sleeve.
 
-   But unlike many Lisp books, this one doesn't just touch on a few of
+But unlike many Lisp books, this one doesn't just touch on a few of
 Lisp's greatest features and then leave you on your own to actually use
 them.  I cover all the language features you'll need to write real
 programs and devote well over a third of the book to developing
@@ -478,7 +471,7 @@ nontrivial software —- a statistical spam filter, a library for
 parsing binary files, and a server for streaming MP3s over a network
 complete with an online MP3 database and Web interface.
 
-   So turn the book over, open it up, and see for yourself how eminently
+So turn the book over, open it up, and see for yourself how eminently
 practical using the greatest language ever invented can be.
 
 Sincerely,
@@ -509,11 +502,11 @@ Blurbs
 
      -------------------------------------------------------------
 
-     “Peter Seibel's Practical Common Lisp is just what the title
-     implies: an excellent introduction to Common Lisp for someone who
-     wants to dive in and start using the language for real work.  The
-     book is very well written and is fun to read—at least for those
-     of us whose idea of fun extends to learning new programming
+     “Peter Seibel's ‘Practical Common Lisp’ is just what the
+     title implies: an excellent introduction to Common Lisp for someone
+     who wants to dive in and start using the language for real work.
+     The book is very well written and is fun to read—at least for
+     those of us whose idea of fun extends to learning new programming
      languages.
 
      Rather than spending a lot of time on abstract discussion of Lisp's
@@ -581,7 +574,7 @@ Blurbs
 
      -------------------------------------------------------------
 
-     “Practical Common Lisp is an excellent book that covers the
+     “‘Practical Common Lisp’ is an excellent book that covers the
      breadth of the Common Lisp language and also demonstrates the
      unique features of Common Lisp with real-world applications that
      the reader can run and extend.  This book not only shows what
@@ -597,7 +590,7 @@ Blurbs
      to quickly appreciate the power of Common Lisp.  His many included
      examples, which focus on contemporary programming problems,
      demonstrate that Lisp is much more than an academic programming
-     language.  Practical Common Lisp is a welcome addition to the
+     language.  ‘Practical Common Lisp’ is a welcome addition to the
      literature.” — ‘James Amundson, Maxima Project Leader’
 
      -------------------------------------------------------------
@@ -612,8 +605,8 @@ Blurbs
 
      “One of the most important parts of learning a programming
      language is learning its proper programming style.  This is hard to
-     teach, but it can be painlessly absorbed from Practical Common
-     Lisp.  Just reading the practical examples made me a better
+     teach, but it can be painlessly absorbed from ‘Practical Common
+     Lisp’.  Just reading the practical examples made me a better
      programmer in any language.” - ‘Peter Scott, Lisp programmer’
 
      -------------------------------------------------------------
@@ -640,19 +633,19 @@ Blurbs
      “While learning Lisp, one is often refered to the CL HyperSpec if
      they do not know what a particular function does, however, I found
      that I often did not 'get it' just reading the HyperSpec.  When I
-     had a problem of this manner, I turned to Practical Common Lisp
-     every single time—it is by far the most readable source on the
-     subject that shows you how to program, not just tell you.” —
-     ‘Philip Haddad, Lisp Programmer’
+     had a problem of this manner, I turned to ‘Practical Common
+     Lisp’ every single time—it is by far the most readable source
+     on the subject that shows you how to program, not just tell you.”
+     — ‘Philip Haddad, Lisp Programmer’
 
      -------------------------------------------------------------
 
      “With the IT world evolving at an ever increasing pace,
      professionals need the most powerful tools available.  This is why
      Common Lisp—the most powerful, flexible, and stable programming
-     language ever—is seeing such a rise in popularity.  Practical
-     Common Lisp is the long-awaited book that will help you harness the
-     power of Common Lisp to tackle today's complex real world
+     language ever—is seeing such a rise in popularity.  ‘Practical
+     Common Lisp’ is the long-awaited book that will help you harness
+     the power of Common Lisp to tackle today's complex real world
      problems.” — ‘Marc Battyani, author of CL-PDF,
      CL-TYPESETTING, and mod_lisp.’
 
@@ -662,8 +655,8 @@ Blurbs
      Unit Test Frameworks, Spam Filters, ID3 Parsers, Web Programming,
      Shoutcast Servers, HTML Generation Interpreters, and HTML
      Generation Compilers just because these are the only things
-     happened to be implemented in the book Practical Common Lisp.  —
-     ‘Tobias C. Rittweiler, Lisp Programmer’
+     happened to be implemented in the book ‘Practical Common Lisp’.
+     — ‘Tobias C. Rittweiler, Lisp Programmer’
 
      -------------------------------------------------------------
 
@@ -706,15 +699,15 @@ then programming in Common Lisp is likely to be about the most fun you
 can have with a computer.  You'll get more done, faster, using it than
 you would using pretty much any other language.
 
-   That's a bold claim.  Can I justify it?  Not in a just a few pages in
+That's a bold claim.  Can I justify it?  Not in a just a few pages in
 this chapter-you're going to have to learn some Lisp and see for
 yourself-thus the rest of this book.  For now, let me start with some
 anecdotal evidence, the story of my own road to Lisp.  Then, in the next
 section, I'll explain the payoff I think you'll get from learning Common
 Lisp.
 
-   I'm one of what must be a fairly small number of second-generation
-Lisp hackers.  My father got his start in computers writing an operating
+I'm one of what must be a fairly small number of second-generation Lisp
+hackers.  My father got his start in computers writing an operating
 system in assembly for the machine he used to gather data for his
 doctoral dissertation in physics.  After running computer systems at
 various physics labs, by the 1980s he had left physics altogether and
@@ -730,27 +723,27 @@ University (CMU) to talk to some of the folks working on what was to
 become Common Lisp about whether Lisp might be a good language for this
 project.
 
-   The CMU folks showed him some demos of stuff they were working on,
-and he was convinced.  He in turn convinced his bosses to let his team
-take over the failing project and do it in Lisp.  A year later, and
-using only what was left of the original budget, his team delivered a
-working application with features that the original team had given up
-any hope of delivering.  My dad credits his team's success to their
-decision to use Lisp.
+The CMU folks showed him some demos of stuff they were working on, and
+he was convinced.  He in turn convinced his bosses to let his team take
+over the failing project and do it in Lisp.  A year later, and using
+only what was left of the original budget, his team delivered a working
+application with features that the original team had given up any hope
+of delivering.  My dad credits his team's success to their decision to
+use Lisp.
 
-   Now, that's just one anecdote.  And maybe my dad is wrong about why
-they succeeded.  Or maybe Lisp was better only in comparison to other
+Now, that's just one anecdote.  And maybe my dad is wrong about why they
+succeeded.  Or maybe Lisp was better only in comparison to other
 languages of the day.  These days we have lots of fancy new languages,
 many of which have incorporated features from Lisp.  Am I really saying
 Lisp can offer you the same benefits today as it offered my dad in the
 1980s?  Read on.
 
-   Despite my father's best efforts, I didn't learn any Lisp in high
+Despite my father's best efforts, I didn't learn any Lisp in high
 school.  After a college career that didn't involve much programming in
 any language, I was seduced by the Web and back into computers.  I
 worked first in Perl, learning enough to be dangerous while building an
-online discussion forum for Mother Jones magazine's Web site and then
-moving to a Web shop, Organic Online, where I worked on big-for the
+online discussion forum for ‘Mother Jones’ magazine's Web site and
+then moving to a Web shop, Organic Online, where I worked on big-for the
 time-Web sites such as the one Nike put up during the 1996 Olympics.
 Later I moved onto Java as an early developer at WebLogic, now part of
 BEA. After WebLogic, I joined another startup where I was the lead
@@ -759,7 +752,7 @@ Along the way, my general interest in programming languages led me to
 explore such mainstream languages as C, C++, and Python, as well as less
 well-known ones such as Smalltalk, Eiffel, and Beta.
 
-   So I knew two languages inside and out and was familiar with another
+So I knew two languages inside and out and was familiar with another
 half dozen.  Eventually, however, I realized my interest in programming
 languages was really rooted in the idea planted by my father's tales of
 Lisp-that different languages really are different, and that, despite
@@ -770,16 +763,16 @@ with Lisp itself.  So, I started doing some Lisp hacking in my free
 time.  And whenever I did, it was exhilarating how quickly I was able to
 go from idea to working code.
 
-   For example, one vacation, having a week or so to hack Lisp, I
-decided to try writing a version of a program-a system for breeding
-genetic algorithms to play the game of Go-that I had written early in my
-career as a Java programmer.  Even handicapped by my then rudimentary
-knowledge of Common Lisp and having to look up even basic functions, it
-still felt more productive than it would have been to rewrite the same
-program in Java, even with several extra years of Java experience
-acquired since writing the first version.
+For example, one vacation, having a week or so to hack Lisp, I decided
+to try writing a version of a program-a system for breeding genetic
+algorithms to play the game of Go-that I had written early in my career
+as a Java programmer.  Even handicapped by my then rudimentary knowledge
+of Common Lisp and having to look up even basic functions, it still felt
+more productive than it would have been to rewrite the same program in
+Java, even with several extra years of Java experience acquired since
+writing the first version.
 
-   A similar experiment led to the library I'll discuss in Chapter 24.
+A similar experiment led to the library I'll discuss in Chapter 24.
 Early in my time at WebLogic I had written a library, in Java, for
 taking apart Java class files.  It worked, but the code was a bit of a
 mess and hard to modify or extend.  I had tried several times, over the
@@ -812,30 +805,30 @@ some quirk in the way my brain is wired.  It could even be genetic,
 since my dad has it too.  So before you dive into learning Lisp, it's
 reasonable to want to know what the payoff is going to be.
 
-   For some languages, the payoff is relatively obvious.  For instance,
-if you want to write low-level code on Unix, you should learn C. Or if
-you want to write certain kinds of cross-platform applications, you
-should learn Java.  And any of a number companies still use a lot of
-C++, so if you want to get a job at one of them, you should learn C++.
+For some languages, the payoff is relatively obvious.  For instance, if
+you want to write low-level code on Unix, you should learn C. Or if you
+want to write certain kinds of cross-platform applications, you should
+learn Java.  And any of a number companies still use a lot of C++, so if
+you want to get a job at one of them, you should learn C++.
 
-   For most languages, however, the payoff isn't so easily categorized;
-it has to do with subjective criteria such as how it feels to use the
+For most languages, however, the payoff isn't so easily categorized; it
+has to do with subjective criteria such as how it feels to use the
 language.  Perl advocates like to say that Perl "makes easy things easy
 and hard things possible" and revel in the fact that, as the Perl motto
 has it, "There's more than one way to do it."  (1) Python's fans, on the
 other hand, think Python is clean and simple and think Python code is
-easier to understand because, as _their_ motto says, "There's only one
-way to do it."
+easier to understand because, as ‘their’ motto says, "There's only
+one way to do it."
 
-   So, why Common Lisp?  There's no immediately obvious payoff for
-adopting Common Lisp the way there is for C, Java, and C++ (unless, of
-course, you happen to own a Lisp Machine).  The benefits of using Lisp
-have much more to do with the experience of using it.  I'll spend the
-rest of this book showing you the specific features of Common Lisp and
-how to use them so you can see for yourself what it's like.  For now
-I'll try to give you a sense of Lisp's philosophy.
+So, why Common Lisp?  There's no immediately obvious payoff for adopting
+Common Lisp the way there is for C, Java, and C++ (unless, of course,
+you happen to own a Lisp Machine).  The benefits of using Lisp have much
+more to do with the experience of using it.  I'll spend the rest of this
+book showing you the specific features of Common Lisp and how to use
+them so you can see for yourself what it's like.  For now I'll try to
+give you a sense of Lisp's philosophy.
 
-   The nearest thing Common Lisp has to a motto is the koan-like
+The nearest thing Common Lisp has to a motto is the koan-like
 description, "the programmable programming language."  While cryptic,
 that description gets at the root of the biggest advantage Common Lisp
 still has over other languages.  More than any other language, Common
@@ -846,7 +839,7 @@ supported some feature that would make your program easier to write,
 because, as you'll see throughout this book, you can just add the
 feature yourself.
 
-   Consequently, a Common Lisp program tends to provide a much clearer
+Consequently, a Common Lisp program tends to provide a much clearer
 mapping between your ideas about how the program works and the code you
 actually write.  Your ideas aren't obscured by boilerplate code and
 endlessly repeated idioms.  This makes your code easier to maintain
@@ -857,25 +850,25 @@ This also means you'll develop code more quickly; there's less code to
 write, and you don't waste time thrashing around trying to find a clean
 way to express yourself within the limitations of the language.  (2)
 
-   Common Lisp is also an excellent language for exploratory
-programming-if you don't know exactly how your program is going to work
-when you first sit down to write it, Common Lisp provides several
-features to help you develop your code incrementally and interactively.
+Common Lisp is also an excellent language for exploratory programming-if
+you don't know exactly how your program is going to work when you first
+sit down to write it, Common Lisp provides several features to help you
+develop your code incrementally and interactively.
 
-   For starters, the interactive read-eval-print loop, which I'll
-introduce in the next chapter, lets you continually interact with your
-program as you develop it.  Write a new function.  Test it.  Change it.
-Try a different approach.  You never have to stop for a lengthy
-compilation cycle.  (3)
+For starters, the interactive read-eval-print loop, which I'll introduce
+in the next chapter, lets you continually interact with your program as
+you develop it.  Write a new function.  Test it.  Change it.  Try a
+different approach.  You never have to stop for a lengthy compilation
+cycle.  (3)
 
-   Other features that support a flowing, interactive programming style
-are Lisp's dynamic typing and the Common Lisp condition system.  Because
-of the former, you spend less time convincing the compiler you should be
+Other features that support a flowing, interactive programming style are
+Lisp's dynamic typing and the Common Lisp condition system.  Because of
+the former, you spend less time convincing the compiler you should be
 allowed to run your code and more time actually running it and working
 on it, (4) and the latter lets you develop even your error handling code
 interactively.
 
-   Another consequence of being "a programmable programming language" is
+Another consequence of being "a programmable programming language" is
 that Common Lisp, in addition to incorporating small changes that make
 particular programs easier to write, can easily adopt big new ideas
 about how programming languages should work.  For instance, the original
@@ -885,7 +878,7 @@ Lisp.  This allowed Lisp programmers to gain actual experience with the
 facilities it provided before it was officially incorporated into the
 language.
 
-   Whatever new paradigm comes down the pike next, it's extremely likely
+Whatever new paradigm comes down the pike next, it's extremely likely
 that Common Lisp will be able to absorb it without requiring any changes
 to the core language.  For example, a Lisper has recently written a
 library, AspectL, that adds support for aspect-oriented programming
@@ -906,19 +899,19 @@ efficiency is discussed at http://www.norvig.com/java-lisp.html.
 which we're capable of incredible concentration and productivity.  The
 importance of flow to programming has been recognized for nearly two
 decades since it was discussed in the classic book about human factors
-in programming Peopleware: Productive Projects and Teams by Tom DeMarco
-and Timothy Lister (Dorset House, 1987).  The two key facts about flow
-are that it takes around 15 minutes to get into a state of flow and that
-even brief interruptions can break you right out of it, requiring
-another 15-minute immersion to reenter.  DeMarco and Lister, like most
-subsequent authors, concerned themselves mostly with flow-destroying
-interruptions such as ringing telephones and inopportune visits from the
-boss.  Less frequently considered but probably just as important to
-programmers are the interruptions caused by our tools.  Languages that
-require, for instance, a lengthy compilation before you can try your
-latest code can be just as inimical to flow as a noisy phone or a nosy
-boss.  So, one way to look at Lisp is as a language designed to keep you
-in a state of flow.
+in programming ‘Peopleware: Productive Projects and Teams’ by Tom
+DeMarco and Timothy Lister (Dorset House, 1987).  The two key facts
+about flow are that it takes around 15 minutes to get into a state of
+flow and that even brief interruptions can break you right out of it,
+requiring another 15-minute immersion to reenter.  DeMarco and Lister,
+like most subsequent authors, concerned themselves mostly with
+flow-destroying interruptions such as ringing telephones and inopportune
+visits from the boss.  Less frequently considered but probably just as
+important to programmers are the interruptions caused by our tools.
+Languages that require, for instance, a lengthy compilation before you
+can try your latest code can be just as inimical to flow as a noisy
+phone or a nosy boss.  So, one way to look at Lisp is as a language
+designed to keep you in a state of flow.
 
    (4) This point is bound to be somewhat controversial, at least with
 some folks.  Static versus dynamic typing is one of the classic
@@ -927,12 +920,12 @@ from statically typed functional languages such as Haskel and ML) and
 refuse to consider living without static type checks, you might as well
 put this book down now.  However, before you do, you might first want to
 check out what self-described "statically typed bigot" Robert Martin
-(author of Designing Object Oriented C++ Applications Using the Booch
-Method [Prentice Hall, 1995]) and C++ and Java author Bruce Eckel
-(author of Thinking in C++ [Prentice Hall, 1995] and Thinking in Java
-[Prentice Hall, 1998]) have had to say about dynamic typing on their
-weblogs (http://www.artima.com/weblogs/viewpost.jsp?thread=4639 and
-http://www.mindview.net/WebLog/log-0025).  On the other hand, folks
+(author of ‘Designing Object Oriented C++ Applications Using the Booch
+Method’ [Prentice Hall, 1995]) and C++ and Java author Bruce Eckel
+(author of ‘Thinking in C++’ [Prentice Hall, 1995] and ‘Thinking
+in Java’ [Prentice Hall, 1998]) have had to say about dynamic typing
+on their weblogs (http://www.artima.com/weblogs/viewpost.jsp?thread=4639
+and http://www.mindview.net/WebLog/log-0025).  On the other hand, folks
 coming from Smalltalk, Python, Perl, or Ruby should feel right at home
 with this aspect of Common Lisp.
 
@@ -972,7 +965,7 @@ just don't exist in other programming languages.  How is this possible?
 What on Earth would provoke the evolution of such a well-equipped
 language?
 
-   Well, McCarthy was (and still is) an artificial intelligence (AI)
+Well, McCarthy was (and still is) an artificial intelligence (AI)
 researcher, and many of the features he built into his initial version
 of the language made it an excellent language for AI programming.
 During the AI boom of the 1980s, Lisp remained a favorite tool for
@@ -987,7 +980,7 @@ large-scale battlefield simulations, automated planning, and natural
 language interfaces.  These folks also used Lisp and continued pushing
 it to do what they needed.
 
-   The same forces that drove Lisp's feature evolution also pushed the
+The same forces that drove Lisp's feature evolution also pushed the
 envelope along other dimensions-big AI problems eat up a lot of
 computing resources however you code them, and if you run Moore's law in
 reverse for 20 years, you can imagine how scarce computing resources
@@ -1001,23 +994,23 @@ Lisp.  As I'll show in Chapter 32, with proper (optional) declarations,
 a good Lisp compiler can generate machine code quite similar to what
 might be generated by a C compiler.
 
-   The 1980s were also the era of the Lisp Machines, with several
+The 1980s were also the era of the Lisp Machines, with several
 companies, most famously Symbolics, producing computers that ran Lisp
 natively from the chips up.  Thus, Lisp became a systems programming
 language, used for writing the operating system, editors, compilers, and
 pretty much everything else that ran on the Lisp Machines.
 
-   In fact, by the early 1980s, with various AI labs and the Lisp
-machine vendors all providing their own Lisp implementations, there was
-such a proliferation of Lisp systems and dialects that the folks at
-DARPA began to express concern about the Lisp community splintering.  To
-address this concern, a grassroots group of Lisp hackers got together in
-1981 and began the process of standardizing a new language called Common
-Lisp that combined the best features from the existing Lisp dialects.
-Their work was documented in the book Common Lisp the Language by Guy
+In fact, by the early 1980s, with various AI labs and the Lisp machine
+vendors all providing their own Lisp implementations, there was such a
+proliferation of Lisp systems and dialects that the folks at DARPA began
+to express concern about the Lisp community splintering.  To address
+this concern, a grassroots group of Lisp hackers got together in 1981
+and began the process of standardizing a new language called Common Lisp
+that combined the best features from the existing Lisp dialects.  Their
+work was documented in the book ‘Common Lisp the Language’ by Guy
 Steele (Digital Press, 1984)-CLtL to the Lisp-cognoscenti.
 
-   By 1986 the first Common Lisp implementations were available, and the
+By 1986 the first Common Lisp implementations were available, and the
 writing was on the wall for the dialects it was intended to replace.  In
 1996, the American National Standards Institute (ANSI) released a
 standard for Common Lisp that built on and extended the language
@@ -1032,7 +1025,7 @@ write the libraries they need and often make them available to others.
 In the last few years, in particular, there has been a spurt of activity
 in open-source Lisp libraries.
 
-   So, on one hand, Lisp is one of computer science's "classical"
+So, on one hand, Lisp is one of computer science's "classical"
 languages, based on ideas that have stood the test of time.  (2) On the
 other, it's a thoroughly modern, general-purpose language whose design
 reflects a deeply pragmatic approach to solving real problems as
@@ -1051,7 +1044,7 @@ wearing bell-bottoms when they learned it.  (3)
 
    ---------- Footnotes ----------
 
-   (1) Lisp 1.5 Programmer's Manual (M.I.T. Press, 1962)
+   (1) ‘Lisp 1.5 Programmer's Manual’ (M.I.T. Press, 1962)
 
    (2) Ideas first introduced in Lisp include the if/then/else
 construct, recursive function calls, dynamic memory allocation, garbage
@@ -1076,7 +1069,7 @@ Common Lisp projects, and the number of local Lisp user groups that have
 sprung up in the past couple of years.
 
 
-File: pcl.info,  Node: 1-2-1,  Next: 1-2,  Prev: 1-2,  Up: 1-2
+File: pcl.info,  Node: 1-2-1,  Next: 1-3,  Prev: 1-2,  Up: 1-2
 
 But I learned Lisp Once, And IT Wasn't Like what you're describing
 ==================================================================
@@ -1087,11 +1080,11 @@ most of the dialects it's descended from, it isn't the only remaining
 Lisp dialect, and depending on where and when you were exposed to Lisp,
 you may very well have learned one of these other dialects.
 
-   Other than Common Lisp, the one general-purpose Lisp dialect that
-still has an active user community is Scheme.  Common Lisp borrowed a
-few important features from Scheme but never intended to replace it.
+Other than Common Lisp, the one general-purpose Lisp dialect that still
+has an active user community is Scheme.  Common Lisp borrowed a few
+important features from Scheme but never intended to replace it.
 
-   Originally designed at M.I.T., where it was quickly put to use as a
+Originally designed at M.I.T., where it was quickly put to use as a
 teaching language for undergraduate computer science courses, Scheme has
 always been aimed at a different language niche than Common Lisp.  In
 particular, Scheme's designers have focused on keeping the core language
@@ -1099,15 +1092,15 @@ as small and as simple as possible.  This has obvious benefits for a
 teaching language and also for programming language researchers who like
 to be able to formally prove things about languages.
 
-   It also has the benefit of making it relatively easy to understand
-the whole language as specified in the standard.  But, it does so at the
+It also has the benefit of making it relatively easy to understand the
+whole language as specified in the standard.  But, it does so at the
 cost of omitting many useful features that are standardized in Common
 Lisp.  Individual Scheme implementations may provide these features in
 implementation-specific ways, but their omission from the standard makes
 it harder to write portable Scheme code than to write portable Common
 Lisp code.
 
-   Scheme also emphasizes a functional programming style and the use of
+Scheme also emphasizes a functional programming style and the use of
 recursion much more than Common Lisp does.  If you studied Lisp in
 college and came away with the impression that it was only an academic
 language with no real-world application, chances are you learned Scheme.
@@ -1116,21 +1109,21 @@ but it's even less applicable to Common Lisp, which was expressly
 designed to be a real-world engineering language rather than a
 theoretically "pure" language.
 
-   If you've learned Scheme, you should also be aware that a number of
+If you've learned Scheme, you should also be aware that a number of
 subtle differences between Scheme and Common Lisp may trip you up.
 These differences are also the basis for several perennial religious
 wars between the hotheads in the Common Lisp and Scheme communities.
 I'll try to point out some of the more important differences as we go
 along.
 
-   Two other Lisp dialects still in widespread use are Elisp, the
-extension language for the Emacs editor, and Autolisp, the extension
-language for Autodesk's AutoCAD computer-aided design tool.  Although
-it's possible more lines of Elisp and Autolisp have been written than of
-any other dialect of Lisp, neither can be used outside their host
-application, and both are quite old-fashioned Lisps compared to either
-Scheme or Common Lisp.  If you've used one of these dialects, prepare to
-hop in the Lisp time machine and jump forward several decades.
+Two other Lisp dialects still in widespread use are Elisp, the extension
+language for the Emacs editor, and Autolisp, the extension language for
+Autodesk's AutoCAD computer-aided design tool.  Although it's possible
+more lines of Elisp and Autolisp have been written than of any other
+dialect of Lisp, neither can be used outside their host application, and
+both are quite old-fashioned Lisps compared to either Scheme or Common
+Lisp.  If you've used one of these dialects, prepare to hop in the Lisp
+time machine and jump forward several decades.
 
 
 File: pcl.info,  Node: 1-3,  Next: Chapter 2,  Prev: 1-2,  Up: Chapter 1
@@ -1142,12 +1135,12 @@ This book is for you if you're curious about Common Lisp, regardless of
 whether you're already convinced you want to use it or if you just want
 to know what all the fuss is about.
 
-   If you've learned some Lisp already but have had trouble making the
-leap from academic exercises to real programs, this book should get you
-on your way.  On the other hand, you don't have to be already convinced
+If you've learned some Lisp already but have had trouble making the leap
+from academic exercises to real programs, this book should get you on
+your way.  On the other hand, you don't have to be already convinced
 that you want to use Lisp to get something out of this book.
 
-   If you're a hard-nosed pragmatist who wants to know what advantages
+If you're a hard-nosed pragmatist who wants to know what advantages
 Common Lisp has over languages such as Perl, Python, Java, C, or C#,
 this book should give you some ideas.  Or maybe you don't even care
 about using Lisp-maybe you're already sure Lisp isn't really any better
@@ -1158,9 +1151,9 @@ this book, you still think Common Lisp is no better than your current
 favorite languages, you'll be in an excellent position to explain
 exactly why.
 
-   I cover not only the syntax and semantics of the language but also
-how you can use it to write software that does useful stuff.  In the
-first part of the book, I'll cover the language itself, mixing in a few
+I cover not only the syntax and semantics of the language but also how
+you can use it to write software that does useful stuff.  In the first
+part of the book, I'll cover the language itself, mixing in a few
 "practical" chapters, where I'll show you how to write real code.  Then,
 after I've covered most of the language, including several parts that
 other books leave for you to figure out on your own, the remainder of
@@ -1170,7 +1163,7 @@ find useful: filter spam, parse binary files, catalog MP3s, stream MP3s
 over a network, and provide a Web interface for the MP3 catalog and
 server.
 
-   After you finish this book, you'll be familiar with all the most
+After you finish this book, you'll be familiar with all the most
 important features of the language and how they fit together, you'll
 have used Common Lisp to write several nontrivial programs, and you'll
 be well prepared to continue exploring the language on your own.  While
@@ -1187,10 +1180,10 @@ In this chapter you'll set up your programming environment and write
 your first Common Lisp programs.  We'll use the easy-to-install Lisp in
 a Box developed by Matthew Danish and Mikel Evins, which packages a
 Common Lisp implementation with Emacs, a powerful Lisp-aware text
-editor, and SLIME (1), a Common Lisp development environment built on
+editor, and SLIME (1) , a Common Lisp development environment built on
 top of Emacs.
 
-   This combo provides a state-of-the-art Common Lisp development
+This combo provides a state-of-the-art Common Lisp development
 environment that supports the incremental, interactive development style
 that characterizes Lisp programming.  The SLIME environment has the
 added advantage of providing a fairly uniform user interface regardless
@@ -1200,7 +1193,7 @@ development environment to talk about; folks who want to explore other
 development environments such as the graphical integrated development
 environments (IDEs) provided by some of the commercial Lisp vendors or
 environments based on other editors shouldn't have too much trouble
-translating the basics (2).
+translating the basics (2) .
 
 * Menu:
 
@@ -1251,31 +1244,31 @@ to do so.  Furthermore, changes to the standard have to be made in
 accordance with a process controlled by the standards body American
 National Standards Institute (ANSI). That process is designed to keep
 any one entity, such as a single vendor, from being able to arbitrarily
-change the standard (1).  Thus, the Common Lisp standard is a contract
+change the standard (1) .  Thus, the Common Lisp standard is a contract
 between any Common Lisp vendor and Common Lisp programmers.  The
 contract tells you that if you write a program that uses the features of
 the language the way they're described in the standard, you can count on
 your program behaving the same in any conforming implementation.
 
-   On the other hand, the standard may not cover everything you may want
-to do in your programs-some things were intentionally left unspecified
-in order to allow continuing experimentation by implementers in areas
-where there wasn't consensus about the best way for the language to
-support certain features.  So every implementation offers some features
-above and beyond what's specified in the standard.  Depending on what
-kind of programming you're going to be doing, it may make sense to just
-pick one implementation that has the extra features you need and use
-that.  On the other hand, if we're delivering Lisp source to be used by
-others, such as libraries, you'll want-as far as possible-to write
-portable Common Lisp.  For writing code that should be mostly portable
-but that needs facilities not defined by the standard, Common Lisp
-provides a flexible way to write code "conditionalized" on the features
-available in a particular implementation.  You'll see an example of this
-kind of code in Chapter 15 when we develop a simple library that
-smoothes over some differences between how different Lisp
-implementations deal with filenames.
+On the other hand, the standard may not cover everything you may want to
+do in your programs-some things were intentionally left unspecified in
+order to allow continuing experimentation by implementers in areas where
+there wasn't consensus about the best way for the language to support
+certain features.  So every implementation offers some features above
+and beyond what's specified in the standard.  Depending on what kind of
+programming you're going to be doing, it may make sense to just pick one
+implementation that has the extra features you need and use that.  On
+the other hand, if we're delivering Lisp source to be used by others,
+such as libraries, you'll want-as far as possible-to write portable
+Common Lisp.  For writing code that should be mostly portable but that
+needs facilities not defined by the standard, Common Lisp provides a
+flexible way to write code "conditionalized" on the features available
+in a particular implementation.  You'll see an example of this kind of
+code in Chapter 15 when we develop a simple library that smoothes over
+some differences between how different Lisp implementations deal with
+filenames.
 
-   For the moment, however, the most important characteristic of an
+For the moment, however, the most important characteristic of an
 implementation is whether it runs on our favorite operating system.  The
 folks at Franz, makers of Allegro Common Lisp, are making available a
 trial version of their product for use with this book that runs on
@@ -1283,23 +1276,23 @@ Linux, Windows, and OS X. Folks looking for an open-source
 implementation have several options.  SBCL (2) is a high-quality
 open-source implementation that compiles to native code and runs on a
 wide variety of Unixes, including Linux and OS X. SBCL is derived from
-CMUCL (3), which is a Common Lisp developed at Carnegie Mellon
+CMUCL (3) , which is a Common Lisp developed at Carnegie Mellon
 University, and, like CMUCL, is largely in the public domain, except a
 few sections licensed under Berkeley Software Distribution (BSD) style
 licenses.  CMUCL itself is another fine choice, though SBCL tends to be
-easier to install and now supports 21-bit Unicode (4).  For OS X users,
+easier to install and now supports 21-bit Unicode (4) .  For OS X users,
 OpenMCL is an excellent choice-it compiles to machine code, supports
 threads, and has quite good integration with OS X's Carbon and Cocoa
 toolkits.  Other open-source and commercial implementations are
 available.  See Chapter 32 for resources from which you can get more
 information.
 
-   All the Lisp code in this book should work in any conforming Common
-Lisp implementation unless otherwise noted, and SLIME will smooth out
-some of the differences between implementations by providing us with a
-common interface for interacting with Lisp.  The output shown in this
-book is from Allegro running on GNU/Linux; in some cases, other Lisp's
-may generate slightly different error messages or debugger output.
+All the Lisp code in this book should work in any conforming Common Lisp
+implementation unless otherwise noted, and SLIME will smooth out some of
+the differences between implementations by providing us with a common
+interface for interacting with Lisp.  The output shown in this book is
+from Allegro running on GNU/Linux; in some cases, other Lisp's may
+generate slightly different error messages or debugger output.
 
    ---------- Footnotes ----------
 
@@ -1339,7 +1332,7 @@ package for your operating system and the preferred Lisp from the Lisp
 in a Box Web site listed in Chapter 32 and then follow the installation
 instructions.
 
-   Since Lisp in a Box uses Emacs as its editor, you'll need to know at
+Since Lisp in a Box uses Emacs as its editor, you'll need to know at
 least a bit about how to use it.  Perhaps the best way to get started
 with Emacs is to work through its built-in tutorial.  To start the
 tutorial, select the first item of the Help menu, Emacs tutorial.  Or
@@ -1355,7 +1348,7 @@ chord, C represents the Ctrl key and M represents the Meta key (also
 known as Alt).  Thus, we could write the key combination we just
 described that starts the tutorial like so: C-h t.
 
-   The tutorial describes other useful commands and the key combinations
+The tutorial describes other useful commands and the key combinations
 that invoke them.  Emacs also comes with extensive online documentation
 using its own built-in hypertext documentation browser, Info.  To read
 the manual, type C-h i.  The Info system comes with its own tutorial,
@@ -1367,8 +1360,8 @@ combo and tells us what command it invokes, and C-h w, which lets us
 enter the name of a command and tells us what key combination invokes
 it.
 
-   The other crucial bit of Emacs terminology, for folks who refuse to
-work through the tutorial, is the notion of a buffer.  While working in
+The other crucial bit of Emacs terminology, for folks who refuse to work
+through the tutorial, is the notion of a ‘buffer’.  While working in
 Emacs, each file you edit will be represented by a different buffer,
 only one of which is "current" at any given time.  The current buffer
 receives all input-whatever you type and any commands you invoke.
@@ -1376,7 +1369,7 @@ Buffers are also used to represent interactions with programs such as
 Common Lisp.  Thus, one common action you'll take is to "switch
 buffers," which means to make a different buffer the current buffer so
 you can edit a particular file or interact with a particular program.
-The command switch-to-buffer, bound to the key combination C-x b,
+The command ‘switch-to-buffer’, bound to the key combination C-x b,
 prompts for the name of a buffer in the area at the bottom of the Emacs
 frame.  When entering a buffer name, hitting Tab will complete the name
 based on the characters typed so far or will show a list of possible
@@ -1384,7 +1377,7 @@ completions.  The prompt also suggests a default buffer, which you can
 accept just by hitting Return.  You can also switch buffers by selecting
 a buffer from the Buffers menu.
 
-   In certain contexts, other key combinations may be available for
+In certain contexts, other key combinations may be available for
 switching to certain buffers.  For instance, when editing Lisp source
 files, the key combo C-c C-z switches to the buffer where you interact
 with Lisp.
@@ -1400,24 +1393,24 @@ prompt that looks like this:
 
      CL-USER>
 
-   This is the Lisp prompt.  Like a Unix or DOS shell prompt, the Lisp
+This is the Lisp prompt.  Like a Unix or DOS shell prompt, the Lisp
 prompt is a place where you can type expressions that will cause things
 to happen.  However, instead of reading and interpreting a line of shell
 commands, Lisp reads Lisp expressions, evaluates them according to the
 rules of Lisp, and prints the result.  Then it does it again with the
 next expression you type.  That endless cycle of reading, evaluating,
-and printing is why it's called the read-eval-print loop, or REPL for
-short.  It's also referred to as the top-level, the top-level listener,
-or the Lisp listener.
+and printing is why it's called the ‘read-eval-print loop’, or REPL
+for short.  It's also referred to as the ‘top-level’, the
+‘top-level listener’, or the ‘Lisp listener’.
 
-   From within the environment provided by the REPL, you can define and
+From within the environment provided by the REPL, you can define and
 redefine program elements such as variables, functions, classes, and
 methods; evaluate any Lisp expression; load files containing Lisp source
 code or compiled code; compile whole files or individual functions;
 enter the debugger; step through code; and inspect the state of
 individual Lisp objects.
 
-   All those facilities are built into the language, accessible via
+All those facilities are built into the language, accessible via
 functions defined in the language standard.  If you had to, you could
 build a pretty reasonable programming environment out of just the REPL
 and any text editor that knows how to properly indent Lisp code.  But
@@ -1443,12 +1436,12 @@ something like this:
      CL-USER> 10
      10
 
-   The first 10 is the one you typed.  The Lisp reader, the R in REPL,
+The first 10 is the one you typed.  The Lisp reader, the R in REPL,
 reads the text "10" and creates a Lisp object representing the number
-10.  This object is a self-evaluating object, which means that when
-given to the evaluator, the E in REPL, it evaluates to itself.  This
-value is then given to the printer, which prints the 10 on the line by
-itself.  While that may seem like a lot of work just to get back to
+10.  This object is a ‘self-evaluating object’, which means that
+when given to the evaluator, the E in REPL, it evaluates to itself.
+This value is then given to the printer, which prints the 10 on the line
+by itself.  While that may seem like a lot of work just to get back to
 where you started, things get a bit more interesting when you give Lisp
 something meatier to chew on.  For instance, you can type (+ 2 3) at the
 Lisp prompt.
@@ -1456,7 +1449,7 @@ Lisp prompt.
      CL-USER> (+ 2 3)
      5
 
-   Anything in parentheses is a list, in this case a list of three
+Anything in parentheses is a list, in this case a list of three
 elements, the symbol +, and the numbers 2 and 3.  Lisp, in general,
 evaluates lists by treating the first element as the name of a function
 and the rest of the elements as expressions to be evaluated to yield the
@@ -1480,95 +1473,97 @@ world."
      CL-USER> "hello, world"
      "hello, world"
 
-   This works because strings, like numbers, have a literal syntax
-that's understood by the Lisp reader and are self-evaluating objects:
-Lisp reads the double-quoted string and instantiates a string object in
+This works because strings, like numbers, have a literal syntax that's
+understood by the Lisp reader and are self-evaluating objects: Lisp
+reads the double-quoted string and instantiates a string object in
 memory that, when evaluated, evaluates to itself and is then printed in
 the same literal syntax.  The quotation marks aren't part of the string
 object in memory-they're just the syntax that tells the reader to read a
 string.  The printer puts them back on when it prints the string because
 it tries to print objects in the same syntax the reader understands.
 
-   However, this may not really qualify as a "hello, world" program.
-It's more like the "hello, world" value.
+However, this may not really qualify as a "hello, world" ‘program’.
+It's more like the "hello, world" ‘value’.
 
-   You can take a step toward a real program by writing some code that
-as a side effect prints the string "hello, world" to standard output.
-Common Lisp provides a couple ways to emit output, but the most flexible
-is the FORMAT function.  FORMAT takes a variable number of arguments,
-but the only two required arguments are the place to send the output and
-a string.  You'll see in the next chapter how the string can contain
-embedded directives that allow you to interpolate subsequent arguments
-into the string, à la printf or Python's string-%.  As long as the
-string doesn't contain an ~, it will be emitted as-is.  If you pass t as
-its first argument, it sends its output to standard output.  So a FORMAT
-expression that will print "hello, world" looks like this (2):
+You can take a step toward a real program by writing some code that as a
+side effect prints the string "hello, world" to standard output.  Common
+Lisp provides a couple ways to emit output, but the most flexible is the
+‘FORMAT’ function.  ‘FORMAT’ takes a variable number of
+arguments, but the only two required arguments are the place to send the
+output and a string.  You'll see in the next chapter how the string can
+contain embedded directives that allow you to interpolate subsequent
+arguments into the string, à la ‘printf’ or Python's string-%.  As
+long as the string doesn't contain an ~, it will be emitted as-is.  If
+you pass t as its first argument, it sends its output to standard
+output.  So a ‘FORMAT’ expression that will print "hello, world"
+looks like this (2) :
 
      CL-USER> (format t "hello, world")
      hello, world
      NIL
 
-   One thing to note about the result of the FORMAT expression is the
-NIL on the line after the "hello, world" output.  That NIL is the result
-of evaluating the FORMAT expression, printed by the REPL. (NIL is Lisp's
-version of false and/or null.  More on that in Chapter 4.)  Unlike the
-other expressions we've seen so far, a FORMAT expression is more
-interesting for its side effect-printing to standard output in this
-case-than for its return value.  But every expression in Lisp evaluates
-to some result (3).
+One thing to note about the result of the ‘FORMAT’ expression is the
+‘NIL’ on the line after the "hello, world" output.  That ‘NIL’
+is the result of evaluating the ‘FORMAT’ expression, printed by the
+REPL. (‘NIL’ is Lisp's version of false and/or null.  More on that
+in Chapter 4.)  Unlike the other expressions we've seen so far, a
+‘FORMAT’ expression is more interesting for its side effect-printing
+to standard output in this case-than for its return value.  But every
+expression in Lisp evaluates to some result (3) .
 
-   However, it's still arguable whether you've yet written a true
+However, it's still arguable whether you've yet written a true
 "program."  But you're getting there.  And you're seeing the bottom-up
 style of programming supported by the REPL: you can experiment with
 different approaches and build a solution from parts you've already
 tested.  Now that you have a simple expression that does what you want,
 you just need to package it in a function.  Functions are one of the
-basic program building blocks in Lisp and can be defined with a DEFUN
-expression such as this:
+basic program building blocks in Lisp and can be defined with a
+‘DEFUN’ expression such as this:
 
      CL-USER> (defun hello-world () (format t "hello, world"))
      HELLO-WORLD
 
-   The hello-world after the DEFUN is the name of the function.  In
-Chapter 4 we'll look at exactly what characters can be used in a name,
-but for now suffice it to say that lots of characters, such as -, that
-are illegal in names in other languages are legal in Common Lisp.  It's
-standard Lisp style-not to mention more in line with normal English
-typography-to form compound names with hyphens, such as hello-world,
-rather than with underscores, as in hello_world, or with inner caps such
-as helloWorld.  The ()s after the name delimit the parameter list, which
-is empty in this case because the function takes no arguments.  The rest
-is the body of the function.
+The ‘hello-world’ after the ‘DEFUN’ is the name of the function.
+In Chapter 4 we'll look at exactly what characters can be used in a
+name, but for now suffice it to say that lots of characters, such as -,
+that are illegal in names in other languages are legal in Common Lisp.
+It's standard Lisp style-not to mention more in line with normal English
+typography-to form compound names with hyphens, such as
+‘hello-world’, rather than with underscores, as in
+‘hello_world’, or with inner caps such as ‘helloWorld’.  The ()s
+after the name delimit the parameter list, which is empty in this case
+because the function takes no arguments.  The rest is the body of the
+function.
 
-   At one level, this expression, like all the others you've seen, is
-just another expression to be read, evaluated, and printed by the REPL.
-The return value in this case is the name of the function you just
-defined (4).  But like the FORMAT expression, this expression is more
+At one level, this expression, like all the others you've seen, is just
+another expression to be read, evaluated, and printed by the REPL. The
+return value in this case is the name of the function you just defined
+(4) .  But like the ‘FORMAT’ expression, this expression is more
 interesting for the side effects it has than for its return value.
-Unlike the FORMAT expression, however, the side effects are invisible:
-when this expression is evaluated, a new function that takes no
-arguments and with the body (format t "hello, world") is created and
+Unlike the ‘FORMAT’ expression, however, the side effects are
+invisible: when this expression is evaluated, a new function that takes
+no arguments and with the body (format t "hello, world") is created and
 given the name HELLO-WORLD.
 
-   Once you've defined the function, you can call it like this:
+Once you've defined the function, you can call it like this:
 
      CL-USER> (hello-world)
      hello, world
      NIL
 
-   You can see that the output is just the same as when you evaluated
-the FORMAT expression directly, including the NIL value printed by the
-REPL. Functions in Common Lisp automatically return the value of the
-last expression evaluated.
+You can see that the output is just the same as when you evaluated the
+‘FORMAT’ expression directly, including the ‘NIL’ value printed
+by the REPL. Functions in Common Lisp automatically return the value of
+the last expression evaluated.
 
    ---------- Footnotes ----------
 
    (1) The venerable "hello, world" predates even the classic Kernighan
 and Ritchie C book that played a big role in its popularization.  The
 original "hello, world" seems to have come from Brian Kernighan's "A
-Tutorial Introduction to the Language B" that was part of the Bell
+Tutorial Introduction to the Language B" that was part of the ‘Bell
 Laboratories Computing Science Technical Report #8: The Programming
-Language B published in January 1973.  (It's available online at
+Language B’ published in January 1973.  (It's available online at
 http://cm.bell-labs.com/cm/cs/who/dmr/bintro.html.)
 
    (2) These are some other expressions that also print the string
@@ -1593,74 +1588,75 @@ However, it still has a problem.  If you exit Lisp and restart, the
 function definition will be gone.  Having written such a fine function,
 you'll want to save your work.
 
-   Easy enough.  You just need to create a file in which to save the
+Easy enough.  You just need to create a file in which to save the
 definition.  In Emacs you can create a new file by typing C-x C-f and
 then, when Emacs prompts you, entering the name of the file you want to
 create.  It doesn't matter particularly where you put the file.  It's
 customary to name Common Lisp source files with a .lisp extension,
 though some folks use .cl instead.
 
-   Once you've created the file, you can type the definition you
-previously entered at the REPL. Some things to note are that after you
-type the opening parenthesis and the word DEFUN, at the bottom of the
-Emacs window, SLIME will tell you the arguments expected.  The exact
-form will depend somewhat on what Common Lisp implementation you're
-using, but it'll probably look something like this:
+Once you've created the file, you can type the definition you previously
+entered at the REPL. Some things to note are that after you type the
+opening parenthesis and the word ‘DEFUN’, at the bottom of the Emacs
+window, SLIME will tell you the arguments expected.  The exact form will
+depend somewhat on what Common Lisp implementation you're using, but
+it'll probably look something like this:
 
      (defun name varlist &rest body)
 
-   The message will disappear as you start to type each new element but
+The message will disappear as you start to type each new element but
 will reappear each time you enter a space.  When you're entering the
 definition in the file, you might choose to break the definition across
 two lines after the parameter list.  If you hit Return and then Tab,
 SLIME will automatically indent the second line appropriately, like this
-(1):
+(1) :
 
      (defun hello-world ()
        (format t "hello, world"))
 
-   SLIME will also help match up the parentheses-as you type a closing
+SLIME will also help match up the parentheses-as you type a closing
 parenthesis, it will flash the corresponding opening parenthesis.  Or
 you can just type C-c C-q to invoke the command
-slime-close-parens-at-point, which will insert as many closing
+‘slime-close-parens-at-point’, which will insert as many closing
 parentheses as necessary to match all the currently open parentheses.
 
-   Now you can get this definition into your Lisp environment in several
+Now you can get this definition into your Lisp environment in several
 ways.  The easiest is to type C-c C-c with the cursor anywhere in or
-immediately after the DEFUN form, which runs the command
-slime-compile-defun, which in turn sends the definition to Lisp to be
-evaluated and compiled.  To make sure this is working, you can make some
-change to hello-world, recompile it, and then go back to the REPL, using
-C-c C-z or C-x b, and call it again.  For instance, you could make it a
-bit more grammatical.
+immediately after the ‘DEFUN’ form, which runs the command
+‘slime-compile-defun’, which in turn sends the definition to Lisp to
+be evaluated and compiled.  To make sure this is working, you can make
+some change to hello-world, recompile it, and then go back to the REPL,
+using C-c C-z or C-x b, and call it again.  For instance, you could make
+it a bit more grammatical.
 
      (defun hello-world ()
        (format t "Hello, world!"))
 
-   Next, recompile with C-c C-c and then type C-c C-z to switch to the
-REPL to try the new version.
+Next, recompile with C-c C-c and then type C-c C-z to switch to the REPL
+to try the new version.
 
      CL-USER> (hello-world)
      Hello, world!
      NIL
 
-   You'll also probably want to save the file you've been working on; in
+You'll also probably want to save the file you've been working on; in
 the hello.lisp buffer, type C-x C-s to invoke the Emacs command
-save-buffer.
+‘save-buffer’.
 
-   Now to try reloading this function from the source file, you'll need
-to quit Lisp and restart.  To quit you can use a SLIME shortcut: at the
+Now to try reloading this function from the source file, you'll need to
+quit Lisp and restart.  To quit you can use a SLIME shortcut: at the
 REPL, type a comma.  At the bottom of the Emacs window, you will be
-prompted for a command.  Type quit (or sayoonara), and then hit Enter.
-This will quit Lisp and close all the buffers created by SLIME such as
-the REPL buffer (2).  Now restart SLIME by typing M-x slime.
+prompted for a command.  Type ‘quit’ (or ‘sayoonara’), and then
+hit Enter.  This will quit Lisp and close all the buffers created by
+SLIME such as the REPL buffer (2) .  Now restart SLIME by typing ‘M-x
+slime’.
 
-   Just for grins, you can try to invoke hello-world.
+Just for grins, you can try to invoke ‘hello-world’.
 
      CL-USER> (hello-world)
 
-   At that point SLIME will pop up a new buffer that starts with
-something that looks like this:
+At that point SLIME will pop up a new buffer that starts with something
+that looks like this:
 
      attempt to call `HELLO-WORLD' which is an undefined function.
         [Condition of type UNDEFINED-FUNCTION]
@@ -1682,57 +1678,57 @@ something that looks like this:
        5: (SWANK::EVAL-REGION "(hello-world)
      " T)
 
-   Blammo!  What happened?  Well, you tried to invoke a function that
+Blammo!  What happened?  Well, you tried to invoke a function that
 doesn't exist.  But despite the burst of output, Lisp is actually
 handling this situation gracefully.  Unlike Java or Python, Common Lisp
 doesn't just bail-throwing an exception and unwinding the stack.  And it
 definitely doesn't dump core just because you tried to invoke a missing
 function.  Instead Lisp drops you into the debugger.
 
-   While you're in the debugger you still have full access to Lisp, so
-you can evaluate expressions to examine the state of our program and
-maybe even fix things.  For now don't worry about that; just type q to
-exit the debugger and get back to the REPL. The debugger buffer will go
-away, and the REPL will show this:
+While you're in the debugger you still have full access to Lisp, so you
+can evaluate expressions to examine the state of our program and maybe
+even fix things.  For now don't worry about that; just type q to exit
+the debugger and get back to the REPL. The debugger buffer will go away,
+and the REPL will show this:
 
      CL-USER> (hello-world)
      ; Evaluation aborted
      CL-USER>
 
-   There's obviously more that can be done from within the debugger than
+There's obviously more that can be done from within the debugger than
 just abort-we'll see, for instance, in Chapter 19 how the debugger
 integrates with the error handling system.  For now, however, the
 important thing to know is that you can always get out of it, and back
-to the REPL, by typing q.
+to the REPL, by typing ‘q’.
 
-   Back at the REPL you can try again.  Things blew up because Lisp
-didn't know the definition of hello-world.  So you need to let Lisp know
-about the definition we saved in the file hello.lisp.  You have several
-ways you could do this.  You could switch back to the buffer containing
-the file (type C-x b and then enter hello.lisp when prompted) and
-recompile the definition as you did before with C-c C-c.  Or you can
-load the whole file, which would be a more convenient approach if the
-file contained a bunch of definitions, using the LOAD function at the
-REPL like this:
+Back at the REPL you can try again.  Things blew up because Lisp didn't
+know the definition of hello-world.  So you need to let Lisp know about
+the definition we saved in the file hello.lisp.  You have several ways
+you could do this.  You could switch back to the buffer containing the
+file (type C-x b and then enter hello.lisp when prompted) and recompile
+the definition as you did before with C-c C-c.  Or you can load the
+whole file, which would be a more convenient approach if the file
+contained a bunch of definitions, using the LOAD function at the REPL
+like this:
 
      CL-USER> (load "hello.lisp")
      ; Loading /home/peter/my-lisp-programs/hello.lisp
      T
 
-   The T means everything loaded correctly (3).  Loading a file with
+The ‘T’ means everything loaded correctly (3) .  Loading a file with
 LOAD is essentially equivalent to typing each of the expressions in the
 file at the REPL in the order they appear in the file, so after the call
-to LOAD, hello-world should be defined:
+to ‘LOAD’, hello-world should be defined:
 
      CL-USER> (hello-world)
      Hello, world!
      NIL
 
-   Another way to load a file's worth of definitions is to compile the
-file first with COMPILE-FILE and then LOAD the resulting compiled file,
-called a FASL file, which is short for fast-load file.  COMPILE-FILE
-returns the name of the FASL file, so we can compile and load from the
-REPL like this:
+Another way to load a file's worth of definitions is to compile the file
+first with ‘COMPILE-FILE’ and then ‘LOAD’ the resulting compiled
+file, called a ‘FASL file’, which is short for ‘fast-load file’.
+‘COMPILE-FILE’ returns the name of the FASL file, so we can compile
+and load from the REPL like this:
 
      CL-USER> (load (compile-file "hello.lisp"))
      ;;; Compiling file hello.lisp
@@ -1741,47 +1737,47 @@ REPL like this:
      v; Fast loading /home/peter/my-lisp-programs/hello.fasl
      T
 
-   SLIME also provides support for loading and compiling files without
+SLIME also provides support for loading and compiling files without
 using the REPL. When you're in a source code buffer, you can use C-c C-l
-to load the file with slime-load-file.  Emacs will prompt for the name
-of a file to load with the name of the current file already filled in;
-you can just hit Enter.  Or you can type C-c C-k to compile and load the
-file represented by the current buffer.  In some Common Lisp
+to load the file with ‘slime-load-file’.  Emacs will prompt for the
+name of a file to load with the name of the current file already filled
+in; you can just hit Enter.  Or you can type C-c C-k to compile and load
+the file represented by the current buffer.  In some Common Lisp
 implementations, compiling code this way will make it quite a bit
 faster; in others, it won't, typically because they always compile
 everything.
 
-   This should be enough to give you a flavor of how Lisp programming
+This should be enough to give you a flavor of how Lisp programming
 works.  Of course I haven't covered all the tricks and techniques yet,
 but you've seen the essential elements-interacting with the REPL trying
 things out, loading and testing new code, tweaking and debugging.
 Serious Lisp hackers often keep a Lisp image running for days on end,
 adding, redefining, and testing bits of their program incrementally.
 
-   Also, even when the Lisp app is deployed, there's often still a way
-to get to a REPL. You'll see in Chapter 26 how you can use the REPL and
+Also, even when the Lisp app is deployed, there's often still a way to
+get to a REPL. You'll see in Chapter 26 how you can use the REPL and
 SLIME to interact with the Lisp that's running a Web server at the same
 time as it's serving up Web pages.  It's even possible to use SLIME to
 connect to a Lisp running on a different machine, allowing you-for
 instance-to debug a remote server just like a local one.
 
-   An even more impressive instance of remote debugging occurred on
-NASA's 1998 Deep Space 1 mission.  A half year after the space craft
-launched, a bit of Lisp code was going to control the spacecraft for two
-days while conducting a sequence of experiments.  Unfortunately, a
-subtle race condition in the code had escaped detection during ground
-testing and was already in space.  When the bug manifested in the
-wild-100 million miles away from Earth-the team was able to diagnose and
-fix the running code, allowing the experiments to complete (4).  One of
-the programmers described it as follows:
+An even more impressive instance of remote debugging occurred on NASA's
+1998 Deep Space 1 mission.  A half year after the space craft launched,
+a bit of Lisp code was going to control the spacecraft for two days
+while conducting a sequence of experiments.  Unfortunately, a subtle
+race condition in the code had escaped detection during ground testing
+and was already in space.  When the bug manifested in the wild-100
+million miles away from Earth-the team was able to diagnose and fix the
+running code, allowing the experiments to complete (4) .  One of the
+programmers described it as follows:
 
      Debugging a program running on a $100M piece of hardware that is
      100 million miles away is an interesting experience.  Having a
      read-eval-print loop running on the spacecraft proved invaluable in
      finding and fixing the problem.
 
-   You're not quite ready to send any Lisp code into deep space, but in
-the next chapter you'll take a crack at writing a program a bit more
+You're not quite ready to send any Lisp code into deep space, but in the
+next chapter you'll take a crack at writing a program a bit more
 interesting than "hello, world."
 
    ---------- Footnotes ----------
@@ -1792,7 +1788,7 @@ REPL, as the REPL reads whole expressions, not lines.
    (2) SLIME shortcuts aren't part of Common Lisp-they're commands to
 SLIME.
 
-   (3) If for some reason the LOAD doesn't go cleanly, you'll get
+   (3) If for some reason the ‘LOAD’ doesn't go cleanly, you'll get
 another error and drop back into the debugger.  If this happens, the
 most likely reason is that Lisp can't find the file, probably because
 its idea of the current working directory isn't the same as where the
@@ -8269,19 +8265,19 @@ values.  The former are variously called ‘arrays’, ‘lists’, or
 ‘tuples’; the latter go by the names ‘hash tables’,
 ‘associative arrays’, ‘maps’, and ‘dictionaries’.
 
-   Lisp is, of course, famous for its list data structure, and most Lisp
+Lisp is, of course, famous for its list data structure, and most Lisp
 books, following the ontogeny-recapitulates-phylogeny principle of
 language instruction, start their discussion of Lisp's collections with
 lists.  However, that approach often leads readers to the mistaken
-conclusion that lists are Lisp's only collection type.  To make matters
-worse, because Lisp's lists are such a flexible data structure, it is
-possible to use them for many of the things arrays and hash tables are
-used for in other languages.  But it's a mistake to focus too much on
-lists; while they're a crucial data structure for representing Lisp code
-as Lisp data, in many situations other data structures are more
-appropriate.
+conclusion that lists are Lisp's ‘only’ collection type.  To make
+matters worse, because Lisp's lists are such a flexible data structure,
+it ‘is’ possible to use them for many of the things arrays and hash
+tables are used for in other languages.  But it's a mistake to focus too
+much on lists; while they're a crucial data structure for representing
+Lisp code as Lisp data, in many situations other data structures are
+more appropriate.
 
-   To keep lists from stealing the show, in this chapter I'll focus on
+To keep lists from stealing the show, in this chapter I'll focus on
 Common Lisp's other collection types: vectors and hash tables.  (1)
 However, vectors and lists share enough characteristics that Common Lisp
 treats them both as subtypes of a more general abstraction, the
@@ -8324,59 +8320,59 @@ hand, are more like arrays in Perl or Ruby, lists in Python, or the
 ArrayList class in Java: they abstract the actual storage, allowing the
 vector to grow and shrink as elements are added and removed.
 
-   You can make fixed-size vectors containing specific values with the
-function ‘VECTOR‘, which takes any number of arguments and returns a
+You can make fixed-size vectors containing specific values with the
+function ‘VECTOR’, which takes any number of arguments and returns a
 freshly allocated fixed-size vector containing those arguments.
 
      (vector)     ==> #()
      (vector 1)   ==> #(1)
      (vector 1 2) ==> #(1 2)
 
-   The #(...)  syntax is the literal notation for vectors used by the
-Lisp printer and reader.  This syntax allows you to save and restore
-vectors by PRINTing them out and READing them back in.  You can use the
-#(...)  syntax to include literal vectors in your code, but as the
+The #(...)  syntax is the literal notation for vectors used by the Lisp
+printer and reader.  This syntax allows you to save and restore vectors
+by ‘PRINT’ing them out and ‘READ’ing them back in.  You can use
+the #(...)  syntax to include literal vectors in your code, but as the
 effects of modifying literal objects aren't defined, you should always
-use VECTOR or the more general function MAKE-ARRAY to create vectors you
-plan to modify.
+use ‘VECTOR’ or the more general function ‘MAKE-ARRAY’ to create
+vectors you plan to modify.
 
-   MAKE-ARRAY is more general than VECTOR since you can use it to create
-arrays of any dimensionality as well as both fixed-size and resizable
-vectors.  The one required argument to MAKE-ARRAY is a list containing
-the dimensions of the array.  Since a vector is a one-dimensional array,
-this list will contain one number, the size of the vector.  As a
-convenience, MAKE-ARRAY will also accept a plain number in the place of
-a one-item list.  With no other arguments, MAKE-ARRAY will create a
-vector with uninitialized elements that must be set before they can be
-accessed.  (2) To create a vector with the elements all set to a
-particular value, you can pass an :initial-element argument.  Thus, to
-make a five-element vector with its elements initialized to NIL, you can
-write the following:
+‘MAKE-ARRAY’ is more general than ‘VECTOR’ since you can use it
+to create arrays of any dimensionality as well as both fixed-size and
+resizable vectors.  The one required argument to ‘MAKE-ARRAY’ is a
+list containing the dimensions of the array.  Since a vector is a
+one-dimensional array, this list will contain one number, the size of
+the vector.  As a convenience, ‘MAKE-ARRAY’ will also accept a plain
+number in the place of a one-item list.  With no other arguments,
+‘MAKE-ARRAY’ will create a vector with uninitialized elements that
+must be set before they can be accessed.  (2) To create a vector with
+the elements all set to a particular value, you can pass an
+‘:initial-element’ argument.  Thus, to make a five-element vector
+with its elements initialized to ‘NIL’, you can write the following:
 
      (make-array 5 :initial-element nil) ==> #(NIL NIL NIL NIL NIL)
 
-   MAKE-ARRAY is also the function to use to make a resizable vector.  A
-resizable vector is a slightly more complicated object than a fixed-size
-vector; in addition to keeping track of the memory used to hold the
-elements and the number of slots available, a resizable vector also
-keeps track of the number of elements actually stored in the vector.
-This number is stored in the vector's fill pointer, so called because
-it's the index of the next position to be filled when you add an element
-to the vector.
+‘MAKE-ARRAY’ is also the function to use to make a resizable vector.
+A resizable vector is a slightly more complicated object than a
+fixed-size vector; in addition to keeping track of the memory used to
+hold the elements and the number of slots available, a resizable vector
+also keeps track of the number of elements actually stored in the
+vector.  This number is stored in the vector's ‘fill pointer’, so
+called because it's the index of the next position to be filled when you
+add an element to the vector.
 
-   To make a vector with a fill pointer, you pass MAKE-ARRAY a
-:fill-pointer argument.  For instance, the following call to MAKE-ARRAY
-makes a vector with room for five elements; but it looks empty because
-the fill pointer is zero:
+To make a vector with a fill pointer, you pass ‘MAKE-ARRAY’ a
+‘:fill-pointer’ argument.  For instance, the following call to
+‘MAKE-ARRAY’ makes a vector with room for five elements; but it
+looks empty because the fill pointer is zero:
 
      (make-array 5 :fill-pointer 0) ==> #()
 
-   To add an element to the end of a resizable vector, you can use the
-function VECTOR-PUSH. It adds the element at the current value of the
-fill pointer and then increments the fill pointer by one, returning the
-index where the new element was added.  The function VECTOR-POP returns
-the most recently pushed item, decrementing the fill pointer in the
-process.
+To add an element to the end of a resizable vector, you can use the
+function ‘VECTOR-PUSH’.  It adds the element at the current value of
+the fill pointer and then increments the fill pointer by one, returning
+the index where the new element was added.  The function
+‘VECTOR-POP’ returns the most recently pushed item, decrementing the
+fill pointer in the process.
 
      (defparameter *x* (make-array 5 :fill-pointer 0))
 
@@ -8393,37 +8389,38 @@ process.
      (vector-pop *x*)     ==> A
      *x*                  ==> #()
 
-   However, even a vector with a fill pointer isn't completely
-resizable.  The vector *x* can hold at most five elements.  To make an
-arbitrarily resizable vector, you need to pass MAKE-ARRAY another
-keyword argument: :adjustable.
+However, even a vector with a fill pointer isn't completely resizable.
+The vector ‘*x*’ can hold at most five elements.  To make an
+arbitrarily resizable vector, you need to pass ‘MAKE-ARRAY’ another
+keyword argument: ‘:adjustable’.
 
      (make-array 5 :fill-pointer 0 :adjustable t) ==> #()
 
-   This call makes an adjustable vector whose underlying memory can be
-resized as needed.  To add elements to an adjustable vector, you use
-VECTOR-PUSH-EXTEND, which works just like VECTOR-PUSH except it will
-automatically expand the array if you try to push an element onto a full
-vector-one whose fill pointer is equal to the size of the underlying
-storage.  (3)
+This call makes an ‘adjustable’ vector whose underlying memory can
+be resized as needed.  To add elements to an adjustable vector, you use
+‘VECTOR-PUSH-EXTEND’, which works just like ‘VECTOR-PUSH’ except
+it will automatically expand the array if you try to push an element
+onto a full vector-one whose fill pointer is equal to the size of the
+underlying storage.  (3)
 
    ---------- Footnotes ----------
 
-   (1) Vectors are called vectors, not arrays as their analogs in other
-languages are, because Common Lisp supports true multidimensional
-arrays.  It's equally correct, though more cumbersome, to refer to them
-as one-dimensional arrays.
+   (1) Vectors are called ‘vectors’, not ‘arrays’ as their
+analogs in other languages are, because Common Lisp supports true
+multidimensional arrays.  It's equally correct, though more cumbersome,
+to refer to them as ‘one-dimensional arrays’.
 
    (2) Array elements "must" be set before they're accessed in the sense
 that the behavior is undefined; Lisp won't necessarily stop you.
 
-   (3) While frequently used together, the :fill-pointer and :adjustable
-arguments are independent-you can make an adjustable array without a
-fill pointer.  However, you can use VECTOR-PUSH and VECTOR-POP only with
-vectors that have a fill pointer and VECTOR-PUSH-EXTEND only with
-vectors that have a fill pointer and are adjustable.  You can also use
-the function ADJUST-ARRAY to modify adjustable arrays in a variety of
-ways beyond just extending the length of a vector.
+   (3) While frequently used together, the ‘:fill-pointer’ and
+‘:adjustable’ arguments are independent-you can make an adjustable
+array without a fill pointer.  However, you can use ‘VECTOR-PUSH’
+and ‘VECTOR-POP’ only with vectors that have a fill pointer and
+‘VECTOR-PUSH-EXTEND’ only with vectors that have a fill pointer and
+are adjustable.  You can also use the function ‘ADJUST-ARRAY’ to
+modify adjustable arrays in a variety of ways beyond just extending the
+length of a vector.
 
 
 File: pcl.info,  Node: 11-2,  Next: 11-3,  Prev: 11-1,  Up: Chapter 11
@@ -8431,43 +8428,44 @@ File: pcl.info,  Node: 11-2,  Next: 11-3,  Prev: 11-1,  Up: Chapter 11
 Subtypes of Vector
 ==================
 
-All the vectors you've dealt with so far have been general vectors that
-can hold any type of object.  It's also possible to create specialized
-vectors that are restricted to holding certain types of elements.  One
-reason to use specialized vectors is they may be stored more compactly
-and can provide slightly faster access to their elements than general
-vectors.  However, for the moment let's focus on a couple kinds of
-specialized vectors that are important data types in their own right.
+All the vectors you've dealt with so far have been ‘general’ vectors
+that can hold any type of object.  It's also possible to create
+‘specialized’ vectors that are restricted to holding certain types
+of elements.  One reason to use specialized vectors is they may be
+stored more compactly and can provide slightly faster access to their
+elements than general vectors.  However, for the moment let's focus on a
+couple kinds of specialized vectors that are important data types in
+their own right.
 
-   One of these you've seen already-strings are vectors specialized to
-hold characters.  Strings are important enough to get their own
-read/print syntax (double quotes) and the set of string-specific
-functions I discussed in the previous chapter.  But because they're also
-vectors, all the functions I'll discuss in the next few sections that
-take vector arguments can also be used with strings.  These functions
-will fill out the string library with functions for things such as
-searching a string for a substring, finding occurrences of a character
-within a string, and more.
+One of these you've seen already-strings are vectors specialized to hold
+characters.  Strings are important enough to get their own read/print
+syntax (double quotes) and the set of string-specific functions I
+discussed in the previous chapter.  But because they're also vectors,
+all the functions I'll discuss in the next few sections that take vector
+arguments can also be used with strings.  These functions will fill out
+the string library with functions for things such as searching a string
+for a substring, finding occurrences of a character within a string, and
+more.
 
-   Literal strings, such as "foo", are like literal vectors written with
+Literal strings, such as "foo", are like literal vectors written with
 the #() syntax-their size is fixed, and they must not be modified.
-However, you can use MAKE-ARRAY to make resizable strings by adding
-another keyword argument, :element-type.  This argument takes a type
-descriptor.  I won't discuss all the possible type descriptors you can
-use here; for now it's enough to know you can create a string by passing
-the symbol CHARACTER as the :element-type argument.  Note that you need
-to quote the symbol to prevent it from being treated as a variable name.
-For example, to make an initially empty but resizable string, you can
-write this:
+However, you can use ‘MAKE-ARRAY’ to make resizable strings by
+adding another keyword argument, ‘:element-type’.  This argument
+takes a ‘type’ descriptor.  I won't discuss all the possible type
+descriptors you can use here; for now it's enough to know you can create
+a string by passing the symbol ‘CHARACTER’ as the
+‘:element-type’ argument.  Note that you need to quote the symbol to
+prevent it from being treated as a variable name.  For example, to make
+an initially empty but resizable string, you can write this:
 
      (make-array 5 :fill-pointer 0 :adjustable t :element-type 'character)  ""
 
-   Bit vectors-vectors whose elements are all zeros or ones-also get
-some special treatment.  They have a special read/print syntax that
-looks like #*00001111 and a fairly large library of functions, which I
-won't discuss, for performing bit-twiddling operations such as "anding"
+Bit vectors-vectors whose elements are all zeros or ones-also get some
+special treatment.  They have a special read/print syntax that looks
+like #*00001111 and a fairly large library of functions, which I won't
+discuss, for performing bit-twiddling operations such as "anding"
 together two bit arrays.  The type descriptor to pass as the
-:element-type to create a bit vector is the symbol BIT.
+‘:element-type’ to create a bit vector is the symbol ‘BIT’.
 
 
 File: pcl.info,  Node: 11-3,  Next: 11-4,  Prev: 11-2,  Up: Chapter 11
@@ -8476,20 +8474,22 @@ Vectors As Sequences
 ====================
 
 As mentioned earlier, vectors and lists are the two concrete subtypes of
-the abstract type sequence.  All the functions I'll discuss in the next
-few sections are sequence functions; in addition to being applicable to
-vectors-both general and specialized-they can also be used with lists.
+the abstract type ‘sequence’.  All the functions I'll discuss in the
+next few sections are sequence functions; in addition to being
+applicable to vectors-both general and specialized-they can also be used
+with lists.
 
-   The two most basic sequence functions are LENGTH, which returns the
-length of a sequence, and ELT, which allows you to access individual
-elements via an integer index.  LENGTH takes a sequence as its only
-argument and returns the number of elements it contains.  For vectors
-with a fill pointer, this will be the value of the fill pointer.  ELT,
-short for element, takes a sequence and an integer index between zero
-(inclusive) and the length of the sequence (exclusive) and returns the
-corresponding element.  ELT will signal an error if the index is out of
-bounds.  Like LENGTH, ELT treats a vector with a fill pointer as having
-the length specified by the fill pointer.
+The two most basic sequence functions are ‘LENGTH’, which returns
+the length of a sequence, and ‘ELT’, which allows you to access
+individual elements via an integer index.  ‘LENGTH’ takes a sequence
+as its only argument and returns the number of elements it contains.
+For vectors with a fill pointer, this will be the value of the fill
+pointer.  ‘ELT’, short for ‘element’, takes a sequence and an
+integer index between zero (inclusive) and the length of the sequence
+(exclusive) and returns the corresponding element.  ‘ELT’ will
+signal an error if the index is out of bounds.  Like ‘LENGTH’,
+‘ELT’ treats a vector with a fill pointer as having the length
+specified by the fill pointer.
 
      (defparameter *x* (vector 1 2 3))
 
@@ -8499,7 +8499,7 @@ the length specified by the fill pointer.
      (elt *x* 2)  ==> 3
      (elt *x* 3)  ==> error
 
-   ELT is also a SETFable place, so you can set the value of a
+‘ELT’ is also a ‘SETF’able place, so you can set the value of a
 particular element like this:
 
      (setf (elt *x* 0) 10)
@@ -8513,18 +8513,18 @@ Sequence Iterating Functions
 ============================
 
 While in theory all operations on sequences boil down to some
-combination of LENGTH, ELT, and SETF of ELT operations, Common Lisp
-provides a large library of sequence functions.
+combination of ‘LENGTH’, ‘ELT’, and ‘SETF’ of ‘ELT’
+operations, Common Lisp provides a large library of sequence functions.
 
-   One group of sequence functions allows you to express certain
-operations on sequences such as finding or filtering specific elements
-without writing explicit loops.  Table 11-1 summarizes them.
+One group of sequence functions allows you to express certain operations
+on sequences such as finding or filtering specific elements without
+writing explicit loops.  Table 11-1 summarizes them.
 
-   Table 11-1.Basic Sequence Functions
+‘Table 11-1.  Basic Sequence Functions’
 
  [image src="tables/11-1.png" ]
 
-   Here are some simple examples of how to use these functions:
+Here are some simple examples of how to use these functions:
 
      (count 1 #(1 2 1 2 3 1 2 3 4))         ==> 3
      (remove 1 #(1 2 1 2 3 1 2 3 4))        ==> #(2 2 3 2 3 4)
@@ -8537,50 +8537,53 @@ without writing explicit loops.  Table 11-1 summarizes them.
      (find 10 #(1 2 1 2 3 1 2 3 4))         ==> NIL
      (position 1 #(1 2 1 2 3 1 2 3 4))      ==> 0
 
-   Note how REMOVE and SUBSTITUTE always return a sequence of the same
-type as their sequence argument.
+Note how ‘REMOVE’ and ‘SUBSTITUTE’ always return a sequence of
+the same type as their sequence argument.
 
-   You can modify the behavior of these five functions in a variety of
-ways using keyword arguments.  For instance, these functions, by
-default, look for elements in the sequence that are the same object as
-the item argument.  You can change this in two ways: First, you can use
-the :test keyword to pass a function that accepts two arguments and
-returns a boolean.  If provided, it will be used to compare item to each
-element instead of the default object equality test, EQL. (1) Second,
-with the :key keyword you can pass a one-argument function to be called
-on each element of the sequence to extract a key value, which will then
-be compared to the item in the place of the element itself.  Note,
-however, that functions such as FIND that return elements of the
-sequence continue to return the actual element, not just the extracted
-key.
+You can modify the behavior of these five functions in a variety of ways
+using keyword arguments.  For instance, these functions, by default,
+look for elements in the sequence that are the same object as the item
+argument.  You can change this in two ways: First, you can use the
+‘:test’ keyword to pass a function that accepts two arguments and
+returns a boolean.  If provided, it will be used to compare ‘item’
+to each element instead of the default object equality test, ‘EQL’.
+(1) Second, with the ‘:key’ keyword you can pass a one-argument
+function to be called on each element of the sequence to extract a
+‘key’ value, which will then be compared to the item in the place of
+the element itself.  Note, however, that functions such as ‘FIND’
+that return elements of the sequence continue to return the actual
+element, not just the extracted key.
 
      (count "foo" #("foo" "bar" "baz") :test #'string=)    ==> 1
      (find 'c #((a 10) (b 20) (c 30) (d 40)) :key #'first) ==> (C 30)
 
-   To limit the effects of these functions to a particular subsequence
-of the sequence argument, you can provide bounding indices with :start
-and :end arguments.  Passing NIL for :end or omitting it is the same as
-specifying the length of the sequence.  (2)
+To limit the effects of these functions to a particular subsequence of
+the sequence argument, you can provide bounding indices with
+‘:start’ and ‘:end’ arguments.  Passing ‘NIL’ for ‘:end’
+or omitting it is the same as specifying the length of the sequence.
+(2)
 
-   If a non-NIL :from-end argument is provided, then the elements of the
-sequence will be examined in reverse order.  By itself :from-end can
-affect the results of only FIND and POSITION. For instance:
+If a non-‘NIL’ ‘:from-end’ argument is provided, then the
+elements of the sequence will be examined in reverse order.  By itself
+‘:from-end’ can affect the results of only ‘FIND’ and
+‘POSITION’.  For instance:
 
      (find 'a #((a 10) (b 20) (a 30) (b 40)) :key #'first)             ==> (A 10)
      (find 'a #((a 10) (b 20) (a 30) (b 40)) :key #'first :from-end t) ==> (A 30)
 
-   However, the :from-end argument can affect REMOVE and SUBSTITUTE in
-conjunction with another keyword parameter, :count, that's used to
-specify how many elements to remove or substitute.  If you specify a
-:count lower than the number of matching elements, then it obviously
-matters which end you start from:
+However, the ‘:from-end’ argument can affect ‘REMOVE’ and
+‘SUBSTITUTE’ in conjunction with another keyword parameter,
+‘:count’, that's used to specify how many elements to remove or
+substitute.  If you specify a ‘:count’ lower than the number of
+matching elements, then it obviously matters which end you start from:
 
      (remove #\a "foobarbaz" :count 1)             ==> "foobrbaz"
      (remove #\a "foobarbaz" :count 1 :from-end t) ==> "foobarbz"
 
-   And while :from-end can't change the results of the COUNT function,
-it does affect the order the elements are passed to any :test and :key
-functions, which could possibly have side effects.  For example:
+And while ‘:from-end’ can't change the results of the ‘COUNT’
+function, it does affect the order the elements are passed to any
+‘:test’ and ‘:key’ functions, which could possibly have side
+effects.  For example:
 
      CL-USER> (defparameter *v* #((a 10) (b 20) (a 30) (b 40)))
      *V*
@@ -8599,32 +8602,33 @@ functions, which could possibly have side effects.  For example:
      Looking at (A 10)
      2
 
-   Table 11-2 summarizes these arguments.
+Table 11-2 summarizes these arguments.
 
-   Table 11-2.  Standard Sequence Function Keyword Arguments
+‘Table 11-2.  Standard Sequence Function Keyword Arguments’
 
  [image src="tables/11-2.png" ]
 
    ---------- Footnotes ----------
 
-   (1) Another parameter, :test-not parameter, specifies a two-argument
-predicate to be used like a :test argument except with the boolean
-result logically reversed.  This parameter is deprecated, however, in
-preference for using the COMPLEMENT function.  COMPLEMENT takes a
-function argu-ment and returns a function that takes the same number of
-arguments as the original and returns the logical complement of the
-original function.  Thus, you can, and should, write this:
+   (1) Another parameter, ‘:test-not’ parameter, specifies a
+two-argument predicate to be used like a ‘:test’ argument except
+with the boolean result logically reversed.  This parameter is
+deprecated, however, in preference for using the ‘COMPLEMENT’
+function.  ‘COMPLEMENT’ takes a function argu-ment and returns a
+function that takes the same number of arguments as the original and
+returns the logical complement of the original function.  Thus, you can,
+and should, write this:
 
      (count x sequence :test (complement #'some-test))
 
-     rather than the following:
+   rather than the following:
 
-   (count x sequence :test-not #'some-test)
+     (count x sequence :test-not #'some-test)
 
-   (2) Note, however, that the effect of :start and :end on REMOVE and
-SUBSTITUTE is only to limit the elements they consider for removal or
-substitution; elements before :start and after :end will be passed
-through untouched.
+   (2) Note, however, that the effect of ‘:start’ and ‘:end’ on
+‘REMOVE’ and ‘SUBSTITUTE’ is only to limit the elements they
+consider for removal or substitution; elements before ‘:start’ and
+after ‘:end’ will be passed through untouched.
 
 
 File: pcl.info,  Node: 11-5,  Next: 11-6,  Prev: 11-4,  Up: Chapter 11
@@ -8633,14 +8637,14 @@ Higher-Order Function Variants
 ==============================
 
 For each of the functions just discussed, Common Lisp provides two
-higher-order function variants that, in the place of the item argument,
-take a function to be called on each element of the sequence.  One set
-of variants are named the same as the basic function with an -IF
+‘higher-order function’ variants that, in the place of the item
+argument, take a function to be called on each element of the sequence.
+One set of variants are named the same as the basic function with an -IF
 appended.  These functions count, find, remove, and substitute elements
 of the sequence for which the function argument returns true.  The other
 set of variants are named with an -IF-NOT suffix and count, find,
-remove, and substitute elements for which the function argument does not
-return true.
+remove, and substitute elements for which the function argument does
+‘not’ return true.
 
      (count-if #'evenp #(1 2 3 4 5))         ==> 2
 
@@ -8651,20 +8655,20 @@ return true.
      (remove-if-not #'(lambda (x) (char= (elt x 0) #\f))
        #("foo" "bar" "baz" "foom")) ==> #("foo" "foom")
 
-   According to the language standard, the -IF-NOT variants are
+According to the language standard, the ‘-IF-NOT’ variants are
 deprecated.  However, that deprecation is generally considered to have
 itself been ill-advised.  If the standard is ever revised, it's more
-likely the deprecation will be removed than the -IF-NOT functions.  For
-one thing, the REMOVE-IF-NOT variant is probably used more often than
-REMOVE-IF. Despite its negative-sounding name, REMOVE-IF-NOT is actually
-the positive variant-it returns the elements that do satisfy the
-predicate.  (1)
+likely the deprecation will be removed than the ‘-IF-NOT’ functions.
+For one thing, the ‘REMOVE-IF-NOT’ variant is probably used more
+often than ‘REMOVE-IF’.  Despite its negative-sounding name,
+‘REMOVE-IF-NOT’ is actually the positive variant-it returns the
+elements that ‘do’ satisfy the predicate.  (1)
 
-   The -IF and -IF-NOT variants accept all the same keyword arguments as
-their vanilla counterparts except for :test, which isn't needed since
-the main argument is already a function.  (2) With a :key argument, the
-value extracted by the :key function is passed to the function instead
-of the actual element.
+The -IF and -IF-NOT variants accept all the same keyword arguments as
+their vanilla counterparts except for ‘:test’, which isn't needed
+since the main argument is already a function.  (2) With a ‘:key’
+argument, the value extracted by the ‘:key’ function is passed to
+the function instead of the actual element.
 
      (count-if #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first)     ==> 2
 
@@ -8673,30 +8677,31 @@ of the actual element.
      (remove-if-not #'alpha-char-p
        #("foo" "bar" "1baz") :key #'(lambda (x) (elt x 0))) ==> #("foo" "bar")
 
-   The REMOVE family of functions also support a fourth variant,
-REMOVE-DUPLICATES, that has only one required argument, a sequence, from
-which it removes all but one instance of each duplicated element.  It
-takes the same keyword arguments as REMOVE, except for :count, since it
-always removes all duplicates.
+The ‘REMOVE’ family of functions also support a fourth variant,
+‘REMOVE-DUPLICATES’, that has only one required argument, a
+sequence, from which it removes all but one instance of each duplicated
+element.  It takes the same keyword arguments as ‘REMOVE’, except
+for ‘:count’, since it always removes all duplicates.
 
      (remove-duplicates #(1 2 1 2 3 1 2 3 4)) ==> #(1 2 3 4)
 
    ---------- Footnotes ----------
 
-   (1) This same functionality goes by the name grep in Perl and filter
-in Python.
+   (1) This same functionality goes by the name ‘grep’ in Perl and
+‘filter’ in Python.
 
-   (2) The difference between the predicates passed as :test arguments
-and as the function arguments to the -IF and -IF-NOT functions is that
-the :test predicates are two-argument predicates used to compare the
-elements of the sequence to the specific item while the -IF and -IF-NOT
-predicates are one-argument functions that simply test the individual
-elements of the sequence.  If the vanilla variants didn't exist, you
-could implement them in terms of the -IF versions by embedding a
-specific item in the test function.
+   (2) The difference between the predicates passed as ‘:test’
+arguments and as the function arguments to the -IF and -IF-NOT functions
+is that the ‘:test’ predicates are two-argument predicates used to
+compare the elements of the sequence to the specific item while the -IF
+and -IF-NOT predicates are one-argument functions that simply test the
+individual elements of the sequence.  If the vanilla variants didn't
+exist, you could implement them in terms of the -IF versions by
+embedding a specific item in the test function.
 
      (count char string) ===
        (count-if #'(lambda (c) (eql char c)) string)
+
      (count char string :test #'CHAR-EQUAL) ===
        (count-if #'(lambda (c) (char-equal char c)) string)
 
@@ -8708,21 +8713,23 @@ Whole Sequence Manipulations
 
 A handful of functions perform operations on a whole sequence (or
 sequences) at a time.  These tend to be simpler than the other functions
-I've described so far.  For instance, COPY-SEQ and REVERSE each take a
-single argument, a sequence, and each returns a new sequence of the same
-type.  The sequence returned by COPY-SEQ contains the same elements as
-its argument while the sequence returned by REVERSE contains the same
-elements but in reverse order.  Note that neither function copies the
-elements themselves-only the returned sequence is a new object.
+I've described so far.  For instance, ‘COPY-SEQ’ and ‘REVERSE’
+each take a single argument, a sequence, and each returns a new sequence
+of the same type.  The sequence returned by ‘COPY-SEQ’ contains the
+same elements as its argument while the sequence returned by
+‘REVERSE’ contains the same elements but in reverse order.  Note
+that neither function copies the elements themselves-only the returned
+sequence is a new object.
 
-   The CONCATENATE function creates a new sequence containing the
-concatenation of any number of sequences.  However, unlike REVERSE and
-COPY-SEQ, which simply return a sequence of the same type as their
-single argument, CONCATENATE must be told explicitly what kind of
-sequence to produce in case the arguments are of different types.  Its
-first argument is a type descriptor, like the :element-type argument to
-MAKE-ARRAY. In this case, the type descriptors you'll most likely use
-are the symbols VECTOR, LIST, or STRING. (1) For example:
+The ‘CONCATENATE’ function creates a new sequence containing the
+concatenation of any number of sequences.  However, unlike ‘REVERSE’
+and ‘COPY-SEQ’, which simply return a sequence of the same type as
+their single argument, ‘CONCATENATE’ must be told explicitly what
+kind of sequence to produce in case the arguments are of different
+types.  Its first argument is a type descriptor, like the
+‘:element-type’ argument to ‘MAKE-ARRAY’.  In this case, the
+type descriptors you'll most likely use are the symbols ‘VECTOR’,
+‘LIST’, or ‘STRING’.  (1) For example:
 
      (concatenate 'vector #(1 2 3) '(4 5 6))    ==> #(1 2 3 4 5 6)
      (concatenate 'list #(1 2 3) '(4 5 6))      ==> (1 2 3 4 5 6)
@@ -8730,9 +8737,9 @@ are the symbols VECTOR, LIST, or STRING. (1) For example:
 
    ---------- Footnotes ----------
 
-   (1) If you tell CONCATENATE to return a specialized vector, such as a
-string, all the elements of the argument sequences must be instances of
-the vector's element type.
+   (1) If you tell ‘CONCATENATE’ to return a specialized vector,
+such as a string, all the elements of the argument sequences must be
+instances of the vector's element type.
 
 
 File: pcl.info,  Node: 11-7,  Next: 11-8,  Prev: 11-6,  Up: Chapter 11
@@ -8740,17 +8747,18 @@ File: pcl.info,  Node: 11-7,  Next: 11-8,  Prev: 11-6,  Up: Chapter 11
 Sorting and Merging
 ===================
 
-The functions SORT and STABLE-SORT provide two ways of sorting a
-sequence.  They both take a sequence and a two-argument predicate and
-return a sorted version of the sequence.
+The functions ‘SORT’ and ‘STABLE-SORT’ provide two ways of
+sorting a sequence.  They both take a sequence and a two-argument
+predicate and return a sorted version of the sequence.
 
      (sort (vector "foo" "bar" "baz") #'string<) ==> #("bar" "baz" "foo")
 
-   The difference is that STABLE-SORT is guaranteed to not reorder any
-elements considered equivalent by the predicate while SORT guarantees
-only that the result is sorted and may reorder equivalent elements.
+The difference is that ‘STABLE-SORT’ is guaranteed to not reorder
+any elements considered equivalent by the predicate while ‘SORT’
+guarantees only that the result is sorted and may reorder equivalent
+elements.
 
-   Both these functions are examples of what are called destructive
+Both these functions are examples of what are called ‘destructive’
 functions.  Destructive functions are allowed-typically for reasons of
 efficiency-to modify their arguments in more or less arbitrary ways.
 This has two implications: one, you should always do something with the
@@ -8759,32 +8767,33 @@ it to another function), and, two, unless you're done with the object
 you're passing to the destructive function, you should pass a copy
 instead.  I'll say more about destructive functions in the next chapter.
 
-   Typically you won't care about the unsorted version of a sequence
-after you've sorted it, so it makes sense to allow SORT and STABLE-SORT
-to destroy the sequence in the course of sorting it.  But it does mean
-you need to remember to write the following: (1)
+Typically you won't care about the unsorted version of a sequence after
+you've sorted it, so it makes sense to allow ‘SORT’ and
+‘STABLE-SORT’ to destroy the sequence in the course of sorting it.
+But it does mean you need to remember to write the following: (1)
 
      (setf my-sequence (sort my-sequence #'string<))
 
-   rather than just this:
+rather than just this:
 
      (sort my-sequence #'string<)
 
-   Both these functions also take a keyword argument, :key, which, like
-the :key argument in other sequence functions, should be a function and
-will be used to extract the values to be passed to the sorting predicate
-in the place of the actual elements.  The extracted keys are used only
-to determine the ordering of elements; the sequence returned will
-contain the actual elements of the argument sequence.
+Both these functions also take a keyword argument, ‘:key’, which,
+like the ‘:key’ argument in other sequence functions, should be a
+function and will be used to extract the values to be passed to the
+sorting predicate in the place of the actual elements.  The extracted
+keys are used only to determine the ordering of elements; the sequence
+returned will contain the actual elements of the argument sequence.
 
-   The MERGE function takes two sequences and a predicate and returns a
-sequence produced by merging the two sequences, according to the
+The ‘MERGE’ function takes two sequences and a predicate and returns
+a sequence produced by merging the two sequences, according to the
 predicate.  It's related to the two sorting functions in that if each
 sequence is already sorted by the same predicate, then the sequence
-returned by MERGE will also be sorted.  Like the sorting functions,
-MERGE takes a :key argument.  Like CONCATENATE, and for the same reason,
-the first argument to MERGE must be a type descriptor specifying the
-type of sequence to produce.
+returned by ‘MERGE’ will also be sorted.  Like the sorting
+functions, ‘MERGE’ takes a ‘:key’ argument.  Like
+‘CONCATENATE’, and for the same reason, the first argument to
+‘MERGE’ must be a type descriptor specifying the type of sequence to
+produce.
 
      (merge 'vector #(1 3 5) #(2 4 6) #'<) ==> #(1 2 3 4 5 6)
      (merge 'list #(1 3 5) #(2 4 6) #'<)   ==> (1 2 3 4 5 6)
@@ -8805,17 +8814,17 @@ Subsequence Manipulations
 =========================
 
 Another set of functions allows you to manipulate subsequences of
-existing sequences.  The most basic of these is SUBSEQ, which extracts a
-subsequence starting at a particular index and continuing to a
-particular ending index or the end of the sequence.  For instance:
+existing sequences.  The most basic of these is ‘SUBSEQ’, which
+extracts a subsequence starting at a particular index and continuing to
+a particular ending index or the end of the sequence.  For instance:
 
      (subseq "foobarbaz" 3)   ==> "barbaz"
      (subseq "foobarbaz" 3 6) ==> "bar"
 
-   SUBSEQ is also SETFable, but it won't extend or shrink a sequence; if
-the new value and the subsequence to be replaced are different lengths,
-the shorter of the two determines how many characters are actually
-changed.
+‘SUBSEQ’ is also ‘SETF’able, but it won't extend or shrink a
+sequence; if the new value and the subsequence to be replaced are
+different lengths, the shorter of the two determines how many characters
+are actually changed.
 
      (defparameter *x* (copy-seq "foobarbaz"))
 
@@ -8828,33 +8837,34 @@ changed.
      (setf (subseq *x* 3 6) "xx")   ; new value too short, only two characters changed
      *x* ==> "fooxxcbaz"
 
-   You can use the FILL function to set multiple elements of a sequence
-to a single value.  The required arguments are a sequence and the value
-with which to fill it.  By default every element of the sequence is set
-to the value; :start and :end keyword arguments can limit the effects to
-a given subsequence.
+You can use the ‘FILL’ function to set multiple elements of a
+sequence to a single value.  The required arguments are a sequence and
+the value with which to fill it.  By default every element of the
+sequence is set to the value; ‘:start’ and ‘:end’ keyword
+arguments can limit the effects to a given subsequence.
 
-   If you need to find a subsequence within a sequence, the SEARCH
-function works like POSITION except the first argument is a sequence
-rather than a single item.
+If you need to find a subsequence within a sequence, the ‘SEARCH’
+function works like ‘POSITION’ except the first argument is a
+sequence rather than a single item.
 
      (position #\b "foobarbaz") ==> 3
      (search "bar" "foobarbaz") ==> 3
 
-   On the other hand, to find where two sequences with a common prefix
-first diverge, you can use the MISMATCH function.  It takes two
+On the other hand, to find where two sequences with a common prefix
+first diverge, you can use the ‘MISMATCH’ function.  It takes two
 sequences and returns the index of the first pair of mismatched
 elements.
 
      (mismatch "foobarbaz" "foom") ==> 3
 
-   It returns NIL if the strings match.  MISMATCH also takes many of the
-standard keyword arguments: a :key argument for specifying a function to
-use to extract the values to be compared; a :test argument to specify
-the comparison function; and :start1, :end1, :start2, and :end2
-arguments to specify subsequences within the two sequences.  And a
-:from-end argument of T specifies the sequences should be searched in
-reverse order, causing MISMATCH to return the index, in the first
+It returns ‘NIL’ if the strings match.  ‘MISMATCH’ also takes
+many of the standard keyword arguments: a ‘:key’ argument for
+specifying a function to use to extract the values to be compared; a
+‘:test’ argument to specify the comparison function; and
+‘:start1’, ‘:end1’, ‘:start2’, and ‘:end2’ arguments to
+specify subsequences within the two sequences.  And a ‘:from-end’
+argument of ‘T’ specifies the sequences should be searched in
+reverse order, causing ‘MISMATCH’ to return the index, in the first
 sequence, where whatever common suffix the two sequences share begins.
 
      (mismatch "foobar" "bar" :from-end t) ==> 3
@@ -8865,27 +8875,28 @@ File: pcl.info,  Node: 11-9,  Next: 11-10,  Prev: 11-8,  Up: Chapter 11
 Sequence Predicates
 ===================
 
-Four other handy functions are EVERY, SOME, NOTANY, and NOTEVERY, which
-iterate over sequences testing a boolean predicate.  The first argument
-to all these functions is the predicate, and the remaining arguments are
-sequences.  The predicate should take as many arguments as the number of
-sequences passed.  The elements of the sequences are passed to the
-predicate-one element from each sequence-until one of the sequences runs
-out of elements or the overall termination test is met: EVERY
-terminates, returning false, as soon as the predicate fails.  If the
-predicate is always satisfied, it returns true.  SOME returns the first
-non-NIL value returned by the predicate or returns false if the
-predicate is never satisfied.  NOTANY returns false as soon as the
-predicate is satisfied or true if it never is.  And NOTEVERY returns
-true as soon as the predicate fails or false if the predicate is always
-satisfied.  Here are some examples of testing just one sequence:
+Four other handy functions are ‘EVERY’, ‘SOME’, ‘NOTANY’,
+and ‘NOTEVERY’, which iterate over sequences testing a boolean
+predicate.  The first argument to all these functions is the predicate,
+and the remaining arguments are sequences.  The predicate should take as
+many arguments as the number of sequences passed.  The elements of the
+sequences are passed to the predicate-one element from each
+sequence-until one of the sequences runs out of elements or the overall
+termination test is met: ‘EVERY’ terminates, returning false, as
+soon as the predicate fails.  If the predicate is always satisfied, it
+returns true.  ‘SOME’ returns the first non-‘NIL’ value returned
+by the predicate or returns false if the predicate is never satisfied.
+‘NOTANY’ returns false as soon as the predicate is satisfied or true
+if it never is.  And ‘NOTEVERY’ returns true as soon as the
+predicate fails or false if the predicate is always satisfied.  Here are
+some examples of testing just one sequence:
 
      (every #'evenp #(1 2 3 4 5))    ==> NIL
      (some #'evenp #(1 2 3 4 5))     ==> T
      (notany #'evenp #(1 2 3 4 5))   ==> NIL
      (notevery #'evenp #(1 2 3 4 5)) ==> T
 
-   These calls compare elements of two sequences pairwise:
+These calls compare elements of two sequences pairwise:
 
      (every #'> #(1 2 3 4) #(5 4 3 2))    ==> NIL
      (some #'> #(1 2 3 4) #(5 4 3 2))     ==> T
@@ -8899,31 +8910,34 @@ Sequence Mapping Functions
 ==========================
 
 Finally, the last of the sequence functions are the generic mapping
-functions.  MAP, like the sequence predicate functions, takes a
-n-argument function and n sequences.  But instead of a boolean value,
-MAP returns a new sequence containing the result of applying the
-function to subsequent elements of the sequences.  Like CONCATENATE and
-MERGE, MAP needs to be told what kind of sequence to create.
+functions.  ‘MAP’, like the sequence predicate functions, takes a
+‘n’-argument function and ‘n’ sequences.  But instead of a
+boolean value, ‘MAP’ returns a new sequence containing the result of
+applying the function to subsequent elements of the sequences.  Like
+‘CONCATENATE’ and ‘MERGE’, ‘MAP’ needs to be told what kind
+of sequence to create.
 
      (map 'vector #'* #(1 2 3 4 5) #(10 9 8 7 6)) ==> #(10 18 24 28 30)
 
-   MAP-INTO is like MAP except instead of producing a new sequence of a
-given type, it places the results into a sequence passed as the first
-argument.  This sequence can be the same as one of the sequences
-providing values for the function.  For instance, to sum several
-vectors-a, b, and c-into one, you could write this:
+‘MAP-INTO’ is like ‘MAP’ except instead of producing a new
+sequence of a given type, it places the results into a sequence passed
+as the first argument.  This sequence can be the same as one of the
+sequences providing values for the function.  For instance, to sum
+several vectors-‘a’, ‘b’, and ‘c’-into one, you could write
+this:
 
      (map-into a #'+ a b c)
 
-   If the sequences are different lengths, MAP-INTO affects only as many
-elements as are present in the shortest sequence, including the sequence
-being mapped into.  However, if the sequence being mapped into is a
-vector with a fill pointer, the number of elements affected isn't
+If the sequences are different lengths, ‘MAP-INTO’ affects only as
+many elements as are present in the shortest sequence, including the
+sequence being mapped into.  However, if the sequence being mapped into
+is a vector with a fill pointer, the number of elements affected isn't
 limited by the fill pointer but rather by the actual size of the vector.
-After a call to MAP-INTO, the fill pointer will be set to the number of
-elements mapped.  MAP-INTO won't, however, extend an adjustable vector.
+After a call to ‘MAP-INTO’, the fill pointer will be set to the
+number of elements mapped.  ‘MAP-INTO’ won't, however, extend an
+adjustable vector.
 
-   The last sequence function is REDUCE, which does another kind of
+The last sequence function is ‘REDUCE’, which does another kind of
 mapping: it maps over a single sequence, applying a two-argument
 function first to the first two elements of the sequence and then to the
 value returned by the function and subsequent elements of the sequence.
@@ -8931,15 +8945,16 @@ Thus, the following expression sums the numbers from one to ten:
 
      (reduce #'+ #(1 2 3 4 5 6 7 8 9 10)) ==> 55
 
-   REDUCE is a surprisingly useful function-whenever you need to distill
-a sequence down to a single value, chances are you can write it with
-REDUCE, and it will often be quite a concise way to express what you
-want.  For instance, to find the maximum value in a sequence of numbers,
-you can write (reduce #'max numbers).  REDUCE also takes a full
-complement of keyword arguments (:key, :from-end, :start, and :end) and
-one unique to REDUCE (:initial-value).  The latter specifies a value
+‘REDUCE’ is a surprisingly useful function-whenever you need to
+distill a sequence down to a single value, chances are you can write it
+with ‘REDUCE’, and it will often be quite a concise way to express
+what you want.  For instance, to find the maximum value in a sequence of
+numbers, you can write ‘(reduce #'max numbers)’.  ‘REDUCE’ also
+takes a full complement of keyword arguments (‘:key’,
+‘:from-end’, ‘:start’, and ‘:end’) and one unique to
+‘REDUCE’ (‘:initial-value’).  The latter specifies a value
 that's logically placed before the first element of the sequence (or
-after the last if you also specify a true :from-end argument).
+after the last if you also specify a true ‘:from-end’ argument).
 
 
 File: pcl.info,  Node: 11-11,  Next: 11-12,  Prev: 11-10,  Up: Chapter 11
@@ -8954,28 +8969,31 @@ you add a value to a hash table, you store it under a particular key.
 Later you can use the same key to retrieve the value.  Or you can
 associate a new value with the same key-each key maps to a single value.
 
-   With no arguments MAKE-HASH-TABLE makes a hash table that considers
-two keys equivalent if they're the same object according to EQL. This is
-a good default unless you want to use strings as keys, since two strings
-with the same contents aren't necessarily EQL. In that case you'll want
-a so-called EQUAL hash table, which you can get by passing the symbol
-EQUAL as the :test keyword argument to MAKE-HASH-TABLE. Two other
-possible values for the :test argument are the symbols EQ and EQUALP.
+With no arguments ‘MAKE-HASH-TABLE’ makes a hash table that
+considers two keys equivalent if they're the same object according to
+‘EQL’.  This is a good default unless you want to use strings as
+keys, since two strings with the same contents aren't necessarily
+‘EQL’.  In that case you'll want a so-called ‘EQUAL’ hash table,
+which you can get by passing the symbol ‘EQUAL’ as the ‘:test’
+keyword argument to ‘MAKE-HASH-TABLE’.  Two other possible values
+for the ‘:test’ argument are the symbols ‘EQ’ and ‘EQUALP’.
 These are, of course, the names of the standard object comparison
-functions, which I discussed in Chapter 4.  However, unlike the :test
-argument passed to sequence functions, MAKE-HASH-TABLE's :test can't be
-used to specify an arbitrary function-only the values EQ, EQL, EQUAL,
-and EQUALP. This is because hash tables actually need two functions, an
-equivalence function and a hash function that computes a numerical hash
-code from the key in a way compatible with how the equivalence function
-will ultimately compare two keys.  However, although the language
-standard provides only for hash tables that use the standard equivalence
-functions, most implementations provide some mechanism for defining
-custom hash tables.
+functions, which I discussed in Chapter 4.  However, unlike the
+‘:test’ argument passed to sequence functions,
+‘MAKE-HASH-TABLE’'s ‘:test’ can't be used to specify an
+arbitrary function-only the values ‘EQ’, ‘EQL’, ‘EQUAL’, and
+‘EQUALP’.  This is because hash tables actually need two functions,
+an equivalence function and a ‘hash’ function that computes a
+numerical hash code from the key in a way compatible with how the
+equivalence function will ultimately compare two keys.  However,
+although the language standard provides only for hash tables that use
+the standard equivalence functions, most implementations provide some
+mechanism for defining custom hash tables.
 
-   The GETHASH function provides access to the elements of a hash table.
-It takes two arguments-a key and the hash table-and returns the value,
-if any, stored in the hash table under that key or NIL. (1) For example:
+The ‘GETHASH’ function provides access to the elements of a hash
+table.  It takes two arguments-a key and the hash table-and returns the
+value, if any, stored in the hash table under that key or ‘NIL’.
+(1) For example:
 
      (defparameter *h* (make-hash-table))
 
@@ -8985,25 +9003,28 @@ if any, stored in the hash table under that key or NIL. (1) For example:
 
      (gethash 'foo *h*) ==> QUUX
 
-   Since GETHASH returns NIL if the key isn't present in the table,
-there's no way to tell from the return value the difference between a
-key not being in a hash table at all and being in the table with the
-value NIL. GETHASH solves this problem with a feature I haven't
-discussed yet-multiple return values.  GETHASH actually returns two
-values; the primary value is the value stored under the given key or
-NIL. The secondary value is a boolean indicating whether the key is
-present in the hash table.  Because of the way multiple values work, the
-extra return value is silently discarded unless the caller explicitly
-handles it with a form that can "see" multiple values.
+Since ‘GETHASH’ returns ‘NIL’ if the key isn't present in the
+table, there's no way to tell from the return value the difference
+between a key not being in a hash table at all and being in the table
+with the value ‘NIL’.  ‘GETHASH’ solves this problem with a
+feature I haven't discussed yet-multiple return values.  ‘GETHASH’
+actually returns two values; the primary value is the value stored under
+the given key or ‘NIL’.  The secondary value is a boolean indicating
+whether the key is present in the hash table.  Because of the way
+multiple values work, the extra return value is silently discarded
+unless the caller explicitly handles it with a form that can "see"
+multiple values.
 
-   I'll discuss multiple return values in greater detail in Chapter 20,
-but for now I'll give you a sneak preview of how to use the
-MULTIPLE-VALUE-BIND macro to take advantage of GETHASH's extra return
-value.  MULTIPLE-VALUE-BIND creates variable bindings like LET does,
-filling them with the multiple values returned by a form.
+I'll discuss multiple return values in greater detail in Chapter 20, but
+for now I'll give you a sneak preview of how to use the
+‘MULTIPLE-VALUE-BIND’ macro to take advantage of ‘GETHASH’'s
+extra return value.  ‘MULTIPLE-VALUE-BIND’ creates variable bindings
+like ‘LET’ does, filling them with the multiple values returned by a
+form.
 
-   The following function shows how you might use MULTIPLE-VALUE-BIND;
-the variables it binds are value and present:
+The following function shows how you might use
+‘MULTIPLE-VALUE-BIND’; the variables it binds are ‘value’ and
+‘present’:
 
      (defun show-value (key hash-table)
        (multiple-value-bind (value present) (gethash key hash-table)
@@ -9017,17 +9038,18 @@ the variables it binds are value and present:
      (show-value 'bar *h*) ==> "Value NIL actually present."
      (show-value 'baz *h*) ==> "Value NIL because key not found."
 
-   Since setting the value under a key to NIL leaves the key in the
+Since setting the value under a key to ‘NIL’ leaves the key in the
 table, you'll need another function to completely remove a key/value
-pair.  REMHASH takes the same arguments as GETHASH and removes the
-specified entry.  You can also completely clear a hash table of all its
-key/value pairs with CLRHASH.
+pair.  ‘REMHASH’ takes the same arguments as ‘GETHASH’ and
+removes the specified entry.  You can also completely clear a hash table
+of all its key/value pairs with ‘CLRHASH’.
 
    ---------- Footnotes ----------
 
-   (1) By an accident of history, the order of arguments to GETHASH is
-the opposite of ELT-ELT takes the collection first and then the index
-while GETHASH takes the key first and then the collection.
+   (1) By an accident of history, the order of arguments to
+‘GETHASH’ is the opposite of ‘ELT’-‘ELT’ takes the
+collection first and then the index while ‘GETHASH’ takes the key
+first and then the collection.
 
 
 File: pcl.info,  Node: 11-12,  Next: Chapter 12,  Prev: 11-11,  Up: Chapter 11
@@ -9036,44 +9058,45 @@ Hash Table Iteration
 ====================
 
 Common Lisp provides a couple ways to iterate over the entries in a hash
-table.  The simplest of these is via the function MAPHASH. Analogous to
-the MAP function, MAPHASH takes a two-argument function and a hash table
-and invokes the function once for each key/value pair in the hash table.
-For instance, to print all the key/value pairs in a hash table, you
-could use MAPHASH like this:
+table.  The simplest of these is via the function ‘MAPHASH’.
+Analogous to the ‘MAP’ function, ‘MAPHASH’ takes a two-argument
+function and a hash table and invokes the function once for each
+key/value pair in the hash table.  For instance, to print all the
+key/value pairs in a hash table, you could use ‘MAPHASH’ like this:
 
      (maphash #'(lambda (k v) (format t "~a => ~a~%" k v)) *h*)
 
-   The consequences of adding or removing elements from a hash table
-while iterating over it aren't specified (and are likely to be bad) with
-two exceptions: you can use SETF with GETHASH to change the value of the
-current entry, and you can use REMHASH to remove the current entry.  For
-instance, to remove all the entries whose value is less than ten, you
-could write this:
+The consequences of adding or removing elements from a hash table while
+iterating over it aren't specified (and are likely to be bad) with two
+exceptions: you can use ‘SETF’ with ‘GETHASH’ to change the
+value of the current entry, and you can use ‘REMHASH’ to remove the
+current entry.  For instance, to remove all the entries whose value is
+less than ten, you could write this:
 
      (maphash #'(lambda (k v) (when (< v 10) (remhash k *h*))) *h*)
 
-   The other way to iterate over a hash table is with the extended LOOP
-macro, which I'll discuss in Chapter 22.  (1) The LOOP equivalent of the
-first MAPHASH expression would look like this:
+The other way to iterate over a hash table is with the extended
+‘LOOP’ macro, which I'll discuss in Chapter 22.  (1) The ‘LOOP’
+equivalent of the first ‘MAPHASH’ expression would look like this:
 
      (loop for k being the hash-keys in *h* using (hash-value v)
        do (format t "~a => ~a~%" k v))
 
-   I could say a lot more about the nonlist collections supported by
-Common Lisp.  For instance, I haven't discussed multidimensional arrays
-at all or the library of functions for manipulating bit arrays.
-However, what I've covered in this chapter should suffice for most of
-your general-purpose programming needs.  Now it's finally time to look
-at Lisp's eponymous data structure: lists.
+I could say a lot more about the nonlist collections supported by Common
+Lisp.  For instance, I haven't discussed multidimensional arrays at all
+or the library of functions for manipulating bit arrays.  However, what
+I've covered in this chapter should suffice for most of your
+general-purpose programming needs.  Now it's finally time to look at
+Lisp's eponymous data structure: lists.
 
    ---------- Footnotes ----------
 
-   (1) LOOP's hash table iteration is typically implemented on top of a
-more primitive form, WITH-HASH-TABLE-ITERATOR, that you don't need to
-worry about; it was added to the language specifically to support
-implementing things such as LOOP and is of little use unless you need to
-write completely new control constructs for iterating over hash tables.
+   (1) ‘LOOP’'s hash table iteration is typically implemented on top
+of a more primitive form, ‘WITH-HASH-TABLE-ITERATOR’, that you don't
+need to worry about; it was added to the language specifically to
+support implementing things such as ‘LOOP’ and is of little use
+unless you need to write completely new control constructs for iterating
+over hash tables.
 
 
 File: pcl.info,  Node: Chapter 12,  Next: Chapter 13,  Prev: Chapter 11,  Up: Top
@@ -28357,646 +28380,645 @@ features are the way they are.
 
 Tag Table:
 Node: Top67
-Node: Preface14016
-Node: Letter15128
-Node: Blurbs16999
-Node: Chapter 128159
-Node: 1-133862
-Ref: 1-1-Footnote-139164
-Ref: 1-1-Footnote-239236
-Ref: 1-1-Footnote-339513
-Ref: 1-1-Footnote-440660
-Ref: 1-1-Footnote-541666
-Ref: 1-1-Footnote-642471
-Node: 1-242630
-Ref: 1-2-Footnote-148180
-Ref: 1-2-Footnote-248238
-Ref: 1-2-Footnote-348497
-Node: 1-2-149573
-Node: 1-352675
-Node: Chapter 255000
-Ref: Chapter 2-Footnote-156593
-Ref: Chapter 2-Footnote-256642
-Node: 2-157795
-Ref: 2-1-Footnote-161909
-Ref: 2-1-Footnote-262748
-Ref: 2-1-Footnote-362779
-Ref: 2-1-Footnote-462803
-Node: 2-263062
-Node: 2-366609
-Node: 2-468584
-Node: 2-570229
-Ref: 2-5-Footnote-174822
-Ref: 2-5-Footnote-275286
-Ref: 2-5-Footnote-375370
-Ref: 2-5-Footnote-475619
-Node: 2-675703
-Ref: 2-6-Footnote-185060
-Ref: 2-6-Footnote-285185
-Ref: 2-6-Footnote-385263
-Ref: 2-6-Footnote-485807
-Node: Chapter 385856
-Ref: Chapter 3-Footnote-188560
-Node: 3-188770
-Node: 3-291992
-Ref: 3-2-Footnote-193732
-Node: 3-394086
-Ref: 3-3-Footnote-197672
-Node: 3-497942
-Node: 3-5102582
-Ref: 3-5-Footnote-1106840
-Node: 3-6107107
-Ref: 3-6-Footnote-1118078
-Ref: 3-6-Footnote-2118244
-Ref: 3-6-Footnote-3118450
-Node: 3-7118861
-Ref: 3-7-Footnote-1121848
-Ref: 3-7-Footnote-2122176
-Node: 3-8122508
-Ref: 3-8-Footnote-1133857
-Ref: 3-8-Footnote-2134265
-Ref: 3-8-Footnote-3134735
-Node: 3-9134969
-Node: Chapter 4136216
-Node: 4-1137033
-Ref: 4-1-Footnote-1138825
-Node: 4-2138892
-Ref: 4-2-Footnote-1142727
-Ref: 4-2-Footnote-2143282
-Ref: 4-2-Footnote-3143539
-Node: 4-3143696
-Ref: 4-3-Footnote-1151125
-Ref: 4-3-Footnote-2151212
-Ref: 4-3-Footnote-3151446
-Ref: 4-3-Footnote-4151708
-Node: 4-4151801
-Ref: 4-4-Footnote-1155271
-Ref: 4-4-Footnote-2155522
-Ref: 4-4-Footnote-3155664
-Ref: 4-4-Footnote-4155808
-Node: 4-5156276
-Node: 4-6157555
-Ref: 4-6-Footnote-1160777
-Ref: 4-6-Footnote-2160902
-Ref: 4-6-Footnote-3161178
-Node: 4-7161564
-Ref: 4-7-Footnote-1164168
-Node: 4-8165355
-Ref: 4-8-Footnote-1171358
-Ref: 4-8-Footnote-2171888
-Node: 4-9172402
-Node: Chapter 5177005
-Ref: Chapter 5-Footnote-1178902
-Node: 5-1179619
-Ref: 5-1-Footnote-1182423
-Ref: 5-1-Footnote-2182733
-Ref: 5-1-Footnote-3182895
-Node: 5-2183404
-Node: 5-3184785
-Ref: 5-3-Footnote-1189043
-Node: 5-4189632
-Ref: 5-4-Footnote-1191831
-Node: 5-5191918
-Node: 5-6195677
-Ref: 5-6-Footnote-1199149
-Node: 5-7199717
-Ref: 5-7-Footnote-1201807
-Node: 5-8202096
-Ref: 5-8-Footnote-1207973
-Ref: 5-8-Footnote-2208301
-Ref: 5-8-Footnote-3208414
-Ref: 5-8-Footnote-4208906
-Node: 5-9209075
-Ref: 5-9-Footnote-1211638
-Node: Chapter 6213281
-Ref: Chapter 6-Footnote-1214852
-Ref: Chapter 6-Footnote-2215095
-Node: 6-1215768
-Ref: 6-1-Footnote-1222472
-Ref: 6-1-Footnote-2222899
-Ref: 6-1-Footnote-3223351
-Ref: 6-1-Footnote-4223537
-Node: 6-2223936
-Node: 6-3226889
-Ref: 6-3-Footnote-1237371
-Ref: 6-3-Footnote-2237562
-Ref: 6-3-Footnote-3237739
-Ref: 6-3-Footnote-4238330
-Ref: 6-3-Footnote-5238952
-Ref: 6-3-Footnote-6239324
-Ref: 6-3-Footnote-7239407
-Node: 6-4239497
-Ref: 6-4-Footnote-1241012
-Node: 6-5241311
-Ref: 6-5-Footnote-1243398
-Node: 6-6243521
-Ref: 6-6-Footnote-1245927
-Ref: 6-6-Footnote-2245995
-Ref: 6-6-Footnote-3246369
-Node: 6-7246795
-Node: Chapter 7250835
-Ref: Chapter 7-Footnote-1255211
-Ref: Chapter 7-Footnote-2255609
-Node: 7-1255918
-Ref: 7-1-Footnote-1259624
-Node: 7-2259884
-Node: 7-3261531
-Node: 7-4262812
-Ref: 7-4-Footnote-1265049
-Node: 7-5265190
-Ref: 7-5-Footnote-1267031
-Node: 7-6268122
-Ref: 7-6-Footnote-1272876
-Ref: 7-6-Footnote-2273060
-Node: 7-7273216
-Ref: 7-7-Footnote-1277356
-Node: Chapter 8277893
-Node: 8-1279950
-Node: 8-2284768
-Node: 8-3287897
-Ref: 8-3-Footnote-1290982
-Node: 8-4291096
-Node: 8-5293098
-Node: 8-6297216
-Ref: 8-6-Footnote-1300962
-Ref: 8-6-Footnote-2301132
-Ref: 8-6-Footnote-3301612
-Node: 8-7301820
-Ref: 8-7-Footnote-1311647
-Ref: 8-7-Footnote-2311973
-Ref: 8-7-Footnote-3312102
-Node: 8-8312540
-Node: 8-8-1316124
-Node: 8-9317390
-Node: Chapter 9317964
-Ref: Chapter 9-Footnote-1319832
-Ref: Chapter 9-Footnote-2320256
-Node: 9-1320565
-Ref: 9-1-Footnote-1323130
-Node: 9-2323214
-Node: 9-3326495
-Ref: 9-3-Footnote-1329466
-Ref: 9-3-Footnote-2329858
-Node: 9-4329952
-Node: 9-5333570
-Node: 9-6335845
-Ref: 9-6-Footnote-1339176
-Ref: 9-6-Footnote-2339297
-Node: 9-7339600
-Node: Chapter 10343654
-Ref: Chapter 10-Footnote-1346715
-Node: 10-1346849
-Ref: 10-1-Footnote-1349187
-Ref: 10-1-Footnote-2349221
-Ref: 10-1-Footnote-3349770
-Ref: 10-1-Footnote-4350763
-Node: 10-2351035
-Ref: 10-2-Footnote-1357640
-Ref: 10-2-Footnote-2357895
-Ref: 10-2-Footnote-3358228
-Node: 10-3358790
-Ref: 10-3-Footnote-1362510
-Ref: 10-3-Footnote-2362667
-Node: 10-4362881
-Node: 10-5365001
-Node: 10-6365621
-Ref: 10-6-Footnote-1367133
-Node: 10-7367501
-Node: 10-8369383
-Ref: 10-8-Footnote-1371167
-Node: 10-9371470
-Node: Chapter 11374033
-Ref: Chapter 11-Footnote-1376539
-Node: 11-1376801
-Ref: 11-1-Footnote-1381283
-Ref: 11-1-Footnote-2381521
-Ref: 11-1-Footnote-3381660
-Node: 11-2382134
-Node: 11-3384446
-Node: 11-4385840
-Ref: 11-4-Footnote-1390102
-Ref: 11-4-Footnote-2390711
-Node: 11-5390939
-Ref: 11-5-Footnote-1393417
-Ref: 11-5-Footnote-2393501
-Node: 11-6394216
-Ref: 11-6-Footnote-1395681
-Node: 11-7395854
-Ref: 11-7-Footnote-1398457
-Node: 11-8398814
-Node: 11-9401302
-Node: 11-10402823
-Node: 11-11405296
-Ref: 11-11-Footnote-1409391
-Node: 11-12409592
-Ref: 11-12-Footnote-1411341
-Node: Chapter 12411695
-Node: 12-1413346
-Ref: 12-1-Footnote-1419224
-Ref: 12-1-Footnote-2419292
-Ref: 12-1-Footnote-3419350
-Ref: 12-1-Footnote-4419608
-Node: 12-2420014
-Node: 12-3424000
-Ref: 12-3-Footnote-1430804
-Ref: 12-3-Footnote-2431039
-Node: 12-4431255
-Ref: 12-4-Footnote-1436176
-Ref: 12-4-Footnote-2436453
-Ref: 12-4-Footnote-3436670
-Ref: 12-4-Footnote-4436758
-Node: 12-5436976
-Ref: 12-5-Footnote-1439723
-Ref: 12-5-Footnote-2440067
-Node: 12-6440493
-Ref: 12-6-Footnote-1443035
-Ref: 12-6-Footnote-2443211
-Node: 12-7443422
-Node: Chapter 13443977
-Node: 13-1444874
-Ref: 13-1-Footnote-1449220
-Ref: 13-1-Footnote-2449410
-Node: 13-2449713
-Ref: 13-2-Footnote-1453373
-Node: 13-3453514
-Ref: 13-3-Footnote-1463205
-Node: 13-4463515
-Ref: 13-4-Footnote-1466549
-Ref: 13-4-Footnote-2466779
-Node: Chapter 14466927
-Node: 14-1468068
-Ref: 14-1-Footnote-1472488
-Node: 14-2472741
-Ref: 14-2-Footnote-1473587
-Ref: 14-2-Footnote-2473923
-Ref: 14-2-Footnote-3474224
-Node: 14-3474523
-Node: 14-4475366
-Node: 14-5479207
-Ref: 14-5-Footnote-1481941
-Node: 14-6482452
-Ref: 14-6-Footnote-1485041
-Node: 14-6-1485853
-Node: 14-7487656
-Ref: 14-7-Footnote-1491911
-Ref: 14-7-Footnote-2492393
-Node: 14-8492503
-Ref: 14-8-Footnote-1498019
-Ref: 14-8-Footnote-2498133
-Node: 14-9498721
-Node: 14-10500916
-Ref: 14-10-Footnote-1506175
-Ref: 14-10-Footnote-2506227
-Ref: 14-10-Footnote-3506621
-Node: 14-11507406
-Ref: 14-11-Footnote-1511810
-Ref: 14-11-Footnote-2511900
-Node: Chapter 15512764
-Node: 15-1514749
-Node: 15-2515541
-Ref: 15-2-Footnote-1519697
-Node: 15-2-1520110
-Node: 15-3521660
-Ref: 15-3-Footnote-1529555
-Ref: 15-3-Footnote-2529708
-Node: 15-4529901
-Ref: 15-4-Footnote-1533847
-Node: 15-5534212
-Node: Chapter 16536077
-Ref: Chapter 16-Footnote-1538572
-Ref: Chapter 16-Footnote-2538582
-Node: 16-1538592
-Ref: 16-1-Footnote-1543294
-Ref: 16-1-Footnote-2543304
-Node: 16-2543314
-Ref: 16-2-Footnote-1547517
-Node: 16-3547527
-Node: 16-4549463
-Ref: 16-4-Footnote-1555052
-Ref: 16-4-Footnote-2555062
-Ref: 16-4-Footnote-3555072
-Node: 16-5555082
-Ref: 16-5-Footnote-1559208
-Ref: 16-5-Footnote-2559218
-Node: 16-6559229
-Node: 16-7564756
-Node: 16-8569335
-Ref: 16-8-Footnote-1572118
-Node: 16-8-1572129
-Node: 16-9573897
-Node: Chapter 17574195
-Ref: Chapter 17-Footnote-1575793
-Node: 17-1576199
-Ref: 17-1-Footnote-1578166
-Ref: 17-1-Footnote-2578273
-Node: 17-1-1578499
-Node: 17-2580017
-Ref: 17-2-Footnote-1582938
-Node: 17-3583088
-Ref: 17-3-Footnote-1589613
-Ref: 17-3-Footnote-2589955
-Ref: 17-3-Footnote-3590110
-Node: 17-4590662
-Ref: 17-4-Footnote-1598220
-Ref: 17-4-Footnote-2598825
-Node: 17-5599087
-Ref: 17-5-Footnote-1603794
-Node: 17-6604214
-Ref: 17-6-Footnote-1605737
-Node: 17-7606236
-Node: 17-8610627
-Ref: 17-8-Footnote-1619055
-Node: 17-9619361
-Node: Chapter 18620533
-Ref: Chapter 18-Footnote-1624636
-Ref: Chapter 18-Footnote-2625310
-Node: 18-1625631
-Ref: 18-1-Footnote-1627609
-Node: 18-2627922
-Node: 18-3631043
-Node: 18-4633793
-Ref: 18-4-Footnote-1638770
-Node: 18-5638924
-Ref: 18-5-Footnote-1641003
-Ref: 18-5-Footnote-2641236
-Node: 18-6641451
-Node: 18-7644925
-Node: 18-8648282
-Node: 18-9653984
-Ref: 18-9-Footnote-1656012
-Ref: 18-9-Footnote-2656431
-Node: 18-10656671
-Node: Chapter 19657340
-Ref: Chapter 19-Footnote-1663002
-Ref: Chapter 19-Footnote-2663061
-Node: 19-1663112
-Node: 19-2664595
-Ref: 19-2-Footnote-1666539
-Ref: 19-2-Footnote-2666692
-Node: 19-3666907
-Node: 19-3-1672507
-Node: 19-4673170
-Ref: 19-4-Footnote-1680327
-Node: 19-5680512
-Node: 19-6683421
-Node: 19-6-1688144
-Node: Chapter 20689205
-Node: 20-1691122
-Ref: 20-1-Footnote-1691901
-Node: 20-2692162
-Ref: 20-2-Footnote-1699558
-Ref: 20-2-Footnote-2699800
-Ref: 20-2-Footnote-3700111
-Node: 20-3701011
-Ref: 20-3-Footnote-1708749
-Ref: 20-3-Footnote-2709400
-Node: 20-4709897
-Ref: 20-4-Footnote-1719190
-Ref: 20-4-Footnote-2719609
-Ref: 20-4-Footnote-3719856
-Ref: 20-4-Footnote-4719951
-Node: 20-5720124
-Ref: 20-5-Footnote-1725409
-Node: 20-6726166
-Ref: 20-6-Footnote-1733176
-Ref: 20-6-Footnote-2733728
-Ref: 20-6-Footnote-3734117
-Node: 20-7734507
-Ref: 20-7-Footnote-1737465
-Node: Chapter 21737593
-Ref: Chapter 21-Footnote-1739833
-Node: 21-1740192
-Node: 21-2744779
-Node: 21-3748171
-Ref: 21-3-Footnote-1750438
-Ref: 21-3-Footnote-2750667
-Node: 21-4751661
-Ref: 21-4-Footnote-1757380
-Ref: 21-4-Footnote-2757619
-Ref: 21-4-Footnote-3758057
-Ref: 21-4-Footnote-4758498
-Ref: 21-4-Footnote-5759025
-Ref: 21-4-Footnote-6759458
-Ref: 21-4-Footnote-7759733
-Node: 21-5759889
-Node: 21-6761302
-Ref: 21-6-Footnote-1765507
-Node: 21-7765834
-Ref: 21-7-Footnote-1770343
-Node: 21-8770521
-Ref: 21-8-Footnote-1776235
-Node: Chapter 22776499
-Node: 22-1778174
-Ref: 22-1-Footnote-1779111
-Node: 22-2779509
-Ref: 22-2-Footnote-1780691
-Node: 22-3780973
-Node: 22-4784048
-Ref: 22-4-Footnote-1787380
-Ref: 22-4-Footnote-2787953
-Node: 22-5788060
-Node: 22-6790257
-Node: 22-7791190
-Node: 22-8793074
-Ref: 22-8-Footnote-1795700
-Ref: 22-8-Footnote-2796333
-Node: 22-9796954
-Ref: 22-9-Footnote-1798839
-Node: 22-10798938
-Node: 22-11802583
-Ref: 22-11-Footnote-1805946
-Ref: 22-11-Footnote-2806074
-Ref: 22-11-Footnote-3806317
-Node: 22-12806471
-Node: 22-13810205
-Ref: 22-13-Footnote-1812203
-Ref: 22-13-Footnote-2812388
-Node: Chapter 23812719
-Ref: Chapter 23-Footnote-1814612
-Ref: Chapter 23-Footnote-2814750
-Node: 23-1814991
-Ref: 23-1-Footnote-1823456
-Ref: 23-1-Footnote-2823623
-Ref: 23-1-Footnote-3823805
-Ref: 23-1-Footnote-4824003
-Node: 23-2824295
-Ref: 23-2-Footnote-1828371
-Ref: 23-2-Footnote-2828601
-Node: 23-3829315
-Ref: 23-3-Footnote-1834623
-Ref: 23-3-Footnote-2834986
-Node: 23-4835833
-Ref: 23-4-Footnote-1844134
-Node: 23-5844397
-Node: 23-6846569
-Node: 23-7849604
-Ref: 23-7-Footnote-1854813
-Ref: 23-7-Footnote-2854954
-Node: 23-8855245
-Ref: 23-8-Footnote-1857993
-Node: 23-9858333
-Node: 23-10864220
-Node: Chapter 24865931
-Node: 24-1867363
-Ref: 24-1-Footnote-1868604
-Ref: 24-1-Footnote-2869017
-Node: 24-2869798
-Ref: 24-2-Footnote-1873466
-Ref: 24-2-Footnote-2874342
-Ref: 24-2-Footnote-3874656
-Node: 24-3875705
-Ref: 24-3-Footnote-1881962
-Ref: 24-3-Footnote-2882208
-Node: 24-4882675
-Node: 24-5886557
-Node: 24-6889336
-Node: 24-7893474
-Ref: 24-7-Footnote-1900726
-Ref: 24-7-Footnote-2901072
-Node: 24-8901318
-Node: 24-9902973
-Node: 24-10908783
-Node: 24-11915196
-Node: 24-12920330
-Ref: 24-12-Footnote-1928711
-Node: 24-13929211
-Ref: 24-13-Footnote-1931870
-Node: Chapter 25932609
-Ref: Chapter 25-Footnote-1937830
-Node: 25-1938186
-Ref: 25-1-Footnote-1941256
-Node: 25-2941896
-Node: 25-3942927
-Ref: 25-3-Footnote-1946588
-Node: 25-4946910
-Ref: 25-4-Footnote-1956296
-Node: 25-5956427
-Ref: 25-5-Footnote-1960390
-Node: 25-6960551
-Node: 25-7965956
-Ref: 25-7-Footnote-1968980
-Node: 25-8969169
-Ref: 25-8-Footnote-1975088
-Node: 25-9975341
-Ref: 25-9-Footnote-1977357
-Node: 25-10978077
-Node: 25-11981155
-Node: 25-12986377
-Node: 25-13990805
-Node: 25-14993622
-Ref: 25-14-Footnote-11005940
-Node: Chapter 261006408
-Node: 26-11007559
-Ref: 26-1-Footnote-11012749
-Ref: 26-1-Footnote-21012957
-Ref: 26-1-Footnote-31013204
-Ref: 26-1-Footnote-41013430
-Node: 26-21014217
-Ref: 26-2-Footnote-11020872
-Ref: 26-2-Footnote-21020933
-Ref: 26-2-Footnote-31020974
-Ref: 26-2-Footnote-41021305
-Node: 26-31021459
-Ref: 26-3-Footnote-11024825
-Node: 26-41025167
-Ref: 26-4-Footnote-11031305
-Node: 26-51031377
-Node: 26-61032514
-Node: 26-71037662
-Ref: 26-7-Footnote-11041502
-Node: 26-81041656
-Node: 26-91046053
-Ref: 26-9-Footnote-11054637
-Node: Chapter 271054994
-Node: 27-11055908
-Ref: 27-1-Footnote-11060963
-Node: 27-1-11061413
-Node: 27-21062784
-Ref: 27-2-Footnote-11067503
-Node: 27-31068028
-Ref: 27-3-Footnote-11071367
-Node: 27-41071911
-Node: 27-51079324
-Ref: 27-5-Footnote-11084468
-Node: 27-61085338
-Ref: 27-6-Footnote-11089458
-Node: 27-71089825
-Node: Chapter 281092981
-Ref: Chapter 28-Footnote-11093545
-Node: 28-11093965
-Ref: 28-1-Footnote-11097601
-Node: 28-21097792
-Ref: 28-2-Footnote-11102913
-Node: 28-2-11103215
-Node: 28-31103786
-Ref: 28-3-Footnote-11116923
-Ref: 28-3-Footnote-21117256
-Ref: 28-3-Footnote-31117595
-Ref: 28-3-Footnote-41117936
-Ref: 28-3-Footnote-51118505
-Ref: 28-3-Footnote-61118991
-Node: Chapter 291119234
-Node: 29-11120181
-Node: 29-1-11124833
-Node: 29-21125841
-Ref: 29-2-Footnote-11134866
-Ref: 29-2-Footnote-21135655
-Ref: 29-2-Footnote-31136149
-Node: 29-31136754
-Node: 29-41146150
-Ref: 29-4-Footnote-11149499
-Node: 29-51149869
-Node: 29-61154494
-Ref: 29-6-Footnote-11161613
-Node: 29-71162683
-Node: 29-81170382
-Node: 29-91171730
-Node: Chapter 301174081
-Node: 30-11175777
-Ref: 30-1-Footnote-11179333
-Ref: 30-1-Footnote-21179768
-Node: 30-21179907
-Ref: 30-2-Footnote-11185951
-Ref: 30-2-Footnote-21186185
-Node: 30-31186463
-Node: 30-3-11189422
-Node: 30-41190239
-Node: 30-51193731
-Node: 30-61195332
-Ref: 30-6-Footnote-11198480
-Node: 30-6-11199023
-Node: 30-71203629
-Ref: 30-7-Footnote-11213351
-Ref: 30-7-Footnote-21213515
-Node: 30-81214063
-Node: Chapter 311214479
-Node: 31-11216009
-Node: 31-21227566
-Ref: 31-2-Footnote-11239783
-Ref: 31-2-Footnote-21240066
-Node: 31-31240365
-Ref: 31-3-Footnote-11247638
-Node: 31-41247761
-Ref: 31-4-Footnote-11252408
-Node: 31-51252879
-Node: Chapter 321255092
-Node: 32-11256285
-Ref: 32-1-Footnote-11261651
-Node: 32-21262142
-Ref: 32-2-Footnote-11263968
-Ref: 32-2-Footnote-21264096
-Node: 32-31264403
-Ref: 32-3-Footnote-11283118
-Ref: 32-3-Footnote-21283560
-Ref: 32-3-Footnote-31284248
-Ref: 32-3-Footnote-41284566
-Node: 32-41284890
-Ref: 32-4-Footnote-11293146
-Ref: 32-4-Footnote-21293723
-Ref: 32-4-Footnote-31294003
-Ref: 32-4-Footnote-41294114
-Node: 32-51294418
-Ref: 32-5-Footnote-11300387
-Ref: 32-5-Footnote-21300624
+Node: Letter15012
+Node: Blurbs16883
+Node: Chapter 128083
+Node: 1-133768
+Ref: 1-1-Footnote-139045
+Ref: 1-1-Footnote-239117
+Ref: 1-1-Footnote-339394
+Ref: 1-1-Footnote-440546
+Ref: 1-1-Footnote-541570
+Ref: 1-1-Footnote-642375
+Node: 1-242534
+Ref: 1-2-Footnote-148073
+Ref: 1-2-Footnote-248137
+Ref: 1-2-Footnote-348396
+Node: 1-2-149472
+Node: 1-352556
+Node: Chapter 254869
+Ref: Chapter 2-Footnote-156461
+Ref: Chapter 2-Footnote-256510
+Node: 2-157663
+Ref: 2-1-Footnote-161771
+Ref: 2-1-Footnote-262610
+Ref: 2-1-Footnote-362641
+Ref: 2-1-Footnote-462665
+Node: 2-262924
+Node: 2-366471
+Node: 2-468461
+Node: 2-570105
+Ref: 2-5-Footnote-174805
+Ref: 2-5-Footnote-275275
+Ref: 2-5-Footnote-375359
+Ref: 2-5-Footnote-475608
+Node: 2-675692
+Ref: 2-6-Footnote-185098
+Ref: 2-6-Footnote-285223
+Ref: 2-6-Footnote-385301
+Ref: 2-6-Footnote-485851
+Node: Chapter 385900
+Ref: Chapter 3-Footnote-188604
+Node: 3-188814
+Node: 3-292036
+Ref: 3-2-Footnote-193776
+Node: 3-394130
+Ref: 3-3-Footnote-197716
+Node: 3-497986
+Node: 3-5102626
+Ref: 3-5-Footnote-1106884
+Node: 3-6107151
+Ref: 3-6-Footnote-1118122
+Ref: 3-6-Footnote-2118288
+Ref: 3-6-Footnote-3118494
+Node: 3-7118905
+Ref: 3-7-Footnote-1121892
+Ref: 3-7-Footnote-2122220
+Node: 3-8122552
+Ref: 3-8-Footnote-1133901
+Ref: 3-8-Footnote-2134309
+Ref: 3-8-Footnote-3134779
+Node: 3-9135013
+Node: Chapter 4136260
+Node: 4-1137077
+Ref: 4-1-Footnote-1138869
+Node: 4-2138936
+Ref: 4-2-Footnote-1142771
+Ref: 4-2-Footnote-2143326
+Ref: 4-2-Footnote-3143583
+Node: 4-3143740
+Ref: 4-3-Footnote-1151169
+Ref: 4-3-Footnote-2151256
+Ref: 4-3-Footnote-3151490
+Ref: 4-3-Footnote-4151752
+Node: 4-4151845
+Ref: 4-4-Footnote-1155315
+Ref: 4-4-Footnote-2155566
+Ref: 4-4-Footnote-3155708
+Ref: 4-4-Footnote-4155852
+Node: 4-5156320
+Node: 4-6157599
+Ref: 4-6-Footnote-1160821
+Ref: 4-6-Footnote-2160946
+Ref: 4-6-Footnote-3161222
+Node: 4-7161608
+Ref: 4-7-Footnote-1164212
+Node: 4-8165399
+Ref: 4-8-Footnote-1171402
+Ref: 4-8-Footnote-2171932
+Node: 4-9172446
+Node: Chapter 5177049
+Ref: Chapter 5-Footnote-1178946
+Node: 5-1179663
+Ref: 5-1-Footnote-1182467
+Ref: 5-1-Footnote-2182777
+Ref: 5-1-Footnote-3182939
+Node: 5-2183448
+Node: 5-3184829
+Ref: 5-3-Footnote-1189087
+Node: 5-4189676
+Ref: 5-4-Footnote-1191875
+Node: 5-5191962
+Node: 5-6195721
+Ref: 5-6-Footnote-1199193
+Node: 5-7199761
+Ref: 5-7-Footnote-1201851
+Node: 5-8202140
+Ref: 5-8-Footnote-1208017
+Ref: 5-8-Footnote-2208345
+Ref: 5-8-Footnote-3208458
+Ref: 5-8-Footnote-4208950
+Node: 5-9209119
+Ref: 5-9-Footnote-1211682
+Node: Chapter 6213325
+Ref: Chapter 6-Footnote-1214896
+Ref: Chapter 6-Footnote-2215139
+Node: 6-1215812
+Ref: 6-1-Footnote-1222516
+Ref: 6-1-Footnote-2222943
+Ref: 6-1-Footnote-3223395
+Ref: 6-1-Footnote-4223581
+Node: 6-2223980
+Node: 6-3226933
+Ref: 6-3-Footnote-1237415
+Ref: 6-3-Footnote-2237606
+Ref: 6-3-Footnote-3237783
+Ref: 6-3-Footnote-4238374
+Ref: 6-3-Footnote-5238996
+Ref: 6-3-Footnote-6239368
+Ref: 6-3-Footnote-7239451
+Node: 6-4239541
+Ref: 6-4-Footnote-1241056
+Node: 6-5241355
+Ref: 6-5-Footnote-1243442
+Node: 6-6243565
+Ref: 6-6-Footnote-1245971
+Ref: 6-6-Footnote-2246039
+Ref: 6-6-Footnote-3246413
+Node: 6-7246839
+Node: Chapter 7250879
+Ref: Chapter 7-Footnote-1255255
+Ref: Chapter 7-Footnote-2255653
+Node: 7-1255962
+Ref: 7-1-Footnote-1259668
+Node: 7-2259928
+Node: 7-3261575
+Node: 7-4262856
+Ref: 7-4-Footnote-1265093
+Node: 7-5265234
+Ref: 7-5-Footnote-1267075
+Node: 7-6268166
+Ref: 7-6-Footnote-1272920
+Ref: 7-6-Footnote-2273104
+Node: 7-7273260
+Ref: 7-7-Footnote-1277400
+Node: Chapter 8277937
+Node: 8-1279994
+Node: 8-2284812
+Node: 8-3287941
+Ref: 8-3-Footnote-1291026
+Node: 8-4291140
+Node: 8-5293142
+Node: 8-6297260
+Ref: 8-6-Footnote-1301006
+Ref: 8-6-Footnote-2301176
+Ref: 8-6-Footnote-3301656
+Node: 8-7301864
+Ref: 8-7-Footnote-1311691
+Ref: 8-7-Footnote-2312017
+Ref: 8-7-Footnote-3312146
+Node: 8-8312584
+Node: 8-8-1316168
+Node: 8-9317434
+Node: Chapter 9318008
+Ref: Chapter 9-Footnote-1319876
+Ref: Chapter 9-Footnote-2320300
+Node: 9-1320609
+Ref: 9-1-Footnote-1323174
+Node: 9-2323258
+Node: 9-3326539
+Ref: 9-3-Footnote-1329510
+Ref: 9-3-Footnote-2329902
+Node: 9-4329996
+Node: 9-5333614
+Node: 9-6335889
+Ref: 9-6-Footnote-1339220
+Ref: 9-6-Footnote-2339341
+Node: 9-7339644
+Node: Chapter 10343698
+Ref: Chapter 10-Footnote-1346759
+Node: 10-1346893
+Ref: 10-1-Footnote-1349231
+Ref: 10-1-Footnote-2349265
+Ref: 10-1-Footnote-3349814
+Ref: 10-1-Footnote-4350807
+Node: 10-2351079
+Ref: 10-2-Footnote-1357684
+Ref: 10-2-Footnote-2357939
+Ref: 10-2-Footnote-3358272
+Node: 10-3358834
+Ref: 10-3-Footnote-1362554
+Ref: 10-3-Footnote-2362711
+Node: 10-4362925
+Node: 10-5365045
+Node: 10-6365665
+Ref: 10-6-Footnote-1367177
+Node: 10-7367545
+Node: 10-8369427
+Ref: 10-8-Footnote-1371211
+Node: 10-9371514
+Node: Chapter 11374077
+Ref: Chapter 11-Footnote-1376589
+Node: 11-1376851
+Ref: 11-1-Footnote-1381453
+Ref: 11-1-Footnote-2381709
+Ref: 11-1-Footnote-3381848
+Node: 11-2382358
+Node: 11-3384716
+Node: 11-4386169
+Ref: 11-4-Footnote-1390592
+Ref: 11-4-Footnote-2391225
+Node: 11-5391489
+Ref: 11-5-Footnote-1394047
+Ref: 11-5-Footnote-2394143
+Node: 11-6394871
+Ref: 11-6-Footnote-1396413
+Node: 11-7396592
+Ref: 11-7-Footnote-1399266
+Node: 11-8399623
+Node: 11-9402216
+Node: 11-10403787
+Node: 11-11406410
+Ref: 11-11-Footnote-1410716
+Node: 11-12410941
+Ref: 11-12-Footnote-1412743
+Node: Chapter 12413115
+Node: 12-1414766
+Ref: 12-1-Footnote-1420644
+Ref: 12-1-Footnote-2420712
+Ref: 12-1-Footnote-3420770
+Ref: 12-1-Footnote-4421028
+Node: 12-2421434
+Node: 12-3425420
+Ref: 12-3-Footnote-1432224
+Ref: 12-3-Footnote-2432459
+Node: 12-4432675
+Ref: 12-4-Footnote-1437596
+Ref: 12-4-Footnote-2437873
+Ref: 12-4-Footnote-3438090
+Ref: 12-4-Footnote-4438178
+Node: 12-5438396
+Ref: 12-5-Footnote-1441143
+Ref: 12-5-Footnote-2441487
+Node: 12-6441913
+Ref: 12-6-Footnote-1444455
+Ref: 12-6-Footnote-2444631
+Node: 12-7444842
+Node: Chapter 13445397
+Node: 13-1446294
+Ref: 13-1-Footnote-1450640
+Ref: 13-1-Footnote-2450830
+Node: 13-2451133
+Ref: 13-2-Footnote-1454793
+Node: 13-3454934
+Ref: 13-3-Footnote-1464625
+Node: 13-4464935
+Ref: 13-4-Footnote-1467969
+Ref: 13-4-Footnote-2468199
+Node: Chapter 14468347
+Node: 14-1469488
+Ref: 14-1-Footnote-1473908
+Node: 14-2474161
+Ref: 14-2-Footnote-1475007
+Ref: 14-2-Footnote-2475343
+Ref: 14-2-Footnote-3475644
+Node: 14-3475943
+Node: 14-4476786
+Node: 14-5480627
+Ref: 14-5-Footnote-1483361
+Node: 14-6483872
+Ref: 14-6-Footnote-1486461
+Node: 14-6-1487273
+Node: 14-7489076
+Ref: 14-7-Footnote-1493331
+Ref: 14-7-Footnote-2493813
+Node: 14-8493923
+Ref: 14-8-Footnote-1499439
+Ref: 14-8-Footnote-2499553
+Node: 14-9500141
+Node: 14-10502336
+Ref: 14-10-Footnote-1507595
+Ref: 14-10-Footnote-2507647
+Ref: 14-10-Footnote-3508041
+Node: 14-11508826
+Ref: 14-11-Footnote-1513230
+Ref: 14-11-Footnote-2513320
+Node: Chapter 15514184
+Node: 15-1516169
+Node: 15-2516961
+Ref: 15-2-Footnote-1521117
+Node: 15-2-1521530
+Node: 15-3523080
+Ref: 15-3-Footnote-1530975
+Ref: 15-3-Footnote-2531128
+Node: 15-4531321
+Ref: 15-4-Footnote-1535267
+Node: 15-5535632
+Node: Chapter 16537497
+Ref: Chapter 16-Footnote-1539992
+Ref: Chapter 16-Footnote-2540002
+Node: 16-1540012
+Ref: 16-1-Footnote-1544714
+Ref: 16-1-Footnote-2544724
+Node: 16-2544734
+Ref: 16-2-Footnote-1548937
+Node: 16-3548947
+Node: 16-4550883
+Ref: 16-4-Footnote-1556472
+Ref: 16-4-Footnote-2556482
+Ref: 16-4-Footnote-3556492
+Node: 16-5556502
+Ref: 16-5-Footnote-1560628
+Ref: 16-5-Footnote-2560638
+Node: 16-6560649
+Node: 16-7566176
+Node: 16-8570755
+Ref: 16-8-Footnote-1573538
+Node: 16-8-1573549
+Node: 16-9575317
+Node: Chapter 17575615
+Ref: Chapter 17-Footnote-1577213
+Node: 17-1577619
+Ref: 17-1-Footnote-1579586
+Ref: 17-1-Footnote-2579693
+Node: 17-1-1579919
+Node: 17-2581437
+Ref: 17-2-Footnote-1584358
+Node: 17-3584508
+Ref: 17-3-Footnote-1591033
+Ref: 17-3-Footnote-2591375
+Ref: 17-3-Footnote-3591530
+Node: 17-4592082
+Ref: 17-4-Footnote-1599640
+Ref: 17-4-Footnote-2600245
+Node: 17-5600507
+Ref: 17-5-Footnote-1605214
+Node: 17-6605634
+Ref: 17-6-Footnote-1607157
+Node: 17-7607656
+Node: 17-8612047
+Ref: 17-8-Footnote-1620475
+Node: 17-9620781
+Node: Chapter 18621953
+Ref: Chapter 18-Footnote-1626056
+Ref: Chapter 18-Footnote-2626730
+Node: 18-1627051
+Ref: 18-1-Footnote-1629029
+Node: 18-2629342
+Node: 18-3632463
+Node: 18-4635213
+Ref: 18-4-Footnote-1640190
+Node: 18-5640344
+Ref: 18-5-Footnote-1642423
+Ref: 18-5-Footnote-2642656
+Node: 18-6642871
+Node: 18-7646345
+Node: 18-8649702
+Node: 18-9655404
+Ref: 18-9-Footnote-1657432
+Ref: 18-9-Footnote-2657851
+Node: 18-10658091
+Node: Chapter 19658760
+Ref: Chapter 19-Footnote-1664422
+Ref: Chapter 19-Footnote-2664481
+Node: 19-1664532
+Node: 19-2666015
+Ref: 19-2-Footnote-1667959
+Ref: 19-2-Footnote-2668112
+Node: 19-3668327
+Node: 19-3-1673927
+Node: 19-4674590
+Ref: 19-4-Footnote-1681747
+Node: 19-5681932
+Node: 19-6684841
+Node: 19-6-1689564
+Node: Chapter 20690625
+Node: 20-1692542
+Ref: 20-1-Footnote-1693321
+Node: 20-2693582
+Ref: 20-2-Footnote-1700978
+Ref: 20-2-Footnote-2701220
+Ref: 20-2-Footnote-3701531
+Node: 20-3702431
+Ref: 20-3-Footnote-1710169
+Ref: 20-3-Footnote-2710820
+Node: 20-4711317
+Ref: 20-4-Footnote-1720610
+Ref: 20-4-Footnote-2721029
+Ref: 20-4-Footnote-3721276
+Ref: 20-4-Footnote-4721371
+Node: 20-5721544
+Ref: 20-5-Footnote-1726829
+Node: 20-6727586
+Ref: 20-6-Footnote-1734596
+Ref: 20-6-Footnote-2735148
+Ref: 20-6-Footnote-3735537
+Node: 20-7735927
+Ref: 20-7-Footnote-1738885
+Node: Chapter 21739013
+Ref: Chapter 21-Footnote-1741253
+Node: 21-1741612
+Node: 21-2746199
+Node: 21-3749591
+Ref: 21-3-Footnote-1751858
+Ref: 21-3-Footnote-2752087
+Node: 21-4753081
+Ref: 21-4-Footnote-1758800
+Ref: 21-4-Footnote-2759039
+Ref: 21-4-Footnote-3759477
+Ref: 21-4-Footnote-4759918
+Ref: 21-4-Footnote-5760445
+Ref: 21-4-Footnote-6760878
+Ref: 21-4-Footnote-7761153
+Node: 21-5761309
+Node: 21-6762722
+Ref: 21-6-Footnote-1766927
+Node: 21-7767254
+Ref: 21-7-Footnote-1771763
+Node: 21-8771941
+Ref: 21-8-Footnote-1777655
+Node: Chapter 22777919
+Node: 22-1779594
+Ref: 22-1-Footnote-1780531
+Node: 22-2780929
+Ref: 22-2-Footnote-1782111
+Node: 22-3782393
+Node: 22-4785468
+Ref: 22-4-Footnote-1788800
+Ref: 22-4-Footnote-2789373
+Node: 22-5789480
+Node: 22-6791677
+Node: 22-7792610
+Node: 22-8794494
+Ref: 22-8-Footnote-1797120
+Ref: 22-8-Footnote-2797753
+Node: 22-9798374
+Ref: 22-9-Footnote-1800259
+Node: 22-10800358
+Node: 22-11804003
+Ref: 22-11-Footnote-1807366
+Ref: 22-11-Footnote-2807494
+Ref: 22-11-Footnote-3807737
+Node: 22-12807891
+Node: 22-13811625
+Ref: 22-13-Footnote-1813623
+Ref: 22-13-Footnote-2813808
+Node: Chapter 23814139
+Ref: Chapter 23-Footnote-1816032
+Ref: Chapter 23-Footnote-2816170
+Node: 23-1816411
+Ref: 23-1-Footnote-1824876
+Ref: 23-1-Footnote-2825043
+Ref: 23-1-Footnote-3825225
+Ref: 23-1-Footnote-4825423
+Node: 23-2825715
+Ref: 23-2-Footnote-1829791
+Ref: 23-2-Footnote-2830021
+Node: 23-3830735
+Ref: 23-3-Footnote-1836043
+Ref: 23-3-Footnote-2836406
+Node: 23-4837253
+Ref: 23-4-Footnote-1845554
+Node: 23-5845817
+Node: 23-6847989
+Node: 23-7851024
+Ref: 23-7-Footnote-1856233
+Ref: 23-7-Footnote-2856374
+Node: 23-8856665
+Ref: 23-8-Footnote-1859413
+Node: 23-9859753
+Node: 23-10865640
+Node: Chapter 24867351
+Node: 24-1868783
+Ref: 24-1-Footnote-1870024
+Ref: 24-1-Footnote-2870437
+Node: 24-2871218
+Ref: 24-2-Footnote-1874886
+Ref: 24-2-Footnote-2875762
+Ref: 24-2-Footnote-3876076
+Node: 24-3877125
+Ref: 24-3-Footnote-1883382
+Ref: 24-3-Footnote-2883628
+Node: 24-4884095
+Node: 24-5887977
+Node: 24-6890756
+Node: 24-7894894
+Ref: 24-7-Footnote-1902146
+Ref: 24-7-Footnote-2902492
+Node: 24-8902738
+Node: 24-9904393
+Node: 24-10910203
+Node: 24-11916616
+Node: 24-12921750
+Ref: 24-12-Footnote-1930131
+Node: 24-13930631
+Ref: 24-13-Footnote-1933290
+Node: Chapter 25934029
+Ref: Chapter 25-Footnote-1939250
+Node: 25-1939606
+Ref: 25-1-Footnote-1942676
+Node: 25-2943316
+Node: 25-3944347
+Ref: 25-3-Footnote-1948008
+Node: 25-4948330
+Ref: 25-4-Footnote-1957716
+Node: 25-5957847
+Ref: 25-5-Footnote-1961810
+Node: 25-6961971
+Node: 25-7967376
+Ref: 25-7-Footnote-1970400
+Node: 25-8970589
+Ref: 25-8-Footnote-1976508
+Node: 25-9976761
+Ref: 25-9-Footnote-1978777
+Node: 25-10979497
+Node: 25-11982575
+Node: 25-12987797
+Node: 25-13992225
+Node: 25-14995042
+Ref: 25-14-Footnote-11007360
+Node: Chapter 261007828
+Node: 26-11008979
+Ref: 26-1-Footnote-11014169
+Ref: 26-1-Footnote-21014377
+Ref: 26-1-Footnote-31014624
+Ref: 26-1-Footnote-41014850
+Node: 26-21015637
+Ref: 26-2-Footnote-11022292
+Ref: 26-2-Footnote-21022353
+Ref: 26-2-Footnote-31022394
+Ref: 26-2-Footnote-41022725
+Node: 26-31022879
+Ref: 26-3-Footnote-11026245
+Node: 26-41026587
+Ref: 26-4-Footnote-11032725
+Node: 26-51032797
+Node: 26-61033934
+Node: 26-71039082
+Ref: 26-7-Footnote-11042922
+Node: 26-81043076
+Node: 26-91047473
+Ref: 26-9-Footnote-11056057
+Node: Chapter 271056414
+Node: 27-11057328
+Ref: 27-1-Footnote-11062383
+Node: 27-1-11062833
+Node: 27-21064204
+Ref: 27-2-Footnote-11068923
+Node: 27-31069448
+Ref: 27-3-Footnote-11072787
+Node: 27-41073331
+Node: 27-51080744
+Ref: 27-5-Footnote-11085888
+Node: 27-61086758
+Ref: 27-6-Footnote-11090878
+Node: 27-71091245
+Node: Chapter 281094401
+Ref: Chapter 28-Footnote-11094965
+Node: 28-11095385
+Ref: 28-1-Footnote-11099021
+Node: 28-21099212
+Ref: 28-2-Footnote-11104333
+Node: 28-2-11104635
+Node: 28-31105206
+Ref: 28-3-Footnote-11118343
+Ref: 28-3-Footnote-21118676
+Ref: 28-3-Footnote-31119015
+Ref: 28-3-Footnote-41119356
+Ref: 28-3-Footnote-51119925
+Ref: 28-3-Footnote-61120411
+Node: Chapter 291120654
+Node: 29-11121601
+Node: 29-1-11126253
+Node: 29-21127261
+Ref: 29-2-Footnote-11136286
+Ref: 29-2-Footnote-21137075
+Ref: 29-2-Footnote-31137569
+Node: 29-31138174
+Node: 29-41147570
+Ref: 29-4-Footnote-11150919
+Node: 29-51151289
+Node: 29-61155914
+Ref: 29-6-Footnote-11163033
+Node: 29-71164103
+Node: 29-81171802
+Node: 29-91173150
+Node: Chapter 301175501
+Node: 30-11177197
+Ref: 30-1-Footnote-11180753
+Ref: 30-1-Footnote-21181188
+Node: 30-21181327
+Ref: 30-2-Footnote-11187371
+Ref: 30-2-Footnote-21187605
+Node: 30-31187883
+Node: 30-3-11190842
+Node: 30-41191659
+Node: 30-51195151
+Node: 30-61196752
+Ref: 30-6-Footnote-11199900
+Node: 30-6-11200443
+Node: 30-71205049
+Ref: 30-7-Footnote-11214771
+Ref: 30-7-Footnote-21214935
+Node: 30-81215483
+Node: Chapter 311215899
+Node: 31-11217429
+Node: 31-21228986
+Ref: 31-2-Footnote-11241203
+Ref: 31-2-Footnote-21241486
+Node: 31-31241785
+Ref: 31-3-Footnote-11249058
+Node: 31-41249181
+Ref: 31-4-Footnote-11253828
+Node: 31-51254299
+Node: Chapter 321256512
+Node: 32-11257705
+Ref: 32-1-Footnote-11263071
+Node: 32-21263562
+Ref: 32-2-Footnote-11265388
+Ref: 32-2-Footnote-21265516
+Node: 32-31265823
+Ref: 32-3-Footnote-11284538
+Ref: 32-3-Footnote-21284980
+Ref: 32-3-Footnote-31285668
+Ref: 32-3-Footnote-41285986
+Node: 32-41286310
+Ref: 32-4-Footnote-11294566
+Ref: 32-4-Footnote-21295143
+Ref: 32-4-Footnote-31295423
+Ref: 32-4-Footnote-41295534
+Node: 32-51295838
+Ref: 32-5-Footnote-11301807
+Ref: 32-5-Footnote-21302044
 
 End Tag Table
